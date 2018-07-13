@@ -35,6 +35,10 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
+        },
+        "config-plugin": {
+            "params": "src/config/params.php",
+            "common": "src/config/common.php"
         }
     },
     "repositories": [
