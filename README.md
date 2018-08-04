@@ -2,11 +2,11 @@
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
     </a>
-    <h1 align="center">Debug Extension for Yii 2</h1>
+    <h1 align="center">Debug Extension for Yii</h1>
     <br>
 </p>
 
-This extension provides a debugger for [Yii framework 2.0](http://www.yiiframework.com) applications. When this extension is used,
+This extension provides a debugger for [Yii framework](http://www.yiiframework.com) applications. When this extension is used,
 a debugger toolbar will appear at the bottom of every page. The extension also provides
 a set of standalone pages to display more detailed debug information.
 
@@ -14,9 +14,9 @@ For license information check the [LICENSE](LICENSE.md)-file.
 
 Documentation is at [docs/guide/README.md](docs/guide/README.md).
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-debug/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-debug)
-[![Total Downloads](https://poser.pugx.org/yiisoft/yii2-debug/downloads.png)](https://packagist.org/packages/yiisoft/yii2-debug)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-debug.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-debug)
+[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii-debug/v/stable.png)](https://packagist.org/packages/yiisoft/yii-debug)
+[![Total Downloads](https://poser.pugx.org/yiisoft/yii-debug/downloads.png)](https://packagist.org/packages/yiisoft/yii-debug)
+[![Build Status](https://travis-ci.org/yiisoft/yii-debug.svg?branch=master)](https://travis-ci.org/yiisoft/yii-debug)
 
 
 Installation
@@ -24,20 +24,9 @@ Installation
 
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-Either run
-
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-debug
+php composer.phar require --prefer-dist yiisoft/yii-debug
 ```
-
-or add
-
-```
-"yiisoft/yii2-debug": "~2.1.0"
-```
-
-to the require section of your `composer.json` file.
-
 
 Usage
 -----
