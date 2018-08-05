@@ -3,6 +3,7 @@
     "description": "The debugger extension for the Yii framework",
     "keywords": ["yii", "debug", "debugger"],
     "license": "BSD-3-Clause",
+    "type": "library",
     "support": {
         "issues": "https://github.com/yiisoft/yii-debug/issues",
         "forum": "http://www.yiiframework.com/forum/",
