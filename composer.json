@@ -1,7 +1,7 @@
 {
     "name": "yiisoft/yii-debug",
     "type": "library",
-    "description": "Yii Framework Debugger Extension",
+    "description": "Yii Framework Debug Panel Extension",
     "keywords": ["yii", "debug", "debugger"],
     "license": "BSD-3-Clause",
     "support": {
@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "yiisoft/core": "^3.0@dev",
+        "yiisoft/yii-core": "^3.0@dev",
         "yiisoft/yii-bootstrap-implementation": "^3.0@dev"
     },
     "require-dev": {
