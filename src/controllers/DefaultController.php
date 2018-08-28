@@ -8,6 +8,7 @@
 namespace yii\debug\controllers;
 
 use Yii;
+use yii\base\Action;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\debug\models\search\Debug;
@@ -58,7 +59,7 @@ class DefaultController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function beforeAction($action)
+    public function beforeAction(Action $action): bool
     {
         Yii::$app->response->format = Response::FORMAT_HTML;
         return parent::beforeAction($action);
