@@ -8,6 +8,7 @@
 namespace yii\debug\controllers;
 
 use Yii;
+use yii\base\Action;
 use yii\debug\models\UserSwitch;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -24,7 +25,7 @@ class UserController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function beforeAction($action)
+    public function beforeAction(Action $action): bool
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if (!Yii::$app->session->hasSessionId) {
