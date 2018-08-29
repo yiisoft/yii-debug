@@ -8,11 +8,11 @@
 namespace yii\debug\panels;
 
 use Psr\Log\LogLevel;
-use Yii;
 use yii\base\InvalidConfigException;
+use yii\debug\models\search\Db;
 use yii\debug\Panel;
 use yii\helpers\ArrayHelper;
-use yii\debug\models\search\Db;
+use yii\helpers\Yii;
 
 /**
  * Debugger panel that collects and displays database queries performed.
@@ -97,7 +97,7 @@ class DbPanel extends Panel
         $queryCount = count($timings);
         $queryTime = number_format($this->getTotalQueryTime($timings) * 1000) . ' ms';
 
-        return Yii::$app->view->render('panels/db/summary', [
+        return $this->app->view->render('panels/db/summary', [
             'timings' => $this->calculateTimings(),
             'panel' => $this,
             'queryCount' => $queryCount,
@@ -112,7 +112,7 @@ class DbPanel extends Panel
     {
         $searchModel = new Db();
 
-        if (!$searchModel->load(Yii::$app->request->getQueryParams())) {
+        if (!$searchModel->load($this->app->request->getQueryParams())) {
             $searchModel->load($this->defaultFilter, '');
         }
 
@@ -121,7 +121,7 @@ class DbPanel extends Panel
         $dataProvider->getSort()->defaultOrder = $this->defaultOrder;
         $sumDuplicates = $this->sumDuplicateQueries($models);
 
-        return Yii::$app->view->render('panels/db/detail', [
+        return $this->app->view->render('panels/db/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -381,6 +381,6 @@ class DbPanel extends Panel
      */
     public function getDb()
     {
-        return Yii::$app->get($this->db);
+        return $this->app->get($this->db);
     }
 }

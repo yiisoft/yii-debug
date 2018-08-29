@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\InlineAction;
 use yii\debug\Panel;
 
@@ -40,7 +40,7 @@ class RequestPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/request/summary', ['panel' => $this]);
+        return $this->app->view->render('panels/request/summary', ['panel' => $this]);
     }
 
     /**
@@ -48,7 +48,7 @@ class RequestPanel extends Panel
      */
     public function getDetail()
     {
-        return Yii::$app->view->render('panels/request/detail', ['panel' => $this]);
+        return $this->app->view->render('panels/request/detail', ['panel' => $this]);
     }
 
     /**
@@ -56,7 +56,7 @@ class RequestPanel extends Panel
      */
     public function save()
     {
-        $headers = Yii::$app->getRequest()->getHeaders();
+        $headers = $this->app->getRequest()->getHeaders();
         $requestHeaders = [];
         foreach ($headers as $name => $value) {
             if (is_array($value) && count($value) == 1) {
@@ -84,11 +84,11 @@ class RequestPanel extends Panel
                 $responseHeaders[] = $header;
             }
         }
-        if (Yii::$app->requestedAction) {
-            if (Yii::$app->requestedAction instanceof InlineAction) {
-                $action = get_class(Yii::$app->requestedAction->controller) . '::' . Yii::$app->requestedAction->actionMethod . '()';
+        if ($this->app->requestedAction) {
+            if ($this->app->requestedAction instanceof InlineAction) {
+                $action = get_class($this->app->requestedAction->controller) . '::' . $this->app->requestedAction->actionMethod . '()';
             } else {
-                $action = get_class(Yii::$app->requestedAction) . '::run()';
+                $action = get_class($this->app->requestedAction) . '::run()';
             }
         } else {
             $action = null;
@@ -96,22 +96,22 @@ class RequestPanel extends Panel
 
         $data = [
             'flashes' => $this->getFlashes(),
-            'statusCode' => Yii::$app->getResponse()->getStatusCode(),
+            'statusCode' => $this->app->getResponse()->getStatusCode(),
             'requestHeaders' => $requestHeaders,
             'responseHeaders' => $responseHeaders,
-            'route' => Yii::$app->requestedAction ? Yii::$app->requestedAction->getUniqueId() : Yii::$app->requestedRoute,
+            'route' => $this->app->requestedAction ? $this->app->requestedAction->getUniqueId() : $this->app->requestedRoute,
             'action' => $action,
-            'actionParams' => Yii::$app->requestedParams,
+            'actionParams' => $this->app->requestedParams,
             'general' => [
-                'method' => Yii::$app->getRequest()->getMethod(),
-                'isAjax' => Yii::$app->getRequest()->getIsAjax(),
-                'isFlash' => Yii::$app->getRequest()->getIsFlash(),
-                'isSecureConnection' => Yii::$app->getRequest()->getIsSecureConnection(),
+                'method' => $this->app->getRequest()->getMethod(),
+                'isAjax' => $this->app->getRequest()->getIsAjax(),
+                'isFlash' => $this->app->getRequest()->getIsFlash(),
+                'isSecureConnection' => $this->app->getRequest()->getIsSecureConnection(),
             ],
-            'requestBody' => Yii::$app->getRequest()->getRawBody() == '' ? [] : [
-                'Content Type' => Yii::$app->getRequest()->getContentType(),
-                'Raw' => Yii::$app->getRequest()->getRawBody(),
-                'Decoded to Params' => Yii::$app->getRequest()->getBodyParams(),
+            'requestBody' => $this->app->getRequest()->getRawBody() == '' ? [] : [
+                'Content Type' => $this->app->getRequest()->getContentType(),
+                'Raw' => $this->app->getRequest()->getRawBody(),
+                'Decoded to Params' => $this->app->getRequest()->getBodyParams(),
             ],
         ];
 
@@ -130,7 +130,7 @@ class RequestPanel extends Panel
     protected function getFlashes()
     {
         /* @var $session \yii\web\Session */
-        $session = Yii::$app->has('session', true) ? Yii::$app->get('session') : null;
+        $session = $this->app->has('session', true) ? $this->app->get('session') : null;
         if ($session === null || !$session->getIsActive()) {
             return [];
         }

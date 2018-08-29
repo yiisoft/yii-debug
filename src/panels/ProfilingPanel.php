@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\debug\Panel;
 use yii\log\Logger;
 use yii\debug\models\search\Profile;
@@ -39,7 +39,7 @@ class ProfilingPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/profile/summary', [
+        return $this->app->view->render('panels/profile/summary', [
             'memory' => sprintf('%.3f MB', $this->data['memory'] / 1048576),
             'time' => number_format($this->data['time'] * 1000) . ' ms',
             'panel' => $this
@@ -52,9 +52,9 @@ class ProfilingPanel extends Panel
     public function getDetail()
     {
         $searchModel = new Profile();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams(), $this->getModels());
+        $dataProvider = $searchModel->search($this->app->request->getQueryParams(), $this->getModels());
 
-        return Yii::$app->view->render('panels/profile/detail', [
+        return $this->app->view->render('panels/profile/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

@@ -8,7 +8,7 @@
 namespace yii\debug\panels;
 
 use Psr\Log\LogLevel;
-use Yii;
+use yii\helpers\Yii;
 use yii\debug\models\Router;
 use yii\debug\Panel;
 
@@ -67,7 +67,7 @@ class RouterPanel extends Panel
      */
     public function getDetail()
     {
-        return Yii::$app->view->render('panels/router/detail', ['model' => new Router($this->data)]);
+        return $this->app->view->render('panels/router/detail', ['model' => new Router($this->data)]);
     }
 
     /**

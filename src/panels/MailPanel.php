@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\Event;
 use yii\debug\models\search\Mail;
 use yii\debug\Panel;
@@ -106,7 +106,7 @@ class MailPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/mail/summary', [
+        return $this->app->view->render('panels/mail/summary', [
             'panel' => $this,
             'mailCount' => count($this->data),
         ]);
@@ -118,9 +118,9 @@ class MailPanel extends Panel
     public function getDetail()
     {
         $searchModel = new Mail();
-        $dataProvider = $searchModel->search(Yii::$app->request->get(), $this->data);
+        $dataProvider = $searchModel->search($this->app->request->get(), $this->data);
 
-        return Yii::$app->view->render('panels/mail/detail', [
+        return $this->app->view->render('panels/mail/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel

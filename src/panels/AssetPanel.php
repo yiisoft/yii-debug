@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\debug\Panel;
@@ -35,7 +35,7 @@ class AssetPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/assets/summary', ['panel' => $this]);
+        return $this->app->view->render('panels/assets/summary', ['panel' => $this]);
     }
 
     /**
@@ -43,7 +43,7 @@ class AssetPanel extends Panel
      */
     public function getDetail()
     {
-        return Yii::$app->view->render('panels/assets/detail', ['panel' => $this]);
+        return $this->app->view->render('panels/assets/detail', ['panel' => $this]);
     }
 
     /**
@@ -51,7 +51,7 @@ class AssetPanel extends Panel
      */
     public function save()
     {
-        $bundles = Yii::$app->view->assetManager->bundles;
+        $bundles = $this->app->view->assetManager->bundles;
         if (empty($bundles)) { // bundles can be false
             return [];
         }
@@ -77,7 +77,7 @@ class AssetPanel extends Panel
     public function isEnabled()
     {
         try {
-            Yii::$app->view->assetManager;
+            $this->app->view->assetManager;
         } catch (InvalidConfigException $exception) {
             return false;
         }

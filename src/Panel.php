@@ -7,10 +7,11 @@
 
 namespace yii\debug;
 
-use Yii;
+use yii\base\Application;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Yii;
 
 /**
  * Panel is a base class for debugger panel classes. It defines how data should be collected,
@@ -56,6 +57,16 @@ class Panel extends Component
      */
     protected $error;
 
+    /**
+     * @var Application
+     */
+    protected $app;
+
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
     /**
      * @return string name of the panel

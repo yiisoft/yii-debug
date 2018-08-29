@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\debug\Panel;
 use yii\debug\models\timeline\Search;
 use yii\debug\models\timeline\Svg;
@@ -94,9 +94,9 @@ class TimelinePanel extends Panel
     public function getDetail()
     {
         $searchModel = new Search();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams(), $this);
+        $dataProvider = $searchModel->search($this->app->request->getQueryParams(), $this);
 
-        return Yii::$app->view->render('panels/timeline/detail', [
+        return $this->app->view->render('panels/timeline/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

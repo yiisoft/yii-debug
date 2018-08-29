@@ -69,7 +69,7 @@ $this->title = 'Yii Debugger';
             [
                 'attribute' => 'time',
                 'value' => function ($data) {
-                    return '<span class="nowrap">' . Yii::$app->formatter->asDatetime($data['time'], 'yyyy-MM-dd HH:mm:ss') . '</span>';
+                    return '<span class="nowrap">' . $this->app->formatter->asDatetime($data['time'], 'yyyy-MM-dd HH:mm:ss') . '</span>';
                 },
                 'format' => 'html',
             ],

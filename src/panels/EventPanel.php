@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\Event;
 use yii\debug\Panel;
 
@@ -62,7 +62,7 @@ class EventPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/event/summary', [
+        return $this->app->view->render('panels/event/summary', [
             'panel' => $this,
             'eventCount' => count($this->data),
         ]);
@@ -74,9 +74,9 @@ class EventPanel extends Panel
     public function getDetail()
     {
         $searchModel = new \yii\debug\models\search\Event();
-        $dataProvider = $searchModel->search(Yii::$app->request->get(), $this->data);
+        $dataProvider = $searchModel->search($this->app->request->get(), $this->data);
 
-        return Yii::$app->view->render('panels/event/detail', [
+        return $this->app->view->render('panels/event/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel

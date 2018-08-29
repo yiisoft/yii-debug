@@ -7,7 +7,7 @@
 
 namespace yii\debug\models;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\Model;
 use yii\web\IdentityInterface;
 use yii\web\User;
@@ -68,7 +68,7 @@ class UserSwitch extends Model
     {
         if ($this->_user === null) {
             /* @var $user User */
-            $this->_user = is_string($this->userComponent) ? Yii::$app->get($this->userComponent, false) : $this->userComponent;
+            $this->_user = is_string($this->userComponent) ? $this->app->get($this->userComponent, false) : $this->userComponent;
         }
         return $this->_user;
     }
@@ -82,7 +82,7 @@ class UserSwitch extends Model
         $currentUser = $this->getUser();
 
         if ($this->_mainUser === null && $currentUser->getIsGuest() === false) {
-            $session = Yii::$app->getSession();
+            $session = $this->app->getSession();
             if ($session->has('main_user')) {
                 $mainUserId = $session->get('main_user');
                 $mainIdentity = call_user_func([$currentUser->identityClass, 'findIdentity'], $mainUserId);
@@ -109,9 +109,9 @@ class UserSwitch extends Model
         // Switch identity
         $this->getUser()->switchIdentity($user->identity);
         if (!$isCurrent) {
-            Yii::$app->getSession()->set('main_user', $this->getMainUser()->getId());
+            $this->app->getSession()->set('main_user', $this->getMainUser()->getId());
         } else {
-            Yii::$app->getSession()->remove('main_user');
+            $this->app->getSession()->remove('main_user');
         }
     }
 
