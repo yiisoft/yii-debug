@@ -86,7 +86,7 @@ echo GridView::widget([
 
                     $query .= Html::tag(
                         'div',
-                        Html::a('[+] Explain', ['db-explain', 'seq' => $data['seq'], 'tag' => Yii::$app->controller->summary['tag']]),
+                        Html::a('[+] Explain', ['db-explain', 'seq' => $data['seq'], 'tag' => $this->app->controller->summary['tag']]),
                         ['class' => 'db-explain']
                     );
                 }

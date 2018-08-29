@@ -7,16 +7,19 @@
 
 namespace yii\debug;
 
-use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
+use yii\base\RequestEvent;
+use yii\di\Initiable;
 use yii\helpers\Json;
-use yii\web\Response;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Yii;
+use yii\view\BodyEvent;
+use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 use yii\web\UrlRule;
 use yii\web\View;
-use yii\web\ForbiddenHttpException;
 
 /**
  * The Yii Debug Module provides the debug toolbar and debugger
@@ -24,7 +27,7 @@ use yii\web\ForbiddenHttpException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Module extends \yii\base\Module implements BootstrapInterface
+class Module extends \yii\base\Module implements BootstrapInterface, Initiable
 {
     const DEFAULT_IDE_TRACELINE = '<a href="ide://open?url=file://{file}&line={line}">{text}</a>';
 
@@ -46,7 +49,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'yii\debug\controllers';
+    public $controllerNamespace = controllers::class;
     /**
      * @var LogTarget
      */
@@ -58,7 +61,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public $profileTarget;
     /**
      * @var array|Panel[] list of debug panels. The array keys are the panel IDs, and values are the corresponding
-     * panel class names or configuration arrays. This will be merged with [[corePanels()]].
+     * panel class names or configuration arrays. See default panels in config.
      * You may reconfigure a core panel via this property by using the same panel ID.
      * You may also disable a core panel by setting it to be false in this property.
      */
@@ -146,12 +149,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
-        parent::init();
         $this->dataPath = Yii::getAlias($this->dataPath);
 
-        if (Yii::$app instanceof \yii\web\Application) {
+        if ($this->app instanceof \yii\web\Application) {
             $this->initPanels();
         }
     }
@@ -161,20 +163,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     protected function initPanels()
     {
-        // merge custom panels and core panels so that they are ordered mainly by custom panels
-        if (empty($this->panels)) {
-            $this->panels = $this->corePanels();
-        } else {
-            $corePanels = $this->corePanels();
-            foreach ($corePanels as $id => $config) {
-                if (isset($this->panels[$id])) {
-                    unset($corePanels[$id]);
-                }
-            }
-            $this->panels = array_filter(array_merge($corePanels, $this->panels));
-        }
-
         foreach ($this->panels as $id => $config) {
+            if ($config === false) {
+                unset($config[$id]);
+                continue;
+            }
             if (is_string($config)) {
                 $config = ['__class' => $config];
             }
@@ -208,8 +201,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
         // @todo handle not supported profiler
 
         // delay attaching event handler to the view component after it is fully configured
-        $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
-            $app->getView()->on(View::EVENT_END_BODY, [$this, 'renderToolbar']);
+        $app->on(RequestEvent::BEFORE, function () use ($app) {
+            $app->getView()->on(BodyEvent::END, [$this, 'renderToolbar']);
             $app->getResponse()->on(Response::EVENT_AFTER_PREPARE, [$this, 'setDebugHeaders']);
         });
 
@@ -218,14 +211,14 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 '__class' => UrlRule::class,
                 'route' => $this->id,
                 'pattern' => $this->id,
-                'suffix' => false
+                'suffix' => false,
             ],
             [
                 '__class' => UrlRule::class,
                 'route' => $this->id . '/<controller>/<action>',
                 'pattern' => $this->id . '/<controller:[\w\-]+>/<action:[\w\-]+>',
-                'suffix' => false
-            ]
+                'suffix' => false,
+            ],
         ], false);
     }
 
@@ -235,7 +228,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public function beforeAction($action)
     {
         if (!$this->enableDebugLogs) {
-            $logger = Yii::$app->getLogger();
+            $logger = $this->app->getLogger();
             if ($logger instanceof \yii\log\Logger) {
                 foreach ($logger->getTargets() as $target) {
                     $target->enabled = false;
@@ -248,8 +241,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         // do not display debug toolbar when in debug view mode
-        Yii::$app->getView()->off(View::EVENT_END_BODY, [$this, 'renderToolbar']);
-        Yii::$app->getResponse()->off(Response::EVENT_AFTER_PREPARE, [$this, 'setDebugHeaders']);
+        $this->app->getView()->off(BodyEvent::END, [$this, 'renderToolbar']);
+        $this->app->getResponse()->off(Response::EVENT_AFTER_PREPARE, [$this, 'setDebugHeaders']);
 
         if ($this->checkAccess()) {
             $this->resetGlobalSettings();
@@ -280,8 +273,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
             'tag' => $this->logTarget->tag,
         ]);
 
-        /* @var $response \yii\web\Response */
-        $response = $event->sender;
+        /** @var Response $response */
+        $response = $event->getTarget();
         $response->setHeader('X-Debug-Tag', $this->logTarget->tag);
         $response->setHeader('X-Debug-Duration', number_format((microtime(true) - YII_BEGIN_TIME) * 1000 + 1));
         $response->setHeader('X-Debug-Link', $url);
@@ -292,7 +285,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     protected function resetGlobalSettings()
     {
-        Yii::$app->assetManager->bundles = [];
+        $this->app->assetManager->bundles = [];
     }
 
     /**
@@ -314,13 +307,13 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function renderToolbar($event)
     {
-        if (!$this->checkAccess() || Yii::$app->getRequest()->getIsAjax()) {
+        if (!$this->checkAccess() || $this->app->getRequest()->getIsAjax()) {
             return;
         }
 
-        /* @var $view View */
-        $view = $event->sender;
-        echo $view->renderDynamic('return Yii::$app->getModule("' . $this->id . '")->getToolbarHtml();');
+        /** @var View $view */
+        $view = $event->getTarget();
+        echo $view->renderDynamic('return $this->app->getModule("' . $this->id . '")->getToolbarHtml();');
 
         // echo is used in order to support cases where asset manager is not available
         echo '<style>' . $view->renderPhpFile(__DIR__ . '/assets/toolbar.css') . '</style>';
@@ -333,7 +326,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     protected function checkAccess()
     {
-        $ip = Yii::$app->getRequest()->getUserIP();
+        $ip = $this->app->getRequest()->getUserIP();
         foreach ($this->allowedIPs as $filter) {
             if ($filter === '*' || $filter === $ip || (($pos = strpos($filter, '*')) !== false && !strncmp($ip, $filter, $pos))) {
                 return true;
@@ -350,26 +343,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @return array default set of panels
-     */
-    protected function corePanels()
-    {
-        return [
-            'config' => ['__class' => panels\ConfigPanel::class],
-            'request' => ['__class' => panels\RequestPanel::class],
-            'log' => ['__class' => panels\LogPanel::class],
-            'profiling' => ['__class' => panels\ProfilingPanel::class],
-            'db' => ['__class' => panels\DbPanel::class],
-            'event' => ['__class' => panels\EventPanel::class],
-            'assets' => ['__class' => panels\AssetPanel::class],
-            'mail' => ['__class' => panels\MailPanel::class],
-            'timeline' => ['__class' => panels\TimelinePanel::class],
-            'user' => ['__class' => panels\UserPanel::class],
-            'router' => ['__class' => panels\RouterPanel::class],
-        ];
-    }
-
-    /**
      * {@inheritdoc}
      * @since 2.0.7
      */
@@ -377,8 +350,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
     {
         $packageInfo = Json::decode(file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'composer.json'));
         $extensionName = $packageInfo['name'];
-        if (isset(Yii::$app->extensions[$extensionName])) {
-            return Yii::$app->extensions[$extensionName]['version'];
+        if (isset($this->app->extensions[$extensionName])) {
+            return $this->app->extensions[$extensionName]['version'];
         }
         return parent::defaultVersion();
     }

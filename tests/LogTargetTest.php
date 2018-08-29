@@ -2,7 +2,7 @@
 
 namespace yiiunit\debug;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\debug\LogTarget;
 use yii\debug\Module;
 
@@ -15,10 +15,10 @@ class LogTargetTest extends TestCase
             ->getMock();
         Yii::setLogger($logger);
 
-        Yii::$app->getRequest()->setUrl('dummy');
+        $this->app->getRequest()->setUrl('dummy');
 
         $module = new Module('debug');
-        $module->bootstrap(Yii::$app);
+        $module->bootstrap($this->app);
 
         $logTarget = new LogTarget($module);
         $data = $this->invoke($logTarget, 'collectSummary');

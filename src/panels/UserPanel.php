@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\Controller;
 use yii\base\Model;
 use yii\base\InvalidConfigException;
@@ -102,7 +102,7 @@ class UserPanel extends Panel
     public function getUser()
     {
         /* @var $user User */
-        return is_string($this->userComponent) ? Yii::$app->get($this->userComponent, false) : $this->userComponent;
+        return is_string($this->userComponent) ? $this->app->get($this->userComponent, false) : $this->userComponent;
     }
 
     /**
@@ -141,7 +141,7 @@ class UserPanel extends Panel
      */
     public function getUserDataProvider()
     {
-        return $this->getUsersFilterModel()->search(Yii::$app->request->queryParams);
+        return $this->getUsersFilterModel()->search($this->app->request->queryParams);
     }
 
     /**
@@ -181,7 +181,7 @@ class UserPanel extends Panel
         if ($userController) {
             $action = $userController->createAction('set-identity');
             $user = $this->userSwitch->getMainUser();
-            $request = Yii::$app->request;
+            $request = $this->app->request;
 
             $allowSwitchUser = $rule->allows($action, $user, $request) ?: false;
         }
@@ -202,7 +202,7 @@ class UserPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/user/summary', ['panel' => $this]);
+        return $this->app->view->render('panels/user/summary', ['panel' => $this]);
     }
 
     /**
@@ -210,7 +210,7 @@ class UserPanel extends Panel
      */
     public function getDetail()
     {
-        return Yii::$app->view->render('panels/user/detail', ['panel' => $this]);
+        return $this->app->view->render('panels/user/detail', ['panel' => $this]);
     }
 
     /**
@@ -218,7 +218,7 @@ class UserPanel extends Panel
      */
     public function save()
     {
-        $identity = Yii::$app->user->identity;
+        $identity = $this->app->user->identity;
 
         if (!isset($identity)) {
             return null;
@@ -228,7 +228,7 @@ class UserPanel extends Panel
         $permissionsProvider = null;
 
         try {
-            $authManager = Yii::$app->getAuthManager();
+            $authManager = $this->app->getAuthManager();
 
             if ($authManager instanceof \yii\rbac\ManagerInterface) {
                 $roles = ArrayHelper::toArray($authManager->getRolesByUser($this->getUser()->id));

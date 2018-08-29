@@ -30,8 +30,8 @@ class User extends Model
      */
     public function init()
     {
-        if (\Yii::$app->user && \Yii::$app->user->identityClass) {
-            $identityImplementation = new \Yii::$app->user->identityClass();
+        if ($this->app->user && $this->app->user->identityClass) {
+            $identityImplementation = new $this->app->user->identityClass();
             if ($identityImplementation instanceof Model) {
                 $this->identityImplement = $identityImplementation;
             }

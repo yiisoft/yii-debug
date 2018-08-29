@@ -7,7 +7,7 @@
 
 namespace yii\debug\controllers;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\Action;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -61,7 +61,7 @@ class DefaultController extends Controller
      */
     public function beforeAction(Action $action): bool
     {
-        Yii::$app->response->format = Response::FORMAT_HTML;
+        $this->app->response->format = Response::FORMAT_HTML;
         return parent::beforeAction($action);
     }
 
@@ -104,7 +104,7 @@ class DefaultController extends Controller
         }
 
         if ($activePanel->hasError()) {
-            Yii::$app->errorHandler->handleException($activePanel->getError());
+            $this->app->errorHandler->handleException($activePanel->getError());
         }
 
         return $this->render('view', [
@@ -135,7 +135,7 @@ class DefaultController extends Controller
             throw new NotFoundHttpException('Mail file not found');
         }
 
-        return Yii::$app->response->sendFile($filePath);
+        return $this->app->response->sendFile($filePath);
     }
 
     /**

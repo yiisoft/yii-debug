@@ -7,8 +7,9 @@
 
 namespace yii\debug;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\InvalidConfigException;
+use yii\debug\Module;
 use yii\helpers\FileHelper;
 use yii\log\Target;
 
@@ -31,12 +32,10 @@ class LogTarget extends Target
 
 
     /**
-     * @param \yii\debug\Module $module
-     * @param array $config
+     * @param Module $module
      */
-    public function __construct($module, $config = [])
+    public function __construct(Module $module)
     {
-        parent::__construct($config);
         $this->module = $module;
         $this->tag = uniqid();
     }
@@ -154,12 +153,12 @@ class LogTarget extends Target
      */
     protected function collectSummary()
     {
-        if (Yii::$app === null) {
+        if ($this->app === null) {
             return '';
         }
 
-        $request = Yii::$app->getRequest();
-        $response = Yii::$app->getResponse();
+        $request = $this->app->getRequest();
+        $response = $this->app->getResponse();
         $summary = [
             'tag' => $this->tag,
             'url' => $request->getAbsoluteUrl(),

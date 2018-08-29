@@ -7,7 +7,7 @@
 
 namespace yii\debug\controllers;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\base\Action;
 use yii\debug\models\UserSwitch;
 use yii\web\BadRequestHttpException;
@@ -27,8 +27,8 @@ class UserController extends Controller
      */
     public function beforeAction(Action $action): bool
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        if (!Yii::$app->session->hasSessionId) {
+        $this->app->response->format = Response::FORMAT_JSON;
+        if (!$this->app->session->hasSessionId) {
             throw new BadRequestHttpException('Need an active session');
         }
         return parent::beforeAction($action);
@@ -40,12 +40,12 @@ class UserController extends Controller
      */
     public function actionSetIdentity()
     {
-        $user_id = Yii::$app->request->post('user_id');
+        $user_id = $this->app->request->post('user_id');
 
         $userSwitch = new UserSwitch();
-        $newIdentity = Yii::$app->user->identity->findIdentity($user_id);
+        $newIdentity = $this->app->user->identity->findIdentity($user_id);
         $userSwitch->setUserByIdentity($newIdentity);
-        return Yii::$app->user;
+        return $this->app->user;
     }
 
     /**
@@ -56,6 +56,6 @@ class UserController extends Controller
     {
         $userSwitch = new UserSwitch();
         $userSwitch->reset();
-        return Yii::$app->user;
+        return $this->app->user;
     }
 }

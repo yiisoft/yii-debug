@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\debug\Panel;
 
 /**
@@ -34,7 +34,7 @@ class ConfigPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/config/summary', ['panel' => $this]);
+        return $this->app->view->render('panels/config/summary', ['panel' => $this]);
     }
 
     /**
@@ -42,7 +42,7 @@ class ConfigPanel extends Panel
      */
     public function getDetail()
     {
-        return Yii::$app->view->render('panels/config/detail', ['panel' => $this]);
+        return $this->app->view->render('panels/config/detail', ['panel' => $this]);
     }
 
     /**
@@ -88,11 +88,11 @@ class ConfigPanel extends Panel
             'yiiVersion' => Yii::getVersion(),
             'application' => [
                 'yii' => Yii::getVersion(),
-                'name' => Yii::$app->name,
-                'version' => Yii::$app->version,
-                'language' => Yii::$app->language,
-                'sourceLanguage' => Yii::$app->sourceLanguage,
-                'charset' => Yii::$app->charset,
+                'name' => $this->app->name,
+                'version' => $this->app->version,
+                'language' => $this->app->language,
+                'sourceLanguage' => $this->app->sourceLanguage,
+                'charset' => $this->app->charset,
                 'env' => YII_ENV,
                 'debug' => YII_DEBUG,
             ],
@@ -103,7 +103,7 @@ class ConfigPanel extends Panel
                 'memcache' => extension_loaded('memcache'),
                 'memcached' => extension_loaded('memcached'),
             ],
-            'extensions' => Yii::$app->extensions,
+            'extensions' => $this->app->extensions,
         ];
     }
 }

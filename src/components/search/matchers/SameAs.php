@@ -32,9 +32,9 @@ class SameAs extends Base
             $value = VarDumper::export($value);
         }
         if ($this->partial) {
-            return mb_stripos($value, $this->baseValue, 0, \Yii::$app->charset) !== false;
+            return mb_stripos($value, $this->baseValue, 0, $this->app->charset) !== false;
         }
 
-        return strcmp(mb_strtoupper($this->baseValue, \Yii::$app->charset), mb_strtoupper($value, \Yii::$app->charset)) === 0;
+        return strcmp(mb_strtoupper($this->baseValue, $this->app->charset), mb_strtoupper($value, $this->app->charset)) === 0;
     }
 }

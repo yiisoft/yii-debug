@@ -234,7 +234,7 @@ If your application is run under a virtualized or dockerized environment, it is 
 
 ```php
 'traceLine' => function($options, $panel) {
-    $filePath = str_replace(Yii::$app->basePath, '~/path/to/your/app', $options['file']);
+    $filePath = str_replace($this->app->basePath, '~/path/to/your/app', $options['file']);
     return strtr('<a href="ide://open?url=file://{file}&line={line}">{text}</a>', ['{file}' => $filePath]);
 },
 ```

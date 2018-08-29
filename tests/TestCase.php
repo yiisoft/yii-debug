@@ -4,7 +4,7 @@ namespace yiiunit\debug;
 
 use yii\di\Container;
 use yii\helpers\ArrayHelper;
-use Yii;
+use yii\helpers\Yii;
 use yii\log\Logger;
 
 /**
@@ -23,7 +23,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Populates Yii::$app with a new application
+     * Populates $this->app with a new application
      * The application will be destroyed on tearDown() automatically.
      * @param array $config The application configuration, if needed
      * @param string $appClass name of the application class to create
@@ -54,12 +54,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Destroys application in Yii::$app by setting it to null.
+     * Destroys application in $this->app by setting it to null.
      */
     protected function destroyApplication()
     {
         Yii::setLogger(new Logger());
-        Yii::$app = null;
+        $this->app = null;
         Yii::$container = new Container();
     }
 

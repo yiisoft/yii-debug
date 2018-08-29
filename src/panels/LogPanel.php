@@ -7,7 +7,7 @@
 
 namespace yii\debug\panels;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\debug\Panel;
 use yii\helpers\VarDumper;
 use yii\log\Logger;
@@ -40,7 +40,7 @@ class LogPanel extends Panel
      */
     public function getSummary()
     {
-        return Yii::$app->view->render('panels/log/summary', ['data' => $this->data, 'panel' => $this]);
+        return $this->app->view->render('panels/log/summary', ['data' => $this->data, 'panel' => $this]);
     }
 
     /**
@@ -49,9 +49,9 @@ class LogPanel extends Panel
     public function getDetail()
     {
         $searchModel = new Log();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams(), $this->getModels());
+        $dataProvider = $searchModel->search($this->app->request->getQueryParams(), $this->getModels());
 
-        return Yii::$app->view->render('panels/log/detail', [
+        return $this->app->view->render('panels/log/detail', [
             'dataProvider' => $dataProvider,
             'panel' => $this,
             'searchModel' => $searchModel,

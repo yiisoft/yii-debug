@@ -6,7 +6,7 @@ use yii\base\Event;
 use yii\caching\Cache;
 use yii\caching\FileCache;
 use yii\debug\Module;
-use Yii;
+use yii\helpers\Yii;
 
 class ModuleTest extends TestCase
 {
@@ -82,7 +82,7 @@ class ModuleTest extends TestCase
         Yii::setLogger($logger);
 
         $module = new Module('debug');
-        $module->bootstrap(Yii::$app);
+        $module->bootstrap($this->app);
 
         $this->assertEquals(<<<HTML
 <div id="yii-debug-toolbar" data-url="/index.php?r=debug%2Fdefault%2Ftoolbar&amp;tag={$module->logTarget->tag}" style="display:none" class="yii-debug-toolbar-bottom"></div>
@@ -102,14 +102,14 @@ HTML
 
         $module = new Module('debug');
         $module->allowedIPs = ['*'];
-        Yii::$app->setModule('debug',$module);
-        $module->bootstrap(Yii::$app);
+        $this->app->setModule('debug',$module);
+        $module->bootstrap($this->app);
 
-        Yii::$app->set('cache', new Cache([
+        $this->app->set('cache', new Cache([
             'handler' => new FileCache(['cachePath' => '@yiiunit/debug/runtime/cache'])
         ]));
 
-        $view = Yii::$app->view;
+        $view = $this->app->view;
         for ($i = 0; $i <= 1; $i++) {
             ob_start();
             $module->logTarget->tag = 'tag' . $i;
@@ -139,10 +139,10 @@ HTML
 
         $module = new Module($moduleID);
         $module->allowedIPs = ['*'];
-        Yii::$app->setModule($moduleID, $module);
-        $module->bootstrap(Yii::$app);
+        $this->app->setModule($moduleID, $module);
+        $module->bootstrap($this->app);
 
-        $view = Yii::$app->view;
+        $view = $this->app->view;
 
         ob_start();
         $module->renderToolbar(new Event(['sender' => $view]));
@@ -153,7 +153,7 @@ HTML
 
     public function testDefaultVersion()
     {
-        Yii::$app->extensions['yiisoft/yii2-debug'] = [
+        $this->app->extensions['yiisoft/yii2-debug'] = [
             'name' => 'yiisoft/yii2-debug',
             'version' => '2.0.7',
         ];
