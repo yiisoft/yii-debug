@@ -33,6 +33,6 @@ class DebugAsset extends AssetBundle
      */
     public $depends = [
         \yii\jquery\YiiAsset::class,
-        \yii\bootstrap\BootstrapAsset::class,
+        \yii\bootstrap4\BootstrapAsset::class,
     ];
 }

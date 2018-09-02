@@ -1,7 +1,7 @@
 <?php
 
-use yii\bootstrap\ButtonDropdown;
-use yii\bootstrap\ButtonGroup;
+use yii\bootstrap4\ButtonDropdown;
+use yii\bootstrap4\ButtonGroup;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
