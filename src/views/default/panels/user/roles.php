@@ -1,6 +1,6 @@
 <?php
 
-use yii\grid\GridView;
+use yii\dataview\GridView;
 
 /* @var $panel yii\debug\panels\UserPanel */
 

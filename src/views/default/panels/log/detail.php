@@ -2,7 +2,7 @@
 
 use Psr\Log\LogLevel;
 use yii\helpers\Html;
-use yii\grid\GridView;
+use yii\dataview\GridView;
 use yii\helpers\VarDumper;
 use yii\log\Logger;
 
