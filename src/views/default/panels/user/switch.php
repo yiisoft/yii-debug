@@ -3,7 +3,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 use yii\debug\UserswitchAsset;
-use yii\grid\GridView;
+use yii\dataview\GridView;
 
 /* @var $this \yii\web\View */
 /* @var $panel yii\debug\panels\UserPanel */
