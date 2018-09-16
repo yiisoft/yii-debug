@@ -4,6 +4,7 @@ namespace yiiunit\debug;
 
 use yii\debug\Module;
 use yii\debug\Panel;
+use yii\tests\TestCase;
 
 class PanelTest extends TestCase
 {
@@ -86,6 +87,9 @@ class PanelTest extends TestCase
 
     private function getPanel()
     {
-        return new Panel(['module' => new Module('debug')]);
+        $panel = new Panel($this->app);
+        $panel->module = new Module('debug', $this->app);
+
+        return $panel;
     }
 }

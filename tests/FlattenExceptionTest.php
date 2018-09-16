@@ -2,6 +2,7 @@
 
 namespace yiiunit\debug;
 
+use yii\tests\TestCase;
 use yii\web\NotFoundHttpException;
 use yii\debug\FlattenException;
 
