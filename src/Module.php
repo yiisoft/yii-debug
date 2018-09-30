@@ -7,6 +7,7 @@
 
 namespace yii\debug;
 
+use yii\base\Action;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\base\RequestEvent;
@@ -225,7 +226,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     /**
      * {@inheritdoc}
      */
-    public function beforeAction($action)
+    public function beforeAction(Action $action)
     {
         if (!$this->enableDebugLogs) {
             $logger = $this->app->getLogger();
