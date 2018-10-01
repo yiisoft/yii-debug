@@ -6,7 +6,6 @@ use yii\base\Event;
 use yii\cache\Cache;
 use yii\cache\FileCache;
 use yii\debug\Module;
-use yii\helpers\Yii;
 use yii\tests\TestCase;
 
 class ModuleTest extends TestCase
@@ -108,7 +107,8 @@ HTML
         $this->app->setModule('debug',$module);
         $module->bootstrap($this->app);
 
-        $this->app->set('cache', new Cache([
+        $this->container->set('cache', new Cache([
+            '__class' => Cache::class,
             'handler' => new FileCache('@yiiunit/debug/runtime/cache')
         ]));
 
@@ -117,7 +117,7 @@ HTML
             ob_start();
             $module->logTarget->tag = 'tag' . $i;
             if ($view->beginCache(__FUNCTION__, ['duration' => 3])) {
-                $module->renderToolbar(new Event(['sender' => $view]));
+                $module->renderToolbar(new Event('sender', $view));
                 $view->endCache();
             }
             $output[$i] = ob_get_clean();
@@ -139,11 +139,9 @@ HTML
             ->getMock();
         $this->container->set('logger', $logger);
 
-        $moduleID = 'my_debug';
-
-        $module = new Module($moduleID, $this->app);
+        $module = new Module('debug', $this->app);
         $module->allowedIPs = ['*'];
-        $this->app->setModule($moduleID, $module);
+        $this->app->setModule('debug',$module);
         $module->bootstrap($this->app);
 
         $view = $this->app->view;
