@@ -7,6 +7,7 @@ use yii\cache\Cache;
 use yii\cache\FileCache;
 use yii\debug\Module;
 use yii\tests\TestCase;
+use yii\view\View;
 
 class ModuleTest extends TestCase
 {
@@ -139,12 +140,13 @@ HTML
             ->getMock();
         $this->container->set('logger', $logger);
 
-        $module = new Module('debug', $this->app);
+        $moduleId = 'my_debug';
+        $module = new Module($moduleId, $this->app);
         $module->allowedIPs = ['*'];
-        $this->app->setModule('debug',$module);
+        $this->app->setModule($moduleId, $module);
         $module->bootstrap($this->app);
 
-        $view = $this->app->view;
+        $view = new View($this->app);
 
         ob_start();
         $module->renderToolbar(new Event('test', $view));
