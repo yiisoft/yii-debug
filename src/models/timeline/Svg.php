@@ -69,7 +69,6 @@ class Svg extends BaseObject
      */
     public function __construct(TimelinePanel $panel, $config = [])
     {
-        parent::__construct($config);
         $this->panel = $panel;
         foreach ($this->listenMessages as $panel) {
             if (isset($this->panel->module->panels[$panel]->data['messages'])) {
