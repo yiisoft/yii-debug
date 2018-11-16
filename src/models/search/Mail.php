@@ -9,6 +9,7 @@ namespace yii\debug\models\search;
 
 use yii\data\ArrayDataProvider;
 use yii\debug\components\search\Filter;
+use yii\helpers\Yii;
 
 /**
  * Mail represents the model behind the search form about current send emails.
@@ -94,7 +95,8 @@ class Mail extends Base
      */
     public function search($params, $models)
     {
-        $dataProvider = new ArrayDataProvider([
+        $dataProvider = Yii::createObject([
+            '__class' => ArrayDataProvider::class,
             'allModels' => $models,
             'pagination' => [
                 'pageSize' => 20,

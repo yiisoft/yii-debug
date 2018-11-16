@@ -9,6 +9,7 @@ namespace yii\debug\models\search;
 
 use yii\data\ArrayDataProvider;
 use yii\debug\components\search\Filter;
+use yii\helpers\Yii;
 
 /**
  * Search model for current request profiling log.
@@ -59,7 +60,8 @@ class Profile extends Base
      */
     public function search($params, $models)
     {
-        $dataProvider = new ArrayDataProvider([
+        $dataProvider = Yii::createObject([
+            '__class' => ArrayDataProvider::class,
             'allModels' => $models,
             'pagination' => false,
             'sort' => [

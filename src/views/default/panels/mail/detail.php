@@ -1,14 +1,16 @@
 <?php
 
-use \yii\widgets\ListView;
+use yii\dataview\ListView;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Yii;
 
 /* @var $panel yii\debug\panels\MailPanel */
 /* @var $searchModel yii\debug\models\search\Mail */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 
-$listView = new ListView([
+$listView = Yii::createObject([
+    '__class' => ListView::class,
     'dataProvider' => $dataProvider,
     'itemView' => '_item',
     'layout' => "{summary}\n{items}\n{pager}\n",
