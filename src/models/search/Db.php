@@ -9,6 +9,7 @@ namespace yii\debug\models\search;
 
 use yii\data\ArrayDataProvider;
 use yii\debug\components\search\Filter;
+use yii\helpers\Yii;
 
 /**
  * Search model for current request database queries.
@@ -58,7 +59,8 @@ class Db extends Base
      */
     public function search($models)
     {
-        $dataProvider = new ArrayDataProvider([
+        $dataProvider = Yii::createObject([
+            '__class' => ArrayDataProvider::class,
             'allModels' => $models,
             'pagination' => false,
             'sort' => [
