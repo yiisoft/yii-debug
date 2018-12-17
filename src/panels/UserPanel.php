@@ -218,7 +218,7 @@ class UserPanel extends Panel
      */
     public function save()
     {
-        $identity = $this->app->user->identity;
+        $identity = $this->app->getUser()->getIdentity(false);
 
         if (!isset($identity)) {
             return null;

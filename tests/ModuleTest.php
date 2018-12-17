@@ -90,7 +90,7 @@ class ModuleTest extends TestCase
         $this->assertEquals(<<<HTML
 <div id="yii-debug-toolbar" data-url="/index.php?r=debug%2Fdefault%2Ftoolbar&amp;tag={$module->logTarget->tag}" style="display:none" class="yii-debug-toolbar-bottom"></div>
 HTML
-        ,$module->getToolbarHtml());
+        ,$module->getToolbarHtml($module->logTarget->tag));
     }
 
     /**

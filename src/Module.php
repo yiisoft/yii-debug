@@ -293,10 +293,10 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      * Gets toolbar HTML
      * @since 2.0.7
      */
-    public function getToolbarHtml()
+    public function getToolbarHtml($tag)
     {
         $url = Url::toRoute(['/' . $this->id . '/default/toolbar',
-            'tag' => $this->logTarget->tag,
+            'tag' => $tag,
         ]);
         return '<div id="yii-debug-toolbar" data-url="' . Html::encode($url) . '" style="display:none" class="yii-debug-toolbar-bottom"></div>';
     }
@@ -314,7 +314,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
 
         /** @var View $view */
         $view = $event->getTarget();
-        echo $view->renderDynamic('return $this->app->getModule("' . $this->id . '")->getToolbarHtml();');
+        echo $view->renderDynamic('return $this->app->getModule("' . $this->id . '")->getToolbarHtml("' . $this->logTarget->tag . '");');
 
         // echo is used in order to support cases where asset manager is not available
         echo '<style>' . $view->renderPhpFile(__DIR__ . '/assets/toolbar.css') . '</style>';
