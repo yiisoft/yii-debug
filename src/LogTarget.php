@@ -120,7 +120,7 @@ class LogTarget extends Target
      * of each message.
      * @param bool $final whether this method is called at the end of the current application
      */
-    public function collect($messages, $final)
+    public function collect($messages, bool $final): void
     {
         $this->messages = array_merge($this->messages, $messages);
         if ($final) {
