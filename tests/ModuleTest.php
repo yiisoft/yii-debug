@@ -8,6 +8,7 @@ use yii\cache\FileCache;
 use yii\debug\Module;
 use yii\tests\TestCase;
 use yii\view\View;
+use yii\view\Theme;
 
 class ModuleTest extends TestCase
 {
@@ -146,7 +147,7 @@ HTML
         $this->app->setModule($moduleId, $module);
         $module->bootstrap($this->app);
 
-        $view = new View($this->app);
+        $view = new View($this->app, new Theme());
 
         ob_start();
         $module->renderToolbar(new Event('test', $view));
