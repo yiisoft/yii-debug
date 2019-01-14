@@ -7,6 +7,7 @@
 
 namespace yii\debug\models\search;
 
+use yii\helpers\Yii;
 use yii\data\ArrayDataProvider;
 use yii\debug\components\search\Filter;
 
@@ -92,20 +93,24 @@ class Debug extends Base
      */
     public function search($params, $models)
     {
-        $dataProvider = new ArrayDataProvider([
+        $dataProvider = Yii::createObject([
+            '__class' => ArrayDataProvider::class,
             'allModels' => $models,
-            'sort' => [
-                'attributes' => ['method', 'ip', 'tag', 'time', 'statusCode', 'sqlCount', 'mailCount'],
-            ],
             'pagination' => [
                 'pageSize' => 50,
+            ],
+            'sort' => [
+                'attributes' => ['method', 'ip', 'tag', 'time', 'statusCode', 'sqlCount', 'mailCount'],
+                'defaultOrder' => [
+                    'time' => SORT_DESC,
+                ],
             ],
         ]);
 
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-
+        
         $filter = new Filter();
         $this->addCondition($filter, 'tag', true);
         $this->addCondition($filter, 'ip', true);

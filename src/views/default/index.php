@@ -58,7 +58,7 @@ $this->title = 'Yii Debugger';
             return [];
         },
         'columns' => array_filter([
-            ['__class' => yii\grid\SerialColumn::class],
+            ['__class' => \yii\dataview\columns\SerialColumn::class],
             [
                 'attribute' => 'tag',
                 'value' => function ($data) {
