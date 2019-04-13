@@ -9,7 +9,7 @@ namespace yii\debug\panels;
 
 use yii\helpers\Yii;
 use yii\debug\Panel;
-use yii\log\Logger;
+use Yii\Log\Logger;
 use yii\debug\models\search\Profile;
 
 /**
