@@ -43,7 +43,6 @@ if (isset($panel->data['identity'])) {
     echo Tabs::widget([
         'items' => $items,
     ]);
-
 } else {
     echo 'Is guest.';
 } ?>

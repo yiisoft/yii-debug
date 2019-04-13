@@ -90,7 +90,7 @@ class ModuleTest extends TestCase
         $this->assertEquals(<<<HTML
 <div id="yii-debug-toolbar" data-url="/index.php?r=debug%2Fdefault%2Ftoolbar&amp;tag={$module->logTarget->tag}" style="display:none" class="yii-debug-toolbar-bottom"></div>
 HTML
-        ,$module->getToolbarHtml());
+        , $module->getToolbarHtml());
     }
 
     /**
@@ -106,7 +106,7 @@ HTML
 
         $module = new Module('debug', $this->app);
         $module->allowedIPs = ['*'];
-        $this->app->setModule('debug',$module);
+        $this->app->setModule('debug', $module);
         $module->bootstrap($this->app);
 
         $this->container->set('cache', new Cache([
@@ -168,4 +168,4 @@ HTML
         /// TODO assert 2.0.7
         $this->assertEquals('1.0', $module->getVersion());
     }
-} 
+}

@@ -95,15 +95,15 @@ class AssetPanel extends Panel
     {
         // @todo remove
         foreach ($bundles as $bundle) {
-            array_walk($bundle->css, function(&$file, $key, $userdata) {
+            array_walk($bundle->css, function (&$file, $key, $userdata) {
                 $file = Html::a($file, $userdata->baseUrl . '/' . $file, ['target' => '_blank']);
             }, $bundle);
 
-            array_walk($bundle->js, function(&$file, $key, $userdata) {
+            array_walk($bundle->js, function (&$file, $key, $userdata) {
                 $file = Html::a($file, $userdata->baseUrl . '/' . $file, ['target' => '_blank']);
             }, $bundle);
 
-            array_walk($bundle->depends, function(&$depend) {
+            array_walk($bundle->depends, function (&$depend) {
                 $depend = Html::a($depend, '#' . $depend);
             });
 
