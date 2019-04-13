@@ -187,7 +187,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     public function bootstrap($app)
     {
         $logger = $app->getLogger();
-        if ($logger instanceof \yii\log\Logger) {
+        if ($logger instanceof \Yii\Log\Logger) {
             $this->logTarget = new LogTarget($this);
             $logger->addTarget($this->logTarget, 'debug');
         }
@@ -230,7 +230,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     {
         if (!$this->enableDebugLogs) {
             $logger = $this->app->getLogger();
-            if ($logger instanceof \yii\log\Logger) {
+            if ($logger instanceof \Yii\Log\Logger) {
                 foreach ($logger->getTargets() as $target) {
                     $target->enabled = false;
                 }

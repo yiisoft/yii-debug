@@ -11,7 +11,7 @@ use yii\helpers\Yii;
 use yii\base\InvalidConfigException;
 use yii\debug\Module;
 use yii\helpers\FileHelper;
-use yii\log\Target;
+use Yii\Log\Target;
 
 /**
  * The debug LogTarget is used to store logs for later use in the debugger tool
@@ -116,7 +116,7 @@ class LogTarget extends Target
      * Processes the given log messages.
      * This method will filter the given messages with [[levels]] and [[categories]].
      * And if requested, it will also export the filtering result to specific medium (e.g. email).
-     * @param array $messages log messages to be processed. See [[\yii\log\Logger::messages]] for the structure
+     * @param array $messages log messages to be processed. See [[\Yii\Log\Logger::messages]] for the structure
      * of each message.
      * @param bool $final whether this method is called at the end of the current application
      */

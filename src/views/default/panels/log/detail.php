@@ -4,7 +4,7 @@ use Psr\Log\LogLevel;
 use yii\helpers\Html;
 use yii\dataview\GridView;
 use yii\helpers\VarDumper;
-use yii\log\Logger;
+use Yii\Log\Logger;
 
 /* @var $panel yii\debug\panels\LogPanel */
 /* @var $searchModel yii\debug\models\search\Log */

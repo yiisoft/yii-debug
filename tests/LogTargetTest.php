@@ -11,7 +11,7 @@ class LogTargetTest extends TestCase
 {
     public function testGetRequestTime()
     {
-        $logger = $this->getMockBuilder(\yii\log\Logger::class)
+        $logger = $this->getMockBuilder(\Yii\Log\Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
