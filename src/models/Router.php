@@ -72,5 +72,4 @@ class Router extends Model
             }
         }
     }
-
 }

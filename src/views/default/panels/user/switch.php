@@ -51,8 +51,8 @@ UserswitchAsset::register($this);
 
 <?php
 if ($panel->canSearchUsers()) {
-    yii\widgets\Pjax::begin(['id' => 'debug-userswitch__filter', 'timeout' => false]);
-    echo GridView::widget([
+                yii\widgets\Pjax::begin(['id' => 'debug-userswitch__filter', 'timeout' => false]);
+                echo GridView::widget([
         'dataProvider' => $panel->getUserDataProvider(),
         'filterModel'  => $panel->getUsersFilterModel(),
         'tableOptions' => [
@@ -60,6 +60,6 @@ if ($panel->canSearchUsers()) {
         ],
         'columns'      => $panel->filterColumns
     ]);
-    yii\widgets\Pjax::end();
-}
+                yii\widgets\Pjax::end();
+            }
 ?>

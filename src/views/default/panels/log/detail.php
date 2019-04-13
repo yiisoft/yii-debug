@@ -21,9 +21,9 @@ echo GridView::widget([
     'filterUrl' => $panel->getUrl(),
     'rowOptions' => function ($model) {
         switch ($model['level']) {
-            case LogLevel::ERROR : return ['class' => 'danger'];
-            case LogLevel::WARNING : return ['class' => 'warning'];
-            case LogLevel::INFO : return ['class' => 'success'];
+            case LogLevel::ERROR: return ['class' => 'danger'];
+            case LogLevel::WARNING: return ['class' => 'warning'];
+            case LogLevel::INFO: return ['class' => 'success'];
             default: return [];
         }
     },

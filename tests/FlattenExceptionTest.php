@@ -11,7 +11,6 @@ use yii\debug\FlattenException;
  */
 class FlattenExceptionTest extends TestCase
 {
-
     public function testMessage()
     {
         $flattened = new FlattenException(new \Exception('test'));

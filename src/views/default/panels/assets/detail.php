@@ -18,7 +18,7 @@ use yii\helpers\Inflector;
         </caption>
     <?php
     foreach ($panel->data as $name => $bundle) {
-    ?>
+        ?>
         <thead>
             <tr>
                 <td colspan="2"><h3 id="<?= Inflector::camel2id($name) ?>"><?= $name ?></h3></td>

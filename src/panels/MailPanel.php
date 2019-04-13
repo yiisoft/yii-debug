@@ -80,7 +80,6 @@ class MailPanel extends Panel
                 $messageData['body'] = $body;
                 $messageData['time'] = $swiftMessage->getDate();
                 $messageData['headers'] = $swiftMessage->getHeaders();
-
             }
 
             // store message as file

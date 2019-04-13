@@ -50,7 +50,7 @@ TimelineAsset::register($this);
             </button>
         </div>
     </div>
-    <?php if($panel->svg->hasPoints()):?>
+    <?php if ($panel->svg->hasPoints()):?>
     <div class="debug-timeline-panel__memory" style="height: <?= StringHelper::normalizeNumber($panel->svg->y) ?>px;">
         <div class="scale" style="bottom: 100%;"><?= sprintf('%.2f MB', $panel->memory / 1048576) ?></div>
         <?=$panel->svg;?>
@@ -76,7 +76,7 @@ TimelineAsset::register($this);
                 ?>
                 <div class="debug-timeline-panel__item">
                     <?php if ($model['child']): ?>
-                        <span class="ruler ruler-start" style="height: <?= StringHelper::normalizeNumber($model['child'] * 21) ?>px; margin-left: <?= StringHelper::normalizeNumber( $model['css']['left']) ?>%"></span>
+                        <span class="ruler ruler-start" style="height: <?= StringHelper::normalizeNumber($model['child'] * 21) ?>px; margin-left: <?= StringHelper::normalizeNumber($model['css']['left']) ?>%"></span>
                     <?php endif; ?>
                     <?= Html::tag('a', '
                         <span class="category">' . Html::encode($model['category']) . ' <span>' . sprintf('%.1f ms', $model['duration']) . '</span>'.$memory.'</span>', ['tabindex'=>$key+1,'title' => $model['info'], 'class' => $dataProvider->getCssClass($model), 'style' => 'background-color: '.$model['css']['color'].';margin-left:' . StringHelper::normalizeNumber($model['css']['left'] . '%;width:' . $model['css']['width']) . '%', 'data-memory'=>$dataProvider->getMemory($model)]); ?>

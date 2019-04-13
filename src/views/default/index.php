@@ -86,7 +86,6 @@ $this->title = 'Yii Debugger';
                         return Html::a($content, ['view', 'panel' => 'db', 'tag' => $data['tag']], [
                             'title' => 'Too many queries. Allowed count is ' . $dbPanel->criticalQueryThreshold,
                         ]);
-
                     }
                     return $data['sqlCount'];
                 },
