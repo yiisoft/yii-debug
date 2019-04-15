@@ -52,13 +52,13 @@ class ExplainAction extends Action
         $results = $this->panel->getDb()->createCommand('EXPLAIN ' . $query)->queryAll();
 
         $output[] = '<table class="table"><thead><tr>' . implode(array_map(function ($key) {
-                return '<th>' . $key . '</th>';
-            }, array_keys($results[0]))) . '</tr></thead><tbody>';
+            return '<th>' . $key . '</th>';
+        }, array_keys($results[0]))) . '</tr></thead><tbody>';
 
         foreach ($results as $result) {
             $output[] = '<tr>' . implode(array_map(function ($value) {
-                    return '<td>' . (empty($value) ? 'NULL' : htmlspecialchars($value)) . '</td>';
-                }, $result)) . '</tr>';
+                return '<td>' . (empty($value) ? 'NULL' : htmlspecialchars($value)) . '</td>';
+            }, $result)) . '</tr>';
         }
         $output[] = '</tbody></table>';
         return implode($output);
