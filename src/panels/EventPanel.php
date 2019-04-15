@@ -7,9 +7,11 @@
 
 namespace yii\debug\panels;
 
+use Clue\GraphComposer\App;
 use yii\helpers\Yii;
 use yii\base\Event;
 use yii\debug\Panel;
+use yii\web\Application;
 
 /**
  * Debugger panel that collects and displays information about triggered events.
@@ -31,18 +33,18 @@ class EventPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function __construct(Application $application)
     {
-        parent::init();
-
-        Event::on('*', '*', function ($event) {
+        parent::__construct($application);
+        Event::on('*', '*', function (Event $event) {
+            $target = $event->getTarget();
             /* @var $event Event */
             $eventData = [
                 'time' => microtime(true),
                 'name' => $event->name,
                 '__class' => get_class($event),
-                'isStatic' => is_object($event->sender) ? '0' : '1',
-                'senderClass' => is_object($event->sender) ? get_class($event->sender) : $event->sender,
+                'isStatic' => is_object($target) ? '0' : '1',
+                'senderClass' => is_object($target) ? get_class($target) : $event->sender,
             ];
 
             $this->_events[] = $eventData;

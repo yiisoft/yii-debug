@@ -8,6 +8,7 @@
 namespace yii\debug\panels;
 
 use Psr\Log\LogLevel;
+use yii\base\Application;
 use yii\base\InvalidConfigException;
 use yii\debug\models\search\Db;
 use yii\debug\Panel;
@@ -64,8 +65,9 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function __construct(Application $application)
     {
+        parent::__construct($application);
         $this->actions['db-explain'] = [
             '__class' => \yii\debug\actions\db\ExplainAction::class,
             'panel' => $this,

@@ -33,7 +33,6 @@ class RouterPanel extends Panel
         'yii\rest\UrlRule::parseRequest'
     ];
 
-
     /**
      * @param string|array $values
      */

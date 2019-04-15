@@ -7,6 +7,7 @@
 
 namespace yii\debug\panels;
 
+use yii\di\Initiable;
 use yii\helpers\Yii;
 use yii\base\Controller;
 use yii\base\Model;
@@ -34,7 +35,7 @@ use yii\web\User;
  * @author Daniel Gomez Pan <pana_1990@hotmail.com>
  * @since 2.0.8
  */
-class UserPanel extends Panel
+class UserPanel extends Panel implements Initiable
 {
     /**
      * @var array the rule which defines who allowed to switch user identity.
@@ -74,7 +75,7 @@ class UserPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         if (!$this->isEnabled() || $this->getUser()->isGuest) {
             return;
