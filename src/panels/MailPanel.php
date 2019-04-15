@@ -18,7 +18,7 @@ use yii\mail\MessageInterface;
 /**
  * Debugger panel that collects and displays the generated emails.
  *
- * @property array $messages Messages. This property is read-only.
+ * @property-read array $messages Messages. Return array of created email files.
  *
  * @author Mark Jebri <mark.github@yandex.ru>
  * @since 2.0
@@ -84,8 +84,9 @@ class MailPanel extends Panel
 
             // store message as file
             $fileName = $event->sender->generateMessageFileName();
-            FileHelper::createDirectory(Yii::getAlias($this->mailPath));
-            file_put_contents(Yii::getAlias($this->mailPath) . '/' . $fileName, $message->toString());
+            $mailPath = Yii::getAlias($this->mailPath);
+            FileHelper::createDirectory($mailPath);
+            file_put_contents($mailPath . '/' . $fileName, $message->toString());
             $messageData['file'] = $fileName;
 
             $this->_messages[] = $messageData;
@@ -107,7 +108,7 @@ class MailPanel extends Panel
     {
         return $this->app->view->render('panels/mail/summary', [
             'panel' => $this,
-            'mailCount' => count($this->data),
+            'mailCount' => is_array($this->data) ? count($this->data) : ⚠️,
         ]);
     }
 
@@ -127,21 +128,27 @@ class MailPanel extends Panel
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function save()
-    {
-        return $this->getMessages();
-    }
-
-    /**
-     * Returns info about messages of current request. Each element is array holding
+     * Save info about messages of current request. Each element is array holding
      * message info, such as: time, reply, bc, cc, from, to and other.
      * @return array messages
      */
-    public function getMessages()
+    public function save()
     {
         return $this->_messages;
+    }
+
+    /**
+     * Return array of created email files
+     * @return array
+     */
+    public function getMessagesFileName()
+    {
+        $names = [];
+        foreach ($this->_messages as $message) {
+            $names[] = $message['file'];
+        }
+
+        return $names;
     }
 
     /**

@@ -56,7 +56,7 @@ class UserSwitch extends Model
     {
         return [
             'user' => 'Current User',
-            'mainUser' => 'frontend', 'Main User',
+            'mainUser' => 'Main User',
         ];
     }
 

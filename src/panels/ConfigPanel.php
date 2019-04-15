@@ -13,8 +13,8 @@ use yii\debug\Panel;
 /**
  * Debugger panel that collects and displays application configuration and environment.
  *
- * @property array $extensions This property is read-only.
- * @property array $phpInfo This property is read-only.
+ * @property-read array $extensions Returns data about extensions.
+ * @property-read array $phpInfo Returns the BODY contents of the phpinfo() output.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -75,6 +75,7 @@ class ConfigPanel extends Panel
         $phpinfo = preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $pinfo);
         $phpinfo = str_replace('<table', '<div class="table-responsive"><table class="table table-condensed table-bordered table-striped table-hover config-php-info-table" ', $phpinfo);
         $phpinfo = str_replace('</table>', '</table></div>', $phpinfo);
+        $phpinfo = str_replace('<div class="center">', '<div class="phpinfo">', $phpinfo);
         return $phpinfo;
     }
 
@@ -103,7 +104,7 @@ class ConfigPanel extends Panel
                 'memcache' => extension_loaded('memcache'),
                 'memcached' => extension_loaded('memcached'),
             ],
-            'extensions' => [], // $this->app->extensions,
+            'extensions' => [], // FIXME: $this->app->extensions
         ];
     }
 }

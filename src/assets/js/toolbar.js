@@ -10,11 +10,11 @@
             xhr.open(settings.method || 'GET', url, true);
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.setRequestHeader('Accept', 'text/html');
-            xhr.onreadystatechange = function (state) {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200 && settings.success) {
                         settings.success(xhr);
-                    } else if (xhr.status != 200 && settings.error) {
+                    } else if (xhr.status !== 200 && settings.error) {
                         settings.error(xhr);
                     }
                 }
@@ -68,31 +68,39 @@
             toggleEl = toolbarEl.querySelector(toggleSelector),
             externalEl = toolbarEl.querySelector(externalSelector),
             blockEls = barEl.querySelectorAll(blockSelector),
+            blockLinksEls = document.querySelectorAll(blockSelector + ':not(.' + titleClass + ') a'),
             iframeEl = viewEl.querySelector('iframe'),
             iframeHeight = function () {
-                return (window.innerHeight * 0.7) + 'px';
+                return (window.innerHeight * (toolbarEl.dataset.height / 100) - barEl.clientHeight) + 'px';
             },
             isIframeActive = function () {
                 return toolbarEl.classList.contains(iframeActiveClass);
+            },
+            resizeIframe = function(mouse) {
+                var availableHeight = window.innerHeight - barEl.clientHeight;
+                viewEl.style.height = Math.min(availableHeight, availableHeight - mouse.y) + "px";
             },
             showIframe = function (href) {
                 toolbarEl.classList.add(iframeAnimatingClass);
                 toolbarEl.classList.add(iframeActiveClass);
 
                 iframeEl.src = externalEl.href = href;
+                iframeEl.removeAttribute('tabindex');
+
                 viewEl.style.height = iframeHeight();
-                setTimeout(function() {
+                setTimeout(function () {
                     toolbarEl.classList.remove(iframeAnimatingClass);
                 }, animationTime);
             },
             hideIframe = function () {
                 toolbarEl.classList.add(iframeAnimatingClass);
                 toolbarEl.classList.remove(iframeActiveClass);
+                iframeEl.setAttribute("tabindex", "-1");
                 removeActiveBlocksCls();
 
                 externalEl.href = '#';
                 viewEl.style.height = '';
-                setTimeout(function() {
+                setTimeout(function () {
                     toolbarEl.classList.remove(iframeAnimatingClass);
                 }, animationTime);
             },
@@ -105,7 +113,13 @@
                 toolbarEl.classList.add(toolbarAnimatingClass);
                 if (toolbarEl.classList.contains(className)) {
                     toolbarEl.classList.remove(className);
+                    [].forEach.call(blockLinksEls, function (el) {
+                        el.setAttribute('tabindex', "-1");
+                    });
                 } else {
+                    [].forEach.call(blockLinksEls, function (el) {
+                        el.removeAttribute('tabindex');
+                    });
                     toolbarEl.classList.add(className);
                 }
                 setTimeout(function () {
@@ -137,17 +151,38 @@
                 }
             };
 
-        toolbarEl.style.display = 'block';
-
         if (restoreStorageState(CACHE_KEY) === ACTIVE_STATE) {
+            var transition = toolbarEl.style.transition;
+            toolbarEl.style.transition = 'none';
             toolbarEl.classList.add(activeClass);
+            setTimeout(function () {
+                toolbarEl.style.transition = transition;
+            }, animationTime);
+        } else {
+            [].forEach.call(blockLinksEls, function (el) {
+                el.setAttribute('tabindex', "-1");
+            });
         }
+
+        toolbarEl.style.display = 'block';
 
         window.onresize = function () {
             if (toolbarEl.classList.contains(iframeActiveClass)) {
                 viewEl.style.height = iframeHeight();
             }
         };
+
+        toolbarEl.addEventListener("mousedown", function(e) {
+            if (isIframeActive() && (e.y - toolbarEl.offsetTop < 4 /* 4px click zone */)) {
+                document.addEventListener("mousemove", resizeIframe, false);
+            }
+        }, false);
+
+        document.addEventListener("mouseup", function(){
+            if (isIframeActive()) {
+                document.removeEventListener("mousemove", resizeIframe, false);
+            }
+        }, false);
 
         barEl.onclick = function (e) {
             var target = e.target,
@@ -173,7 +208,7 @@
     }
 
     function findAncestor(el, cls) {
-        while ((el = el.parentElement) && !el.classList.contains(cls));
+        while ((el = el.parentElement) && !el.classList.contains(cls)) ;
         return el;
     }
 
@@ -263,14 +298,16 @@
             className += ' yii-debug-toolbar__label_error';
         }
         requestCounter[0].className = className;
-    };
+    }
 
     var proxied = XMLHttpRequest.prototype.open;
 
     XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
         var self = this;
+
+        // fix https://github.com/yiisoft/yii2-debug/issues/326
         /* prevent logging AJAX calls to static and inline files, like templates */
-        if (url.substr(0, 1) === '/' && !url.match(new RegExp("{{ excluded_ajax_paths }}"))) {
+        if (url && url.substr(0, 1) === '/' && !url.match(new RegExp('{{ excluded_ajax_paths }}'))) {
             var stackElement = {
                 loading: true,
                 error: false,
@@ -279,14 +316,14 @@
                 start: new Date()
             };
             requestStack.push(stackElement);
-            this.addEventListener("readystatechange", function () {
-                if (self.readyState == 4) {
-                    stackElement.duration = self.getResponseHeader("X-Debug-Duration") || new Date() - stackElement.start;
+            this.addEventListener('readystatechange', function () {
+                if (self.readyState === 4) {
+                    stackElement.duration = self.getResponseHeader('X-Debug-Duration') || new Date() - stackElement.start;
                     stackElement.loading = false;
                     stackElement.statusCode = self.status;
                     stackElement.error = self.status < 200 || self.status >= 400;
-                    stackElement.profile = self.getResponseHeader("X-Debug-Tag");
-                    stackElement.profilerUrl = self.getResponseHeader("X-Debug-Link");
+                    stackElement.profile = self.getResponseHeader('X-Debug-Tag');
+                    stackElement.profilerUrl = self.getResponseHeader('X-Debug-Link');
                     renderAjaxRequests();
                 }
             }, false);
@@ -299,12 +336,15 @@
     if (window.fetch) {
         var originalFetch = window.fetch;
 
-        window.fetch = function(input, init) {
+        window.fetch = function (input, init) {
             var method;
             var url;
-            if (typeof input === "string") {
+            if (typeof input === 'string') {
                 method = (init && init.method) || 'GET';
                 url = input;
+            } else if (window.URL && input instanceof URL) { // fix https://github.com/yiisoft/yii2-debug/issues/296
+                method = (init && init.method) || 'GET';
+                url = input.href;
             } else if (window.Request && input instanceof Request) {
                 method = input.method;
                 url = input.url;
@@ -312,7 +352,7 @@
             var promise = originalFetch(input, init);
 
             /* prevent logging AJAX calls to static and inline files, like templates */
-            if (url.substr(0, 1) === '/' && !url.match(new RegExp("{{ excluded_ajax_paths }}"))) {
+            if (url && url.substr(0, 1) === '/' && !url.match(new RegExp('{{ excluded_ajax_paths }}'))) {
                 var stackElement = {
                     loading: true,
                     error: false,
@@ -321,17 +361,17 @@
                     start: new Date()
                 };
                 requestStack.push(stackElement);
-                promise.then(function(response) {
-                    stackElement.duration = response.headers.get("X-Debug-Duration") || new Date() - stackElement.start;
+                promise.then(function (response) {
+                    stackElement.duration = response.headers.get('X-Debug-Duration') || new Date() - stackElement.start;
                     stackElement.loading = false;
                     stackElement.statusCode = response.status;
                     stackElement.error = response.status < 200 || response.status >= 400;
-                    stackElement.profile = response.headers.get("X-Debug-Tag");
-                    stackElement.profilerUrl = response.headers.get("X-Debug-Link");
+                    stackElement.profile = response.headers.get('X-Debug-Tag');
+                    stackElement.profilerUrl = response.headers.get('X-Debug-Link');
                     renderAjaxRequests();
 
                     return response;
-                }).catch(function(error) {
+                }).catch(function (error) {
                     stackElement.loading = false;
                     stackElement.error = true;
                     renderAjaxRequests();

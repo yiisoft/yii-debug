@@ -77,7 +77,7 @@ class AssetPanel extends Panel
     public function isEnabled()
     {
         try {
-            $this->app->view->assetManager;
+            isset($this->app->view->assetManager) && $this->app->view->assetManager;
         } catch (InvalidConfigException $exception) {
             return false;
         }
@@ -95,12 +95,12 @@ class AssetPanel extends Panel
     {
         // @todo remove
         foreach ($bundles as $bundle) {
-            array_walk($bundle->css, function (&$file, $key, $userdata) {
-                $file = Html::a($file, $userdata->baseUrl . '/' . $file, ['target' => '_blank']);
+            array_walk($bundle->css, function (&$file, $key, $userData) {
+                $file = Html::a($file, $userData->baseUrl . '/' . $file, ['target' => '_blank']);
             }, $bundle);
 
-            array_walk($bundle->js, function (&$file, $key, $userdata) {
-                $file = Html::a($file, $userdata->baseUrl . '/' . $file, ['target' => '_blank']);
+            array_walk($bundle->js, function (&$file, $key, $userData) {
+                $file = Html::a($file, $userData->baseUrl . '/' . $file, ['target' => '_blank']);
             }, $bundle);
 
             array_walk($bundle->depends, function (&$depend) {

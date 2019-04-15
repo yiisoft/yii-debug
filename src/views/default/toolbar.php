@@ -1,21 +1,23 @@
 <?php
 
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this \yii\web\View */
 /* @var $panels \yii\debug\Panel[] */
 /* @var $tag string */
 /* @var $position string */
+/* @var $defaultHeight int */
 
 $firstPanel = reset($panels);
 $url = $firstPanel->getUrl();
 ?>
-<div id="yii-debug-toolbar" class="yii-debug-toolbar yii-debug-toolbar_position_<?= $position ?>">
+<div id="yii-debug-toolbar" class="yii-debug-toolbar yii-debug-toolbar_position_<?= $position ?>" data-height="<?= $defaultHeight ?>">
+    <div class="yii-debug-toolbar__resize-handle"></div>
     <div class="yii-debug-toolbar__bar">
         <div class="yii-debug-toolbar__block yii-debug-toolbar__title">
             <a href="<?= Url::to(['index']) ?>">
-                <img width="30" height="30" alt="" src="<?= \yii\debug\Module::getYiiLogo() ?>">
+                <img width="30" height="30" alt="Yii" src="<?= \yii\debug\Module::getYiiLogo() ?>">
             </a>
         </div>
 
@@ -40,7 +42,9 @@ $url = $firstPanel->getUrl();
         <?php foreach ($panels as $panel): ?>
             <?php if ($panel->hasError()): ?>
                 <div class="yii-debug-toolbar__block">
-                    <a href="<?= $panel->getUrl() ?>" title="<?= Html::encode($panel->getError()->getMessage()); ?>"><?=Html::encode($panel->getName())?> <span class="yii-debug-toolbar__label yii-debug-toolbar__label_error">error</span></a>
+                    <a href="<?= $panel->getUrl() ?>"
+                       title="<?= Html::encode($panel->getError()->getMessage()); ?>"><?= Html::encode($panel->getName()) ?>
+                        <span class="yii-debug-toolbar__label yii-debug-toolbar__label_error">error</span></a>
                 </div>
             <?php else: ?>
                 <?= $panel->getSummary() ?>

@@ -14,7 +14,7 @@ use yii\web\HttpException;
 /**
  * ExplainAction provides EXPLAIN information for SQL queries
  *
- * @property \yii\debug\controllers\DefaultController $controller the controller that owns this action.
+ * @property \yii\debug\controllers\DefaultController|\yii\web\Controller|\yii\console\Controller $controller the controller that owns this action
  *
  * @author Laszlo <github@lvlconsultancy.nl>
  * @since 2.0.6
@@ -26,7 +26,17 @@ class ExplainAction extends Action
      */
     public $panel;
 
-
+    /**
+     * Runs the action.
+     *
+     * @param string $seq
+     * @param string $tag
+     * @return string
+     * @throws HttpException
+     * @throws \yii\db\Exception
+     * @throws \yii\web\NotFoundHttpException if the view file cannot be found
+     * @throws \yii\exceptions\InvalidConfigException
+     */
     public function run($seq, $tag)
     {
         $this->controller->loadData($tag);

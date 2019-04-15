@@ -81,8 +81,7 @@ class LogTarget extends Target
      */
     private function updateIndexFile($indexFile, $summary)
     {
-        touch($indexFile);
-        if (($fp = @fopen($indexFile, 'r+')) === false) {
+        if (!@touch($indexFile) || ($fp = @fopen($indexFile, 'r+')) === false) {
             throw new InvalidConfigException("Unable to open debug data index file: $indexFile");
         }
         @flock($fp, LOCK_EX);
@@ -139,6 +138,11 @@ class LogTarget extends Target
             foreach (array_keys($manifest) as $tag) {
                 $file = $this->module->dataPath . "/$tag.data";
                 @unlink($file);
+                if (isset($manifest[$tag]['mailFiles'])) {
+                    foreach ($manifest[$tag]['mailFiles'] as $mailFile) {
+                        @unlink(Yii::getAlias($this->module->panels['mail']->mailPath) . "/$mailFile");
+                    }
+                }
                 unset($manifest[$tag]);
                 if (--$n <= 0) {
                     break;
@@ -155,7 +159,7 @@ class LogTarget extends Target
     {
         $app = $this->module->getApp();
         if ($app === null) {
-            return '';
+            return [];
         }
 
         $request = $app->getRequest();
@@ -163,7 +167,7 @@ class LogTarget extends Target
         $summary = [
             'tag' => $this->tag,
             'url' => $request->getAbsoluteUrl(),
-            'ajax' => (int) $request->getIsAjax(),
+            'ajax' => (int)$request->getIsAjax(),
             'method' => $request->getMethod(),
             'ip' => $request->getUserIP(),
             'time' => $_SERVER['REQUEST_TIME_FLOAT'],
@@ -172,7 +176,9 @@ class LogTarget extends Target
         ];
 
         if (isset($this->module->panels['mail'])) {
-            $summary['mailCount'] = count($this->module->panels['mail']->getMessages());
+            $mailFiles = $this->module->panels['mail']->getMessagesFileName();
+            $summary['mailCount'] = count($mailFiles);
+            $summary['mailFiles'] = $mailFiles;
         }
 
         return $summary;

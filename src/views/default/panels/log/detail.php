@@ -10,23 +10,41 @@ use Yii\Log\Logger;
 /* @var $searchModel yii\debug\models\search\Log */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 ?>
-<h1>Log Messages</h1>
+    <h1>Log Messages</h1>
 <?php
 
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'id' => 'log-panel-detailed-grid',
-    'options' => ['class' => 'detail-grid-view table-responsive'],
+    'options' => ['class' => ['detail-grid-view', 'table-responsive', 'logs-messages-table']],
     'filterModel' => $searchModel,
     'filterUrl' => $panel->getUrl(),
     'rowOptions' => function ($model) {
         switch ($model['level']) {
-            case LogLevel::ERROR: return ['class' => 'danger'];
-            case LogLevel::WARNING: return ['class' => 'warning'];
-            case LogLevel::INFO: return ['class' => 'success'];
-            default: return [];
+            case LogLevel::ERROR:
+                return ['class' => 'danger'];
+            case LogLevel::WARNING:
+                return ['class' => 'warning'];
+            case LogLevel::INFO:
+                return ['class' => 'success'];
+            default:
+                return [];
         }
     },
+    'pager' => [
+        'linkContainerOptions' => [
+            'class' => 'page-item'
+        ],
+        'linkOptions' => [
+            'class' => 'page-link'
+        ],
+        'disabledListItemSubTagOptions' => [
+            'tag' => 'a',
+            'href' => 'javascript:;',
+            'tabindex' => '-1',
+            'class' => 'page-link'
+        ]
+    ],
     'columns' => [
         [
             'attribute' => 'time',

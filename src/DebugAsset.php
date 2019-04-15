@@ -11,9 +11,6 @@ use yii\web\AssetBundle;
 
 /**
  * Debugger asset bundle
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class DebugAsset extends AssetBundle
 {
@@ -25,14 +22,13 @@ class DebugAsset extends AssetBundle
      * {@inheritdoc}
      */
     public $css = [
-        'main.css',
-        'toolbar.css',
+        'css/main.css',
+        'css/toolbar.css',
     ];
     /**
      * {@inheritdoc}
      */
-    public $depends = [
-        \yii\jquery\YiiAsset::class,
-        \yii\bootstrap4\BootstrapAsset::class,
+    public $js = [
+        'js/bs4-native.min.js',
     ];
 }

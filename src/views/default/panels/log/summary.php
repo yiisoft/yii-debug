@@ -6,16 +6,21 @@ use Yii\Log\Target;
 /* @var $panel yii\debug\panels\LogPanel */
 /* @var $data array */
 
-$titles = ['all' => $this->app->i18n->format('Logged {n,plural,=1{1 message} other{# messages}}', ['n' => count($data['messages'])], 'en-US')];
+$titles = [
+    'all' => $this->app->i18n->format('Logged {n,plural,=1{1 message} other{# messages}}',
+        ['n' => count($data['messages'])], 'en-US')
+];
 $errorCount = count(Target::filterMessages($data['messages'], [LogLevel::ERROR]));
 $warningCount = count(Target::filterMessages($data['messages'], [LogLevel::WARNING]));
 
 if ($errorCount) {
-    $titles['errors'] = $this->app->i18n->format('{n,plural,=1{1 error} other{# errors}}', ['n' => $errorCount], 'en-US');
+    $titles['errors'] = $this->app->i18n->format('{n,plural,=1{1 error} other{# errors}}', ['n' => $errorCount],
+        'en-US');
 }
 
 if ($warningCount) {
-    $titles['warnings'] = $this->app->i18n->format('{n,plural,=1{1 warning} other{# warnings}}', ['n' => $warningCount], 'en-US');
+    $titles['warnings'] = $this->app->i18n->format('{n,plural,=1{1 warning} other{# warnings}}', ['n' => $warningCount],
+        'en-US');
 }
 ?>
 
