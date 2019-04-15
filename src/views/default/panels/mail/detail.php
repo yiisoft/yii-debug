@@ -38,7 +38,7 @@ $listView->sorter = ['options' => ['class' => 'mail-sorter']];
     </div>
 </div>
 
-<div id="email-form" style="display: none;">
+<div id="email-form" class="collapse">
     <?php $form = ActiveForm::begin([
         'method' => 'get',
         'action' => ['default/view', 'tag' => $this->app->request->get('tag'), 'panel' => 'mail'],

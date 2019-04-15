@@ -14,7 +14,7 @@ use yii\web\HttpException;
 /**
  * ExplainAction provides EXPLAIN information for SQL queries
  *
- * @property \yii\debug\controllers\DefaultController|\yii\web\Controller|\yii\console\Controller $controller the controller that owns this action.
+ * @property \yii\debug\controllers\DefaultController|\yii\web\Controller|\yii\console\Controller $controller the controller that owns this action
  *
  * @author Laszlo <github@lvlconsultancy.nl>
  * @since 2.0.6
@@ -30,7 +30,7 @@ class ExplainAction extends Action
      * Runs the action.
      *
      * @param string $seq
-     * @param string $tagz
+     * @param string $tag
      * @return string
      * @throws HttpException
      * @throws \yii\db\Exception
@@ -52,13 +52,13 @@ class ExplainAction extends Action
         $results = $this->panel->getDb()->createCommand('EXPLAIN ' . $query)->queryAll();
 
         $output[] = '<table class="table"><thead><tr>' . implode(array_map(function ($key) {
-            return '<th>' . $key . '</th>';
-        }, array_keys($results[0]))) . '</tr></thead><tbody>';
+                return '<th>' . $key . '</th>';
+            }, array_keys($results[0]))) . '</tr></thead><tbody>';
 
         foreach ($results as $result) {
             $output[] = '<tr>' . implode(array_map(function ($value) {
-                return '<td>' . (empty($value) ? 'NULL' : htmlspecialchars($value)) . '</td>';
-            }, $result)) . '</tr>';
+                    return '<td>' . (empty($value) ? 'NULL' : htmlspecialchars($value)) . '</td>';
+                }, $result)) . '</tr>';
         }
         $output[] = '</tbody></table>';
         return implode($output);

@@ -27,7 +27,7 @@ use yii\helpers\VarDumper;
             <?php foreach ($values as $name => $value): ?>
                 <tr>
                     <th><?= Html::encode($name) ?></th>
-                    <td><?= htmlspecialchars(VarDumper::dumpAsString($value), ENT_QUOTES|ENT_SUBSTITUTE,
+                    <td><?= htmlspecialchars(VarDumper::dumpAsString($value), ENT_QUOTES | ENT_SUBSTITUTE,
                             $this->app->encoding, true) ?></td>
                 </tr>
             <?php endforeach; ?>
