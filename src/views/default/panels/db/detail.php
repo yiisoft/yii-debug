@@ -127,4 +127,3 @@ if ($hasExplain) {
         ['id' => 'db-explain-all']
     );
 }
-

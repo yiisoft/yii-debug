@@ -28,9 +28,7 @@ if (isset($panel->data['identity'])) {
     if ($panel->canSwitchUser()) {
         $items['nav'][] = 'Switch User';
         $items['content'][] = $this->render('switch', ['panel' => $panel]);
-    }
-
-    ?>
+    } ?>
     <ul class="nav nav-tabs">
         <?php
         foreach ($items['nav'] as $k => $item) {
@@ -47,8 +45,7 @@ if (isset($panel->data['identity'])) {
                     'class' => 'nav-item'
                 ]
             );
-        }
-        ?>
+        } ?>
     </ul>
     <div class="tab-content">
         <?php
@@ -57,11 +54,9 @@ if (isset($panel->data['identity'])) {
                 'class' => $k === 0 ? 'tab-pane fade active show' : 'tab-pane fade',
                 'id' => 'u-tab-' . $k
             ]);
-        }
-        ?>
+        } ?>
     </div>
     <?php
-
 } else {
-    echo 'Is guest.';
-} ?>
+            echo 'Is guest.';
+        } ?>
