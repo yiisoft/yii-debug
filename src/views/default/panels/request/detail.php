@@ -86,7 +86,7 @@ if (isset($panel->data['SERVER'])) {
 <div class="tab-content">
     <?php
     foreach ($items['content'] as $k => $item) {
-       echo Html::tag('div', $item, [
+        echo Html::tag('div', $item, [
             'class' => $k === 0 ? 'tab-pane fade active show' : 'tab-pane fade',
             'id' => 'r-tab-' . $k
         ]);
