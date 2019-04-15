@@ -11,7 +11,6 @@ use yii\helpers\Yii;
 use yii\debug\Panel;
 use yii\debug\models\timeline\Search;
 use yii\debug\models\timeline\Svg;
-use yii\base\InvalidConfigException;
 
 /**
  * Debugger panel that collects and displays timeline data.
@@ -67,18 +66,6 @@ class TimelinePanel extends Panel
      * @var int Used memory in request
      */
     private $_memory;
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        if (!isset($this->module->panels['profiling'])) {
-            throw new InvalidConfigException('Unable to determine the profiling panel');
-        }
-        parent::init();
-    }
 
     /**
      * {@inheritdoc}

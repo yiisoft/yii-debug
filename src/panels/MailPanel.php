@@ -7,6 +7,7 @@
 
 namespace yii\debug\panels;
 
+use yii\base\Application;
 use yii\helpers\Yii;
 use yii\base\Event;
 use yii\debug\models\search\Mail;
@@ -14,6 +15,7 @@ use yii\debug\Panel;
 use yii\mail\BaseMailer;
 use yii\helpers\FileHelper;
 use yii\mail\MessageInterface;
+use yii\mail\SendEvent;
 
 /**
  * Debugger panel that collects and displays the generated emails.
@@ -39,11 +41,11 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function __construct(Application $application)
     {
-        parent::init();
+        parent::__construct($application);
 
-        Event::on(BaseMailer::class, BaseMailer::EVENT_AFTER_SEND, function ($event) {
+        Event::on(BaseMailer::class, SendEvent::AFTER, function ($event) {
             /* @var $message MessageInterface */
             $message = $event->message;
             $messageData = [
