@@ -104,7 +104,7 @@ class ConfigPanel extends Panel
                 'memcache' => extension_loaded('memcache'),
                 'memcached' => extension_loaded('memcached'),
             ],
-            'extensions' => [], // $this->app->extensions,
+            'extensions' => [], // FIXME: $this->app->extensions
         ];
     }
 }

@@ -159,7 +159,7 @@ class LogTarget extends Target
     {
         $app = $this->module->getApp();
         if ($app === null) {
-            return '';
+            return [];
         }
 
         $request = $app->getRequest();

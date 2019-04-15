@@ -2,7 +2,7 @@
 /* @var $panel yii\debug\panels\ConfigPanel */
 $extensions = $panel->getExtensions();
 ?>
-<h1>Configuration</h1>
+    <h1>Configuration</h1>
 
 <?php
 $formatLanguage = function ($locale) {
@@ -48,7 +48,7 @@ echo $this->render('table', [
         'PHP Version' => $panel->data['php']['version'],
         'Xdebug' => $panel->data['php']['xdebug'] ? 'Enabled' : 'Disabled',
         'APC' => $panel->data['php']['apc'] ? 'Enabled' : 'Disabled',
-        'Memcache' =>  $memcache,
+        'Memcache' => $memcache,
     ],
 ]);
 
