@@ -414,8 +414,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     /**
      * @return array default set of panels
      */
-    protected
-    function corePanels()
+    protected function corePanels()
     {
         return [
             'config' => ['__class' => 'yii\debug\panels\ConfigPanel'],
@@ -437,8 +436,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      * {@inheritdoc}
      * @since 2.0.7
      */
-    protected
-    function defaultVersion()
+    protected function defaultVersion()
     {
         $packageInfo = Json::decode(file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'composer.json'));
         $extensionName = $packageInfo['name'];
@@ -451,8 +449,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     /**
      * @return string page title to be used in HTML
      */
-    public
-    function htmlTitle()
+    public function htmlTitle()
     {
         if (is_string($this->pageTitle) && !empty($this->pageTitle)) {
             return $this->pageTitle;
