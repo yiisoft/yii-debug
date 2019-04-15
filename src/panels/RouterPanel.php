@@ -65,6 +65,14 @@ class RouterPanel extends Panel
     /**
      * {@inheritdoc}
      */
+    public function getSummary()
+    {
+        return $this->app->view->render('panels/router/summary', ['panel' => $this]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDetail()
     {
         return $this->app->view->render('panels/router/detail', ['model' => new Router($this->data)]);
@@ -76,8 +84,19 @@ class RouterPanel extends Panel
     public function save()
     {
         $target = $this->module->logTarget;
+        if ($this->app->requestedAction) {
+            if ($this->app->requestedAction instanceof InlineAction) {
+                $action = get_class($this->app->requestedAction->controller) . '::' . $this->app->requestedAction->actionMethod . '()';
+            } else {
+                $action = get_class($this->app->requestedAction) . '::run()';
+            }
+        } else {
+            $action = null;
+        }
         return [
-            'messages' => $target::filterMessages($target->messages, [LogLevel::DEBUG], $this->_categories)
+            'messages' => $target::filterMessages($target->messages, [LogLevel::DEBUG], $this->_categories),
+            'route' => $this->app->requestedAction ? $this->app->requestedAction->getUniqueId() : $this->app->requestedRoute,
+            'action' => $action,
         ];
     }
 }
