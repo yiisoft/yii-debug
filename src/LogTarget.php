@@ -153,12 +153,13 @@ class LogTarget extends Target
      */
     protected function collectSummary()
     {
-        if ($this->app === null) {
+        $app = $this->module->getApp();
+        if ($app === null) {
             return '';
         }
 
-        $request = $this->app->getRequest();
-        $response = $this->app->getResponse();
+        $request = $app->getRequest();
+        $response = $app->getResponse();
         $summary = [
             'tag' => $this->tag,
             'url' => $request->getAbsoluteUrl(),
