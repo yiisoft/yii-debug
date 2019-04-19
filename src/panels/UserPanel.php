@@ -8,7 +8,6 @@
 namespace yii\debug\panels;
 
 use yii\di\Initiable;
-use yii\helpers\Yii;
 use yii\base\Controller;
 use yii\base\Model;
 use yii\base\InvalidConfigException;
@@ -21,7 +20,7 @@ use yii\debug\models\UserSwitch;
 use yii\debug\Panel;
 use yii\filters\AccessControl;
 use yii\filters\AccessRule;
-use yii\helpers\ArrayHelper;
+use Yii\Helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 use yii\web\IdentityInterface;
 use yii\web\User;

@@ -2,7 +2,7 @@
 
 use yii\debug\TimelineAsset;
 use yii\helpers\Html;
-use yii\helpers\StringHelper;
+use Yii\Helpers\StringHelper;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 

@@ -9,9 +9,8 @@ namespace yii\debug;
 
 use yii\base\Application;
 use yii\base\Component;
-use yii\helpers\ArrayHelper;
+use Yii\Helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\helpers\Yii;
 
 /**
  * Panel is a base class for debugger panel classes. It defines how data should be collected,

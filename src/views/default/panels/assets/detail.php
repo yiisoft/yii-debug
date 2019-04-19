@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Inflector;
+use Yii\Helpers\Inflector;
 
 /* @var $panel yii\debug\panels\AssetPanel */
 ?>

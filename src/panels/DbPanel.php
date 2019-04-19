@@ -12,8 +12,7 @@ use yii\base\Application;
 use yii\base\InvalidConfigException;
 use yii\debug\models\search\Db;
 use yii\debug\Panel;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Yii;
+use Yii\Helpers\ArrayHelper;
 
 /**
  * Debugger panel that collects and displays database queries performed.
