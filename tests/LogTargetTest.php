@@ -1,11 +1,10 @@
 <?php
 
-namespace yiiunit\debug;
+namespace Yiisoft\Debug\Tests;
 
-use yii\helpers\Yii;
-use yii\debug\LogTarget;
-use yii\debug\Module;
 use yii\tests\TestCase;
+use Yiisoft\Debug\LogTarget;
+use Yiisoft\Debug\Module;
 
 class LogTargetTest extends TestCase
 {

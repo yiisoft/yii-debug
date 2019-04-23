@@ -1,5 +1,5 @@
 <?php
-/* @var $panel yii\debug\panels\DbPanel */
+/* @var $panel Yiisoft\Debug\Panels\DbPanel */
 /* @var $queryCount int */
 /* @var $queryTime int */
 ?>

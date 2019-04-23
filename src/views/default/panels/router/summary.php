@@ -1,8 +1,8 @@
 <?php
 
-use \yii\helpers\Html;
+use yii\helpers\Html;
 
-/* @var $panel yii\debug\panels\RouterPanel */
+/* @var $panel Yiisoft\Debug\Panels\RouterPanel */
 
 ?>
 <div class="yii-debug-toolbar__block">

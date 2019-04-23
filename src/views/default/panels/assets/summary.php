@@ -1,5 +1,5 @@
 <?php
-/* @var $panel yii\debug\panels\AssetPanel */
+/* @var $panel Yiisoft\Debug\Panels\AssetPanel */
 if (!empty($panel->data)):
     ?>
     <div class="yii-debug-toolbar__block">
