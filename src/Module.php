@@ -5,22 +5,20 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\debug;
+namespace Yiisoft\Debug;
 
 use yii\base\Action;
 use yii\base\ActionEvent;
-use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\base\RequestEvent;
 use yii\di\Initiable;
-use yii\helpers\Json;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\helpers\Yii;
 use yii\view\BodyEvent;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
-use yii\web\UrlRule;
 use yii\web\View;
 
 /**

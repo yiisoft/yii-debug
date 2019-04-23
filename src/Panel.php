@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\debug;
+namespace Yiisoft\Debug;
 
 use yii\base\Application;
 use yii\base\Component;
-use Yii\Helpers\ArrayHelper;
 use yii\helpers\Url;
+use Yiisoft\Arrays\ArrayHelper;
 
 /**
  * Panel is a base class for debugger panel classes. It defines how data should be collected,

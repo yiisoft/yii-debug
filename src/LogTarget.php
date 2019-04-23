@@ -5,12 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\debug;
+namespace Yiisoft\Debug;
 
-use yii\helpers\Yii;
 use yii\base\InvalidConfigException;
-use yii\debug\Module;
 use yii\helpers\FileHelper;
+use yii\helpers\Yii;
 use Yii\Log\Target;
 
 /**

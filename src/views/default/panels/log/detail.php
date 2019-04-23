@@ -1,13 +1,13 @@
 <?php
 
 use Psr\Log\LogLevel;
-use yii\helpers\Html;
 use yii\dataview\GridView;
+use yii\helpers\Html;
 use yii\helpers\VarDumper;
 use Yii\Log\Logger;
 
-/* @var $panel yii\debug\panels\LogPanel */
-/* @var $searchModel yii\debug\models\search\Log */
+/* @var $panel Yiisoft\Debug\Panels\LogPanel */
+/* @var $searchModel Yiisoft\Debug\Models\Search\Log */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 ?>
     <h1>Log Messages</h1>

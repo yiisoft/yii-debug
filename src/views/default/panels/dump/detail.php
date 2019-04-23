@@ -1,11 +1,11 @@
 <?php
 
-use yii\helpers\Html;
 use yii\dataview\GridView;
+use yii\helpers\Html;
 use yii\helpers\VarDumper;
 
-/* @var $panel yii\debug\panels\DumpPanel */
-/* @var $searchModel yii\debug\models\search\Log */
+/* @var $panel Yiisoft\Debug\Panels\DumpPanel */
+/* @var $searchModel Yiisoft\Debug\Models\Search\Log */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 ?>
     <h1>Dump</h1>

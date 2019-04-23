@@ -1,14 +1,14 @@
 <?php
 
-use yii\debug\TimelineAsset;
 use yii\helpers\Html;
-use Yii\Helpers\StringHelper;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
+use Yiisoft\Debug\TimelineAsset;
+use Yiisoft\Strings\StringHelper;
 
-/* @var $panel yii\debug\panels\TimelinePanel */
-/* @var $searchModel \yii\debug\models\timeline\Search */
-/* @var $dataProvider \yii\debug\models\timeline\DataProvider */
+/* @var $panel Yiisoft\Debug\Panels\TimelinePanel */
+/* @var $searchModel \Yiisoft\Debug\Models\Timeline\Search */
+/* @var $dataProvider \Yiisoft\Debug\Models\Timeline\DataProvider */
 
 TimelineAsset::register($this);
 ?>
