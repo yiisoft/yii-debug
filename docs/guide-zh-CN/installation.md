@@ -8,13 +8,13 @@
 可以运行
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-debug
+php composer.phar require --prefer-dist yiisoft/yii-debug
 ```
 
 或者添加
 
 ```
-"yiisoft/yii2-debug": "~2.0.0"
+"yiisoft/yii-debug": "~3.0.0"
 ```
 
 在 `composer.json` 文件中的必要部分。
@@ -28,7 +28,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        'class' => 'yii\debug\Module',
+        'class' => 'Yiisoft\Debug\Module',
     ],
 ]
 ```
@@ -40,7 +40,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        'class' => 'yii\debug\Module',
+        'class' => 'Yiisoft\Debug\Module',
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]

@@ -8,13 +8,13 @@
 Виконайте
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-debug
+php composer.phar require --prefer-dist yiisoft/yii-debug
 ```
 
 або додайте
 
 ```
-"yiisoft/yii2-debug": "~2.0.0"
+"yiisoft/yii-debug": "~3.0.0"
 ```
 
 до секції require вашого файлу `composer.json`.
@@ -27,7 +27,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-debug
 ```php
 'bootstrap' => ['debug'],
 'modules' => [
-    'debug' => 'yii\debug\Module',
+    'debug' => 'Yiisoft\Debug\Module',
 ]
 ```
 
@@ -38,7 +38,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        'class' => 'yii\debug\Module',
+        'class' => 'Yiisoft\Debug\Module',
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]

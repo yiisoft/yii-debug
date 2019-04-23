@@ -8,13 +8,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-debug
+php composer.phar require --prefer-dist yiisoft/yii-debug
 ```
 
 or add
 
 ```
-"yiisoft/yii2-debug": "~2.1.0"
+"yiisoft/yii-debug": "~3.0.0"
 ```
 
 to the require section of your `composer.json` file.
@@ -28,7 +28,7 @@ To enable extension, add these lines to your configuration file to enable the de
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
     ],
 ]
 ```
@@ -40,7 +40,7 @@ server, add the parameter `allowedIPs` to the configuration to whitelist your IP
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]
@@ -100,10 +100,10 @@ Database panel default sorting and filtering can be configured like the followin
 
 ```php
 $config['modules']['debug'] = [
-    '__class' => yii\debug\Module::class,
+    '__class' => Yiisoft\Debug\Module::class,
     'panels' => [
         'db' => [
-            '__class' => yii\debug\panels\DbPanel::class,
+            '__class' => Yiisoft\Debug\Panels\DbPanel::class,
             'defaultOrder' => [
                 'seq' => SORT_ASC
             ],
@@ -211,7 +211,7 @@ Now you are able to use the ide:// protocol in your browser.
 When you click such a link, the IDE will automatically open the file and move the cursor to the corresponding line.
 
 ##### Disable links
-IDE links for traces are created by default. You have to set the property `yii\debug\Module::traceLink` to
+IDE links for traces are created by default. You have to set the property `Yiisoft\Debug\Module::traceLink` to
  false to render a textual line only.
 
 ```php
@@ -220,7 +220,7 @@ IDE links for traces are created by default. You have to set the property `yii\d
 ...
 'modules' => [
     'debug' => [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
         'traceLink' => false
     ]
 ]
@@ -248,10 +248,10 @@ return [
     'bootstrap' => ['debug'],
     'modules' => [
         'debug' => [
-            '__class' => yii\debug\Module::class,
+            '__class' => Yiisoft\Debug\Module::class,
             'panels' => [
                 'user' => [
-                    '__class' => yii\debug\panels\UserPanel::class,
+                    '__class' => Yiisoft\Debug\Panels\UserPanel::class,
                     'ruleUserSwitch' => [
                         'allow' => true,
                         'roles' => ['manager'],

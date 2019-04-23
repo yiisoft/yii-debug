@@ -8,13 +8,13 @@ La mejor manera para instalar esta extensión es a través de [composer](http://
 Ejecuta
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-debug
+php composer.phar require --prefer-dist yiisoft/yii-debug
 ```
 
 o añade
 
 ```
-"yiisoft/yii2-debug": "~2.0.0"
+"yiisoft/yii-debug": "~3.0.0"
 ```
 
 en la sección require de tu fichero `composer.json`.
@@ -27,7 +27,7 @@ Para habilitar la extensión, añade estas lineas en tu archivo de configuració
 ```php
 'bootstrap' => ['debug'],
 'modules' => [
-    'debug' => 'yii\debug\Module',
+    'debug' => 'Yiisoft\Debug\Module',
 ]
 ```
 
@@ -37,7 +37,7 @@ Por defecto, el modulo debug sólo trabaja cuando se navega por la web dentro de
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        'class' => 'yii\debug\Module',
+        'class' => 'Yiisoft\Debug\Module',
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]
