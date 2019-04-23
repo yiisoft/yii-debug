@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use Yii\Helpers\Inflector;
+use Yiisoft\Helpers\InflectorHelper;
 
 /* @var $panel Yiisoft\Debug\Panels\AssetPanel */
 ?>
@@ -21,7 +21,7 @@ use Yii\Helpers\Inflector;
             ?>
             <thead>
             <tr>
-                <td colspan="2"><h3 id="<?= Inflector::camel2id($name) ?>"><?= $name ?></h3></td>
+                <td colspan="2"><h3 id="<?= InflectorHelper::camel2id($name) ?>"><?= $name ?></h3></td>
             </tr>
             </thead>
             <tbody>
@@ -79,7 +79,7 @@ use Yii\Helpers\Inflector;
                     <td class="ws-normal">
                         <ul class="assets">
                             <?php foreach ($bundle['depends'] as $depend): ?>
-                                <li><?= Html::a($depend, '#' . Inflector::camel2id($depend)) ?></li>
+                                <li><?= Html::a($depend, '#' . InflectorHelper::camel2id($depend)) ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </td>
