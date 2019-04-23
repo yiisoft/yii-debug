@@ -57,7 +57,7 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = controllers::class;
+    public $controllerNamespace = Controllers::class;
     /**
      * @var LogTarget
      */
@@ -415,18 +415,18 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     protected function corePanels()
     {
         return [
-            'config' => ['__class' => 'yii\debug\panels\ConfigPanel'],
-            'request' => ['__class' => 'yii\debug\panels\RequestPanel'],
-            'router' => ['__class' => 'yii\debug\panels\RouterPanel'],
-            'log' => ['__class' => 'yii\debug\panels\LogPanel'],
-            'profiling' => ['__class' => 'yii\debug\panels\ProfilingPanel'],
-            'db' => ['__class' => 'yii\debug\panels\DbPanel'],
-            'event' => ['__class' => 'yii\debug\panels\EventPanel'],
-            'assets' => ['__class' => 'yii\debug\panels\AssetPanel'],
-            'mail' => ['__class' => 'yii\debug\panels\MailPanel'],
-            'timeline' => ['__class' => 'yii\debug\panels\TimelinePanel'],
-            'user' => ['__class' => 'yii\debug\panels\UserPanel'],
-            'dump' => ['__class' => 'yii\debug\panels\DumpPanel'],
+            'config' => ['__class' => 'Yiisoft\Debug\Panels\ConfigPanel'],
+            'request' => ['__class' => 'Yiisoft\Debug\Panels\RequestPanel'],
+            'router' => ['__class' => 'Yiisoft\Debug\Panels\RouterPanel'],
+            'log' => ['__class' => 'Yiisoft\Debug\Panels\LogPanel'],
+            'profiling' => ['__class' => 'Yiisoft\Debug\Panels\ProfilingPanel'],
+            'db' => ['__class' => 'Yiisoft\Debug\Panels\DbPanel'],
+            'event' => ['__class' => 'Yiisoft\Debug\Panels\EventPanel'],
+            'assets' => ['__class' => 'Yiisoft\Debug\Panels\AssetPanel'],
+            'mail' => ['__class' => 'Yiisoft\Debug\Panels\MailPanel'],
+            'timeline' => ['__class' => 'Yiisoft\Debug\Panels\TimelinePanel'],
+            'user' => ['__class' => 'Yiisoft\Debug\Panels\UserPanel'],
+            'dump' => ['__class' => 'Yiisoft\Debug\Panels\DumpPanel'],
         ];
     }
 
