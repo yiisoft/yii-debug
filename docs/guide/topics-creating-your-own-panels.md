@@ -19,7 +19,7 @@ namespace app\panels;
 use yii\base\Event;
 use yii\base\View;
 use yii\base\ViewEvent;
-use yii\debug\Panel;
+use Yiisoft\Debug\Panel;
 
 class ViewsPanel extends Panel
 {
@@ -86,7 +86,7 @@ if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
         'panels' => [
             'views' => ['__class' => app\panels\ViewsPanel::class],
         ],

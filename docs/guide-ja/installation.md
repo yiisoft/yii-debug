@@ -8,13 +8,13 @@
 下記のコマンドを実行してください。
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-debug
+php composer.phar require --prefer-dist yiisoft/yii-debug
 ```
 
 または、あなたの `composer.json` ファイルの `require` セクションに、
 
 ```
-"yiisoft/yii2-debug": "~2.1.0"
+"yiisoft/yii-debug": "~3.0.0"
 ```
 
 を追加してください。
@@ -28,7 +28,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
     ],
 ]
 ```
@@ -40,7 +40,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]
@@ -100,10 +100,10 @@ defined('YII_DEBUG') or define('YII_DEBUG', true);
 
 ```php
 $config['modules']['debug'] = [
-    '__class' => yii\debug\Module::class,
+    '__class' => Yiisoft\Debug\Module::class,
     'panels' => [
         'db' => [
-            '__class' => yii\debug\panels\DbPanel::class,
+            '__class' => Yiisoft\Debug\Panels\DbPanel::class,
             'defaultOrder' => [
                 'seq' => SORT_ASC
             ],
@@ -212,7 +212,7 @@ Windows Registry Editor Version 5.00
 
 ##### リンクを無効化する
 トレースのための IDE リンクはデフォルトで作成されます。
-テキスト行だけを表示したい場合は、プロパティ `yii\debug\Module::traceLink` を `false` に設定しなければなりません。
+テキスト行だけを表示したい場合は、プロパティ `Yiisoft\Debug\Module::traceLink` を `false` に設定しなければなりません。
 
 ```php
 <?php
@@ -220,7 +220,7 @@ Windows Registry Editor Version 5.00
 ...
 'modules' => [
     'debug' => [
-        '__class' => yii\debug\Module::class,
+        '__class' => Yiisoft\Debug\Module::class,
         'traceLink' => false
     ]
 ]
@@ -248,10 +248,10 @@ return [
     'bootstrap' => ['debug'],
     'modules' => [
         'debug' => [
-            '__class' => yii\debug\Module::class,
+            '__class' => Yiisoft\Debug\Module::class,
             'panels' => [
                 'user' => [
-                    '__class' => yii\debug\panels\UserPanel::class,
+                    '__class' => Yiisoft\Debug\Panels\UserPanel::class,
                     'ruleUserSwitch' => [
                         'allow' => true,
                         'roles' => ['manager'],
