@@ -1,5 +1,5 @@
 <?php
-/* @var $panel yii\debug\panels\EventPanel */
+/* @var $panel Yiisoft\Debug\Panels\EventPanel */
 /* @var $eventCount int */
 if ($eventCount): ?>
     <div class="yii-debug-toolbar__block">

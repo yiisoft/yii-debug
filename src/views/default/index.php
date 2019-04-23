@@ -6,9 +6,9 @@ use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $manifest array */
-/* @var $searchModel \yii\debug\models\search\Debug */
+/* @var $searchModel Yiisoft\Debug\Models\Search\Debug */
 /* @var $dataProvider ArrayDataProvider */
-/* @var $panels \yii\debug\Panel[] */
+/* @var $panels Yiisoft\Debug\Panel[] */
 
 $this->title = 'Yii Debugger';
 ?>
@@ -17,7 +17,7 @@ $this->title = 'Yii Debugger';
         <div class="yii-debug-toolbar__bar">
             <div class="yii-debug-toolbar__block yii-debug-toolbar__title">
                 <a href="#">
-                    <img width="30" height="30" alt="" src="<?= \yii\debug\Module::getYiiLogo() ?>">
+                    <img width="30" height="30" alt="" src="<?= \Yiisoft\Debug\Module::getYiiLogo() ?>">
                 </a>
             </div>
             <?php foreach ($panels as $panel): ?>
@@ -92,7 +92,7 @@ $this->title = 'Yii Debugger';
                         'attribute' => 'sqlCount',
                         'label' => 'Query Count',
                         'value' => function ($data) {
-                            /* @var $dbPanel \yii\debug\panels\DbPanel */
+                            /* @var $dbPanel \Yiisoft\Debug\Panels\DbPanel */
                             $dbPanel = $this->context->module->panels['db'];
 
                             if ($dbPanel->isQueryCountCritical($data['sqlCount'])) {

@@ -1,12 +1,12 @@
 <?php
 
 use yii\dataview\GridView;
-use yii\debug\DbAsset;
+use Yiisoft\Debug\DbAsset;
 use yii\helpers\Html;
 use yii\web\View;
 
-/* @var $panel yii\debug\panels\DbPanel */
-/* @var $searchModel yii\debug\models\search\Db */
+/* @var $panel Yiisoft\Debug\Panels\DbPanel */
+/* @var $searchModel Yiisoft\Debug\Models\Search\Db */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 /* @var $hasExplain bool */
 /* @var $sumDuplicates int */

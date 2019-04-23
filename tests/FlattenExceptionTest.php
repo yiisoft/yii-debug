@@ -1,10 +1,10 @@
 <?php
 
-namespace yiiunit\debug;
+namespace Yiisoft\Debug\Tests;
 
 use yii\tests\TestCase;
 use yii\web\NotFoundHttpException;
-use yii\debug\FlattenException;
+use Yiisoft\Debug\FlattenException;
 
 /**
  * @author Dmitry Bashkarev <dmitry@bashkarev.com>

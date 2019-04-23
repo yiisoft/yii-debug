@@ -7,8 +7,8 @@ use yii\helpers\Url;
 /* @var $summary array */
 /* @var $tag string */
 /* @var $manifest array */
-/* @var $panels \yii\debug\Panel[] */
-/* @var $activePanel \yii\debug\Panel */
+/* @var $panels \Yiisoft\Debug\Panel[] */
+/* @var $activePanel \Yiisoft\Debug\Panel */
 
 $this->title = 'Yii Debugger';
 ?>
@@ -17,7 +17,7 @@ $this->title = 'Yii Debugger';
         <div class="yii-debug-toolbar__bar">
             <div class="yii-debug-toolbar__block yii-debug-toolbar__title">
                 <a href="<?= Url::to(['index']) ?>">
-                    <img width="29" height="30" alt="" src="<?= \yii\debug\Module::getYiiLogo() ?>">
+                    <img width="29" height="30" alt="" src="<?= \Yiisoft\Debug\Module::getYiiLogo() ?>">
                 </a>
             </div>
 

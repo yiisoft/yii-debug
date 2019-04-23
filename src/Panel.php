@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\debug;
+namespace Yiisoft\Debug;
 
 use yii\base\Application;
 use yii\base\Component;

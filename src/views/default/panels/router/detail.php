@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-/* @var $model  yii\debug\models\Router */
+/* @var $model Yiisoft\Debug\Models\Router */
 ?>
 
 <h1>
@@ -12,7 +12,7 @@ use yii\helpers\Html;
             [
                 'rulesTested' => $model->count,
                 'hasMatch' => (int)$model->hasMatch,
-            ], 'en_US'); ?>
+            ], 'en_US') ?>
     </small>
 </h1>
 

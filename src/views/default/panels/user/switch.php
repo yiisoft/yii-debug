@@ -2,11 +2,11 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
-use yii\debug\UserswitchAsset;
+use Yiisoft\Debug\UserswitchAsset;
 use yii\dataview\GridView;
 
 /* @var $this \yii\web\View */
-/* @var $panel yii\debug\panels\UserPanel */
+/* @var $panel Yiisoft\Debug\Panels\UserPanel */
 
 UserswitchAsset::register($this);
 ?>

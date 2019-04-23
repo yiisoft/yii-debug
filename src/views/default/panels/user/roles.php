@@ -2,7 +2,7 @@
 
 use yii\dataview\GridView;
 
-/* @var $panel yii\debug\panels\UserPanel */
+/* @var $panel Yiisoft\Debug\Panels\UserPanel */
 
 if ($panel->data['rolesProvider']) {
     echo '<h2>Roles</h2>';

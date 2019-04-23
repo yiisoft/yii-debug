@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\debug;
+namespace Yiisoft\Debug;
 
 use yii\web\AssetBundle;
 
@@ -37,6 +37,6 @@ class TimelineAsset extends AssetBundle
      * {@inheritdoc}
      */
     public $depends = [
-        'yii\debug\DebugAsset'
+        DebugAsset::class
     ];
 }

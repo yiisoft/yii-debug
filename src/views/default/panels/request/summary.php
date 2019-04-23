@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\web\Response;
 
-/* @var $panel yii\debug\panels\RequestPanel */
+/* @var $panel Yiisoft\Debug\Panels\RequestPanel */
 
 $statusCode = $panel->data['statusCode'];
 if ($statusCode === null) {
