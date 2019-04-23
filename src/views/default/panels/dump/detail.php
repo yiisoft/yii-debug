@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 use yii\dataview\GridView;
+use yii\helpers\Html;
 use yii\helpers\VarDumper;
 
 /* @var $panel Yiisoft\Debug\Panels\DumpPanel */

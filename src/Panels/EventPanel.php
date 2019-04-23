@@ -8,10 +8,10 @@
 namespace Yiisoft\Debug\Panels;
 
 use Clue\GraphComposer\App;
-use yii\helpers\Yii;
 use yii\base\Event;
-use Yiisoft\Debug\Panel;
+use yii\helpers\Yii;
 use yii\web\Application;
+use Yiisoft\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays information about triggered events.

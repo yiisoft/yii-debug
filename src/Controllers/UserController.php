@@ -8,10 +8,10 @@
 namespace Yiisoft\Debug\Controllers;
 
 use yii\base\Action;
-use Yiisoft\Debug\Models\UserSwitch;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
+use Yiisoft\Debug\Models\UserSwitch;
 
 /**
  * User controller

@@ -8,8 +8,8 @@
 namespace Yiisoft\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
-use Yiisoft\Debug\Components\Search\Filter;
 use yii\helpers\Yii;
+use Yiisoft\Debug\Components\Search\Filter;
 
 /**
  * Mail represents the model behind the search form about current send emails.

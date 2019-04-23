@@ -7,23 +7,23 @@
 
 namespace Yiisoft\Debug\Panels;
 
-use yii\di\Initiable;
 use yii\base\Controller;
-use yii\base\Model;
 use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
 use yii\db\ActiveRecord;
+use yii\di\Initiable;
+use yii\filters\AccessControl;
+use yii\filters\AccessRule;
+use yii\helpers\VarDumper;
+use yii\web\IdentityInterface;
+use yii\web\User;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Debug\Controllers\UserController;
 use Yiisoft\Debug\Models\Search\UserSearchInterface;
 use Yiisoft\Debug\Models\UserSwitch;
 use Yiisoft\Debug\Panel;
-use yii\filters\AccessControl;
-use yii\filters\AccessRule;
-use Yiisoft\Arrays\ArrayHelper;
-use yii\helpers\VarDumper;
-use yii\web\IdentityInterface;
-use yii\web\User;
 
 /**
  * Debugger panel that collects and displays user data.

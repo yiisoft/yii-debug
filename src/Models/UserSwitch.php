@@ -7,7 +7,6 @@
 
 namespace Yiisoft\Debug\Models;
 
-use yii\helpers\Yii;
 use yii\base\Model;
 use yii\web\IdentityInterface;
 use yii\web\User;

@@ -2,8 +2,8 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
-use Yiisoft\Debug\UserswitchAsset;
 use yii\dataview\GridView;
+use Yiisoft\Debug\UserswitchAsset;
 
 /* @var $this \yii\web\View */
 /* @var $panel Yiisoft\Debug\Panels\UserPanel */

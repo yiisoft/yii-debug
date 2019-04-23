@@ -1,9 +1,9 @@
 <?php
 
 use yii\dataview\GridView;
-use Yiisoft\Debug\DbAsset;
 use yii\helpers\Html;
 use yii\web\View;
+use Yiisoft\Debug\DbAsset;
 
 /* @var $panel Yiisoft\Debug\Panels\DbPanel */
 /* @var $searchModel Yiisoft\Debug\Models\Search\Db */

@@ -7,11 +7,9 @@
 
 namespace Yiisoft\Debug\Panels;
 
-use yii\helpers\Yii;
-use Yiisoft\Debug\Panel;
 use yii\helpers\VarDumper;
-use Yii\Log\Logger;
 use Yiisoft\Debug\Models\Search\Log;
+use Yiisoft\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays logs.

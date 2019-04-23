@@ -8,8 +8,8 @@
 namespace Yiisoft\Debug\Actions\DB;
 
 use yii\base\Action;
-use Yiisoft\Debug\Panels\DbPanel;
 use yii\web\HttpException;
+use Yiisoft\Debug\Panels\DbPanel;
 
 /**
  * ExplainAction provides EXPLAIN information for SQL queries

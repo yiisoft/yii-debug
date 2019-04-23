@@ -8,7 +8,6 @@
 namespace Yiisoft\Debug\Panels;
 
 use Psr\Log\LogLevel;
-use yii\helpers\Yii;
 use Yiisoft\Debug\Models\Router;
 use Yiisoft\Debug\Panel;
 

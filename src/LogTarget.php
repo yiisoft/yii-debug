@@ -7,9 +7,9 @@
 
 namespace Yiisoft\Debug;
 
-use yii\helpers\Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
+use yii\helpers\Yii;
 use Yii\Log\Target;
 
 /**

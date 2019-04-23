@@ -7,7 +7,6 @@
 
 namespace Yiisoft\Debug\Panels;
 
-use yii\helpers\Yii;
 use yii\base\InlineAction;
 use Yiisoft\Debug\Panel;
 

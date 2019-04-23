@@ -7,12 +7,12 @@
 
 namespace Yiisoft\Debug\Controllers;
 
-use yii\helpers\Yii;
 use yii\base\Action;
+use yii\helpers\Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use Yiisoft\Debug\Models\Search\Debug;
 use yii\web\Response;
+use Yiisoft\Debug\Models\Search\Debug;
 
 /**
  * Debugger controller provides browsing over available debug logs.

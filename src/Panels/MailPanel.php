@@ -8,14 +8,14 @@
 namespace Yiisoft\Debug\Panels;
 
 use yii\base\Application;
-use yii\helpers\Yii;
 use yii\base\Event;
-use Yiisoft\Debug\Models\Search\Mail;
-use Yiisoft\Debug\Panel;
-use yii\mail\BaseMailer;
 use yii\helpers\FileHelper;
+use yii\helpers\Yii;
+use yii\mail\BaseMailer;
 use yii\mail\MessageInterface;
 use yii\mail\SendEvent;
+use Yiisoft\Debug\Models\Search\Mail;
+use Yiisoft\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays the generated emails.

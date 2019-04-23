@@ -8,9 +8,9 @@
 namespace Yiisoft\Debug\Panels;
 
 use yii\helpers\Yii;
-use Yiisoft\Debug\Panel;
 use Yiisoft\Debug\Models\Timeline\Search;
 use Yiisoft\Debug\Models\Timeline\Svg;
+use Yiisoft\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays timeline data.

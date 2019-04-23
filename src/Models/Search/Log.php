@@ -8,8 +8,8 @@
 namespace Yiisoft\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
-use Yiisoft\Debug\Components\Search\Filter;
 use yii\helpers\Yii;
+use Yiisoft\Debug\Components\Search\Filter;
 
 /**
  * Search model for current request log.

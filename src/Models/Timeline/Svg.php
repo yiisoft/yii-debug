@@ -8,8 +8,8 @@
 namespace Yiisoft\Debug\Models\Timeline;
 
 use yii\base\BaseObject;
-use Yiisoft\Debug\Panels\TimelinePanel;
 use Yii\Helpers\StringHelper;
+use Yiisoft\Debug\Panels\TimelinePanel;
 
 /**
  * Svg is used to draw a graph using SVG

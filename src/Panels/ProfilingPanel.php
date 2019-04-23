@@ -7,10 +7,8 @@
 
 namespace Yiisoft\Debug\Panels;
 
-use yii\helpers\Yii;
-use Yiisoft\Debug\Panel;
-use Yii\Log\Logger;
 use Yiisoft\Debug\Models\Search\Profile;
+use Yiisoft\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays performance profiling info.

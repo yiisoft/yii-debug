@@ -7,8 +7,8 @@
 
 namespace Yiisoft\Debug\Models\Search;
 
-use yii\helpers\Yii;
 use yii\data\ArrayDataProvider;
+use yii\helpers\Yii;
 use Yiisoft\Debug\Components\Search\Filter;
 
 /**

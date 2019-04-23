@@ -5,10 +5,10 @@ namespace Yiisoft\Debug\Tests;
 use yii\base\Event;
 use yii\cache\Cache;
 use yii\cache\FileCache;
-use Yiisoft\Debug\Module;
 use yii\tests\TestCase;
-use yii\view\View;
 use yii\view\Theme;
+use yii\view\View;
+use Yiisoft\Debug\Module;
 
 class ModuleTest extends TestCase
 {
