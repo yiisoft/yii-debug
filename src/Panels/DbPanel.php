@@ -8,9 +8,9 @@
 namespace Yiisoft\Debug\Panels;
 
 use Psr\Log\LogLevel;
-use Yii\Arrays\ArrayHelper;
 use yii\base\Application;
 use yii\base\InvalidConfigException;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Debug\Models\Search\Db;
 use Yiisoft\Debug\Panel;
 

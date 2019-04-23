@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use Yii\Helpers\StringHelper;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use Yiisoft\Debug\TimelineAsset;
+use Yiisoft\Strings\StringHelper;
 
 /* @var $panel Yiisoft\Debug\Panels\TimelinePanel */
 /* @var $searchModel \Yiisoft\Debug\Models\Timeline\Search */
