@@ -230,7 +230,7 @@ class UserPanel extends Panel implements Initiable
         try {
             $authManager = $this->app->getAuthManager();
 
-            if ($authManager instanceof \yii\rbac\ManagerInterface) {
+            if ($authManager instanceof \Yiisoft\Rbac\ManagerInterface) {
                 $roles = ArrayHelper::toArray($authManager->getRolesByUser($this->getUser()->id));
                 foreach ($roles as &$role) {
                     $role['data'] = $this->dataToString($role['data']);
