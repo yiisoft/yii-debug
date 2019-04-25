@@ -78,7 +78,7 @@ class ModuleTest extends TestCase
      */
     public function testGetToolbarHtml()
     {
-        $logger = $this->getMockBuilder(\Yii\Log\Logger::class)
+        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
@@ -98,7 +98,7 @@ HTML
      */
     public function testNonCachedToolbarHtml()
     {
-        $logger = $this->getMockBuilder(\Yii\Log\Logger::class)
+        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
@@ -135,7 +135,7 @@ HTML
      */
     public function testToolbarWithCustomModuleID()
     {
-        $logger = $this->getMockBuilder(\Yii\Log\Logger::class)
+        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();

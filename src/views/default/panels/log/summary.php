@@ -1,7 +1,7 @@
 <?php
 
 use Psr\Log\LogLevel;
-use Yii\Log\Target;
+use Yiisoft\Log\Target;
 
 /* @var $panel Yiisoft\Debug\Panels\LogPanel */
 /* @var $data array */
