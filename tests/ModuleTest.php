@@ -3,8 +3,8 @@
 namespace Yiisoft\Debug\Tests;
 
 use yii\base\Event;
-use yii\cache\Cache;
-use yii\cache\FileCache;
+use Yiisoft\Cache\Cache;
+use Yiisoft\Cache\FileCache;
 use yii\tests\TestCase;
 use yii\view\Theme;
 use yii\view\View;
