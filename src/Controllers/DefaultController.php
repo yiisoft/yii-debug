@@ -145,7 +145,7 @@ class DefaultController extends Controller
      * Download mail action
      *
      * @param string $file
-     * @return \yii\console\Response|Response
+     * @return \Yiisoft\Yii\Console\Response|Response
      * @throws NotFoundHttpException
      */
     public function actionDownloadMail($file)
