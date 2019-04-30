@@ -1,7 +1,7 @@
 <?php
 
 use Psr\Log\LogLevel;
-use yii\dataview\GridView;
+use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
 use yii\helpers\VarDumper;
 use Yiisoft\Log\Logger;

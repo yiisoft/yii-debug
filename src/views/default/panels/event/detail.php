@@ -1,6 +1,6 @@
 <?php
 
-use yii\dataview\GridView;
+use Yiisoft\Yii\DataView\GridView;
 
 /* @var $panel Yiisoft\Debug\Panels\EventPanel */
 /* @var $searchModel Yiisoft\Debug\Models\Search\Event */

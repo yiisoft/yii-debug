@@ -2,7 +2,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
-use yii\dataview\GridView;
+use Yiisoft\Yii\DataView\GridView;
 use Yiisoft\Debug\UserswitchAsset;
 
 /* @var $this \yii\web\View */

@@ -1,6 +1,6 @@
 <?php
 
-use yii\dataview\ListView;
+use Yiisoft\Yii\DataView\ListView;
 use yii\helpers\Html;
 use yii\helpers\Yii;
 use yii\widgets\ActiveForm;
