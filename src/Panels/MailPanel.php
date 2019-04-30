@@ -60,7 +60,7 @@ class MailPanel extends Panel
             ];
 
             // add more information when message is a SwiftMailer message
-            if ($message instanceof \yii\swiftmailer\Message) {
+            if ($message instanceof \Yiisoft\Yii\SwiftMailer\Message) {
                 /* @var $swiftMessage \Swift_Message */
                 $swiftMessage = $message->getSwiftMessage();
 
