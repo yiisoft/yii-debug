@@ -17,7 +17,7 @@ class DbAsset extends AssetBundle
     /**
      * {@inheritdoc}
      */
-    public $sourcePath = '@yii/debug/assets';
+    public $sourcePath = '@Yiisoft/Debug/assets';
     /**
      * {@inheritdoc}
      */
