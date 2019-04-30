@@ -1,7 +1,7 @@
 <?php
 
 use yii\data\ArrayDataProvider;
-use yii\dataview\GridView;
+use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
@@ -71,7 +71,7 @@ $this->title = 'Yii Debugger';
                     ]
                 ],
                 'columns' => array_filter([
-                    ['__class' => \yii\dataview\columns\SerialColumn::class],
+                    ['__class' => \Yiisoft\Yii\DataView\Columns\SerialColumn::class],
                     [
                         'attribute' => 'tag',
                         'value' => function ($data) {
