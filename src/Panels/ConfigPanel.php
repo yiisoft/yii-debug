@@ -34,7 +34,7 @@ class ConfigPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Configuration';
     }
@@ -42,7 +42,7 @@ class ConfigPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/config/summary', ['panel' => $this]);
     }
@@ -50,7 +50,7 @@ class ConfigPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         return $this->render('panels/config/detail', ['panel' => $this]);
     }

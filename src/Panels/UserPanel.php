@@ -204,7 +204,7 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'User';
     }
@@ -212,7 +212,7 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/user/summary', ['panel' => $this]);
     }
@@ -220,7 +220,7 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         return $this->render('panels/user/detail', ['panel' => $this]);
     }
@@ -298,7 +298,7 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         try {
             $this->getUser();

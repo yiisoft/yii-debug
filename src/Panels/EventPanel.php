@@ -57,7 +57,7 @@ class EventPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Events';
     }
@@ -65,7 +65,7 @@ class EventPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/event/summary', [
             'panel' => $this,
@@ -76,7 +76,7 @@ class EventPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new \Yiisoft\Yii\Debug\Models\Search\Event();
         $dataProvider = $searchModel->search($this->request->get(), $this->data);
@@ -99,7 +99,7 @@ class EventPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         $yiiVersion = Yii::getVersion();
         if (!version_compare($yiiVersion, '2.0.14', '>=') && strpos($yiiVersion, '-dev') === false) {

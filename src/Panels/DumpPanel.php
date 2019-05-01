@@ -53,7 +53,7 @@ class DumpPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Dump';
     }
@@ -61,7 +61,7 @@ class DumpPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/dump/summary', ['panel' => $this]);
     }
@@ -69,7 +69,7 @@ class DumpPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Log();
         $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());

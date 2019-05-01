@@ -38,7 +38,7 @@ class ProfilingPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Profiling';
     }
@@ -46,7 +46,7 @@ class ProfilingPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/profile/summary', [
             'memory' => sprintf('%.3f MB', $this->data['memory'] / 1048576),
@@ -58,7 +58,7 @@ class ProfilingPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Profile();
         $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());

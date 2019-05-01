@@ -65,7 +65,7 @@ class RouterPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Router';
     }
@@ -73,7 +73,7 @@ class RouterPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/router/summary', ['panel' => $this]);
     }
@@ -81,7 +81,7 @@ class RouterPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         return $this->render('panels/router/detail', ['model' => new Router($this->data)]);
     }

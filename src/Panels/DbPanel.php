@@ -81,7 +81,7 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Database';
     }
@@ -97,7 +97,7 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         $timings = $this->calculateTimings();
         $queryCount = count($timings);
@@ -114,7 +114,7 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Db();
 
@@ -334,7 +334,7 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         try {
             $this->getDb();

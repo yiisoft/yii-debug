@@ -23,7 +23,7 @@ class AssetPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Asset Bundles';
     }
@@ -31,7 +31,7 @@ class AssetPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/assets/summary', ['panel' => $this]);
     }
@@ -39,7 +39,7 @@ class AssetPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         return $this->render('panels/assets/detail', ['panel' => $this]);
     }
@@ -72,7 +72,7 @@ class AssetPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         try {
             isset($this->view->assetManager) && $this->view->assetManager;

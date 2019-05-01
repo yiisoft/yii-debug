@@ -101,7 +101,7 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Mail';
     }
@@ -109,7 +109,7 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/mail/summary', [
             'panel' => $this,
@@ -120,7 +120,7 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Mail();
         $dataProvider = $searchModel->search($this->request->get(), $this->data);

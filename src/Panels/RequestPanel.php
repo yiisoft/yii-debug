@@ -47,7 +47,7 @@ class RequestPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Request';
     }
@@ -55,7 +55,7 @@ class RequestPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/request/summary', ['panel' => $this]);
     }
@@ -63,7 +63,7 @@ class RequestPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         return $this->render('panels/request/detail', ['panel' => $this]);
     }

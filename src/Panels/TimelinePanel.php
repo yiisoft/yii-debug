@@ -80,7 +80,7 @@ class TimelinePanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Timeline';
     }
@@ -88,7 +88,7 @@ class TimelinePanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Search();
         $dataProvider = $searchModel->search($this->request->getQueryParams(), $this);

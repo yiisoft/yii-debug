@@ -37,7 +37,7 @@ class LogPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Logs';
     }
@@ -45,7 +45,7 @@ class LogPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->render('panels/log/summary', ['data' => $this->data, 'panel' => $this]);
     }
@@ -53,7 +53,7 @@ class LogPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Log();
         $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());

@@ -69,7 +69,7 @@ class Panel extends Component implements ViewContextInterface
     /**
      * @return string name of the panel
      */
-    public function getName()
+    public function getName(): string
     {
         return '';
     }
@@ -77,7 +77,7 @@ class Panel extends Component implements ViewContextInterface
     /**
      * @return string content that is displayed at debug toolbar
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return '';
     }
@@ -85,7 +85,7 @@ class Panel extends Component implements ViewContextInterface
     /**
      * @return string content that is displayed in debugger detail view
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         return '';
     }
@@ -115,7 +115,7 @@ class Panel extends Component implements ViewContextInterface
      * @param null|array $additionalParams Optional additional parameters to add to the route
      * @return string URL pointing to panel detail view
      */
-    public function getUrl($additionalParams = null)
+    public function getUrl($additionalParams = null): string
     {
         $route = [
             '/' . $this->module->id . '/default/view',
@@ -136,7 +136,7 @@ class Panel extends Component implements ViewContextInterface
      * @return string the trace line
      * @since 2.0.7
      */
-    public function getTraceLine($options)
+    public function getTraceLine(array $options): string
     {
         if (!isset($options['text'])) {
             $options['text'] = "{$options['file']}:{$options['line']}";
@@ -183,7 +183,7 @@ class Panel extends Component implements ViewContextInterface
      * @return bool whether this panel is enabled.
      * @since 2.0.10
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return true;
     }
@@ -203,7 +203,7 @@ class Panel extends Component implements ViewContextInterface
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @return string the rendering result.
      */
-    public function render($view, $params = [])
+    public function render(string $view, array $params = []): string
     {
         return $this->view->render($view, $params, $this);
     }
