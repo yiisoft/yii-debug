@@ -7,13 +7,14 @@
 
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Application;
 use yii\base\Event;
+use yii\base\Request;
 use yii\helpers\FileHelper;
 use yii\helpers\Yii;
 use yii\mail\BaseMailer;
 use yii\mail\MessageInterface;
 use yii\mail\SendEvent;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Models\Search\Mail;
 use Yiisoft\Yii\Debug\Panel;
 
@@ -37,13 +38,15 @@ class MailPanel extends Panel
      */
     private $_messages = [];
 
+    private $request;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(Application $application)
+    public function __construct(Request $request, View $view)
     {
-        parent::__construct($application);
+        $this->request = $request;
+        parent::__construct($view);
 
         Event::on(BaseMailer::class, SendEvent::AFTER, function ($event) {
             /* @var $message MessageInterface */
@@ -98,7 +101,7 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Mail';
     }
@@ -106,9 +109,9 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
-        return $this->app->view->render('panels/mail/summary', [
+        return $this->render('panels/mail/summary', [
             'panel' => $this,
             'mailCount' => is_array($this->data) ? count($this->data) : '⚠️',
         ]);
@@ -117,12 +120,12 @@ class MailPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Mail();
-        $dataProvider = $searchModel->search($this->app->request->get(), $this->data);
+        $dataProvider = $searchModel->search($this->request->get(), $this->data);
 
-        return $this->app->view->render('panels/mail/detail', [
+        return $this->render('panels/mail/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel
