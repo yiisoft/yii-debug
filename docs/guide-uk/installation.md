@@ -27,7 +27,7 @@ php composer.phar require --prefer-dist yiisoft/yii-debug
 ```php
 'bootstrap' => ['debug'],
 'modules' => [
-    'debug' => 'Yiisoft\Debug\Module',
+    'debug' => 'Yiisoft\Yii\Debug\Module',
 ]
 ```
 
@@ -38,7 +38,7 @@ php composer.phar require --prefer-dist yiisoft/yii-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        'class' => 'Yiisoft\Debug\Module',
+        'class' => 'Yiisoft\Yii\Debug\Module',
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]

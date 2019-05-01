@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug;
+namespace Yiisoft\Yii\Debug;
 
 use yii\base\Action;
 use yii\base\ActionEvent;
@@ -415,18 +415,18 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     protected function corePanels()
     {
         return [
-            'config' => ['__class' => 'Yiisoft\Debug\Panels\ConfigPanel'],
-            'request' => ['__class' => 'Yiisoft\Debug\Panels\RequestPanel'],
-            'router' => ['__class' => 'Yiisoft\Debug\Panels\RouterPanel'],
-            'log' => ['__class' => 'Yiisoft\Debug\Panels\LogPanel'],
-            'profiling' => ['__class' => 'Yiisoft\Debug\Panels\ProfilingPanel'],
-            'db' => ['__class' => 'Yiisoft\Debug\Panels\DbPanel'],
-            'event' => ['__class' => 'Yiisoft\Debug\Panels\EventPanel'],
-            'assets' => ['__class' => 'Yiisoft\Debug\Panels\AssetPanel'],
-            'mail' => ['__class' => 'Yiisoft\Debug\Panels\MailPanel'],
-            'timeline' => ['__class' => 'Yiisoft\Debug\Panels\TimelinePanel'],
-            'user' => ['__class' => 'Yiisoft\Debug\Panels\UserPanel'],
-            'dump' => ['__class' => 'Yiisoft\Debug\Panels\DumpPanel'],
+            'config' => ['__class' => 'Yiisoft\Yii\Debug\Panels\ConfigPanel'],
+            'request' => ['__class' => 'Yiisoft\Yii\Debug\Panels\RequestPanel'],
+            'router' => ['__class' => 'Yiisoft\Yii\Debug\Panels\RouterPanel'],
+            'log' => ['__class' => 'Yiisoft\Yii\Debug\Panels\LogPanel'],
+            'profiling' => ['__class' => 'Yiisoft\Yii\Debug\Panels\ProfilingPanel'],
+            'db' => ['__class' => 'Yiisoft\Yii\Debug\Panels\DbPanel'],
+            'event' => ['__class' => 'Yiisoft\Yii\Debug\Panels\EventPanel'],
+            'assets' => ['__class' => 'Yiisoft\Yii\Debug\Panels\AssetPanel'],
+            'mail' => ['__class' => 'Yiisoft\Yii\Debug\Panels\MailPanel'],
+            'timeline' => ['__class' => 'Yiisoft\Yii\Debug\Panels\TimelinePanel'],
+            'user' => ['__class' => 'Yiisoft\Yii\Debug\Panels\UserPanel'],
+            'dump' => ['__class' => 'Yiisoft\Yii\Debug\Panels\DumpPanel'],
         ];
     }
 

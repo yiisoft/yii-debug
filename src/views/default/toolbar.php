@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 /* @var $this \yii\web\View */
-/* @var $panels Yiisoft\Debug\Panel[] */
+/* @var $panels Yiisoft\Yii\Debug\Panel[] */
 /* @var $tag string */
 /* @var $position string */
 /* @var $defaultHeight int */
@@ -17,7 +17,7 @@ $url = $firstPanel->getUrl();
     <div class="yii-debug-toolbar__bar">
         <div class="yii-debug-toolbar__block yii-debug-toolbar__title">
             <a href="<?= Url::to(['index']) ?>">
-                <img width="30" height="30" alt="Yii" src="<?= \Yiisoft\Debug\Module::getYiiLogo() ?>">
+                <img width="30" height="30" alt="Yii" src="<?= \Yiisoft\Yii\Debug\Module::getYiiLogo() ?>">
             </a>
         </div>
 

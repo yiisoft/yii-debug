@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Components\Search\Matchers;
+namespace Yiisoft\Yii\Debug\Components\Search\Matchers;
 
 /**
  * MatcherInterface should be implemented by all matchers that are used in a filter.

@@ -5,8 +5,8 @@ use yii\helpers\Html;
 use yii\helpers\Yii;
 use yii\widgets\ActiveForm;
 
-/* @var $panel Yiisoft\Debug\Panels\MailPanel */
-/* @var $searchModel Yiisoft\Debug\Models\search\Mail */
+/* @var $panel Yiisoft\Yii\Debug\Panels\MailPanel */
+/* @var $searchModel Yiisoft\Yii\Debug\Models\search\Mail */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 
 $listView = Yii::createObject([

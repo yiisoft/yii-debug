@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this \yii\web\View */
-/* @var $panel Yiisoft\Debug\Panels\UserPanel */
+/* @var $panel Yiisoft\Yii\Debug\Panels\UserPanel */
 ?>
 
 <h1>User</h1>

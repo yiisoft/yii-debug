@@ -5,13 +5,13 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Controllers;
+namespace Yiisoft\Yii\Debug\Controllers;
 
 use yii\base\Action;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
-use Yiisoft\Debug\Models\UserSwitch;
+use Yiisoft\Yii\Debug\Models\UserSwitch;
 
 /**
  * User controller

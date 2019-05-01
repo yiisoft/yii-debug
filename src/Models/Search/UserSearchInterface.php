@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\Search;
+namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\DataProviderInterface;
 use yii\web\IdentityInterface;

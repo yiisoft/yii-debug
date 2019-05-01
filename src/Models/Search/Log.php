@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\Search;
+namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
 use yii\helpers\Yii;
-use Yiisoft\Debug\Components\Search\Filter;
+use Yiisoft\Yii\Debug\Components\Search\Filter;
 
 /**
  * Search model for current request log.

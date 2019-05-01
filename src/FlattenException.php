@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug;
+namespace Yiisoft\Yii\Debug;
 
 /**
  * FlattenException wraps a PHP Exception to be able to serialize it.

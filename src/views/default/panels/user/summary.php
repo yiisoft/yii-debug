@@ -1,6 +1,6 @@
 <?php
 /* @var $this \yii\web\View */
-/* @var $panel Yiisoft\Debug\Panels\UserPanel */
+/* @var $panel Yiisoft\Yii\Debug\Panels\UserPanel */
 ?>
 <div class="yii-debug-toolbar__block">
     <a href="<?= $panel->getUrl() ?>">

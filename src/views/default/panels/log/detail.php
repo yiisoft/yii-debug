@@ -6,8 +6,8 @@ use yii\helpers\Html;
 use yii\helpers\VarDumper;
 use Yiisoft\Log\Logger;
 
-/* @var $panel Yiisoft\Debug\Panels\LogPanel */
-/* @var $searchModel Yiisoft\Debug\Models\Search\Log */
+/* @var $panel Yiisoft\Yii\Debug\Panels\LogPanel */
+/* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Log */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 ?>
     <h1>Log Messages</h1>

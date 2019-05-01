@@ -5,10 +5,10 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\Timeline;
+namespace Yiisoft\Yii\Debug\Models\Timeline;
 
 use yii\base\BaseObject;
-use Yiisoft\Debug\Panels\TimelinePanel;
+use Yiisoft\Yii\Debug\Panels\TimelinePanel;
 use Yiisoft\Strings\StringHelper;
 
 /**

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-/* @var $panel Yiisoft\Debug\Panels\RequestPanel */
+/* @var $panel Yiisoft\Yii\Debug\Panels\RequestPanel */
 
 echo '<h1>Request</h1>';
 

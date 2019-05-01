@@ -27,7 +27,7 @@ Para habilitar la extensión, añade estas lineas en tu archivo de configuració
 ```php
 'bootstrap' => ['debug'],
 'modules' => [
-    'debug' => 'Yiisoft\Debug\Module',
+    'debug' => 'Yiisoft\Yii\Debug\Module',
 ]
 ```
 
@@ -37,7 +37,7 @@ Por defecto, el modulo debug sólo trabaja cuando se navega por la web dentro de
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        'class' => 'Yiisoft\Debug\Module',
+        'class' => 'Yiisoft\Yii\Debug\Module',
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]

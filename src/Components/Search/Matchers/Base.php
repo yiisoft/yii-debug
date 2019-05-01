@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Components\Search\Matchers;
+namespace Yiisoft\Yii\Debug\Components\Search\Matchers;
 
 use yii\base\Component;
 

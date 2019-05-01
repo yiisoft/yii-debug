@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\Search;
+namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\base\Model;
-use Yiisoft\Debug\Components\Search\Filter;
-use Yiisoft\Debug\Components\Search\Matchers;
+use Yiisoft\Yii\Debug\Components\Search\Filter;
+use Yiisoft\Yii\Debug\Components\Search\Matchers;
 
 /**
  * Base search model

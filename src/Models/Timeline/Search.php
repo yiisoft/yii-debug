@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\Timeline;
+namespace Yiisoft\Yii\Debug\Models\Timeline;
 
-use Yiisoft\Debug\Components\Search\Filter;
-use Yiisoft\Debug\Components\Search\Matchers\GreaterThanOrEqual;
-use Yiisoft\Debug\Models\Search\Base;
-use Yiisoft\Debug\Panels\TimelinePanel;
+use Yiisoft\Yii\Debug\Components\Search\Filter;
+use Yiisoft\Yii\Debug\Components\Search\Matchers\GreaterThanOrEqual;
+use Yiisoft\Yii\Debug\Models\Search\Base;
+use Yiisoft\Yii\Debug\Panels\TimelinePanel;
 
 /**
  * Search model for timeline data.

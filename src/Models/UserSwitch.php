@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models;
+namespace Yiisoft\Yii\Debug\Models;
 
 use yii\base\Model;
 use yii\web\IdentityInterface;
