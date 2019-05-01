@@ -17,7 +17,7 @@ class DebugAsset extends AssetBundle
     /**
      * {@inheritdoc}
      */
-    public $sourcePath = '@Yiisoft/Debug/assets';
+    public $sourcePath = '@Yiisoft/Yii/Debug/assets';
     /**
      * {@inheritdoc}
      */

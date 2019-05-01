@@ -111,7 +111,7 @@ HTML
 
         $this->container->set('cache', new Cache([
             '__class' => Cache::class,
-            'handler' => new FileCache('@Yiisoft/Debug/Tests/runtime/cache')
+            'handler' => new FileCache('@Yiisoft/Yii/Debug/Tests/runtime/cache')
         ]));
 
         $view = $this->app->view;
