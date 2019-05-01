@@ -5,16 +5,16 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Actions\DB;
+namespace Yiisoft\Yii\Debug\Actions\DB;
 
 use yii\base\Action;
 use yii\web\HttpException;
-use Yiisoft\Debug\Panels\DbPanel;
+use Yiisoft\Yii\Debug\Panels\DbPanel;
 
 /**
  * ExplainAction provides EXPLAIN information for SQL queries
  *
- * @property \Yiisoft\Debug\Controllers\DefaultController|\yii\web\Controller|\Yiisoft\Yii\Console\Controller $controller the controller that owns this action
+ * @property \Yiisoft\Yii\Debug\Controllers\DefaultController|\yii\web\Controller|\Yiisoft\Yii\Console\Controller $controller the controller that owns this action
  *
  * @author Laszlo <github@lvlconsultancy.nl>
  * @since 2.0.6

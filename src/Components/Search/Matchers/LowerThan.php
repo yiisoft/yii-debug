@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Components\Search\Matchers;
+namespace Yiisoft\Yii\Debug\Components\Search\Matchers;
 
 /**
  * Checks if the given value is lower than the base one.

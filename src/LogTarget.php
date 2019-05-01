@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug;
+namespace Yiisoft\Yii\Debug;
 
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;

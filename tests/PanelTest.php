@@ -1,10 +1,10 @@
 <?php
 
-namespace Yiisoft\Debug\Tests;
+namespace Yiisoft\Yii\Debug\Tests;
 
 use yii\tests\TestCase;
-use Yiisoft\Debug\Module;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Module;
+use Yiisoft\Yii\Debug\Panel;
 
 class PanelTest extends TestCase
 {

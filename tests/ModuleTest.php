@@ -1,6 +1,6 @@
 <?php
 
-namespace Yiisoft\Debug\Tests;
+namespace Yiisoft\Yii\Debug\Tests;
 
 use yii\base\Event;
 use Yiisoft\Cache\Cache;
@@ -8,7 +8,7 @@ use Yiisoft\Cache\FileCache;
 use yii\tests\TestCase;
 use yii\view\Theme;
 use yii\view\View;
-use Yiisoft\Debug\Module;
+use Yiisoft\Yii\Debug\Module;
 
 class ModuleTest extends TestCase
 {
@@ -111,7 +111,7 @@ HTML
 
         $this->container->set('cache', new Cache([
             '__class' => Cache::class,
-            'handler' => new FileCache('@Yiisoft/Debug/Tests/runtime/cache')
+            'handler' => new FileCache('@Yiisoft/Yii/Debug/Tests/runtime/cache')
         ]));
 
         $view = $this->app->view;

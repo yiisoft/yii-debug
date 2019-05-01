@@ -3,8 +3,8 @@
 use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
 
-/* @var $panel Yiisoft\Debug\Panels\ProfilingPanel */
-/* @var $searchModel Yiisoft\Debug\Models\Search\Profile */
+/* @var $panel Yiisoft\Yii\Debug\Panels\ProfilingPanel */
+/* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Profile */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 /* @var $time int */
 /* @var $memory int */

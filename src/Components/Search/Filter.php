@@ -5,10 +5,10 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Components\Search;
+namespace Yiisoft\Yii\Debug\Components\Search;
 
 use yii\base\Component;
-use Yiisoft\Debug\Components\Search\Matchers\MatcherInterface;
+use Yiisoft\Yii\Debug\Components\Search\Matchers\MatcherInterface;
 
 /**
  * Provides array filtering capabilities.

@@ -5,14 +5,14 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
 use yii\base\Application;
 use yii\base\InvalidConfigException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Debug\Models\Search\Db;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Models\Search\Db;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays database queries performed.

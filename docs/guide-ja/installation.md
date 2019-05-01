@@ -28,7 +28,7 @@ php composer.phar require --prefer-dist yiisoft/yii-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => Yiisoft\Debug\Module::class,
+        '__class' => Yiisoft\Yii\Debug\Module::class,
     ],
 ]
 ```
@@ -40,7 +40,7 @@ php composer.phar require --prefer-dist yiisoft/yii-debug
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => Yiisoft\Debug\Module::class,
+        '__class' => Yiisoft\Yii\Debug\Module::class,
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]
@@ -100,10 +100,10 @@ defined('YII_DEBUG') or define('YII_DEBUG', true);
 
 ```php
 $config['modules']['debug'] = [
-    '__class' => Yiisoft\Debug\Module::class,
+    '__class' => Yiisoft\Yii\Debug\Module::class,
     'panels' => [
         'db' => [
-            '__class' => Yiisoft\Debug\Panels\DbPanel::class,
+            '__class' => Yiisoft\Yii\Debug\Panels\DbPanel::class,
             'defaultOrder' => [
                 'seq' => SORT_ASC
             ],
@@ -212,7 +212,7 @@ Windows Registry Editor Version 5.00
 
 ##### リンクを無効化する
 トレースのための IDE リンクはデフォルトで作成されます。
-テキスト行だけを表示したい場合は、プロパティ `Yiisoft\Debug\Module::traceLink` を `false` に設定しなければなりません。
+テキスト行だけを表示したい場合は、プロパティ `Yiisoft\Yii\Debug\Module::traceLink` を `false` に設定しなければなりません。
 
 ```php
 <?php
@@ -220,7 +220,7 @@ Windows Registry Editor Version 5.00
 ...
 'modules' => [
     'debug' => [
-        '__class' => Yiisoft\Debug\Module::class,
+        '__class' => Yiisoft\Yii\Debug\Module::class,
         'traceLink' => false
     ]
 ]
@@ -248,10 +248,10 @@ return [
     'bootstrap' => ['debug'],
     'modules' => [
         'debug' => [
-            '__class' => Yiisoft\Debug\Module::class,
+            '__class' => Yiisoft\Yii\Debug\Module::class,
             'panels' => [
                 'user' => [
-                    '__class' => Yiisoft\Debug\Panels\UserPanel::class,
+                    '__class' => Yiisoft\Yii\Debug\Panels\UserPanel::class,
                     'ruleUserSwitch' => [
                         'allow' => true,
                         'roles' => ['manager'],

@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\search;
+namespace Yiisoft\Yii\Debug\Models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;

@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Application;
 use yii\base\Event;
@@ -14,8 +14,8 @@ use yii\helpers\Yii;
 use yii\mail\BaseMailer;
 use yii\mail\MessageInterface;
 use yii\mail\SendEvent;
-use Yiisoft\Debug\Models\Search\Mail;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Models\Search\Mail;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays the generated emails.

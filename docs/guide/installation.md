@@ -28,7 +28,7 @@ To enable extension, add these lines to your configuration file to enable the de
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => Yiisoft\Debug\Module::class,
+        '__class' => Yiisoft\Yii\Debug\Module::class,
     ],
 ]
 ```
@@ -40,7 +40,7 @@ server, add the parameter `allowedIPs` to the configuration to whitelist your IP
 'bootstrap' => ['debug'],
 'modules' => [
     'debug' => [
-        '__class' => Yiisoft\Debug\Module::class,
+        '__class' => Yiisoft\Yii\Debug\Module::class,
         'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
     ]
 ]
@@ -100,10 +100,10 @@ Database panel default sorting and filtering can be configured like the followin
 
 ```php
 $config['modules']['debug'] = [
-    '__class' => Yiisoft\Debug\Module::class,
+    '__class' => Yiisoft\Yii\Debug\Module::class,
     'panels' => [
         'db' => [
-            '__class' => Yiisoft\Debug\Panels\DbPanel::class,
+            '__class' => Yiisoft\Yii\Debug\Panels\DbPanel::class,
             'defaultOrder' => [
                 'seq' => SORT_ASC
             ],
@@ -211,7 +211,7 @@ Now you are able to use the ide:// protocol in your browser.
 When you click such a link, the IDE will automatically open the file and move the cursor to the corresponding line.
 
 ##### Disable links
-IDE links for traces are created by default. You have to set the property `Yiisoft\Debug\Module::traceLink` to
+IDE links for traces are created by default. You have to set the property `Yiisoft\Yii\Debug\Module::traceLink` to
  false to render a textual line only.
 
 ```php
@@ -220,7 +220,7 @@ IDE links for traces are created by default. You have to set the property `Yiiso
 ...
 'modules' => [
     'debug' => [
-        '__class' => Yiisoft\Debug\Module::class,
+        '__class' => Yiisoft\Yii\Debug\Module::class,
         'traceLink' => false
     ]
 ]
@@ -248,10 +248,10 @@ return [
     'bootstrap' => ['debug'],
     'modules' => [
         'debug' => [
-            '__class' => Yiisoft\Debug\Module::class,
+            '__class' => Yiisoft\Yii\Debug\Module::class,
             'panels' => [
                 'user' => [
-                    '__class' => Yiisoft\Debug\Panels\UserPanel::class,
+                    '__class' => Yiisoft\Yii\Debug\Panels\UserPanel::class,
                     'ruleUserSwitch' => [
                         'allow' => true,
                         'roles' => ['manager'],

@@ -5,19 +5,19 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Controllers;
+namespace Yiisoft\Yii\Debug\Controllers;
 
 use yii\base\Action;
 use yii\helpers\Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use Yiisoft\Debug\Models\Search\Debug;
+use Yiisoft\Yii\Debug\Models\Search\Debug;
 
 /**
  * Debugger controller provides browsing over available debug logs.
  *
- * @see \Yiisoft\Debug\Panel
+ * @see \Yiisoft\Yii\Debug\Panel
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -29,7 +29,7 @@ class DefaultController extends Controller
      */
     public $layout = 'main';
     /**
-     * @var \Yiisoft\Debug\Module owner module.
+     * @var \Yiisoft\Yii\Debug\Module owner module.
      */
     public $module;
     /**
@@ -90,7 +90,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @see \Yiisoft\Debug\Panel
+     * @see \Yiisoft\Yii\Debug\Panel
      * @param string|null $tag debug data tag.
      * @param string|null $panel debug panel ID.
      * @return mixed response.

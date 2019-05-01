@@ -3,10 +3,10 @@
 use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
 use yii\web\View;
-use Yiisoft\Debug\DbAsset;
+use Yiisoft\Yii\Debug\DbAsset;
 
-/* @var $panel Yiisoft\Debug\Panels\DbPanel */
-/* @var $searchModel Yiisoft\Debug\Models\Search\Db */
+/* @var $panel Yiisoft\Yii\Debug\Panels\DbPanel */
+/* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Db */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 /* @var $hasExplain bool */
 /* @var $sumDuplicates int */

@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug;
+namespace Yiisoft\Yii\Debug;
 
 use yii\web\AssetBundle;
 
@@ -17,7 +17,7 @@ class DebugAsset extends AssetBundle
     /**
      * {@inheritdoc}
      */
-    public $sourcePath = '@Yiisoft/Debug/assets';
+    public $sourcePath = '@Yiisoft/Yii/Debug/assets';
     /**
      * {@inheritdoc}
      */
