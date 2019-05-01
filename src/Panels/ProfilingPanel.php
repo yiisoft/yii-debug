@@ -7,6 +7,9 @@
 
 namespace Yiisoft\Yii\Debug\Panels;
 
+use yii\base\Application;
+use yii\web\Request;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Models\Search\Profile;
 use Yiisoft\Yii\Debug\Panel;
 
@@ -22,6 +25,14 @@ class ProfilingPanel extends Panel
      * @var array current request profile timings
      */
     private $_models;
+    /** @var Request */
+    private $request;
+
+    public function __construct(Request $request, View $view)
+    {
+        $this->request = $request;
+        parent::__construct($view);
+    }
 
 
     /**
@@ -37,7 +48,7 @@ class ProfilingPanel extends Panel
      */
     public function getSummary()
     {
-        return $this->app->view->render('panels/profile/summary', [
+        return $this->render('panels/profile/summary', [
             'memory' => sprintf('%.3f MB', $this->data['memory'] / 1048576),
             'time' => number_format($this->data['time'] * 1000) . ' ms',
             'panel' => $this
@@ -50,9 +61,9 @@ class ProfilingPanel extends Panel
     public function getDetail()
     {
         $searchModel = new Profile();
-        $dataProvider = $searchModel->search($this->app->request->getQueryParams(), $this->getModels());
+        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());
 
-        return $this->app->view->render('panels/profile/detail', [
+        return $this->render('panels/profile/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

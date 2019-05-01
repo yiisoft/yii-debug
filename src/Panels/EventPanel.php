@@ -9,8 +9,9 @@ namespace Yiisoft\Yii\Debug\Panels;
 
 use Clue\GraphComposer\App;
 use yii\base\Event;
+use yii\base\Request;
 use yii\helpers\Yii;
-use yii\web\Application;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
@@ -28,14 +29,16 @@ class EventPanel extends Panel
      * @var array current request events
      */
     private $_events = [];
-
+    /** @var Request */
+    private $request;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(Application $application)
+    public function __construct(Request $request, View $view)
     {
-        parent::__construct($application);
+        $this->request = $request;
+        parent::__construct($view);
         Event::on('*', '*', function (Event $event) {
             $target = $event->getTarget();
             /* @var $event Event */
@@ -64,7 +67,7 @@ class EventPanel extends Panel
      */
     public function getSummary()
     {
-        return $this->app->view->render('panels/event/summary', [
+        return $this->render('panels/event/summary', [
             'panel' => $this,
             'eventCount' => count($this->data),
         ]);
@@ -76,9 +79,9 @@ class EventPanel extends Panel
     public function getDetail()
     {
         $searchModel = new \Yiisoft\Yii\Debug\Models\Search\Event();
-        $dataProvider = $searchModel->search($this->app->request->get(), $this->data);
+        $dataProvider = $searchModel->search($this->request->get(), $this->data);
 
-        return $this->app->view->render('panels/event/detail', [
+        return $this->render('panels/event/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel

@@ -10,6 +10,8 @@ namespace Yiisoft\Yii\Debug;
 use yii\base\Application;
 use yii\base\Component;
 use yii\helpers\Url;
+use yii\web\View;
+use yii\view\ViewContextInterface;
 use Yiisoft\Arrays\ArrayHelper;
 
 /**
@@ -24,7 +26,7 @@ use Yiisoft\Arrays\ArrayHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Panel extends Component
+class Panel extends Component implements ViewContextInterface
 {
     /**
      * @var string panel unique identifier.
@@ -55,16 +57,13 @@ class Panel extends Component
      * @since 2.0.10
      */
     protected $error;
-
-    /**
-     * @var Application
-     */
-    protected $app;
+    /** @var View */
+    protected $view;
 
 
-    public function __construct(Application $app)
+    public function __construct(View $view)
     {
-        $this->app = $app;
+        $this->view = $view;
     }
 
     /**
@@ -187,5 +186,25 @@ class Panel extends Component
     public function isEnabled()
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getViewPath()
+    {
+        return __DIR__ . '/views/default';
+    }
+
+    /**
+     * Renders the view specified with optional parameters.
+     * The view will be rendered using the [[view]] component.
+     * @param string $view a view name or a path alias of the view file.
+     * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
+     * @return string the rendering result.
+     */
+    public function render($view, $params = [])
+    {
+        return $this->view->render($view, $params, $this);
     }
 }

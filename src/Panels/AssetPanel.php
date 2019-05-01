@@ -33,7 +33,7 @@ class AssetPanel extends Panel
      */
     public function getSummary()
     {
-        return $this->app->view->render('panels/assets/summary', ['panel' => $this]);
+        return $this->render('panels/assets/summary', ['panel' => $this]);
     }
 
     /**
@@ -41,7 +41,7 @@ class AssetPanel extends Panel
      */
     public function getDetail()
     {
-        return $this->app->view->render('panels/assets/detail', ['panel' => $this]);
+        return $this->render('panels/assets/detail', ['panel' => $this]);
     }
 
     /**
@@ -49,7 +49,7 @@ class AssetPanel extends Panel
      */
     public function save()
     {
-        $bundles = $this->app->view->assetManager->bundles;
+        $bundles = $this->view->assetManager->bundles;
         if (empty($bundles)) { // bundles can be false
             return [];
         }
@@ -75,7 +75,7 @@ class AssetPanel extends Panel
     public function isEnabled()
     {
         try {
-            isset($this->app->view->assetManager) && $this->app->view->assetManager;
+            isset($this->view->assetManager) && $this->view->assetManager;
         } catch (InvalidConfigException $exception) {
             return false;
         }

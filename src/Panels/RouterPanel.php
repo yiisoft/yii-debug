@@ -8,6 +8,8 @@
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
+use yii\base\Application;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Models\Router;
 use Yiisoft\Yii\Debug\Panel;
 
@@ -29,8 +31,16 @@ class RouterPanel extends Panel
         'yii\web\UrlManager::parseRequest',
         'yii\web\UrlRule::parseRequest',
         'yii\web\CompositeUrlRule::parseRequest',
-        'yii\rest\UrlRule::parseRequest'
+        'Yiisoft\Yii\Rest\UrlRule::parseRequest'
     ];
+
+    private $app;
+
+    public function __construct(Application $app, View $view)
+    {
+        $this->app = $app;
+        parent::__construct($view);
+    }
 
     /**
      * @param string|array $values
@@ -65,7 +75,7 @@ class RouterPanel extends Panel
      */
     public function getSummary()
     {
-        return $this->app->view->render('panels/router/summary', ['panel' => $this]);
+        return $this->render('panels/router/summary', ['panel' => $this]);
     }
 
     /**
@@ -73,7 +83,7 @@ class RouterPanel extends Panel
      */
     public function getDetail()
     {
-        return $this->app->view->render('panels/router/detail', ['model' => new Router($this->data)]);
+        return $this->render('panels/router/detail', ['model' => new Router($this->data)]);
     }
 
     /**
