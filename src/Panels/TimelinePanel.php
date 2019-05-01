@@ -7,7 +7,10 @@
 
 namespace Yiisoft\Yii\Debug\Panels;
 
+use yii\base\Application;
+use yii\base\Request;
 use yii\helpers\Yii;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Models\Timeline\Search;
 use Yiisoft\Yii\Debug\Models\Timeline\Svg;
 use Yiisoft\Yii\Debug\Panel;
@@ -66,11 +69,18 @@ class TimelinePanel extends Panel
      * @var int Used memory in request
      */
     private $_memory;
+    private $request;
+
+    public function __construct(Request $request, View $view)
+    {
+        $this->request = $request;
+        parent::__construct($view);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Timeline';
     }
@@ -78,12 +88,12 @@ class TimelinePanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Search();
-        $dataProvider = $searchModel->search($this->app->request->getQueryParams(), $this);
+        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this);
 
-        return $this->app->view->render('panels/timeline/detail', [
+        return $this->render('panels/timeline/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

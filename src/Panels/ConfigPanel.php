@@ -7,7 +7,9 @@
 
 namespace Yiisoft\Yii\Debug\Panels;
 
+use yii\base\Application;
 use yii\helpers\Yii;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
@@ -21,10 +23,18 @@ use Yiisoft\Yii\Debug\Panel;
  */
 class ConfigPanel extends Panel
 {
+    private $app;
+
+    public function __construct(Application $app, View $view)
+    {
+        $this->app = $app;
+        parent::__construct($view);
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Configuration';
     }
@@ -32,17 +42,17 @@ class ConfigPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
-        return $this->app->view->render('panels/config/summary', ['panel' => $this]);
+        return $this->render('panels/config/summary', ['panel' => $this]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
-        return $this->app->view->render('panels/config/detail', ['panel' => $this]);
+        return $this->render('panels/config/detail', ['panel' => $this]);
     }
 
     /**

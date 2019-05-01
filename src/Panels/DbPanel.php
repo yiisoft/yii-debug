@@ -8,8 +8,10 @@
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
-use yii\base\Application;
 use yii\base\InvalidConfigException;
+use yii\base\Request;
+use yii\db\ConnectionInterface;
+use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Yii\Debug\Models\Search\Db;
 use Yiisoft\Yii\Debug\Panel;
@@ -60,15 +62,18 @@ class DbPanel extends Panel
      */
     private $_timings;
 
+    private $request;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(Application $application)
+    public function __construct(ConnectionInterface $db, Request $request, View $view)
     {
-        parent::__construct($application);
+        $this->db = $db;
+        $this->request = $request;
+        parent::__construct($view);
         $this->actions['db-explain'] = [
-            '__class' => \yii\debug\actions\db\ExplainAction::class,
+            '__class' => \Yiisoft\Yii\Debug\Actions\DB\ExplainAction::class,
             'panel' => $this,
         ];
     }
@@ -76,7 +81,7 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Database';
     }
@@ -92,13 +97,13 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         $timings = $this->calculateTimings();
         $queryCount = count($timings);
         $queryTime = number_format($this->getTotalQueryTime($timings) * 1000) . ' ms';
 
-        return $this->app->view->render('panels/db/summary', [
+        return $this->render('panels/db/summary', [
             'timings' => $this->calculateTimings(),
             'panel' => $this,
             'queryCount' => $queryCount,
@@ -109,11 +114,11 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Db();
 
-        if (!$searchModel->load($this->app->request->getQueryParams())) {
+        if (!$searchModel->load($this->request->getQueryParams())) {
             $searchModel->load($this->defaultFilter, '');
         }
 
@@ -122,7 +127,7 @@ class DbPanel extends Panel
         $dataProvider->getSort()->defaultOrder = $this->defaultOrder;
         $sumDuplicates = $this->sumDuplicateQueries($models);
 
-        return $this->app->view->render('panels/db/detail', [
+        return $this->render('panels/db/detail', [
             'panel' => $this,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -329,7 +334,7 @@ class DbPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         try {
             $this->getDb();
@@ -382,6 +387,6 @@ class DbPanel extends Panel
      */
     public function getDb()
     {
-        return $this->app->get($this->db);
+        return $this->db;
     }
 }

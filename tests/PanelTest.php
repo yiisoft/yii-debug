@@ -87,7 +87,7 @@ class PanelTest extends TestCase
 
     private function getPanel()
     {
-        $panel = new Panel($this->app);
+        $panel = new Panel($this->app->getView());
         $panel->module = new Module('debug', $this->app);
 
         return $panel;

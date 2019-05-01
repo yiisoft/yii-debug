@@ -9,6 +9,8 @@ namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
 use Yii;
+use yii\base\Request;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Models\Search\Log;
 use Yiisoft\Yii\Debug\Panel;
 
@@ -39,12 +41,19 @@ class DumpPanel extends Panel
      * @var array log messages extracted to array as models, to use with data provider.
      */
     private $_models;
+    /** @var Request */
+    private $request;
 
+    public function __construct(Request $request, View $view)
+    {
+        $this->request = $request;
+        parent::__construct($view);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Dump';
     }
@@ -52,20 +61,20 @@ class DumpPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
-        return $this->app->view->render('panels/dump/summary', ['panel' => $this]);
+        return $this->render('panels/dump/summary', ['panel' => $this]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
         $searchModel = new Log();
-        $dataProvider = $searchModel->search($this->app->request->getQueryParams(), $this->getModels());
+        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());
 
-        return $this->app->view->render('panels/dump/detail', [
+        return $this->render('panels/dump/detail', [
             'dataProvider' => $dataProvider,
             'panel' => $this,
             'searchModel' => $searchModel,

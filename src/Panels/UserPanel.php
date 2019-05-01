@@ -7,9 +7,11 @@
 
 namespace Yiisoft\Yii\Debug\Panels;
 
+use yii\base\Application;
 use yii\base\Controller;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
+use yii\base\Request;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
 use yii\db\ActiveRecord;
@@ -19,6 +21,7 @@ use yii\filters\AccessRule;
 use yii\helpers\VarDumper;
 use yii\web\IdentityInterface;
 use yii\web\User;
+use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Yii\Debug\Controllers\UserController;
 use Yiisoft\Yii\Debug\Models\Search\UserSearchInterface;
@@ -69,7 +72,16 @@ class UserPanel extends Panel implements Initiable
      * @since 2.0.13
      */
     public $userComponent = 'user';
+    /** @var Request */
+    private $request;
+    private $app;
 
+    public function __construct(Request $request, Application $app, View $view)
+    {
+        $this->app = $app;
+        $this->request = $request;
+        parent::__construct($view);
+    }
 
     /**
      * {@inheritdoc}
@@ -141,7 +153,7 @@ class UserPanel extends Panel implements Initiable
      */
     public function getUserDataProvider()
     {
-        return $this->getUsersFilterModel()->search($this->app->request->queryParams);
+        return $this->getUsersFilterModel()->search($this->request->queryParams);
     }
 
     /**
@@ -181,7 +193,7 @@ class UserPanel extends Panel implements Initiable
         if ($userController) {
             $action = $userController->createAction('set-identity');
             $user = $this->userSwitch->getMainUser();
-            $request = $this->app->request;
+            $request = $this->request;
 
             $allowSwitchUser = $rule->allows($action, $user, $request) ?: false;
         }
@@ -192,7 +204,7 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'User';
     }
@@ -200,17 +212,17 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
-        return $this->app->view->render('panels/user/summary', ['panel' => $this]);
+        return $this->render('panels/user/summary', ['panel' => $this]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
-        return $this->app->view->render('panels/user/detail', ['panel' => $this]);
+        return $this->render('panels/user/detail', ['panel' => $this]);
     }
 
     /**
@@ -286,7 +298,7 @@ class UserPanel extends Panel implements Initiable
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         try {
             $this->getUser();

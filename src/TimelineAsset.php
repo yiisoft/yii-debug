@@ -20,7 +20,7 @@ class TimelineAsset extends AssetBundle
     /**
      * {@inheritdoc}
      */
-    public $sourcePath = '@yii/debug/assets';
+    public $sourcePath = '@Yiisoft/Yii/Debug/assets';
     /**
      * {@inheritdoc}
      */

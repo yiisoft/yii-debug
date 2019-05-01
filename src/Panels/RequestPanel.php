@@ -7,7 +7,12 @@
 
 namespace Yiisoft\Yii\Debug\Panels;
 
+use yii\base\Application;
 use yii\base\InlineAction;
+use yii\base\Request;
+use yii\base\Response;
+use yii\web\Session;
+use yii\web\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
@@ -25,11 +30,24 @@ class RequestPanel extends Panel
      */
     public $displayVars = ['_SERVER', '_GET', '_POST', '_COOKIE', '_FILES', '_SESSION'];
 
+    private $request;
+    private $response;
+    private $session;
+    private $app;
+
+    public function __construct(Session $session, Response $response, Request $request, Application $app, View $view)
+    {
+        $this->session = $session;
+        $this->request = $request;
+        $this->response = $response;
+        $this->app = $app;
+        parent::__construct($view);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Request';
     }
@@ -37,17 +55,17 @@ class RequestPanel extends Panel
     /**
      * {@inheritdoc}
      */
-    public function getSummary()
+    public function getSummary(): string
     {
-        return $this->app->view->render('panels/request/summary', ['panel' => $this]);
+        return $this->render('panels/request/summary', ['panel' => $this]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDetail()
+    public function getDetail(): string
     {
-        return $this->app->view->render('panels/request/detail', ['panel' => $this]);
+        return $this->render('panels/request/detail', ['panel' => $this]);
     }
 
     /**
@@ -55,7 +73,7 @@ class RequestPanel extends Panel
      */
     public function save()
     {
-        $headers = $this->app->getRequest()->getHeaders();
+        $headers = $this->request->getHeaders();
         $requestHeaders = [];
         foreach ($headers as $name => $value) {
             if (is_array($value) && count($value) == 1) {
@@ -83,6 +101,7 @@ class RequestPanel extends Panel
                 $responseHeaders[] = $header;
             }
         }
+
         if ($this->app->requestedAction) {
             if ($this->app->requestedAction instanceof InlineAction) {
                 $action = get_class($this->app->requestedAction->controller) . '::' . $this->app->requestedAction->actionMethod . '()';
@@ -95,22 +114,22 @@ class RequestPanel extends Panel
 
         $data = [
             'flashes' => $this->getFlashes(),
-            'statusCode' => $this->app->getResponse()->getStatusCode(),
+            'statusCode' => $this->response->getStatusCode(),
             'requestHeaders' => $requestHeaders,
             'responseHeaders' => $responseHeaders,
             'route' => $this->app->requestedAction ? $this->app->requestedAction->getUniqueId() : $this->app->requestedRoute,
             'action' => $action,
             'actionParams' => $this->app->requestedParams,
             'general' => [
-                'method' => $this->app->getRequest()->getMethod(),
-                'isAjax' => $this->app->getRequest()->getIsAjax(),
-                'isFlash' => $this->app->getRequest()->getIsFlash(),
-                'isSecureConnection' => $this->app->getRequest()->getIsSecureConnection(),
+                'method' => $this->request->getMethod(),
+                'isAjax' => $this->request->getIsAjax(),
+                'isFlash' => $this->request->getIsFlash(),
+                'isSecureConnection' => $this->request->getIsSecureConnection(),
             ],
-            'requestBody' => $this->app->getRequest()->getRawBody() == '' ? [] : [
-                'Content Type' => $this->app->getRequest()->getContentType(),
-                'Raw' => $this->app->getRequest()->getRawBody(),
-                'Decoded to Params' => $this->app->getRequest()->getBodyParams(),
+            'requestBody' => $this->request->getRawBody() == '' ? [] : [
+                'Content Type' => $this->request->getContentType(),
+                'Raw' => $this->request->getRawBody(),
+                'Decoded to Params' => $this->request->getBodyParams(),
             ],
         ];
 
@@ -128,13 +147,11 @@ class RequestPanel extends Panel
      */
     protected function getFlashes()
     {
-        /* @var $session \yii\web\Session */
-        $session = $this->app->has('session', true) ? $this->app->get('session') : null;
-        if ($session === null || !$session->getIsActive()) {
+        if ($this->session === null || !$this->session->getIsActive()) {
             return [];
         }
 
-        $counters = $session->get($session->flashParam, []);
+        $counters = $this->session->get($this->session->flashParam, []);
         $flashes = [];
         foreach (array_keys($counters) as $key) {
             if (array_key_exists($key, $_SESSION)) {
