@@ -3,10 +3,10 @@
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 use Yiisoft\Yii\DataView\GridView;
-use Yiisoft\Debug\UserswitchAsset;
+use Yiisoft\Yii\Debug\UserswitchAsset;
 
 /* @var $this \yii\web\View */
-/* @var $panel Yiisoft\Debug\Panels\UserPanel */
+/* @var $panel Yiisoft\Yii\Debug\Panels\UserPanel */
 
 UserswitchAsset::register($this);
 ?>

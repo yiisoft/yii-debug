@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Controller;
 use yii\base\InvalidConfigException;
@@ -20,10 +20,10 @@ use yii\helpers\VarDumper;
 use yii\web\IdentityInterface;
 use yii\web\User;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Debug\Controllers\UserController;
-use Yiisoft\Debug\Models\Search\UserSearchInterface;
-use Yiisoft\Debug\Models\UserSwitch;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Controllers\UserController;
+use Yiisoft\Yii\Debug\Models\Search\UserSearchInterface;
+use Yiisoft\Yii\Debug\Models\UserSwitch;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays user data.
@@ -85,12 +85,12 @@ class UserPanel extends Panel implements Initiable
 
         if (!is_object($this->filterModel)
             && class_exists($this->filterModel)
-            && in_array(\Yiisoft\Debug\Models\Search\UserSearchInterface::class, class_implements($this->filterModel), true)
+            && in_array(\Yiisoft\Yii\Debug\Models\Search\UserSearchInterface::class, class_implements($this->filterModel), true)
         ) {
             $this->filterModel = new $this->filterModel;
         } elseif ($this->getUser() && $this->getUser()->identityClass) {
             if (is_subclass_of($this->getUser()->identityClass, ActiveRecord::class)) {
-                $this->filterModel = new \Yiisoft\Debug\Models\Search\User();
+                $this->filterModel = new \Yiisoft\Yii\Debug\Models\Search\User();
             }
         }
     }

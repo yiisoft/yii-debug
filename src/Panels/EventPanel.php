@@ -5,13 +5,13 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use Clue\GraphComposer\App;
 use yii\base\Event;
 use yii\helpers\Yii;
 use yii\web\Application;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays information about triggered events.
@@ -75,7 +75,7 @@ class EventPanel extends Panel
      */
     public function getDetail()
     {
-        $searchModel = new \Yiisoft\Debug\Models\Search\Event();
+        $searchModel = new \Yiisoft\Yii\Debug\Models\Search\Event();
         $dataProvider = $searchModel->search($this->app->request->get(), $this->data);
 
         return $this->app->view->render('panels/event/detail', [

@@ -3,7 +3,7 @@
 use Psr\Log\LogLevel;
 use Yiisoft\Log\Target;
 
-/* @var $panel Yiisoft\Debug\Panels\LogPanel */
+/* @var $panel Yiisoft\Yii\Debug\Panels\LogPanel */
 /* @var $data array */
 
 $titles = [

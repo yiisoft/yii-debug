@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\helpers\Yii;
-use Yiisoft\Debug\Models\Timeline\Search;
-use Yiisoft\Debug\Models\Timeline\Svg;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Models\Timeline\Search;
+use Yiisoft\Yii\Debug\Models\Timeline\Svg;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays timeline data.
@@ -60,7 +60,7 @@ class TimelinePanel extends Panel
      * @var array
      */
     private $_svgOptions = [
-        '__class' => \Yiisoft\Debug\Models\Timeline\Svg::class
+        '__class' => \Yiisoft\Yii\Debug\Models\Timeline\Svg::class
     ];
     /**
      * @var int Used memory in request

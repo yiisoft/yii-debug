@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
-use Yiisoft\Debug\Models\Router;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Models\Router;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * RouterPanel provides a panel which displays information about routing process.

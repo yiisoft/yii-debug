@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
 use Yii;
-use Yiisoft\Debug\Models\Search\Log;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Models\Search\Log;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Dump panel that collects and displays debug messages (LogLevel::DEBUG).

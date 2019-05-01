@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\web\AssetBundle;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays asset bundles data.

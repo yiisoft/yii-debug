@@ -5,10 +5,10 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Models\Timeline;
+namespace Yiisoft\Yii\Debug\Models\Timeline;
 
 use yii\data\ArrayDataProvider;
-use Yiisoft\Debug\Panels\TimelinePanel;
+use Yiisoft\Yii\Debug\Panels\TimelinePanel;
 
 /**
  * DataProvider implements a data provider based on a data array.

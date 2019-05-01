@@ -3,12 +3,12 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use Yiisoft\Debug\TimelineAsset;
+use Yiisoft\Yii\Debug\TimelineAsset;
 use Yiisoft\Strings\StringHelper;
 
-/* @var $panel Yiisoft\Debug\Panels\TimelinePanel */
-/* @var $searchModel \Yiisoft\Debug\Models\Timeline\Search */
-/* @var $dataProvider \Yiisoft\Debug\Models\Timeline\DataProvider */
+/* @var $panel Yiisoft\Yii\Debug\Panels\TimelinePanel */
+/* @var $searchModel \Yiisoft\Yii\Debug\Models\Timeline\Search */
+/* @var $dataProvider \Yiisoft\Yii\Debug\Models\Timeline\DataProvider */
 
 TimelineAsset::register($this);
 ?>

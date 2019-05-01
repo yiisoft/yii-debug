@@ -5,10 +5,10 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yiisoft\Debug\Panels;
+namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\helpers\Yii;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays application configuration and environment.

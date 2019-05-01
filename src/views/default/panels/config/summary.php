@@ -1,5 +1,5 @@
 <?php
-/* @var $panel Yiisoft\Debug\Panels\ConfigPanel */
+/* @var $panel Yiisoft\Yii\Debug\Panels\ConfigPanel */
 ?>
 <div class="yii-debug-toolbar__block">
     <a href="<?= $panel->getUrl() ?>">
