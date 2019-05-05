@@ -9,7 +9,7 @@ namespace Yiisoft\Yii\Debug\Models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\db\ActiveRecord;
+use Yiisoft\Db\ActiveRecord;
 
 /**
  * Search model for implementation of IdentityInterface
