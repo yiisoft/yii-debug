@@ -14,7 +14,7 @@ use yii\base\Model;
 use yii\base\Request;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
-use yii\db\ActiveRecord;
+use Yiisoft\Db\ActiveRecord;
 use yii\di\Initiable;
 use yii\filters\AccessControl;
 use yii\filters\AccessRule;

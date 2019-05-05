@@ -10,7 +10,7 @@ namespace Yiisoft\Yii\Debug\Panels;
 use Psr\Log\LogLevel;
 use yii\base\InvalidConfigException;
 use yii\base\Request;
-use yii\db\ConnectionInterface;
+use Yiisoft\Db\ConnectionInterface;
 use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Yii\Debug\Models\Search\Db;
@@ -174,12 +174,12 @@ class DbPanel extends Panel
 
     /**
      * Returns all profile logs of the current request for this panel. It includes categories such as:
-     * 'yii\db\Command::query', 'yii\db\Command::execute'.
+     * 'Yiisoft\Db\Command::query', 'Yiisoft\Db\Command::execute'.
      * @return array[]
      */
     public function getProfileLogs()
     {
-        $categories = ['yii\db\Command::query', 'yii\db\Command::execute'];
+        $categories = ['Yiisoft\Db\Command::query', 'Yiisoft\Db\Command::execute'];
         $profileTarget = $this->module->profileTarget;
 
         $logTarget = $this->module->logTarget;
@@ -352,7 +352,7 @@ class DbPanel extends Panel
     protected function hasExplain()
     {
         $db = $this->getDb();
-        if (!($db instanceof \yii\db\Connection)) {
+        if (!($db instanceof \Yiisoft\Db\Connection)) {
             return false;
         }
         switch ($db->getDriverName()) {
@@ -382,7 +382,7 @@ class DbPanel extends Panel
     /**
      * Returns a reference to the DB component associated with the panel
      *
-     * @return \yii\db\Connection
+     * @return \Yiisoft\Db\Connection
      * @since 2.0.5
      */
     public function getDb()

@@ -33,7 +33,7 @@ class ExplainAction extends Action
      * @param string $tag
      * @return string
      * @throws HttpException
-     * @throws \yii\db\Exception
+     * @throws \Yiisoft\Db\Exception
      * @throws \yii\web\NotFoundHttpException if the view file cannot be found
      * @throws \yii\exceptions\InvalidConfigException
      */
