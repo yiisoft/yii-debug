@@ -76,7 +76,7 @@ class LogPanel extends Panel
             $except = $this->module->panels['router']->getCategories();
         }
         
-        $messages = $target->filterMessages($target->messages, [], [], $except);
+        $messages = $target->filterMessages($target->getMessages(), [], [], $except);
         foreach ($messages as &$message) {
             if (!is_string($message[1])) {
                 // exceptions may not be serializable if in the call stack somewhere is a Closure

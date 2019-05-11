@@ -92,7 +92,7 @@ class DumpPanel extends Panel
             $except = $this->module->panels['router']->getCategories();
         }
 
-        $messages = $target->filterMessages($target->messages, [LogLevel::DEBUG], $this->categories, $except);
+        $messages = $target->filterMessages($target->getMessages(), [LogLevel::DEBUG], $this->categories, $except);
 
         return $messages;
     }
