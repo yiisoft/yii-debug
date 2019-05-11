@@ -102,7 +102,7 @@ class RouterPanel extends Panel
             $action = null;
         }
         return [
-            'messages' => $target::filterMessages($target->messages, [LogLevel::DEBUG], $this->_categories),
+            'messages' => $target::filterMessages($target->getMessages(), [LogLevel::DEBUG], $this->_categories),
             'route' => $this->app->requestedAction ? $this->app->requestedAction->getUniqueId() : $this->app->requestedRoute,
             'action' => $action,
         ];

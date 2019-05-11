@@ -186,7 +186,7 @@ class DbPanel extends Panel
         if ($logTarget === null) {
             $logMessages = [];
         } else {
-            $logMessages = $logTarget->filterMessages($logTarget->messages, [LogLevel::INFO, LogLevel::DEBUG], $categories);
+            $logMessages = $logTarget->filterMessages($logTarget->getMessages(), [LogLevel::INFO, LogLevel::DEBUG], $categories);
         }
 
         $messages = [];

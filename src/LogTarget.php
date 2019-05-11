@@ -43,7 +43,7 @@ class LogTarget extends Target
      * Exports log messages to a specific destination.
      * Child classes must implement this method.
      */
-    public function export()
+    public function export(): void
     {
         $path = $this->module->dataPath;
         FileHelper::createDirectory($path, $this->module->dirMode);
@@ -120,7 +120,7 @@ class LogTarget extends Target
      */
     public function collect($messages, bool $final): void
     {
-        $this->messages = array_merge($this->messages, $messages);
+        $this->setMessages(array_merge($this->getMessages(), $messages));
         if ($final) {
             $this->export();
         }
