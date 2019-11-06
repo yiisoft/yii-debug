@@ -18,13 +18,10 @@ class LogTargetTest extends TestCase
     {
         $this->markTestIncomplete();
 
-        $method = new ReflectionMethod(LogTarget::class, 'collectSummary');
-        $method->setAccessible(true);
-
-        $module = new Module();
+        $module = $this->createMock(Module::class);
         $logTarget = new LogTarget($module);
 
-        $data = $method->invoke($logTarget);
+        $data = $this->invokeMethod($logTarget, 'collectSummary');
         self::assertSame($_SERVER['REQUEST_TIME_FLOAT'], $data['time']);
     }
 }

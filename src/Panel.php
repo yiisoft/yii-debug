@@ -7,12 +7,10 @@
 
 namespace Yiisoft\Yii\Debug;
 
-use yii\base\Application;
-use yii\base\Component;
-use yii\helpers\Url;
-use yii\web\View;
-use yii\view\ViewContextInterface;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Router\UrlGeneratorInterface;
+use Yiisoft\View\View;
+use Yiisoft\View\ViewContextInterface;
 
 /**
  * Panel is a base class for debugger panel classes. It defines how data should be collected,
@@ -26,7 +24,7 @@ use Yiisoft\Arrays\ArrayHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Panel extends Component implements ViewContextInterface
+class Panel implements ViewContextInterface
 {
     /**
      * @var string panel unique identifier.
@@ -59,11 +57,15 @@ class Panel extends Component implements ViewContextInterface
     protected $error;
     /** @var View */
     protected $view;
+    /**
+     * @var \Yiisoft\Router\UrlGeneratorInterface
+     */
+    private $urlGenerator;
 
-
-    public function __construct(View $view)
+    public function __construct(View $view, UrlGeneratorInterface $urlGenerator)
     {
         $this->view = $view;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -127,7 +129,7 @@ class Panel extends Component implements ViewContextInterface
             $route = ArrayHelper::merge($route, $additionalParams);
         }
 
-        return Url::toRoute($route);
+        return $this->urlGenerator->generate($route);
     }
 
     /**
@@ -191,7 +193,7 @@ class Panel extends Component implements ViewContextInterface
     /**
      * {@inheritdoc}
      */
-    public function getViewPath()
+    public function getViewPath(): string
     {
         return __DIR__ . '/views/default';
     }
@@ -202,6 +204,7 @@ class Panel extends Component implements ViewContextInterface
      * @param string $view a view name or a path alias of the view file.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @return string the rendering result.
+     * @throws \Throwable
      */
     public function render(string $view, array $params = []): string
     {

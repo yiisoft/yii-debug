@@ -7,9 +7,9 @@
 
 namespace Yiisoft\Yii\Debug;
 
-use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
 use yii\helpers\Yii;
+use Yiisoft\Factory\Exceptions\InvalidConfigException;
 use Yiisoft\Log\Target;
 
 /**
@@ -28,7 +28,6 @@ class LogTarget extends Target
      * @var string
      */
     public $tag;
-
 
     /**
      * @param Module $module
@@ -73,10 +72,9 @@ class LogTarget extends Target
 
     /**
      * Updates index file with summary log data
-     *
      * @param string $indexFile path to index file
      * @param array $summary summary log data
-     * @throws \yii\base\InvalidConfigException
+     * @throws \Yiisoft\Factory\Exceptions\InvalidConfigException
      */
     private function updateIndexFile($indexFile, $summary)
     {

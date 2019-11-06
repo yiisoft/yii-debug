@@ -85,7 +85,7 @@ class PanelTest extends TestCase
         $view = $this->getMockBuilder(View::class)->disableOriginalConstructor()->getMock();
         $urlGenerator = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
         $panel = new Panel($view, $urlGenerator);
-        $panel->module = new Module();
+        $panel->module = $this->createMock(Module::class);
 
         return $panel;
     }
