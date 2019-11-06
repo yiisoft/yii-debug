@@ -87,7 +87,6 @@ class FlattenExceptionTest extends TestCase
 
         $exception = $this->createException([
             (object)['foo' => 1],
-            new NotFoundHttpException(),
             $incomplete,
             $dh,
             $fh,
@@ -116,7 +115,6 @@ class FlattenExceptionTest extends TestCase
 
         $i = 0;
         $this->assertSame(['object', 'stdClass'], $array[$i++]);
-        $this->assertSame(['object', 'yii\web\NotFoundHttpException'], $array[$i++]);
         $this->assertSame(['incomplete-object', 'BogusTestClass'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
