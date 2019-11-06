@@ -2,6 +2,8 @@
 
 namespace Yiisoft\Yii\Debug\Tests;
 
+use Yiisoft\Router\UrlGeneratorInterface;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Module;
 use Yiisoft\Yii\Debug\Panel;
 
@@ -78,16 +80,12 @@ class PanelTest extends TestCase
         $this->assertEquals('<a href="ide://open?url=file.php&line=10">custom text</a>', $panel->getTraceLine($traceConfig));
     }
 
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->mockWebApplication();
-    }
-
     private function getPanel()
     {
-        $panel = new Panel($this->app->getView());
-        $panel->module = new Module('debug', $this->app);
+        $view = $this->getMockBuilder(View::class)->disableOriginalConstructor()->getMock();
+        $urlGenerator = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
+        $panel = new Panel($view, $urlGenerator);
+        $panel->module = new Module();
 
         return $panel;
     }
