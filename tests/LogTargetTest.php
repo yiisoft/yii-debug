@@ -2,32 +2,29 @@
 
 namespace Yiisoft\Yii\Debug\Tests;
 
+use Psr\Log\LoggerInterface;
+use ReflectionMethod;
+use Yiisoft\Log\Logger;
 use Yiisoft\Yii\Debug\LogTarget;
 use Yiisoft\Yii\Debug\Module;
 
 class LogTargetTest extends TestCase
 {
+    /**
+     * @TODO Needs refactor {@see \Yiisoft\Yii\Debug\Module}
+     * @throws \ReflectionException
+     */
     public function testGetRequestTime()
     {
-        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
-            ->setConstructorArgs([[]])
-            ->setMethods(['dispatch'])
-            ->getMock();
-        $this->container->set('logger', $logger);
+        $this->markTestIncomplete();
 
-        $this->app->getRequest()->setUrl('dummy');
+        $method = new ReflectionMethod(LogTarget::class, 'collectSummary');
+        $method->setAccessible(true);
 
-        $module = new Module('debug', $this->app);
-        $module->bootstrap($this->app);
-
+        $module = new Module();
         $logTarget = new LogTarget($module);
-        $data = $this->invokeMethod($logTarget, 'collectSummary');
-        self::assertSame($_SERVER['REQUEST_TIME_FLOAT'], $data['time']);
-    }
 
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->mockWebApplication();
+        $data = $method->invoke($logTarget);
+        self::assertSame($_SERVER['REQUEST_TIME_FLOAT'], $data['time']);
     }
 }
