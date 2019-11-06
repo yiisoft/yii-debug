@@ -2,7 +2,6 @@
 
 namespace Yiisoft\Yii\Debug\Tests;
 
-use yii\tests\TestCase;
 use Yiisoft\Yii\Debug\Module;
 use Yiisoft\Yii\Debug\Panel;
 
