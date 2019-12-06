@@ -16,7 +16,7 @@ Documentation is at [docs/guide/README.md](docs/guide/README.md).
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/yii-debug/v/stable.png)](https://packagist.org/packages/yiisoft/yii-debug)
 [![Total Downloads](https://poser.pugx.org/yiisoft/yii-debug/downloads.png)](https://packagist.org/packages/yiisoft/yii-debug)
-[![Build Status](https://travis-ci.org/yiisoft/yii-debug.svg?branch=master)](https://travis-ci.org/yiisoft/yii-debug)
+[![Build Status](https://travis-ci.com/yiisoft/yii-debug.svg?branch=master)](https://travis-ci.com/yiisoft/yii-debug)
 
 
 Installation
