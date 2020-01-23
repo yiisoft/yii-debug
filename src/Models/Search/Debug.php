@@ -110,7 +110,7 @@ class Debug extends Base
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        
+
         $filter = new Filter();
         $this->addCondition($filter, 'tag', true);
         $this->addCondition($filter, 'ip', true);
