@@ -99,7 +99,7 @@ class UserPanel extends Panel implements Initiable
             && class_exists($this->filterModel)
             && in_array(\Yiisoft\Yii\Debug\Models\Search\UserSearchInterface::class, class_implements($this->filterModel), true)
         ) {
-            $this->filterModel = new $this->filterModel;
+            $this->filterModel = new $this->filterModel();
         } elseif ($this->getUser() && $this->getUser()->identityClass) {
             if (is_subclass_of($this->getUser()->identityClass, ActiveRecord::class)) {
                 $this->filterModel = new \Yiisoft\Yii\Debug\Models\Search\User();

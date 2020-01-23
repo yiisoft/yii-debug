@@ -49,7 +49,7 @@ class FlattenExceptionTest extends TestCase
 
     public function testPrevious()
     {
-        $exception2 = new \Exception;
+        $exception2 = new \Exception();
         $exception = new \Exception('test', 0, $exception2);
 
         $flattened = new FlattenException($exception);

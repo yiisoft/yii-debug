@@ -75,7 +75,7 @@ class LogPanel extends Panel
         if (isset($this->module->panels['router'])) {
             $except = $this->module->panels['router']->getCategories();
         }
-        
+
         $messages = $target->filterMessages($target->getMessages(), [], [], $except);
         foreach ($messages as &$message) {
             if (!is_string($message[1])) {
