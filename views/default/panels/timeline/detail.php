@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Yii\Debug\TimelineAsset;
+use Yiisoft\Yii\Debug\Asset\TimelineAsset;
 
 /* @var $panel Yiisoft\Yii\Debug\Panels\TimelinePanel */
 /* @var $searchModel \Yiisoft\Yii\Debug\Models\Timeline\Search */

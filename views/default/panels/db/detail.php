@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\web\View;
 use Yiisoft\Yii\DataView\GridView;
-use Yiisoft\Yii\Debug\DbAsset;
+use Yiisoft\Yii\Debug\Asset\DbAsset;
 
 /* @var $panel Yiisoft\Yii\Debug\Panels\DbPanel */
 /* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Db */

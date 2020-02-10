@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-Yiisoft\Yii\Debug\DebugAsset::register($this);
+Yiisoft\Yii\Debug\Asset\DebugAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
