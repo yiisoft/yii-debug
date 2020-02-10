@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\search;
 
 use yii\base\Model;
@@ -23,11 +17,6 @@ class User extends Model
      * @var Model implementation of IdentityInterface
      */
     public $identityImplement = null;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         if ($this->app->user && $this->app->user->identityClass) {
@@ -38,42 +27,22 @@ class User extends Model
         }
         parent::init();
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function __get($name)
     {
         return $this->identityImplement->__get($name);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function __set($name, $value)
     {
         return $this->identityImplement->__set($name, $value);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [[array_keys($this->identityImplement->getAttributes()), 'safe']];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributes()
     {
         return $this->identityImplement->attributes();
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function search($params)
     {
         if ($this->identityImplement instanceof ActiveRecord) {

@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
 use yii\base\Action;
@@ -54,9 +48,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      * function (Action|null $action) The action can be null when called from a non action context (like set debug header)
      */
     public $checkAccessCallback;
-    /**
-     * {@inheritdoc}
-     */
     public $controllerNamespace = Controllers::class;
     /**
      * @var LogTarget
@@ -180,10 +171,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     {
         self::$_yiiLogo = $logo;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function init(): void
     {
         $this->dataPath = Yii::getAlias($this->dataPath);
@@ -223,10 +210,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
             }
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function bootstrap($app)
     {
         $logger = $app->getLogger();
@@ -266,10 +249,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
             ],
         ], false);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function beforeAction(Action $action)
     {
         if (!$this->enableDebugLogs) {
@@ -430,10 +409,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     * @since 2.0.7
-     */
     protected function defaultVersion()
     {
         $packageInfo = Json::decode(file_get_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'composer.json'));

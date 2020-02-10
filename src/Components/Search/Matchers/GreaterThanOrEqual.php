@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Components\Search\Matchers;
 
 /**
@@ -15,9 +9,6 @@ namespace Yiisoft\Yii\Debug\Components\Search\Matchers;
  */
 class GreaterThanOrEqual extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public function match($value)
     {
         return $value >= $this->baseValue;

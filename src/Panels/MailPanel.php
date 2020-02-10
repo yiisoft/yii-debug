@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Event;
@@ -39,10 +33,6 @@ class MailPanel extends Panel
     private $_messages = [];
 
     private $request;
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(Request $request, View $view)
     {
         $this->request = $request;
@@ -97,18 +87,10 @@ class MailPanel extends Panel
             $this->_messages[] = $messageData;
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Mail';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/mail/summary', [
@@ -116,10 +98,6 @@ class MailPanel extends Panel
             'mailCount' => is_array($this->data) ? count($this->data) : '⚠️',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new Mail();

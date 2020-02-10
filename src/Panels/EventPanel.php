@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Clue\GraphComposer\App;
@@ -31,10 +25,6 @@ class EventPanel extends Panel
     private $_events = [];
     /** @var Request */
     private $request;
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(Request $request, View $view)
     {
         $this->request = $request;
@@ -53,18 +43,10 @@ class EventPanel extends Panel
             $this->_events[] = $eventData;
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Events';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/event/summary', [
@@ -72,10 +54,6 @@ class EventPanel extends Panel
             'eventCount' => count($this->data),
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new \Yiisoft\Yii\Debug\Models\Search\Event();
@@ -87,18 +65,10 @@ class EventPanel extends Panel
             'searchModel' => $searchModel
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         return $this->_events;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled(): bool
     {
         $yiiVersion = Yii::getVersion();

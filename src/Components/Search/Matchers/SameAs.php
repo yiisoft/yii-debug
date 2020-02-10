@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Components\Search\Matchers;
 
 use yii\helpers\VarDumper;
@@ -21,11 +15,6 @@ class SameAs extends Base
      * @var bool if partial match should be used.
      */
     public $partial = false;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function match($value)
     {
         if (!is_scalar($value)) {

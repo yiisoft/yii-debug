@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
@@ -28,21 +22,12 @@ class Db extends Base
      * @var int query attribute input search value
      */
     public $query;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['type', 'query'], 'safe'],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

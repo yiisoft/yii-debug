@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Application;
@@ -33,19 +27,10 @@ class ProfilingPanel extends Panel
         $this->request = $request;
         parent::__construct($view);
     }
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Profiling';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/profile/summary', [
@@ -54,10 +39,6 @@ class ProfilingPanel extends Panel
             'panel' => $this
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new Profile();
@@ -71,10 +52,6 @@ class ProfilingPanel extends Panel
             'time' => number_format($this->data['time'] * 1000) . ' ms',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->profileTarget;

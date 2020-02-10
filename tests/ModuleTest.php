@@ -3,18 +3,15 @@
 namespace Yiisoft\Yii\Debug\Tests;
 
 use yii\base\Event;
-use Yiisoft\Cache\Cache;
-use Yiisoft\Cache\FileCache;
 use yii\tests\TestCase;
 use yii\view\Theme;
 use yii\view\View;
+use Yiisoft\Cache\Cache;
+use Yiisoft\Cache\FileCache;
 use Yiisoft\Yii\Debug\Module;
 
 class ModuleTest extends TestCase
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         parent::setUp();

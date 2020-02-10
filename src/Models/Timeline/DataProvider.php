@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Timeline;
 
 use yii\data\ArrayDataProvider;
@@ -36,10 +30,6 @@ class DataProvider extends ArrayDataProvider
         $this->panel = $panel;
         parent::__construct($config);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function prepareModels()
     {
         if (($models = $this->allModels) === null) {

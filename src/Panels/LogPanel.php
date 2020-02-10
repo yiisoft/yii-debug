@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Request;
@@ -33,26 +27,14 @@ class LogPanel extends Panel
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Logs';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/log/summary', ['data' => $this->data, 'panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new Log();
@@ -64,10 +46,6 @@ class LogPanel extends Panel
             'searchModel' => $searchModel,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->logTarget;

@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Application;
@@ -30,26 +24,14 @@ class ConfigPanel extends Panel
         $this->app = $app;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Configuration';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/config/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/config/detail', ['panel' => $this]);
@@ -88,10 +70,6 @@ class ConfigPanel extends Panel
         $phpinfo = str_replace('<div class="center">', '<div class="phpinfo">', $phpinfo);
         return $phpinfo;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         return [

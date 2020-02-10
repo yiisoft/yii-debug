@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Controllers;
 
 use yii\base\Action;
@@ -24,9 +18,6 @@ use Yiisoft\Yii\Debug\Models\Search\Debug;
  */
 class DefaultController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public $layout = 'main';
     /**
      * @var \Yiisoft\Yii\Debug\Module owner module.
@@ -41,11 +32,6 @@ class DefaultController extends Controller
      * @var array
      */
     private $_manifest;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         $actions = [];
@@ -55,10 +41,6 @@ class DefaultController extends Controller
 
         return $actions;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function beforeAction(Action $action): bool
     {
         $this->app->response->format = Response::FORMAT_HTML;

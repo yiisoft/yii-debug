@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Timeline;
 
 use Yiisoft\Yii\Debug\Components\Search\Filter;
@@ -28,21 +22,12 @@ class Search extends Base
      * @var int attribute search
      */
     public $duration = 0;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['category', 'duration'], 'safe'],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

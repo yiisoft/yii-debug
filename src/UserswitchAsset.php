@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
 use yii\web\AssetBundle;
@@ -17,13 +11,7 @@ use yii\web\AssetBundle;
  */
 class UserswitchAsset extends AssetBundle
 {
-    /**
-     * {@inheritdoc}
-     */
     public $sourcePath = '@yii/debug/assets';
-    /**
-     * {@inheritdoc}
-     */
     public $js = [
         'js/userswitch.js',
     ];

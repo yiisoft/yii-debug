@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
@@ -61,34 +55,18 @@ class RouterPanel extends Panel
     {
         return $this->_categories;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Router';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/router/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/router/detail', ['model' => new Router($this->data)]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->logTarget;

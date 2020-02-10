@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
@@ -59,21 +53,12 @@ class Mail extends Base
      * @var string file attribute input search value
      */
     public $file;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['from', 'to', 'reply', 'cc', 'bcc', 'subject', 'body', 'charset'], 'safe'],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

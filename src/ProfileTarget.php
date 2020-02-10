@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
 use yii\profile\Target;
@@ -22,11 +16,6 @@ class ProfileTarget extends Target
      * @see \yii\profile\Profiler::$messages
      */
     public $messages = [];
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function export(array $messages)
     {
         $this->messages = $messages;

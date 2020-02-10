@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Application;
@@ -43,34 +37,18 @@ class RequestPanel extends Panel
         $this->app = $app;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Request';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/request/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/request/detail', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $headers = $this->request->getHeaders();

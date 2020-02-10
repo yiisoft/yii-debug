@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
@@ -26,11 +20,6 @@ class Event extends Base
     public $name;
     public $class;
     public $senderClass;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -40,10 +29,6 @@ class Event extends Base
             [$this->attributes(), 'safe'],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

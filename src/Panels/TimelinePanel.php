@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Application;
@@ -76,18 +70,10 @@ class TimelinePanel extends Panel
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Timeline';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new Search();
@@ -99,10 +85,6 @@ class TimelinePanel extends Panel
             'searchModel' => $searchModel,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function load($data)
     {
         if (!isset($data['start']) || empty($data['start'])) {
@@ -130,10 +112,6 @@ class TimelinePanel extends Panel
         }
         $this->_memory = $data['memory'];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         return [

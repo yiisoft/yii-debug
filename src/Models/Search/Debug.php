@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
@@ -56,21 +50,12 @@ class Debug extends Base
      * @var array critical codes, used to determine grid row options.
      */
     public $criticalCodes = [400, 404, 500];
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['tag', 'ip', 'method', 'ajax', 'url', 'statusCode', 'sqlCount', 'mailCount'], 'safe'],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

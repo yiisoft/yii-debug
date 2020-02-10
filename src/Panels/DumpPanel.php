@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
@@ -49,26 +43,14 @@ class DumpPanel extends Panel
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Dump';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/dump/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new Log();
@@ -80,10 +62,6 @@ class DumpPanel extends Panel
             'searchModel' => $searchModel,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->logTarget;

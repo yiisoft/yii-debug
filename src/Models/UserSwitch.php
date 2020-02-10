@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models;
 
 use yii\base\Model;
@@ -36,21 +30,12 @@ class UserSwitch extends Model
      * @since 2.0.13
      */
     public $userComponent = 'user';
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['user', 'mainUser'], 'safe']
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

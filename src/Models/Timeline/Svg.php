@@ -1,15 +1,9 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Timeline;
 
 use yii\base\BaseObject;
-use Yiisoft\Yii\Debug\Panels\TimelinePanel;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Yii\Debug\Panels\TimelinePanel;
 
 /**
  * Svg is used to draw a graph using SVG
@@ -62,11 +56,6 @@ class Svg extends BaseObject
      * @var TimelinePanel
      */
     protected $panel;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(TimelinePanel $panel, $config = [])
     {
         $this->panel = $panel;

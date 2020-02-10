@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Models\Search;
 
 use yii\data\ArrayDataProvider;
@@ -32,21 +26,12 @@ class Log extends Base
      * @var int message attribute input search value
      */
     public $message;
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['level', 'message', 'category'], 'safe'],
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [

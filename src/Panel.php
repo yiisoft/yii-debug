@@ -1,17 +1,11 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
 use yii\base\Application;
 use yii\base\Component;
 use yii\helpers\Url;
-use yii\web\View;
 use yii\view\ViewContextInterface;
+use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
 
 /**
@@ -187,10 +181,6 @@ class Panel extends Component implements ViewContextInterface
     {
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getViewPath()
     {
         return __DIR__ . '/views/default';

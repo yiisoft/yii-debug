@@ -1,18 +1,12 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
 use yii\base\InvalidConfigException;
 use yii\base\Request;
-use Yiisoft\Db\ConnectionInterface;
 use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Db\ConnectionInterface;
 use Yiisoft\Yii\Debug\Models\Search\Db;
 use Yiisoft\Yii\Debug\Panel;
 
@@ -63,10 +57,6 @@ class DbPanel extends Panel
     private $_timings;
 
     private $request;
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(ConnectionInterface $db, Request $request, View $view)
     {
         $this->db = $db;
@@ -77,10 +67,6 @@ class DbPanel extends Panel
             'panel' => $this,
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Database';
@@ -93,10 +79,6 @@ class DbPanel extends Panel
     {
         return 'DB';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         $timings = $this->calculateTimings();
@@ -110,10 +92,6 @@ class DbPanel extends Panel
             'queryTime' => $queryTime,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         $searchModel = new Db();
@@ -163,10 +141,6 @@ class DbPanel extends Panel
 
         return $this->_timings;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         return ['messages' => $this->getProfileLogs()];
@@ -330,10 +304,6 @@ class DbPanel extends Panel
             []
         );
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled(): bool
     {
         try {

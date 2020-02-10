@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use yii\base\Application;
@@ -14,7 +8,6 @@ use yii\base\Model;
 use yii\base\Request;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
-use Yiisoft\Db\ActiveRecord;
 use yii\di\Initiable;
 use yii\filters\AccessControl;
 use yii\filters\AccessRule;
@@ -23,6 +16,7 @@ use yii\web\IdentityInterface;
 use yii\web\User;
 use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Db\ActiveRecord;
 use Yiisoft\Yii\Debug\Controllers\UserController;
 use Yiisoft\Yii\Debug\Models\Search\UserSearchInterface;
 use Yiisoft\Yii\Debug\Models\UserSwitch;
@@ -82,10 +76,6 @@ class UserPanel extends Panel implements Initiable
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function init(): void
     {
         if (!$this->isEnabled() || $this->getUser()->isGuest) {
@@ -200,34 +190,18 @@ class UserPanel extends Panel implements Initiable
 
         return $allowSwitchUser;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'User';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/user/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/user/detail', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $identity = $this->app->getUser()->getIdentity(false);
@@ -294,10 +268,6 @@ class UserPanel extends Panel implements Initiable
             'permissionsProvider' => $permissionsProvider,
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled(): bool
     {
         try {

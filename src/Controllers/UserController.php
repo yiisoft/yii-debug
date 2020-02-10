@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Controllers;
 
 use yii\base\Action;
@@ -21,9 +15,6 @@ use Yiisoft\Yii\Debug\Models\UserSwitch;
  */
 class UserController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function beforeAction(Action $action): bool
     {
         $this->app->response->format = Response::FORMAT_JSON;
