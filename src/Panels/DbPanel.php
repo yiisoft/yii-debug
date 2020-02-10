@@ -1,24 +1,14 @@
 <?php
 namespace Yiisoft\Yii\Debug\Panels;
 
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\LogLevel;
-use yii\base\InvalidConfigException;
-use yii\base\Request;
-use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Db\ConnectionInterface;
-use Yiisoft\Yii\Debug\Models\Search\Db;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays database queries performed.
- *
- * @property array $profileLogs This property is read-only.
- * @property string $summaryName Short name of the panel, which will be use in summary. This property is
- * read-only.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class DbPanel extends Panel
 {
@@ -35,7 +25,6 @@ class DbPanel extends Panel
     /**
      * @var array the default ordering of the database queries. In the format of
      * [ property => sort direction ], for example: [ 'duration' => SORT_DESC ]
-     * @since 2.0.7
      */
     public $defaultOrder = [
         'seq' => SORT_ASC
@@ -43,7 +32,6 @@ class DbPanel extends Panel
     /**
      * @var array the default filter to apply to the database queries. In the format
      * of [ property => value ], for example: [ 'type' => 'SELECT' ]
-     * @since 2.0.7
      */
     public $defaultFilter = [];
 
@@ -57,7 +45,7 @@ class DbPanel extends Panel
     private $_timings;
 
     private $request;
-    public function __construct(ConnectionInterface $db, Request $request, View $view)
+    public function __construct(ConnectionInterface $db, RequestInterface $request, View $view)
     {
         $this->db = $db;
         $this->request = $request;
@@ -94,21 +82,11 @@ class DbPanel extends Panel
     }
     public function getDetail(): string
     {
-        $searchModel = new Db();
-
-        if (!$searchModel->load($this->request->getQueryParams())) {
-            $searchModel->load($this->defaultFilter, '');
-        }
-
         $models = $this->getModels();
-        $dataProvider = $searchModel->search($models);
-        $dataProvider->getSort()->defaultOrder = $this->defaultOrder;
         $sumDuplicates = $this->sumDuplicateQueries($models);
 
         return $this->render('panels/db/detail', [
             'panel' => $this,
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
             'hasExplain' => $this->hasExplain(),
             'sumDuplicates' => $sumDuplicates,
         ]);
@@ -157,11 +135,13 @@ class DbPanel extends Panel
         $profileTarget = $this->module->profileTarget;
 
         $logTarget = $this->module->logTarget;
-        if ($logTarget === null) {
-            $logMessages = [];
-        } else {
-            $logMessages = $logTarget->filterMessages($logTarget->getMessages(), [LogLevel::INFO, LogLevel::DEBUG], $categories);
-        }
+        $logMessages = $logTarget === null
+            ? []
+            : $logTarget::filterMessages(
+                $logTarget->getMessages(),
+                [LogLevel::INFO, LogLevel::DEBUG],
+                $categories
+            );
 
         $messages = [];
         foreach ($profileTarget->messages as $message) {
@@ -233,7 +213,6 @@ class DbPanel extends Panel
      *
      * @param $timings
      * @return array
-     * @since 2.0.13
      */
     public function countDuplicateQuery($timings)
     {
@@ -247,7 +226,6 @@ class DbPanel extends Panel
      *
      * @param $modelData
      * @return int
-     * @since 2.0.13
      */
     public function sumDuplicateQueries($modelData)
     {
@@ -291,7 +269,6 @@ class DbPanel extends Panel
      * Returns array query types
      *
      * @return array
-     * @since 2.0.3
      */
     public function getTypes()
     {
@@ -308,7 +285,7 @@ class DbPanel extends Panel
     {
         try {
             $this->getDb();
-        } catch (InvalidConfigException $exception) {
+        } catch (\Throwable $exception) {
             return false;
         }
 
@@ -317,7 +294,6 @@ class DbPanel extends Panel
 
     /**
      * @return bool Whether the DB component has support for EXPLAIN queries
-     * @since 2.0.5
      */
     protected function hasExplain()
     {
@@ -341,8 +317,6 @@ class DbPanel extends Panel
      *
      * @param string $type query type
      * @return bool
-     *
-     * @since 2.0.5
      */
     public static function canBeExplained($type)
     {
@@ -353,7 +327,6 @@ class DbPanel extends Panel
      * Returns a reference to the DB component associated with the panel
      *
      * @return \Yiisoft\Db\Connection
-     * @since 2.0.5
      */
     public function getDb()
     {

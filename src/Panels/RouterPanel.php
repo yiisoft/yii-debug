@@ -2,19 +2,11 @@
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
-use yii\base\Application;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Router;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * RouterPanel provides a panel which displays information about routing process.
- *
- * @property array $categories Note that the type of this property differs in getter and setter. See
- * [[getCategories()]] and [[setCategories()]] for details.
- *
- * @author Dmitriy Bashkarev <dmitriy@bashkarev.com>
- * @since 2.0.8
  */
 class RouterPanel extends Panel
 {

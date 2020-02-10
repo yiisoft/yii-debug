@@ -1,11 +1,8 @@
 <?php
 namespace Yiisoft\Yii\Debug\Panels;
 
-use Clue\GraphComposer\App;
-use yii\base\Event;
-use yii\base\Request;
-use yii\helpers\Yii;
-use yii\web\View;
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
@@ -13,9 +10,6 @@ use Yiisoft\Yii\Debug\Panel;
  *
  * > Note: this panel requires Yii framework version >= 2.0.14 to function and will not
  *   appear at lower version.
- *
- * @author Paul Klimov <klimov.paul@gmail.com>
- * @since 2.0.14
  */
 class EventPanel extends Panel
 {
@@ -23,9 +17,9 @@ class EventPanel extends Panel
      * @var array current request events
      */
     private $_events = [];
-    /** @var Request */
+    /** @var \Psr\Http\Message\RequestInterface */
     private $request;
-    public function __construct(Request $request, View $view)
+    public function __construct(RequestInterface $request, View $view)
     {
         $this->request = $request;
         parent::__construct($view);
@@ -56,13 +50,8 @@ class EventPanel extends Panel
     }
     public function getDetail(): string
     {
-        $searchModel = new \Yiisoft\Yii\Debug\Models\Search\Event();
-        $dataProvider = $searchModel->search($this->request->get(), $this->data);
-
         return $this->render('panels/event/detail', [
             'panel' => $this,
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel
         ]);
     }
     public function save()

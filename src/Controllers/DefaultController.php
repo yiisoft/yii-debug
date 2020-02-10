@@ -1,20 +1,8 @@
 <?php
 namespace Yiisoft\Yii\Debug\Controllers;
 
-use yii\base\Action;
-use yii\helpers\Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\web\Response;
-use Yiisoft\Yii\Debug\Models\Search\Debug;
-
 /**
  * Debugger controller provides browsing over available debug logs.
- *
- * @see \Yiisoft\Yii\Debug\Panel
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class DefaultController extends Controller
 {

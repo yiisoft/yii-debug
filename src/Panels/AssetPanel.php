@@ -1,16 +1,11 @@
 <?php
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\web\AssetBundle;
+use Yiisoft\Assets\AssetBundle;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays asset bundles data.
- *
- * @author Artur Fursa <arturfursa@gmail.com>
- * @since 2.0
  */
 class AssetPanel extends Panel
 {

@@ -1,27 +1,10 @@
 <?php
 namespace Yiisoft\Yii\Debug;
 
-use yii\base\Action;
-use yii\base\ActionEvent;
-use yii\base\BootstrapInterface;
-use yii\base\RequestEvent;
-use yii\di\Initiable;
-use yii\helpers\Html;
-use yii\helpers\Json;
-use yii\helpers\Url;
-use yii\helpers\Yii;
-use yii\view\BodyEvent;
-use yii\web\ForbiddenHttpException;
-use yii\web\Response;
-use yii\web\View;
-
 /**
  * The Yii Debug Module provides the debug toolbar and debugger
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
-class Module extends \yii\base\Module implements BootstrapInterface, Initiable
+class Module
 {
     const DEFAULT_IDE_TRACELINE = '<a href="ide://open?url=file://{file}&line={line}">{text}</a>';
 
@@ -67,7 +50,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
     /**
      * @var string the name of the panel that should be visible when opening the debug panel.
      * The default value is 'log'.
-     * @since 2.0.7
      */
     public $defaultPanel = 'log';
     /**
@@ -78,7 +60,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      * @var int the permission to be set for newly created debugger data files.
      * This value will be used by PHP [[chmod()]] function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
-     * @since 2.0.6
      */
     public $fileMode;
     /**
@@ -86,7 +67,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      * This value will be used by PHP [[chmod()]] function. No umask will be applied.
      * Defaults to 0775, meaning the directory is read-writable by owner and group,
      * but read-only for other users.
-     * @since 2.0.6
      */
     public $dirMode = 0775;
     /**
@@ -124,7 +104,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      *     return $line;
      * }
      * ```
-     * @since 2.0.7
      */
     public $traceLine = self::DEFAULT_IDE_TRACELINE;
     /**
@@ -286,7 +265,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
      * without interfering with the request itself.
      *
      * @param \yii\base\Event $event
-     * @since 2.0.7
      */
     public function setDebugHeaders($event)
     {
@@ -314,7 +292,6 @@ class Module extends \yii\base\Module implements BootstrapInterface, Initiable
 
     /**
      * Gets toolbar HTML
-     * @since 2.0.7
      */
     public function getToolbarHtml()
     {
