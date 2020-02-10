@@ -1,9 +1,9 @@
 <?php
 
-use Yiisoft\Yii\DataView\ListView;
 use yii\helpers\Html;
 use yii\helpers\Yii;
 use yii\widgets\ActiveForm;
+use Yiisoft\Yii\DataView\ListView;
 
 /* @var $panel Yiisoft\Yii\Debug\Panels\MailPanel */
 /* @var $searchModel Yiisoft\Yii\Debug\Models\search\Mail */

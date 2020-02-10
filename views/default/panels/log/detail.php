@@ -1,10 +1,10 @@
 <?php
 
 use Psr\Log\LogLevel;
-use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
 use yii\helpers\VarDumper;
 use Yiisoft\Log\Logger;
+use Yiisoft\Yii\DataView\GridView;
 
 /* @var $panel Yiisoft\Yii\Debug\Panels\LogPanel */
 /* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Log */

@@ -1,8 +1,8 @@
 <?php
 
-use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
 use yii\helpers\VarDumper;
+use Yiisoft\Yii\DataView\GridView;
 
 /* @var $panel Yiisoft\Yii\Debug\Panels\DumpPanel */
 /* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Log */

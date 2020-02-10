@@ -1,8 +1,8 @@
 <?php
 
 use yii\data\ArrayDataProvider;
-use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
+use Yiisoft\Yii\DataView\GridView;
 
 /* @var $this \yii\web\View */
 /* @var $manifest array */

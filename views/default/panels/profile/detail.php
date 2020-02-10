@@ -1,7 +1,7 @@
 <?php
 
-use Yiisoft\Yii\DataView\GridView;
 use yii\helpers\Html;
+use Yiisoft\Yii\DataView\GridView;
 
 /* @var $panel Yiisoft\Yii\Debug\Panels\ProfilingPanel */
 /* @var $searchModel Yiisoft\Yii\Debug\Models\Search\Profile */
