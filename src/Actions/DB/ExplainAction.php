@@ -3,6 +3,9 @@ namespace Yiisoft\Yii\Debug\Actions\DB;
 
 use Yiisoft\Yii\Debug\Panels\DbPanel;
 
+/**
+ * ExplainAction provides EXPLAIN information for SQL queries
+ */
 class ExplainAction
 {
     public DbPanel $panel;
