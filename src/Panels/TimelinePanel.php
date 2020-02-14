@@ -1,4 +1,5 @@
 <?php
+
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Http\Message\RequestInterface;
