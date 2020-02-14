@@ -1,30 +1,13 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Event;
-use yii\base\Request;
-use yii\helpers\FileHelper;
-use yii\helpers\Yii;
-use yii\mail\BaseMailer;
-use yii\mail\MessageInterface;
-use yii\mail\SendEvent;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Search\Mail;
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\Files\FileHelper;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays the generated emails.
- *
- * @property-read array $messages Messages. Return array of created email files.
- *
- * @author Mark Jebri <mark.github@yandex.ru>
- * @since 2.0
  */
 class MailPanel extends Panel
 {
@@ -38,12 +21,8 @@ class MailPanel extends Panel
      */
     private $_messages = [];
 
-    private $request;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(Request $request, View $view)
+    private RequestInterface $request;
+    public function __construct(RequestInterface $request, View $view)
     {
         $this->request = $request;
         parent::__construct($view);
@@ -97,18 +76,10 @@ class MailPanel extends Panel
             $this->_messages[] = $messageData;
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Mail';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/mail/summary', [
@@ -116,19 +87,10 @@ class MailPanel extends Panel
             'mailCount' => is_array($this->data) ? count($this->data) : '⚠️',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
-        $searchModel = new Mail();
-        $dataProvider = $searchModel->search($this->request->get(), $this->data);
-
         return $this->render('panels/mail/detail', [
             'panel' => $this,
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel
         ]);
     }
 

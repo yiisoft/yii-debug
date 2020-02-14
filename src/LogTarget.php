@@ -1,38 +1,20 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
-use yii\base\InvalidConfigException;
-use yii\helpers\FileHelper;
-use yii\helpers\Yii;
+use Yiisoft\Files\FileHelper;
 use Yiisoft\Log\Target;
 
 /**
  * The debug LogTarget is used to store logs for later use in the debugger tool
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class LogTarget extends Target
 {
-    /**
-     * @var Module
-     */
-    public $module;
+    public Module $module;
     /**
      * @var string
      */
     public $tag;
 
-
-    /**
-     * @param Module $module
-     */
     public function __construct(Module $module)
     {
         $this->module = $module;

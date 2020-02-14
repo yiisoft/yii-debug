@@ -1,32 +1,15 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
-use yii\base\Application;
-use yii\base\Component;
-use yii\helpers\Url;
-use yii\web\View;
-use yii\view\ViewContextInterface;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\View\View;
+use Yiisoft\View\ViewContextInterface;
 
 /**
  * Panel is a base class for debugger panel classes. It defines how data should be collected,
  * what should be displayed at debug toolbar and on debugger details view.
- *
- * @property string $detail Content that is displayed in debugger detail view. This property is read-only.
- * @property string $name Name of the panel. This property is read-only.
- * @property string $summary Content that is displayed at debug toolbar. This property is read-only.
- * @property string $url URL pointing to panel detail view. This property is read-only.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
-class Panel extends Component implements ViewContextInterface
+class Panel implements ViewContextInterface
 {
     /**
      * @var string panel unique identifier.
@@ -54,7 +37,6 @@ class Panel extends Component implements ViewContextInterface
 
     /**
      * @var FlattenException|null Error while saving the panel
-     * @since 2.0.10
      */
     protected $error;
     /** @var View */
@@ -134,7 +116,6 @@ class Panel extends Component implements ViewContextInterface
      * Returns a trace line
      * @param array $options The array with trace
      * @return string the trace line
-     * @since 2.0.7
      */
     public function getTraceLine(array $options): string
     {
@@ -153,7 +134,6 @@ class Panel extends Component implements ViewContextInterface
 
     /**
      * @param FlattenException $error
-     * @since 2.0.10
      */
     public function setError(FlattenException $error)
     {
@@ -162,18 +142,13 @@ class Panel extends Component implements ViewContextInterface
 
     /**
      * @return FlattenException|null
-     * @since 2.0.10
      */
-    public function getError()
+    public function getError(): ?FlattenException
     {
         return $this->error;
     }
 
-    /**
-     * @return bool
-     * @since 2.0.10
-     */
-    public function hasError()
+    public function hasError(): bool
     {
         return $this->error !== null;
     }
@@ -181,17 +156,12 @@ class Panel extends Component implements ViewContextInterface
     /**
      * Checks whether this panel is enabled.
      * @return bool whether this panel is enabled.
-     * @since 2.0.10
      */
     public function isEnabled(): bool
     {
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getViewPath()
+    public function getViewPath(): string
     {
         return __DIR__ . '/views/default';
     }

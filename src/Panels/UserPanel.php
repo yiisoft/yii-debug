@@ -1,43 +1,19 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Application;
-use yii\base\Controller;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\base\Request;
-use yii\data\ArrayDataProvider;
-use yii\data\DataProviderInterface;
-use Yiisoft\Db\ActiveRecord;
-use yii\di\Initiable;
-use yii\filters\AccessControl;
-use yii\filters\AccessRule;
-use yii\helpers\VarDumper;
-use yii\web\IdentityInterface;
-use yii\web\User;
-use yii\web\View;
+use Psr\Http\Message\RequestInterface;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Auth\IdentityInterface;
+use Yiisoft\VarDumper\VarDumper;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Controllers\UserController;
-use Yiisoft\Yii\Debug\Models\Search\UserSearchInterface;
-use Yiisoft\Yii\Debug\Models\UserSwitch;
 use Yiisoft\Yii\Debug\Panel;
+use Yiisoft\Yii\Web\User\User;
 
 /**
  * Debugger panel that collects and displays user data.
- *
- * @property DataProviderInterface $userDataProvider This property is read-only.
- * @property Model|UserSearchInterface $usersFilterModel This property is read-only.
- *
- * @author Daniel Gomez Pan <pana_1990@hotmail.com>
- * @since 2.0.8
  */
-class UserPanel extends Panel implements Initiable
+class UserPanel extends Panel
 {
     /**
      * @var array the rule which defines who allowed to switch user identity.
@@ -46,46 +22,30 @@ class UserPanel extends Panel implements Initiable
      * By default deny for everyone. Recommendation: can allow for administrator
      * or developer (if implement) role: ['allow' => true, 'roles' => ['admin']]
      * @see http://www.yiiframework.com/doc-2.0/guide-security-authorization.html
-     * @since 2.0.10
      */
     public $ruleUserSwitch = [
         'allow' => false,
     ];
-    /**
-     * @var UserSwitch object of switching users
-     * @since 2.0.10
-     */
     public $userSwitch;
-    /**
-     * @var Model|UserSearchInterface Implements of User model with search method.
-     * @since 2.0.10
-     */
     public $filterModel;
     /**
      * @var array allowed columns for GridView.
      * @see http://www.yiiframework.com/doc-2.0/yii-grid-gridview.html#$columns-detail
-     * @since 2.0.10
      */
     public $filterColumns = [];
     /**
      * @var string|User ID of the user component or a user object
-     * @since 2.0.13
      */
     public $userComponent = 'user';
-    /** @var Request */
-    private $request;
+    private RequestInterface $request;
     private $app;
 
-    public function __construct(Request $request, Application $app, View $view)
+    public function __construct(RequestInterface $request, Application $app, View $view)
     {
         $this->app = $app;
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function init(): void
     {
         if (!$this->isEnabled() || $this->getUser()->isGuest) {
@@ -107,13 +67,8 @@ class UserPanel extends Panel implements Initiable
         }
     }
 
-    /**
-     * @return User|null
-     * @since 2.0.13
-     */
-    public function getUser()
+    public function getUser(): User
     {
-        /* @var $user User */
         return is_string($this->userComponent) ? $this->app->get($this->userComponent, false) : $this->userComponent;
     }
 
@@ -200,34 +155,18 @@ class UserPanel extends Panel implements Initiable
 
         return $allowSwitchUser;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'User';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/user/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/user/detail', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $identity = $this->app->getUser()->getIdentity(false);
@@ -272,13 +211,13 @@ class UserPanel extends Panel implements Initiable
         }
 
         // If the identity is a model, let it specify the attribute labels
-        if ($identity instanceof Model) {
+        if ($identity instanceof IdentityInterface) {
             $attributes = [];
 
             foreach (array_keys($identityData) as $attribute) {
                 $attributes[] = [
                     'attribute' => $attribute,
-                    'label' => $identity->getAttributeLabel($attribute),
+                    'label' => $identity->getId(),
                 ];
             }
         } else {
@@ -294,15 +233,11 @@ class UserPanel extends Panel implements Initiable
             'permissionsProvider' => $permissionsProvider,
         ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled(): bool
     {
         try {
             $this->getUser();
-        } catch (InvalidConfigException $exception) {
+        } catch (\Throwable $exception) {
             return false;
         }
         return true;
@@ -329,12 +264,8 @@ class UserPanel extends Panel implements Initiable
      * @param IdentityInterface $identity
      * @return array
      */
-    protected function identityData($identity)
+    protected function identityData(IdentityInterface $identity): array
     {
-        if ($identity instanceof Model) {
-            return $identity->getAttributes();
-        }
-
         return get_object_vars($identity);
     }
 }
