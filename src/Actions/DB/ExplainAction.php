@@ -1,4 +1,5 @@
 <?php
+
 namespace Yiisoft\Yii\Debug\Actions\DB;
 
 use Yiisoft\Yii\Debug\Panels\DbPanel;

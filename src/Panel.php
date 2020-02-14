@@ -1,4 +1,5 @@
 <?php
+
 namespace Yiisoft\Yii\Debug;
 
 use Yiisoft\Arrays\ArrayHelper;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Yiisoft\Assets\AssetBundle;
