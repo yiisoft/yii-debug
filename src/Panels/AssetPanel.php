@@ -1,52 +1,26 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\web\AssetBundle;
+use Yiisoft\Assets\AssetBundle;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays asset bundles data.
- *
- * @author Artur Fursa <arturfursa@gmail.com>
- * @since 2.0
  */
 class AssetPanel extends Panel
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Asset Bundles';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/assets/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/assets/detail', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $bundles = $this->view->assetManager->bundles;
@@ -68,10 +42,6 @@ class AssetPanel extends Panel
         }
         return $data;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled(): bool
     {
         try {

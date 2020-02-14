@@ -1,23 +1,12 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Application;
-use yii\web\Request;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Search\Profile;
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays performance profiling info.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class ProfilingPanel extends Panel
 {
@@ -25,27 +14,17 @@ class ProfilingPanel extends Panel
      * @var array current request profile timings
      */
     private $_models;
-    /** @var Request */
-    private $request;
+    private RequestInterface $request;
 
-    public function __construct(Request $request, View $view)
+    public function __construct(RequestInterface $request, View $view)
     {
         $this->request = $request;
         parent::__construct($view);
     }
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Profiling';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/profile/summary', [
@@ -54,27 +33,14 @@ class ProfilingPanel extends Panel
             'panel' => $this
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
-        $searchModel = new Profile();
-        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());
-
         return $this->render('panels/profile/detail', [
             'panel' => $this,
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
             'memory' => sprintf('%.3f MB', $this->data['memory'] / 1048576),
             'time' => number_format($this->data['time'] * 1000) . ' ms',
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->profileTarget;

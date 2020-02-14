@@ -1,42 +1,15 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Actions\DB;
 
-use yii\base\Action;
-use yii\web\HttpException;
 use Yiisoft\Yii\Debug\Panels\DbPanel;
 
 /**
  * ExplainAction provides EXPLAIN information for SQL queries
- *
- * @property \Yiisoft\Yii\Debug\Controllers\DefaultController|\yii\web\Controller|\Yiisoft\Yii\Console\Controller $controller the controller that owns this action
- *
- * @author Laszlo <github@lvlconsultancy.nl>
- * @since 2.0.6
  */
-class ExplainAction extends Action
+class ExplainAction
 {
-    /**
-     * @var DbPanel
-     */
-    public $panel;
+    public DbPanel $panel;
 
-    /**
-     * Runs the action.
-     *
-     * @param string $seq
-     * @param string $tag
-     * @return string
-     * @throws HttpException
-     * @throws \Yiisoft\Db\Exception
-     * @throws \yii\web\NotFoundHttpException if the view file cannot be found
-     * @throws \yii\exceptions\InvalidConfigException
-     */
     public function run($seq, $tag)
     {
         $this->controller->loadData($tag);

@@ -1,30 +1,12 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Application;
-use yii\base\Request;
-use yii\helpers\Yii;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Timeline\Search;
-use Yiisoft\Yii\Debug\Models\Timeline\Svg;
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays timeline data.
- *
- * @property array $colors
- * @property float $duration This property is read-only.
- * @property float $start This property is read-only.
- * @property array $svgOptions
- *
- * @author Dmitriy Bashkarev <dmitriy@bashkarev.com>
- * @since 2.0.7
  */
 class TimelinePanel extends Panel
 {
@@ -69,40 +51,23 @@ class TimelinePanel extends Panel
      * @var int Used memory in request
      */
     private $_memory;
-    private $request;
+    private RequestInterface $request;
 
-    public function __construct(Request $request, View $view)
+    public function __construct(RequestInterface $request, View $view)
     {
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Timeline';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
-        $searchModel = new Search();
-        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this);
-
         return $this->render('panels/timeline/detail', [
             'panel' => $this,
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function load($data)
     {
         if (!isset($data['start']) || empty($data['start'])) {
@@ -130,10 +95,6 @@ class TimelinePanel extends Panel
         }
         $this->_memory = $data['memory'];
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         return [
@@ -204,7 +165,6 @@ class TimelinePanel extends Panel
     /**
      * Memory peak in request, bytes. (obtained by memory_get_peak_usage())
      * @return int
-     * @since 2.0.8
      */
     public function getMemory()
     {
@@ -213,7 +173,6 @@ class TimelinePanel extends Panel
 
     /**
      * @return Svg
-     * @since 2.0.8
      */
     public function getSvg()
     {

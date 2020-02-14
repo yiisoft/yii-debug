@@ -1,41 +1,29 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Application;
-use yii\base\InlineAction;
-use yii\base\Request;
-use yii\base\Response;
-use yii\web\Session;
-use yii\web\View;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
+use Yiisoft\Yii\Web\Session\SessionInterface;
 
 /**
  * Debugger panel that collects and displays request data.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class RequestPanel extends Panel
 {
     /**
      * @var array list of the PHP predefined variables that are allowed to be displayed in the request panel.
      * Note that a variable must be accessible via `$GLOBALS`. Otherwise it won't be displayed.
-     * @since 2.0.10
      */
     public $displayVars = ['_SERVER', '_GET', '_POST', '_COOKIE', '_FILES', '_SESSION'];
 
-    private $request;
-    private $response;
-    private $session;
+    private RequestInterface $request;
+    private ResponseInterface $response;
+    private SessionInterface $session;
     private $app;
 
-    public function __construct(Session $session, Response $response, Request $request, Application $app, View $view)
+    public function __construct(SessionInterface $session, ResponseInterface $response, RequestInterface $request, Application $app, View $view)
     {
         $this->session = $session;
         $this->request = $request;
@@ -43,34 +31,18 @@ class RequestPanel extends Panel
         $this->app = $app;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Request';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/request/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/request/detail', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $headers = $this->request->getHeaders();

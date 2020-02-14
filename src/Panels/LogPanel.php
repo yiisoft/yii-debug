@@ -1,23 +1,13 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
-use yii\base\Request;
-use yii\helpers\VarDumper;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Search\Log;
+use Psr\Http\Message\RequestInterface;
+use Yiisoft\VarDumper\VarDumper;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays logs.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class LogPanel extends Panel
 {
@@ -25,49 +15,28 @@ class LogPanel extends Panel
      * @var array log messages extracted to array as models, to use with data provider.
      */
     private $_models;
-    /** @var Request */
+    /** @var \Psr\Http\Message\RequestInterface */
     private $request;
 
-    public function __construct(Request $request, View $view)
+    public function __construct(RequestInterface $request, View $view)
     {
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Logs';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/log/summary', ['data' => $this->data, 'panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
-        $searchModel = new Log();
-        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());
-
         return $this->render('panels/log/detail', [
-            'dataProvider' => $dataProvider,
             'panel' => $this,
-            'searchModel' => $searchModel,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->logTarget;
@@ -76,7 +45,7 @@ class LogPanel extends Panel
             $except = $this->module->panels['router']->getCategories();
         }
 
-        $messages = $target->filterMessages($target->getMessages(), [], [], $except);
+        $messages = $target::filterMessages($target->getMessages(), [], [], $except);
         foreach ($messages as &$message) {
             if (!is_string($message[1])) {
                 // exceptions may not be serializable if in the call stack somewhere is a Closure

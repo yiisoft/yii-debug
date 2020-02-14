@@ -1,25 +1,13 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\LogLevel;
-use Yii;
-use yii\base\Request;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Search\Log;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Dump panel that collects and displays debug messages (LogLevel::DEBUG).
- *
- * @author Pistej <pistej2@gmail.com>
- * @author Simon Karlen <simi.albi@outlook.com>
- * @since 2.1.0
  */
 class DumpPanel extends Panel
 {
@@ -41,49 +29,28 @@ class DumpPanel extends Panel
      * @var array log messages extracted to array as models, to use with data provider.
      */
     private $_models;
-    /** @var Request */
+    /** @var RequestInterface */
     private $request;
 
-    public function __construct(Request $request, View $view)
+    public function __construct(RequestInterface $request, View $view)
     {
         $this->request = $request;
         parent::__construct($view);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Dump';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/dump/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
-        $searchModel = new Log();
-        $dataProvider = $searchModel->search($this->request->getQueryParams(), $this->getModels());
-
         return $this->render('panels/dump/detail', [
-            'dataProvider' => $dataProvider,
             'panel' => $this,
-            'searchModel' => $searchModel,
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->logTarget;
@@ -92,7 +59,7 @@ class DumpPanel extends Panel
             $except = $this->module->panels['router']->getCategories();
         }
 
-        $messages = $target->filterMessages($target->getMessages(), [LogLevel::DEBUG], $this->categories, $except);
+        $messages = $target::filterMessages($target->getMessages(), [LogLevel::DEBUG], $this->categories, $except);
 
         return $messages;
     }

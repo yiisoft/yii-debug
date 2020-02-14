@@ -1,26 +1,12 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug\Panels;
 
 use Psr\Log\LogLevel;
-use yii\base\Application;
-use yii\web\View;
-use Yiisoft\Yii\Debug\Models\Router;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Debug\Panel;
 
 /**
  * RouterPanel provides a panel which displays information about routing process.
- *
- * @property array $categories Note that the type of this property differs in getter and setter. See
- * [[getCategories()]] and [[setCategories()]] for details.
- *
- * @author Dmitriy Bashkarev <dmitriy@bashkarev.com>
- * @since 2.0.8
  */
 class RouterPanel extends Panel
 {
@@ -61,34 +47,18 @@ class RouterPanel extends Panel
     {
         return $this->_categories;
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Router';
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummary(): string
     {
         return $this->render('panels/router/summary', ['panel' => $this]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDetail(): string
     {
         return $this->render('panels/router/detail', ['model' => new Router($this->data)]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
         $target = $this->module->logTarget;

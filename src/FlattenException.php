@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Yii\Debug;
 
 /**
@@ -12,9 +6,6 @@ namespace Yiisoft\Yii\Debug;
  * Implements the Throwable interface
  * Basically, this class removes all objects from the trace.
  * Ported from Symfony components @link https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Debug/Exception/FlattenException.php
- *
- * @author Dmitry Bashkarev <dmitry@bashkarev.com>
- * @since 2.0.10
  */
 class FlattenException
 {
