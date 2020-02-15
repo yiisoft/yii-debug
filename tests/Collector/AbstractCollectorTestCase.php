@@ -14,6 +14,13 @@ abstract class AbstractCollectorTestCase extends TestCase
 {
     protected ContainerInterface $container;
 
+    protected function setUp(): void
+    {
+        $config = require Builder::path('tests');
+
+        $this->container = new Container($config);
+    }
+
     /**
      * @dataProvider targetProvider()
      * @param \Yiisoft\Yii\Debug\Target\TargetInterface $target
@@ -21,11 +28,9 @@ abstract class AbstractCollectorTestCase extends TestCase
     public function testExport(TargetInterface $target): void
     {
         $collector = $this->getCollector($target);
-        $collector->setTarget($target);
         $this->assertEmpty($target->getData());
         $this->somethingDoTestExport();
         $collector->export();
-        var_dump($target->getData());
         $this->assertNotEmpty(...$target->getData());
     }
 
@@ -37,13 +42,6 @@ abstract class AbstractCollectorTestCase extends TestCase
     }
 
     abstract protected function getCollector(TargetInterface $target): CollectorInterface;
-
-    protected function setUp(): void
-    {
-        $config = require Builder::path('tests');
-
-        $this->container = new Container($config);
-    }
 
     protected function somethingDoTestExport(): void
     {
