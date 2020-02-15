@@ -20,7 +20,7 @@ class LogCollectorTest extends AbstractCollectorTestCase
         $logCollector = $this->container->get(LoggerInterface::class);
         $this->assertInstanceOf(CollectorInterface::class, $logCollector);
 
-        /* @var \Yiisoft\Yii\Debug\Collector\LogCollector $logCollector */
+        /* @var \Yiisoft\Yii\Debug\Collector\CollectorInterface $logCollector */
         $logCollector->setTarget($target);
 
         return $logCollector;
