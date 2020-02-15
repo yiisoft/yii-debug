@@ -10,19 +10,18 @@ class LogCollector implements CollectorInterface, LoggerInterface
 {
     private LoggerInterface $logger;
     private array $messages = [];
-    /**
-     * @var \Yiisoft\Yii\Debug\Target\TargetInterface
-     */
-    private TargetInterface $target;
+    private ?TargetInterface $target = null;
 
-    public function __construct(TargetInterface $target, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->target = $target;
     }
 
     public function export(): void
     {
+        if ($this->target === null) {
+            throw new \RuntimeException('$target can not be null');
+        }
         $this->target->add($this->messages);
     }
 
