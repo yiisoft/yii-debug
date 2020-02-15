@@ -31,7 +31,7 @@ abstract class AbstractCollectorTestCase extends TestCase
         $this->assertEmpty($target->getData());
         $this->somethingDoTestExport();
         $collector->export();
-        $this->assertNotEmpty(...$target->getData());
+        $this->assertNotEmpty($target->getData());
     }
 
     public function targetProvider(): array
