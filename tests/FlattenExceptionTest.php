@@ -2,40 +2,36 @@
 
 namespace Yiisoft\Yii\Debug\Tests;
 
-use yii\tests\TestCase;
-use yii\web\NotFoundHttpException;
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\FlattenException;
 
-/**
- * @author Dmitry Bashkarev <dmitry@bashkarev.com>
- */
 class FlattenExceptionTest extends TestCase
 {
-    public function testMessage()
+    public function testMessage(): void
     {
         $flattened = new FlattenException(new \Exception('test'));
         $this->assertEquals('test', $flattened->getMessage());
     }
 
-    public function testCode()
+    public function testCode(): void
     {
         $flattened = new FlattenException(new \Exception('test', 100));
         $this->assertEquals(100, $flattened->getCode());
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $flattened = new FlattenException(new \Exception('test', 100));
         $this->assertEquals(__FILE__, $flattened->getFile());
     }
 
-    public function testLine()
+    public function testLine(): void
     {
         $flattened = new FlattenException(new \Exception('test', 100));
         $this->assertEquals(__LINE__ - 1, $flattened->getLine());
     }
 
-    public function testTrace()
+    public function testTrace(): void
     {
         $i = (new \Exception('test'));
         $flattened = new FlattenException($i);
@@ -47,7 +43,7 @@ class FlattenExceptionTest extends TestCase
         $this->assertEquals(__FUNCTION__, $trace[0]['function']);
     }
 
-    public function testPrevious()
+    public function testPrevious(): void
     {
         $exception2 = new \Exception();
         $exception = new \Exception('test', 0, $exception2);
@@ -58,13 +54,13 @@ class FlattenExceptionTest extends TestCase
         $this->assertSame($flattened2->getTrace(), $flattened->getPrevious()->getTrace());
     }
 
-    public function testTraceAsString()
+    public function testTraceAsString(): void
     {
         $exception = $this->createException('test');
         $this->assertEquals($exception->getTraceAsString(), (new FlattenException($exception))->getTraceAsString());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $exception = new \Exception();
         $this->assertEquals($exception->__toString(), (new FlattenException($exception))->__toString(), 'empty');
@@ -72,12 +68,12 @@ class FlattenExceptionTest extends TestCase
         $this->assertEquals($exception->__toString(), (new FlattenException($exception))->__toString());
     }
 
-    public function testClass()
+    public function testClass(): void
     {
         $this->assertEquals((new FlattenException(new \Exception()))->getClass(), 'Exception');
     }
 
-    public function testArguments()
+    public function testArguments(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM skip');
@@ -143,7 +139,7 @@ class FlattenExceptionTest extends TestCase
         $this->assertTrue(is_nan($array[$i++][1]));
     }
 
-    public function testClosureSerialize()
+    public function testClosureSerialize(): void
     {
         $exception = $this->createException(function () {
             return 1 + 1;
@@ -153,7 +149,7 @@ class FlattenExceptionTest extends TestCase
         $this->assertContains('Closure', serialize($flattened));
     }
 
-    public function testRecursionInArguments()
+    public function testRecursionInArguments(): void
     {
         $a = ['foo'];
         $a[] = [2, &$a];
@@ -164,7 +160,7 @@ class FlattenExceptionTest extends TestCase
         $this->assertContains('*DEEP NESTED ARRAY*', serialize($trace));
     }
 
-    public function testTooBigArray()
+    public function testTooBigArray(): void
     {
         $a = [];
         for ($i = 0; $i < 20; ++$i) {
