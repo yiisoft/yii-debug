@@ -17,6 +17,12 @@ class LogCollectorTest extends AbstractCollectorTestCase
     protected function getCollector(TargetInterface $target): CollectorInterface
     {
         // Container should return Logger that implements CollectorInterface.
-        return $this->container->get(LoggerInterface::class);
+        $logCollector = $this->container->get(LoggerInterface::class);
+        $this->assertInstanceOf(CollectorInterface::class, $logCollector);
+
+        /* @var \Yiisoft\Yii\Debug\Collector\LogCollector $logCollector */
+        $logCollector->setTarget($target);
+
+        return $logCollector;
     }
 }
