@@ -14,5 +14,14 @@ return [
             $container->get(Yiisoft\EventDispatcher\Dispatcher::class)
         );
     },
+    \Psr\EventDispatcher\ListenerProviderInterface::class => function (\Psr\Container\ContainerInterface $container) {
+//        $provider = new \Yiisoft\EventDispatcher\Provider\Provider();
 
+        $collector = new \Yiisoft\Yii\Debug\Collector\RequestCollector(
+            $container->get(\Yiisoft\Yii\Debug\Target\TargetInterface::class),
+            $container->get(\Yiisoft\EventDispatcher\Provider\Provider::class)
+        );
+
+        return $collector;
+    },
 ];
