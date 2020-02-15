@@ -2,29 +2,29 @@
 
 namespace Yiisoft\Yii\Debug\Tests;
 
-use yii\base\Event;
-use yii\tests\TestCase;
-use yii\view\Theme;
-use yii\view\View;
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Cache\Cache;
-use Yiisoft\Cache\FileCache;
+use Yiisoft\Log\Logger;
 use Yiisoft\Yii\Debug\Module;
 
 class ModuleTest extends TestCase
 {
-    protected function setUp()
+    /**
+     * @dataProvider dataProviderCheckAccess
+     *
+     * @param array $allowedIPs
+     * @param string $userIp
+     * @param bool $expectedResult
+     */
+    public function testCheckAccess(array $allowedIPs, $userIp, $expectedResult)
     {
-        parent::setUp();
-        $this->mockWebApplication();
+        $module = new Module('debug', $this->app);
+        $module->allowedIPs = $allowedIPs;
+        $_SERVER['REMOTE_ADDR'] = $userIp;
+        $this->assertEquals($expectedResult, $this->invokeMethod($module, 'checkAccess'));
     }
 
-    // Tests :
-
-    /**
-     * Data provider for [[testCheckAccess()]]
-     * @return array test data
-     */
-    public function dataProviderCheckAccess()
+    public function dataProviderCheckAccess(): array
     {
         return [
             [
@@ -56,26 +56,11 @@ class ModuleTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderCheckAccess
-     *
-     * @param array $allowedIPs
-     * @param string $userIp
-     * @param bool $expectedResult
-     */
-    public function testCheckAccess(array $allowedIPs, $userIp, $expectedResult)
-    {
-        $module = new Module('debug', $this->app);
-        $module->allowedIPs = $allowedIPs;
-        $_SERVER['REMOTE_ADDR'] = $userIp;
-        $this->assertEquals($expectedResult, $this->invokeMethod($module, 'checkAccess'));
-    }
-
-    /**
      * Test to verify toolbars html
      */
     public function testGetToolbarHtml()
     {
-        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
+        $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
@@ -95,7 +80,7 @@ HTML
      */
     public function testNonCachedToolbarHtml()
     {
-        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
+        $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
@@ -132,7 +117,7 @@ HTML
      */
     public function testToolbarWithCustomModuleID()
     {
-        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
+        $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
