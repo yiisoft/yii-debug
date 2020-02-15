@@ -9,17 +9,19 @@ class EventCollector implements CollectorInterface, EventDispatcherInterface
 {
     private array $events = [];
 
-    private TargetInterface $target;
+    private ?TargetInterface $target = null;
     private EventDispatcherInterface $dispatcher;
 
-    public function __construct(TargetInterface $target, EventDispatcherInterface $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
-        $this->target = $target;
         $this->dispatcher = $dispatcher;
     }
 
     public function export(): void
     {
+        if ($this->target === null) {
+            throw new \RuntimeException('$target can not be null');
+        }
         $this->target->add($this->events);
     }
 

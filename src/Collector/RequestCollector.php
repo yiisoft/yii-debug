@@ -15,19 +15,21 @@ class RequestCollector implements CollectorInterface, MiddlewareInterface, Liste
 {
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
-    private TargetInterface $target;
+    private ?TargetInterface $target = null;
     private ListenerProviderInterface $listenerProvider;
     private float $start = 0;
     private float $stop = 0;
 
-    public function __construct(TargetInterface $target, ListenerProviderInterface $listenerProvider)
+    public function __construct(ListenerProviderInterface $listenerProvider)
     {
-        $this->target = $target;
         $this->listenerProvider = $listenerProvider;
     }
 
     public function export(): void
     {
+        if ($this->target === null) {
+            throw new \RuntimeException('$target can not be null');
+        }
         $this->target->add($this->request, $this->response, $this->stop - $this->start);
     }
 
