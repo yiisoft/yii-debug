@@ -26,4 +26,9 @@ class DummyCollector implements CollectorInterface
             'object' => new \stdClass(),
         ];
     }
+
+    public function setTarget(TargetInterface $target): void
+    {
+        $this->target = $target;
+    }
 }
