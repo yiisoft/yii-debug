@@ -15,19 +15,26 @@ class RequestCollectorTest extends AbstractCollectorTestCase
     {
         $dispatcher = $this->container->get(EventDispatcherInterface::class);
         $dispatcher->dispatch(new RequestStartedEvent());
-        sleep(1);
+        usleep(123_000);
         $dispatcher->dispatch(new RequestEndEvent());
     }
 
     protected function getCollector(TargetInterface $target): CollectorInterface
     {
         // Container should return EventDispatcher that implements CollectorInterface.
-        $dispatcher = $this->container->get(ListenerProviderInterface::class);
-        $this->assertInstanceOf(CollectorInterface::class, $dispatcher);
+        $provider = $this->container->get(ListenerProviderInterface::class);
+        $this->assertInstanceOf(CollectorInterface::class, $provider);
 
-        /* @var \Yiisoft\Yii\Debug\Collector\CollectorInterface $dispatcher */
-        $dispatcher->setTarget($target);
+        /* @var \Yiisoft\Yii\Debug\Collector\CollectorInterface $provider */
+        $provider->setTarget($target);
 
-        return $dispatcher;
+        return $provider;
+    }
+
+    protected function assertExportedData(TargetInterface $target): void
+    {
+        parent::assertExportedData($target);
+        $data = $target->getData();
+        $this->assertGreaterThan(0.123, $data[2]);
     }
 }
