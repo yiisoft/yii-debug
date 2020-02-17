@@ -18,14 +18,16 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class Debug
 {
-    public static function init(ContainerInterface &$container): void
+    public static function init(ContainerInterface $container): ContainerInterface
     {
         $definitions = self::getDefinitions($container);
         $debugContainer = new Container($definitions);
 
-        $container = new CompositeContainer();
-        $container->attach($debugContainer);
-        $container->attach($container);
+        $newContainer = new CompositeContainer();
+        $newContainer->attach($debugContainer);
+        $newContainer->attach($newContainer);
+
+        return $newContainer;
     }
 
     private static function getDefinitions(ContainerInterface $originContainer): array
