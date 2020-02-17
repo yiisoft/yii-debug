@@ -25,7 +25,7 @@ class Debug
 
         $newContainer = new CompositeContainer();
         $newContainer->attach($debugContainer);
-        $newContainer->attach($newContainer);
+        $newContainer->attach($container);
 
         return $newContainer;
     }
