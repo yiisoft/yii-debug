@@ -240,10 +240,6 @@ class Module
             }
         }
 
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
         // do not display debug toolbar when in debug view mode
         $this->app->getView()->off(BodyEvent::END, [$this, 'renderToolbar']);
         $this->app->getResponse()->off(Response::EVENT_AFTER_PREPARE, [$this, 'setDebugHeaders']);
@@ -394,7 +390,7 @@ class Module
         if (isset($this->app->extensions[$extensionName])) {
             return $this->app->extensions[$extensionName]['version'];
         }
-        return parent::defaultVersion();
+        return 'parent::defaultVersion()';
     }
 
     /**

@@ -53,8 +53,6 @@
             "dev-master": "3.0.x-dev"
         },
         "config-plugin": {
-            "params": "config/params.php",
-            "web": "config/web.php",
             "tests": "config/tests.php"
         }
     },

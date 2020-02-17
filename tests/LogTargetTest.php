@@ -2,15 +2,16 @@
 
 namespace Yiisoft\Yii\Debug\Tests;
 
-use yii\tests\TestCase;
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Log\Logger;
 use Yiisoft\Yii\Debug\LogTarget;
 use Yiisoft\Yii\Debug\Module;
 
 class LogTargetTest extends TestCase
 {
-    public function testGetRequestTime()
+    public function testGetRequestTime(): void
     {
-        $logger = $this->getMockBuilder(\Yiisoft\Log\Logger::class)
+        $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
             ->setMethods(['dispatch'])
             ->getMock();
@@ -24,11 +25,5 @@ class LogTargetTest extends TestCase
         $logTarget = new LogTarget($module);
         $data = $this->invokeMethod($logTarget, 'collectSummary');
         self::assertSame($_SERVER['REQUEST_TIME_FLOAT'], $data['time']);
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->mockWebApplication();
     }
 }
