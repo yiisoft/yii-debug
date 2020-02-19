@@ -18,7 +18,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "yiisoft/yii-dataview": "^3.0@dev",
         "yiisoft/arrays": "^3.0@dev",
         "yiisoft/strings": "^3.0@dev",
         "yiisoft/profiler": "dev-master",
