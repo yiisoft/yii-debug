@@ -18,12 +18,13 @@ class Debug
 {
     public static function init(ContainerInterface $container): ContainerInterface
     {
+        $compositeContainer = new CompositeContainer();
+
         $definitions = self::getDefinitions($container);
         // extending only for debugging that to have difference between original container and debug container
         $debugContainer = new class($definitions) extends Container{};
         $debugContainer->set(ContainerInterface::class, fn($c) => $compositeContainer);
 
-        $compositeContainer = new CompositeContainer();
         $compositeContainer->attach($container);
         $compositeContainer->attach($debugContainer);
 
