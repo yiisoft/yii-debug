@@ -8,8 +8,6 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Di\CompositeContainer;
 use Yiisoft\Di\Container;
-use Yiisoft\EventDispatcher\Dispatcher;
-use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
@@ -21,13 +19,15 @@ class Debug
     public static function init(ContainerInterface $container): ContainerInterface
     {
         $definitions = self::getDefinitions($container);
-        $debugContainer = new Container($definitions);
+        // extending only for debugging that to have difference between original container and debug container
+        $debugContainer = new class($definitions) extends Container{};
+        $debugContainer->set(ContainerInterface::class, fn($c) => $compositeContainer);
 
-        $newContainer = new CompositeContainer();
-        $newContainer->attach($debugContainer);
-        $newContainer->attach($container);
+        $compositeContainer = new CompositeContainer();
+        $compositeContainer->attach($container);
+        $compositeContainer->attach($debugContainer);
 
-        return $newContainer;
+        return $compositeContainer;
     }
 
     private static function getDefinitions(ContainerInterface $originContainer): array
