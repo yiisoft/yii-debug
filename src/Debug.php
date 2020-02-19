@@ -38,10 +38,10 @@ class Debug
                 return new LogCollector($originContainer->get(LoggerInterface::class));
             },
             EventDispatcherInterface::class => function () use ($originContainer) {
-                return new EventCollector($originContainer->get(Dispatcher::class));
+                return new EventCollector($originContainer->get(EventDispatcherInterface::class));
             },
             ListenerProviderInterface::class => function () use ($originContainer) {
-                return new RequestCollector($originContainer->get(Provider::class));
+                return new RequestCollector($originContainer->get(ListenerProviderInterface::class));
             },
         ];
     }
