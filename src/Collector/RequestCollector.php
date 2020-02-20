@@ -43,10 +43,12 @@ class RequestCollector implements CollectorInterface, MiddlewareInterface, Liste
 
     public function getListenersForEvent(object $event): iterable
     {
-        if ($event instanceof RequestStartedEvent) {
-            $this->start = microtime(true);
-        } elseif ($event instanceof RequestEndEvent) {
-            $this->stop = microtime(true);
+        if ($this->isActive()) {
+            if ($event instanceof RequestStartedEvent) {
+                $this->start = microtime(true);
+            } elseif ($event instanceof RequestEndEvent) {
+                $this->stop = microtime(true);
+            }
         }
 
         yield from $this->listenerProvider->getListenersForEvent($event);

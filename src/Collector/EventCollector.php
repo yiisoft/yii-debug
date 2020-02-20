@@ -24,7 +24,9 @@ class EventCollector implements CollectorInterface, EventDispatcherInterface
 
     public function dispatch(object $event)
     {
-        $this->collectEvent($event);
+        if ($this->isActive()) {
+            $this->collectEvent($event);
+        }
 
         return $this->dispatcher->dispatch($event);
     }
