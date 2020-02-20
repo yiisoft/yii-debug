@@ -9,7 +9,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Yiisoft\Yii\Debug\Event\RequestEndEvent;
 use Yiisoft\Yii\Debug\Event\RequestStartedEvent;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class RequestCollector implements CollectorInterface, MiddlewareInterface, ListenerProviderInterface
 {
@@ -17,7 +16,6 @@ class RequestCollector implements CollectorInterface, MiddlewareInterface, Liste
 
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
-    private ?TargetInterface $target = null;
     private ListenerProviderInterface $listenerProvider;
     private float $start = 0;
     private float $stop = 0;
@@ -33,11 +31,6 @@ class RequestCollector implements CollectorInterface, MiddlewareInterface, Liste
             throw new \RuntimeException('$target can not be null');
         }
         $this->target->add($this->request, $this->response, $this->stop - $this->start);
-    }
-
-    public function setTarget(TargetInterface $target): void
-    {
-        $this->target = $target;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

@@ -4,7 +4,6 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class LogCollector implements CollectorInterface, LoggerInterface
 {
@@ -12,7 +11,6 @@ class LogCollector implements CollectorInterface, LoggerInterface
 
     private LoggerInterface $logger;
     private array $messages = [];
-    private ?TargetInterface $target = null;
 
     public function __construct(LoggerInterface $logger)
     {
@@ -25,11 +23,6 @@ class LogCollector implements CollectorInterface, LoggerInterface
             throw new \RuntimeException('$target can not be null');
         }
         $this->target->add($this->messages);
-    }
-
-    public function setTarget(TargetInterface $target): void
-    {
-        $this->target = $target;
     }
 
     public function emergency($message, array $context = [])

@@ -8,8 +8,6 @@ class DummyCollector implements CollectorInterface
 {
     use CollectorTrait;
 
-    private TargetInterface $target;
-
     public function __construct(TargetInterface $target)
     {
         $this->target = $target;
@@ -27,10 +25,5 @@ class DummyCollector implements CollectorInterface
             'str' => 'asdas',
             'object' => new \stdClass(),
         ];
-    }
-
-    public function setTarget(TargetInterface $target): void
-    {
-        $this->target = $target;
     }
 }

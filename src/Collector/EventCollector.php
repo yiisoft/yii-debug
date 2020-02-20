@@ -3,7 +3,6 @@
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class EventCollector implements CollectorInterface, EventDispatcherInterface
 {
@@ -11,7 +10,6 @@ class EventCollector implements CollectorInterface, EventDispatcherInterface
 
     private array $events = [];
 
-    private ?TargetInterface $target = null;
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(EventDispatcherInterface $dispatcher)
@@ -25,11 +23,6 @@ class EventCollector implements CollectorInterface, EventDispatcherInterface
             throw new \RuntimeException('$target can not be null');
         }
         $this->target->add($this->events);
-    }
-
-    public function setTarget(TargetInterface $target): void
-    {
-        $this->target = $target;
     }
 
     public function dispatch(object $event)
