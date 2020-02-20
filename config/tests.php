@@ -13,12 +13,8 @@ return [
         );
     },
     \Psr\EventDispatcher\ListenerProviderInterface::class => function (\Psr\Container\ContainerInterface $container) {
-//        $provider = new \Yiisoft\EventDispatcher\Provider\Provider();
-
-        $collector = new \Yiisoft\Yii\Debug\Collector\RequestCollector(
+        return new \Yiisoft\Yii\Debug\Collector\RequestCollector(
             $container->get(\Yiisoft\EventDispatcher\Provider\Provider::class)
         );
-
-        return $collector;
     },
 ];
