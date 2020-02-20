@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
+use Yiisoft\Aliases\Aliases;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\Contracts\ServiceProviderInterface;
 use Yiisoft\EventDispatcher\Dispatcher;
@@ -13,7 +14,7 @@ use Yiisoft\EventDispatcher\Provider\Aggregate;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
-use Yiisoft\Yii\Debug\Target\MemTarget;
+use Yiisoft\Yii\Debug\Target\FileTarget;
 use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class DebugServiceProvider implements ServiceProviderInterface
@@ -26,40 +27,37 @@ class DebugServiceProvider implements ServiceProviderInterface
 
         $container->setMultiple(
             [
-                TargetInterface::class => MemTarget::class,
-                LoggerInterface::class => function (ContainerInterface $container) use ($logger) {
-                    $collector = new LogCollector($logger);
-                    $collector->setTarget($container->get(TargetInterface::class));
+                TargetInterface::class => function (ContainerInterface $container) {
+                    $runtime = $container->get(Aliases::class)->get('@runtime');
+                    $id = time();
 
-                    return $collector;
+                    return new FileTarget("$runtime/debug/$id.data");
+                },
+                LoggerInterface::class => function (ContainerInterface $container) use ($logger) {
+                    return new LogCollector($logger);
                 },
                 EventDispatcherInterface::class => function (ContainerInterface $container) use ($dispatcher) {
                     $compositeDispatcher = new CompositeDispatcher();
                     $compositeDispatcher->attach(new Dispatcher($container->get(DebugListenerProvider::class)));
                     $compositeDispatcher->attach($dispatcher);
 
-                    $collector = new EventCollector($compositeDispatcher);
-                    $collector->setTarget($container->get(TargetInterface::class));
-
-                    return $collector;
+                    return new EventCollector($compositeDispatcher);
                 },
                 ListenerProviderInterface::class => function (ContainerInterface $container) use ($listenerProvider) {
                     $provider = new Aggregate();
                     $provider->attach($listenerProvider);
                     $provider->attach($container->get(DebugListenerProvider::class));
 
-                    $collector = new RequestCollector($provider);
-                    $collector->setTarget($container->get(TargetInterface::class));
-
-                    return $collector;
+                    return new RequestCollector($provider);
                 },
                 Debugger::class => function (ContainerInterface $container) {
                     return new Debugger(
+                        $container->get(TargetInterface::class),
                         ...[
-                               $container->get(LoggerInterface::class),
-                               $container->get(EventDispatcherInterface::class),
-                               $container->get(ListenerProviderInterface::class),
-                           ]
+                            $container->get(LoggerInterface::class),
+                            $container->get(EventDispatcherInterface::class),
+                            $container->get(ListenerProviderInterface::class),
+                        ]
                     );
                 },
             ]
