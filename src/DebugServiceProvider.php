@@ -15,20 +15,6 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class DebugServiceProvider implements ServiceProviderInterface
 {
-    public function hasDefinitionFor(string $id): bool
-    {
-        return in_array(
-            $id,
-            [
-                TargetInterface::class,
-                LoggerInterface::class,
-                EventDispatcherInterface::class,
-                ListenerProviderInterface::class,
-            ],
-            true
-        );
-    }
-
     public function register(Container $container): void
     {
         $logger = $container->get(LoggerInterface::class);
