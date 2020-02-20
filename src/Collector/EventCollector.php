@@ -17,12 +17,9 @@ class EventCollector implements CollectorInterface, EventDispatcherInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function export(): void
+    public function collect(): array
     {
-        if ($this->target === null) {
-            throw new \RuntimeException('$target can not be null');
-        }
-        $this->target->add($this->events);
+        return $this->events;
     }
 
     public function dispatch(object $event)
@@ -35,7 +32,7 @@ class EventCollector implements CollectorInterface, EventDispatcherInterface
     private function collectEvent(object $event): void
     {
         $this->events[] = [
-            'event' => $event,
+            'event' => get_class($event),
             'time' => microtime(true),
         ];
     }

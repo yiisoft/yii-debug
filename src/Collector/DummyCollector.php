@@ -2,20 +2,13 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Yiisoft\Yii\Debug\Target\TargetInterface;
-
 class DummyCollector implements CollectorInterface
 {
     use CollectorTrait;
 
-    public function __construct(TargetInterface $target)
+    public function collect(): array
     {
-        $this->target = $target;
-    }
-
-    public function export(): void
-    {
-        $this->target->add($this->getData());
+        return $this->getData();
     }
 
     public function getData()

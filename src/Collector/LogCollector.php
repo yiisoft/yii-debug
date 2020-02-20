@@ -17,12 +17,9 @@ class LogCollector implements CollectorInterface, LoggerInterface
         $this->logger = $logger;
     }
 
-    public function export(): void
+    public function collect(): array
     {
-        if ($this->target === null) {
-            throw new \RuntimeException('$target can not be null');
-        }
-        $this->target->add($this->messages);
+        return $this->messages;
     }
 
     public function emergency($message, array $context = [])

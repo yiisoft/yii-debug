@@ -30,7 +30,7 @@ abstract class AbstractCollectorTestCase extends TestCase
         $collector = $this->getCollector($target);
         $this->assertEmpty($target->getData());
         $this->somethingDoTestExport();
-        $collector->export();
+        $collector->collect();
         $this->assertExportedData($target);
     }
 
