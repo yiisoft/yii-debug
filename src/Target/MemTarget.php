@@ -6,8 +6,10 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 class MemTarget implements TargetInterface
 {
+    /**
+     * @var CollectorInterface[]
+     */
     private array $collectors = [];
-    private array $data = [];
 
     public function persist(CollectorInterface $collector): void
     {
@@ -16,12 +18,16 @@ class MemTarget implements TargetInterface
 
     public function getData(): array
     {
-        return $this->data = [];
+        $data = [];
+
+        foreach ($this->collectors as $collector) {
+            $data[] = $collector->collect();
+        }
+
+        return $data;
     }
 
     public function flush(): void
     {
-        // TODO make export to storage
-        $this->data = [];
     }
 }
