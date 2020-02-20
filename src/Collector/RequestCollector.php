@@ -13,6 +13,8 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class RequestCollector implements CollectorInterface, MiddlewareInterface, ListenerProviderInterface
 {
+    use CollectorTrait;
+
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
     private ?TargetInterface $target = null;

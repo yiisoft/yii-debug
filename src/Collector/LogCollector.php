@@ -8,6 +8,8 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class LogCollector implements CollectorInterface, LoggerInterface
 {
+    use CollectorTrait;
+
     private LoggerInterface $logger;
     private array $messages = [];
     private ?TargetInterface $target = null;

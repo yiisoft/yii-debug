@@ -6,6 +6,8 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class DummyCollector implements CollectorInterface
 {
+    use CollectorTrait;
+
     private TargetInterface $target;
 
     public function __construct(TargetInterface $target)
