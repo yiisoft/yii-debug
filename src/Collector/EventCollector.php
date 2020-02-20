@@ -7,6 +7,8 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class EventCollector implements CollectorInterface, EventDispatcherInterface
 {
+    use CollectorTrait;
+
     private array $events = [];
 
     private ?TargetInterface $target = null;
