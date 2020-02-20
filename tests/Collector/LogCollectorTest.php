@@ -4,7 +4,6 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Psr\Log\LoggerInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class LogCollectorTest extends AbstractCollectorTestCase
 {
@@ -14,14 +13,11 @@ class LogCollectorTest extends AbstractCollectorTestCase
         $logger->alert('test', ['context']);
     }
 
-    protected function getCollector(TargetInterface $target): CollectorInterface
+    protected function getCollector(): CollectorInterface
     {
         // Container should return Logger that implements CollectorInterface.
         $logCollector = $this->container->get(LoggerInterface::class);
         $this->assertInstanceOf(CollectorInterface::class, $logCollector);
-
-        /* @var \Yiisoft\Yii\Debug\Collector\CollectorInterface $logCollector */
-        $logCollector->setTarget($target);
 
         return $logCollector;
     }

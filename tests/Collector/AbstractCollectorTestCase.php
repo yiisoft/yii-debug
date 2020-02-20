@@ -27,11 +27,10 @@ abstract class AbstractCollectorTestCase extends TestCase
      */
     public function testExport(TargetInterface $target): void
     {
-        $collector = $this->getCollector($target);
+        $collector = $this->getCollector();
         $this->assertEmpty($target->getData());
         $this->somethingDoTestExport();
-        $collector->collect();
-        $this->assertExportedData($target);
+        $this->assertExportedData($collector);
     }
 
     public function targetProvider(): array
@@ -41,14 +40,14 @@ abstract class AbstractCollectorTestCase extends TestCase
         ];
     }
 
-    abstract protected function getCollector(TargetInterface $target): CollectorInterface;
+    abstract protected function getCollector(): CollectorInterface;
 
     protected function somethingDoTestExport(): void
     {
     }
 
-    protected function assertExportedData(TargetInterface $target): void
+    protected function assertExportedData(CollectorInterface $collector): void
     {
-        $this->assertNotEmpty($target->getData());
+        $this->assertNotEmpty($collector->collect());
     }
 }
