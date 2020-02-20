@@ -2,6 +2,7 @@
 
 namespace Yiisoft\Yii\Debug\Target;
 
+use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 class FileTarget implements TargetInterface
@@ -31,7 +32,7 @@ class FileTarget implements TargetInterface
 
     public function flush(): void
     {
-        $content = var_export($this->getData(), true);
+        $content = VarDumper::dumpAsString($this->getData());
         if (file_exists($this->path)) {
             $result = file_put_contents($this->path, $content, FILE_APPEND);
         } else {
