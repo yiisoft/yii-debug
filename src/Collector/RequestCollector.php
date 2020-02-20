@@ -25,12 +25,13 @@ class RequestCollector implements CollectorInterface, MiddlewareInterface, Liste
         $this->listenerProvider = $listenerProvider;
     }
 
-    public function export(): void
+    public function collect(): array
     {
-        if ($this->target === null) {
-            throw new \RuntimeException('$target can not be null');
-        }
-        $this->target->add($this->request, $this->response, $this->stop - $this->start);
+        return [
+            $this->request,
+            $this->response,
+            'processing_time' => $this->stop - $this->start,
+        ];
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

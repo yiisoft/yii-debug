@@ -16,7 +16,7 @@ abstract class AbstractTargetTestCase extends TestCase
         $target = $this->getTarget();
 
         $this->assertEquals([], $target->getData());
-        $target->add(...$data);
+        $target->persist(...$data);
         $this->assertEquals($data, $target->getData());
     }
 
@@ -28,7 +28,7 @@ abstract class AbstractTargetTestCase extends TestCase
     {
         $target = $this->getTarget();
 
-        $target->add(...$data);
+        $target->persist(...$data);
         $this->assertEquals($data, $target->getData());
         $target->flush();
         $this->assertEquals([], $target->getData());
