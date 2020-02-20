@@ -7,7 +7,6 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Event\RequestEndEvent;
 use Yiisoft\Yii\Debug\Event\RequestStartedEvent;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class RequestCollectorTest extends AbstractCollectorTestCase
 {
@@ -19,22 +18,20 @@ class RequestCollectorTest extends AbstractCollectorTestCase
         $dispatcher->dispatch(new RequestEndEvent());
     }
 
-    protected function getCollector(TargetInterface $target): CollectorInterface
+    protected function getCollector(): CollectorInterface
     {
         // Container should return EventDispatcher that implements CollectorInterface.
         $provider = $this->container->get(ListenerProviderInterface::class);
         $this->assertInstanceOf(CollectorInterface::class, $provider);
 
-        /* @var \Yiisoft\Yii\Debug\Collector\CollectorInterface $provider */
-        $provider->setTarget($target);
-
         return $provider;
     }
 
-    protected function assertExportedData(TargetInterface $target): void
+    protected function assertExportedData(CollectorInterface $collector): void
     {
-        parent::assertExportedData($target);
-        $data = $target->getData();
-        $this->assertGreaterThan(0.123, $data[2]);
+        parent::assertExportedData($collector);
+        $data = $collector->collect();
+
+        $this->assertGreaterThan(0.123, $data['processing_time']);
     }
 }
