@@ -14,7 +14,7 @@ return [
     },
     \Psr\EventDispatcher\ListenerProviderInterface::class => function (\Psr\Container\ContainerInterface $container) {
         return new \Yiisoft\Yii\Debug\Collector\RequestCollector(
-            $container->get(\Yiisoft\EventDispatcher\Provider\Provider::class)
+            $container->get(\Yiisoft\EventDispatcher\Dispatcher::class)
         );
     },
 ];
