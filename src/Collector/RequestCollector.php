@@ -7,8 +7,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Event\RequestEndEvent;
 use Yiisoft\Yii\Debug\Event\RequestStartedEvent;
+use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
+use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 class RequestCollector implements CollectorInterface, EventDispatcherInterface
 {
@@ -42,9 +44,9 @@ class RequestCollector implements CollectorInterface, EventDispatcherInterface
     public function dispatch(object $event)
     {
         if ($this->isActive()) {
-            if ($event instanceof RequestStartedEvent) {
+            if ($event instanceof BeforeRequest) {
                 $this->requestProcessingTimeStarted = microtime(true);
-            } elseif ($event instanceof RequestEndEvent) {
+            } elseif ($event instanceof AfterRequest) {
                 $this->requestProcessingTimeStopped = microtime(true);
             }
         }
