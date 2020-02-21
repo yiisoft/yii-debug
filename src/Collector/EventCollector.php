@@ -3,6 +3,7 @@
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Yiisoft\Yii\Web\Event\ApplicationStartup;
 
 final class EventCollector implements CollectorInterface, EventDispatcherInterface
 {
@@ -24,7 +25,7 @@ final class EventCollector implements CollectorInterface, EventDispatcherInterfa
 
     public function dispatch(object $event)
     {
-        if ($this->isActive()) {
+        if ($this->isActive() || $event instanceof ApplicationStartup) {
             $this->collectEvent($event);
         }
 
