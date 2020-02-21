@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-class LogCollector implements CollectorInterface, LoggerInterface
+final class LogCollector implements CollectorInterface, LoggerInterface
 {
     use CollectorTrait;
 

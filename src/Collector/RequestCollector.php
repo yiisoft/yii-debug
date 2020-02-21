@@ -8,7 +8,7 @@ use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-class RequestCollector implements CollectorInterface, EventDispatcherInterface
+final class RequestCollector implements CollectorInterface, EventDispatcherInterface
 {
     use CollectorTrait;
 

@@ -6,7 +6,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Web\Event\AfterMiddleware;
 use Yiisoft\Yii\Web\Event\BeforeMiddleware;
 
-class MiddlewareCollector implements CollectorInterface, EventDispatcherInterface
+final class MiddlewareCollector implements CollectorInterface, EventDispatcherInterface
 {
     use CollectorTrait;
 
