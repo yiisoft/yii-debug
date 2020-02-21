@@ -23,8 +23,7 @@ class DebugListenerProvider implements ListenerProviderInterface
             yield function () use ($container) {
                 $container->get(Debugger::class)->startup();
             };
-        }
-        if ($event instanceof ApplicationShutdown) {
+        } elseif ($event instanceof ApplicationShutdown) {
             yield function () use ($container) {
                 $container->get(Debugger::class)->shutdown();
             };
