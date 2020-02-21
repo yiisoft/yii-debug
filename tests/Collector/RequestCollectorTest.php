@@ -2,29 +2,32 @@
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\EventDispatcher\ListenerProviderInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Event\RequestEndEvent;
-use Yiisoft\Yii\Debug\Event\RequestStartedEvent;
+use Yiisoft\Yii\Debug\Collector\RequestCollector;
+use Yiisoft\Yii\Web\Event\AfterRequest;
+use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 class RequestCollectorTest extends AbstractCollectorTestCase
 {
-    protected function somethingDoTestExport(): void
+    /**
+     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|RequestCollector $collector
+     */
+    protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $dispatcher = $this->container->get(EventDispatcherInterface::class);
-        $dispatcher->dispatch(new RequestStartedEvent());
+        $collector->dispatch(new BeforeRequest($this->createMock(ServerRequestInterface::class)));
         usleep(123_000);
-        $dispatcher->dispatch(new RequestEndEvent());
+        $collector->dispatch(new AfterRequest($this->createMock(ResponseInterface::class)));
     }
 
     protected function getCollector(): CollectorInterface
     {
         // Container should return EventDispatcher that implements CollectorInterface.
-        $provider = $this->container->get(ListenerProviderInterface::class);
-        $this->assertInstanceOf(CollectorInterface::class, $provider);
+        $collector = $this->container->get(RequestCollector::class);
+        $this->assertInstanceOf(CollectorInterface::class, $collector);
 
-        return $provider;
+        return $collector;
     }
 
     protected function assertExportedData(CollectorInterface $collector): void
@@ -32,6 +35,6 @@ class RequestCollectorTest extends AbstractCollectorTestCase
         parent::assertExportedData($collector);
         $data = $collector->collect();
 
-        $this->assertGreaterThan(0.123, $data['processing_time']);
+        $this->assertGreaterThan(0.123, $data['request_processing_time']);
     }
 }

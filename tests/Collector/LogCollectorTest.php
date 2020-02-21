@@ -7,10 +7,12 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 class LogCollectorTest extends AbstractCollectorTestCase
 {
-    protected function somethingDoTestExport(): void
+    /**
+     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\LogCollector $collector
+     */
+    protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $logger = $this->container->get(LoggerInterface::class);
-        $logger->alert('test', ['context']);
+        $collector->alert('test', ['context']);
     }
 
     protected function getCollector(): CollectorInterface
