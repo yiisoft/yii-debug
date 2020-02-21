@@ -9,11 +9,12 @@ use Yiisoft\Aliases\Aliases;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\Contracts\ServiceProviderInterface;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
-use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
+use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
+use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
 use Yiisoft\Yii\Debug\Target\FileTarget;
 use Yiisoft\Yii\Debug\Target\TargetInterface;
 
@@ -34,19 +35,17 @@ class DebugServiceProvider implements ServiceProviderInterface
                 },
                 LogCollector::class => fn() => new LogCollector($logger),
                 LoggerInterface::class => LogCollector::class,
-                MiddlewareCollector::class => function () {
-                    return new MiddlewareCollector();
-                },
-                RequestCollector::class => function (ContainerInterface $container) {
-                    return new RequestCollector(
-                        new Dispatcher($container->get(DebugListenerProvider::class))
-                    );
+                MiddlewareCollector::class => fn() => new MiddlewareCollector(),
+                RequestCollector::class => function () {
+                    return new RequestCollector();
                 },
                 EventCollector::class => function (ContainerInterface $container) use ($dispatcher) {
                     $compositeDispatcher = new CompositeDispatcher();
+                    $compositeDispatcher->attach($container->get(DebugStartupDispatcher::class));
                     $compositeDispatcher->attach($container->get(RequestCollector::class));
                     $compositeDispatcher->attach($container->get(MiddlewareCollector::class));
                     $compositeDispatcher->attach($dispatcher);
+                    $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
 
                     return new EventCollector($compositeDispatcher);
                 },
