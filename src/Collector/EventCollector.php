@@ -4,7 +4,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 
-class EventCollector implements CollectorInterface, EventDispatcherInterface
+final class EventCollector implements CollectorInterface, EventDispatcherInterface
 {
     use CollectorTrait;
 
