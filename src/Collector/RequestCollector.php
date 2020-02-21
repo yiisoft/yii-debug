@@ -2,27 +2,29 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Psr\EventDispatcher\ListenerProviderInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Yiisoft\Yii\Debug\Event\RequestEndEvent;
 use Yiisoft\Yii\Debug\Event\RequestStartedEvent;
+use Yiisoft\Yii\Web\Event\ApplicationShutdown;
+use Yiisoft\Yii\Web\Event\ApplicationStartup;
 
-class RequestCollector implements CollectorInterface, MiddlewareInterface, ListenerProviderInterface
+class RequestCollector implements CollectorInterface, EventDispatcherInterface
 {
     use CollectorTrait;
 
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
-    private ListenerProviderInterface $listenerProvider;
-    private float $start = 0;
-    private float $stop = 0;
+    private EventDispatcherInterface $eventDispatcher;
+    private float $applicationProcessingTimeStarted = 0;
+    private float $applicationProcessingTimeStopped = 0;
+    private float $requestProcessingTimeStarted = 0;
+    private float $requestProcessingTimeStopped = 0;
 
-    public function __construct(ListenerProviderInterface $listenerProvider)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        $this->listenerProvider = $listenerProvider;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function collect(): array
@@ -30,27 +32,29 @@ class RequestCollector implements CollectorInterface, MiddlewareInterface, Liste
         return [
             $this->request,
             $this->response,
-            'processing_time' => $this->stop - $this->start,
+            'application_processing_time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
+            'request_processing_time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+            'memory_peak_usage' => memory_get_peak_usage(true),
+            'memory_usage' => memory_get_usage(true),
         ];
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        $this->request = clone $request;
-
-        return $this->response = $handler->handle($request);
-    }
-
-    public function getListenersForEvent(object $event): iterable
+    public function dispatch(object $event)
     {
         if ($this->isActive()) {
             if ($event instanceof RequestStartedEvent) {
-                $this->start = microtime(true);
+                $this->requestProcessingTimeStarted = microtime(true);
             } elseif ($event instanceof RequestEndEvent) {
-                $this->stop = microtime(true);
+                $this->requestProcessingTimeStopped = microtime(true);
             }
         }
 
-        yield from $this->listenerProvider->getListenersForEvent($event);
+        if ($event instanceof ApplicationStartup) {
+            $this->applicationProcessingTimeStarted = microtime(true);
+        } elseif ($event instanceof ApplicationShutdown) {
+            $this->applicationProcessingTimeStopped = microtime(true);
+        }
+
+        return $this->eventDispatcher->dispatch($event);
     }
 }
