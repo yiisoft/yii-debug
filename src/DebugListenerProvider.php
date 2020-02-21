@@ -4,8 +4,8 @@ namespace Yiisoft\Yii\Debug;
 
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
-use Yiisoft\Yii\Debug\Event\ApplicationShutdown;
-use Yiisoft\Yii\Debug\Event\ApplicationStartup;
+use Yiisoft\Yii\Web\Event\ApplicationShutdown;
+use Yiisoft\Yii\Web\Event\ApplicationStartup;
 
 class DebugListenerProvider implements ListenerProviderInterface
 {
@@ -20,12 +20,12 @@ class DebugListenerProvider implements ListenerProviderInterface
     {
         $container = $this->container;
         if ($event instanceof ApplicationStartup) {
-            yield function (ApplicationStartup $event) use ($container) {
+            yield function () use ($container) {
                 $container->get(Debugger::class)->startup();
             };
         }
         if ($event instanceof ApplicationShutdown) {
-            yield function (ApplicationShutdown $event) use ($container) {
+            yield function () use ($container) {
                 $container->get(Debugger::class)->shutdown();
             };
         }
