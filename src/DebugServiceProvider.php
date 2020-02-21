@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\Contracts\ServiceProviderInterface;
-use Yiisoft\EventDispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Aggregate;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
@@ -37,8 +36,8 @@ class DebugServiceProvider implements ServiceProviderInterface
                     return new LogCollector($logger);
                 },
                 EventDispatcherInterface::class => function (ContainerInterface $container) use ($dispatcher) {
-                    $compositeDispatcher = new CompositeDispatcher();
-                    $compositeDispatcher->attach(new Dispatcher($container->get(DebugListenerProvider::class)));
+                    $compositeDispatcher = new \Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher();
+                    $compositeDispatcher->attach(new \Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher($container->get(DebugListenerProvider::class)));
                     $compositeDispatcher->attach($dispatcher);
 
                     return new EventCollector($compositeDispatcher);
