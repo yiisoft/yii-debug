@@ -2,13 +2,12 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-final class RequestCollector implements CollectorInterface, EventDispatcherInterface
+final class RequestCollector implements CollectorInterface
 {
     use CollectorTrait;
 
@@ -27,20 +26,20 @@ final class RequestCollector implements CollectorInterface, EventDispatcherInter
         ];
     }
 
-    public function dispatch(object $event)
+    public function dispatch(object $event): void
     {
-        if ($this->isActive()) {
-            if ($event instanceof BeforeRequest) {
-                $this->requestProcessingTimeStarted = microtime(true);
-            } elseif ($event instanceof AfterRequest) {
-                $this->requestProcessingTimeStopped = microtime(true);
-            } elseif ($event instanceof ApplicationStartup) {
-                $this->applicationProcessingTimeStarted = microtime(true);
-            } elseif ($event instanceof ApplicationShutdown) {
-                $this->applicationProcessingTimeStopped = microtime(true);
-            }
+        if (!$this->isActive()) {
+            return;
         }
 
-        return $event;
+        if ($event instanceof ApplicationStartup) {
+            $this->applicationProcessingTimeStarted = microtime(true);
+        } elseif ($event instanceof BeforeRequest) {
+            $this->requestProcessingTimeStarted = microtime(true);
+        } elseif ($event instanceof AfterRequest) {
+            $this->requestProcessingTimeStopped = microtime(true);
+        } elseif ($event instanceof ApplicationShutdown) {
+            $this->applicationProcessingTimeStopped = microtime(true);
+        }
     }
 }

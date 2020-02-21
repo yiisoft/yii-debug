@@ -2,11 +2,10 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Web\Event\AfterMiddleware;
 use Yiisoft\Yii\Web\Event\BeforeMiddleware;
 
-final class MiddlewareCollector implements CollectorInterface, EventDispatcherInterface
+final class MiddlewareCollector implements CollectorInterface
 {
     use CollectorTrait;
 
@@ -21,7 +20,7 @@ final class MiddlewareCollector implements CollectorInterface, EventDispatcherIn
         ];
     }
 
-    public function dispatch(object $event)
+    public function dispatch(object $event): void
     {
         if ($this->isActive()) {
             if ($event instanceof BeforeMiddleware) {
@@ -40,7 +39,5 @@ final class MiddlewareCollector implements CollectorInterface, EventDispatcherIn
                 ];
             }
         }
-
-        return $event;
     }
 }
