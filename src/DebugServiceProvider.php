@@ -10,8 +10,6 @@ use Yiisoft\Di\Contracts\ServiceProviderInterface;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
-use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
 
@@ -32,8 +30,7 @@ class DebugServiceProvider implements ServiceProviderInterface
                 EventCollector::class => function (ContainerInterface $container) use ($dispatcher) {
                     $compositeDispatcher = new CompositeDispatcher();
                     $compositeDispatcher->attach($container->get(DebugStartupDispatcher::class));
-                    $compositeDispatcher->attach($container->get(RequestCollector::class));
-                    $compositeDispatcher->attach($container->get(MiddlewareCollector::class));
+                    $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));
                     $compositeDispatcher->attach($dispatcher);
                     $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
 
