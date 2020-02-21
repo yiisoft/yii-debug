@@ -7,10 +7,12 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 class EventCollectorTest extends AbstractCollectorTestCase
 {
-    protected function somethingDoTestExport(): void
+    /**
+     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\EventCollector $collector
+     */
+    protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $dispatcher = $this->container->get(EventDispatcherInterface::class);
-        $dispatcher->dispatch(new \stdClass());
+        $collector->dispatch(new \stdClass());
     }
 
     protected function getCollector(): CollectorInterface

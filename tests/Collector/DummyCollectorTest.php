@@ -10,6 +10,11 @@ class DummyCollectorTest extends AbstractCollectorTestCase
     {
         return new DummyCollector();
     }
+
+    protected function somethingDoTestExport(CollectorInterface $collector): void
+    {
+        // pass
+    }
 }
 
 final class DummyCollector implements CollectorInterface

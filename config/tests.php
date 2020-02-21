@@ -1,20 +1,36 @@
 <?php
 
+use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\EventDispatcher\ListenerProviderInterface;
+use Psr\Log\LoggerInterface;
+use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
+use Yiisoft\EventDispatcher\Provider\Provider;
+use Yiisoft\Log\Logger;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Collector\RequestCollector;
+use Yiisoft\Yii\Debug\Target\MemTarget;
+use Yiisoft\Yii\Debug\Target\TargetInterface;
+
 return [
-    \Yiisoft\Yii\Debug\Target\TargetInterface::class => \Yiisoft\Yii\Debug\Target\MemTarget::class,
-    \Psr\Log\LoggerInterface::class => function (\Psr\Container\ContainerInterface $container) {
-        return new \Yiisoft\Yii\Debug\Collector\LogCollector(
-            $container->get(\Yiisoft\Log\Logger::class)
+    TargetInterface::class => MemTarget::class,
+    LoggerInterface::class => function (ContainerInterface $container) {
+        return new LogCollector(
+            $container->get(Logger::class)
         );
     },
-    \Psr\EventDispatcher\EventDispatcherInterface::class => function (\Psr\Container\ContainerInterface $container) {
-        return new \Yiisoft\Yii\Debug\Collector\EventCollector(
-            $container->get(Yiisoft\EventDispatcher\Dispatcher::class)
+    EventDispatcherInterface::class => function (ContainerInterface $container) {
+        return new EventCollector(
+            $container->get(Dispatcher::class)
         );
     },
-    \Psr\EventDispatcher\ListenerProviderInterface::class => function (\Psr\Container\ContainerInterface $container) {
-        return new \Yiisoft\Yii\Debug\Collector\RequestCollector(
-            $container->get(\Yiisoft\EventDispatcher\Dispatcher::class)
+    ListenerProviderInterface::class => function (ContainerInterface $container) {
+        return new RequestCollector(
+            $container->get(Dispatcher::class)
         );
+    },
+    Dispatcher::class => function () {
+        return new Yiisoft\EventDispatcher\Dispatcher\Dispatcher(new Provider());
     },
 ];
