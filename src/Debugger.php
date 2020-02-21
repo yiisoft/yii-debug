@@ -2,7 +2,6 @@
 
 namespace Yiisoft\Yii\Debug;
 
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class Debugger
@@ -13,7 +12,7 @@ class Debugger
     private array $collectors;
     private TargetInterface $target;
 
-    public function __construct(TargetInterface $target, CollectorInterface ...$collectors)
+    public function __construct(TargetInterface $target, array $collectors)
     {
         $this->collectors = $collectors;
         $this->target = $target;

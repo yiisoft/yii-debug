@@ -50,15 +50,6 @@ class DebugServiceProvider implements ServiceProviderInterface
                     return new EventCollector($compositeDispatcher);
                 },
                 EventDispatcherInterface::class => EventCollector::class,
-                Debugger::class => function (ContainerInterface $container) {
-                    return new Debugger(
-                        $container->get(TargetInterface::class),
-                        $container->get(LogCollector::class),
-                        $container->get(EventCollector::class),
-                        $container->get(RequestCollector::class),
-                        $container->get(MiddlewareCollector::class),
-                    );
-                },
             ]
         );
     }
