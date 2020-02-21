@@ -54,7 +54,7 @@
         "config-plugin": {
             "tests": "config/tests.php",
             "params": "config/params.php",
-            "web": "config/web.php"
+            "common": "config/common.php"
         }
     },
     "repositories": [
