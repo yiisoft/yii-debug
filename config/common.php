@@ -28,7 +28,7 @@ return [
         return new Debugger(
             $container->get(TargetInterface::class),
             array_map(
-                fn($class) => $container->get($class),
+                fn ($class) => $container->get($class),
                 $params['debugger.collectors']
             )
         );
