@@ -1,6 +1,6 @@
 <?php
 
-namespace Yiisoft\Yii\Debug\Collector\Proxy;
+namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
