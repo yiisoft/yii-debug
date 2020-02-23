@@ -2,8 +2,8 @@
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
 
 class EventCollectorTest extends AbstractCollectorTestCase
 {
@@ -17,10 +17,6 @@ class EventCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        // Container should return EventDispatcher that implements CollectorInterface.
-        $dispatcher = $this->container->get(EventDispatcherInterface::class);
-        $this->assertInstanceOf(CollectorInterface::class, $dispatcher);
-
-        return $dispatcher;
+        return new EventCollector();
     }
 }

@@ -23,11 +23,7 @@ class RequestCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        // Container should return EventDispatcher that implements CollectorInterface.
-        $collector = $this->container->get(RequestCollector::class);
-        $this->assertInstanceOf(CollectorInterface::class, $collector);
-
-        return $collector;
+        return new RequestCollector();
     }
 
     protected function assertExportedData(CollectorInterface $collector): void

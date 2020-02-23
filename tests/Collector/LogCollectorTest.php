@@ -2,9 +2,9 @@
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
 
 class LogCollectorTest extends AbstractCollectorTestCase
 {
@@ -18,10 +18,6 @@ class LogCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        // Container should return Logger that implements CollectorInterface.
-        $logCollector = $this->container->get(LoggerInterface::class);
-        $this->assertInstanceOf(CollectorInterface::class, $logCollector);
-
-        return $logCollector;
+        return new LogCollector();
     }
 }
