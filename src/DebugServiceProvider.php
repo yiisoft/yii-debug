@@ -37,9 +37,6 @@ class DebugServiceProvider implements ServiceProviderInterface
 
                     return new EventDispatcherProxy($compositeDispatcher, $container->get(EventCollector::class));
                 },
-                // collectors initialization
-                LogCollector::class => fn() => new LogCollector(),
-                EventCollector::class => fn() => new EventCollector(),
             ]
         );
     }
