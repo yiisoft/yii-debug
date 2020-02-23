@@ -10,10 +10,10 @@ use Yiisoft\Di\Contracts\ServiceProviderInterface;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\Proxy\EventDispatcherProxy;
-use Yiisoft\Yii\Debug\Collector\Proxy\LoggerProxy;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
+use Yiisoft\Yii\Debug\Proxy\EventDispatcherProxy;
+use Yiisoft\Yii\Debug\Proxy\LoggerProxy;
 
 class DebugServiceProvider implements ServiceProviderInterface
 {
