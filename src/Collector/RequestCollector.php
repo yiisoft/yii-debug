@@ -26,9 +26,10 @@ final class RequestCollector implements CollectorInterface
         ];
     }
 
-    public function dispatch(object $event): void
+    public function dispatch(...$payload): void
     {
-        if (!$this->isActive()) {
+        $event = current($payload);
+        if (!is_object($event) || !$this->isActive()) {
             return;
         }
 

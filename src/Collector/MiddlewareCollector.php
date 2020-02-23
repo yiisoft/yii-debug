@@ -20,24 +20,27 @@ final class MiddlewareCollector implements CollectorInterface
         ];
     }
 
-    public function dispatch(object $event): void
+    public function dispatch(...$payload): void
     {
-        if ($this->isActive()) {
-            if ($event instanceof BeforeMiddleware) {
-                $this->beforeStack[] = [
-                    'name' => get_class($event->getMiddleware()),
-                    'time' => microtime(true),
-                    'memory' => memory_get_usage(true),
-                    'request' => $event->getRequest(),
-                ];
-            } elseif ($event instanceof AfterMiddleware) {
-                $this->afterStack[] = [
-                    'name' => get_class($event->getMiddleware()),
-                    'time' => microtime(true),
-                    'memory' => memory_get_usage(true),
-                    'response' => $event->getResponse(),
-                ];
-            }
+        $event = current($payload);
+        if (!is_object($event) || !$this->isActive()) {
+            return;
+        }
+
+        if ($event instanceof BeforeMiddleware) {
+            $this->beforeStack[] = [
+                'name' => get_class($event->getMiddleware()),
+                'time' => microtime(true),
+                'memory' => memory_get_usage(true),
+                'request' => $event->getRequest(),
+            ];
+        } elseif ($event instanceof AfterMiddleware) {
+            $this->afterStack[] = [
+                'name' => get_class($event->getMiddleware()),
+                'time' => microtime(true),
+                'memory' => memory_get_usage(true),
+                'response' => $event->getResponse(),
+            ];
         }
     }
 }

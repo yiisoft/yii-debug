@@ -3,6 +3,7 @@
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 class LogCollectorTest extends AbstractCollectorTestCase
@@ -12,7 +13,7 @@ class LogCollectorTest extends AbstractCollectorTestCase
      */
     protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $collector->alert('test', ['context']);
+        $collector->dispatch(LogLevel::ALERT, 'test', ['context']);
     }
 
     protected function getCollector(): CollectorInterface

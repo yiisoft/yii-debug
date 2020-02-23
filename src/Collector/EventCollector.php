@@ -2,34 +2,27 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
 
-final class EventCollector implements CollectorInterface, EventDispatcherInterface
+final class EventCollector implements CollectorInterface
 {
     use CollectorTrait;
 
     private array $events = [];
-
-    private EventDispatcherInterface $dispatcher;
-
-    public function __construct(EventDispatcherInterface $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-    }
 
     public function collect(): array
     {
         return $this->events;
     }
 
-    public function dispatch(object $event)
+    public function dispatch(...$payload): void
     {
-        if ($this->isActive() || $event instanceof ApplicationStartup) {
-            $this->collectEvent($event);
+        $event = current($payload);
+        if (!is_object($event) || (!$this->isActive() && !$event instanceof ApplicationStartup)) {
+            return;
         }
 
-        return $this->dispatcher->dispatch($event);
+        $this->collectEvent($event);
     }
 
     private function collectEvent(object $event): void
