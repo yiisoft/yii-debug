@@ -8,31 +8,21 @@ class DummyCollectorTest extends AbstractCollectorTestCase
 {
     protected function getCollector(): CollectorInterface
     {
-        return new DummyCollector();
+        $collector = $this->createMock(CollectorInterface::class);
+        $collector->method('collect')
+            ->willReturn(
+                [
+                    'int' => 123,
+                    'str' => 'asdas',
+                    'object' => new \stdClass(),
+                ]
+            );
+
+        return $collector;
     }
 
     protected function somethingDoTestExport(CollectorInterface $collector): void
     {
         // pass
-    }
-}
-
-final class DummyCollector implements CollectorInterface
-{
-    public function collect(): array
-    {
-        return [
-            'int' => 123,
-            'str' => 'asdas',
-            'object' => new \stdClass(),
-        ];
-    }
-
-    public function startup(): void
-    {
-    }
-
-    public function shutdown(): void
-    {
     }
 }

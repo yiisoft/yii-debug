@@ -9,4 +9,6 @@ interface CollectorInterface
     public function shutdown(): void;
 
     public function collect(): array;
+
+    public function dispatch(...$payload): void;
 }
