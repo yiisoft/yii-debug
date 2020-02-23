@@ -6,6 +6,7 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
 
 class Debugger
 {
+    private string $id;
     /**
      * @var \Yiisoft\Yii\Debug\Collector\CollectorInterface[]
      */
@@ -16,6 +17,12 @@ class Debugger
     {
         $this->collectors = $collectors;
         $this->target = $target;
+        $this->id = uniqid('yii-debug-', true);
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function startup(): void
