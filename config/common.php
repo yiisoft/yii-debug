@@ -13,6 +13,10 @@ use Yiisoft\Yii\Debug\Target\TargetInterface;
  * @var $params array
  */
 
+if (!(bool)($params['debugger.enabled'] ?? false)) {
+    return [];
+}
+
 return [
     TargetInterface::class => function (ContainerInterface $container) {
         $runtime = $container->get(Aliases::class)->get('@runtime');
