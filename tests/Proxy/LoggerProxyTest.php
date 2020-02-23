@@ -10,6 +10,12 @@ use Yiisoft\Yii\Debug\Proxy\LoggerProxy;
 
 class LoggerProxyTest extends TestCase
 {
+    public function testImplementInterface(): void
+    {
+        $interfaces = class_implements(LoggerProxy::class);
+        $this->assertContains(LoggerInterface::class, $interfaces);
+    }
+
     /**
      * @dataProvider logMethodsProvider()
      */
