@@ -8,7 +8,6 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 class FileStorage implements StorageInterface
 {
     private array $collectors = [];
-    private array $data = [];
     private string $path;
 
     public function __construct(string $path)
@@ -23,11 +22,12 @@ class FileStorage implements StorageInterface
 
     public function getData(): array
     {
+        $data = [];
         foreach ($this->collectors as $collector) {
-            $this->data[get_class($collector)] = $collector->collect();
+            $data[get_class($collector)] = $collector->collect();
         }
 
-        return $this->data;
+        return $data;
     }
 
     public function flush(): void
