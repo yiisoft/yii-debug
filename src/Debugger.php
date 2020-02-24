@@ -4,7 +4,7 @@ namespace Yiisoft\Yii\Debug;
 
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-class Debugger
+final class Debugger
 {
     private string $id;
     /**
