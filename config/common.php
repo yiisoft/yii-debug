@@ -6,8 +6,8 @@ use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
 use Yiisoft\Yii\Debug\DebugEventDispatcher;
 use Yiisoft\Yii\Debug\Debugger;
-use Yiisoft\Yii\Debug\Target\FileTarget;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
+use Yiisoft\Yii\Debug\Storage\FileStorage;
+use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 /**
  * @var $params array
@@ -18,15 +18,15 @@ if (!(bool)($params['debugger.enabled'] ?? false)) {
 }
 
 return [
-    TargetInterface::class => function (ContainerInterface $container) {
+    StorageInterface::class => function (ContainerInterface $container) {
         $runtime = $container->get(Aliases::class)->get('@runtime');
         $id = time();
 
-        return new FileTarget("$runtime/debug/$id.data");
+        return new FileStorage("$runtime/debug/$id.data");
     },
     Debugger::class => function (ContainerInterface $container) use ($params) {
         return new Debugger(
-            $container->get(TargetInterface::class),
+            $container->get(StorageInterface::class),
             array_map(
                 fn ($class) => $container->get($class),
                 $params['debugger.collectors']
