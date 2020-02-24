@@ -70,14 +70,11 @@ class FlattenExceptionTest extends TestCase
 
     public function testClass(): void
     {
-        $this->assertEquals((new FlattenException(new \Exception()))->getClass(), 'Exception');
+        $this->assertEquals('Exception', (new FlattenException(new \Exception()))->getClass());
     }
 
     public function testArguments(): void
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('HHVM skip');
-        }
         $dh = opendir(__DIR__);
         $fh = tmpfile();
 
@@ -85,7 +82,7 @@ class FlattenExceptionTest extends TestCase
 
         $exception = $this->createException([
             (object)['foo' => 1],
-            new NotFoundHttpException(),
+            new \RuntimeException('test'),
             $incomplete,
             $dh,
             $fh,
@@ -114,7 +111,7 @@ class FlattenExceptionTest extends TestCase
 
         $i = 0;
         $this->assertSame(['object', 'stdClass'], $array[$i++]);
-        $this->assertSame(['object', 'yii\web\NotFoundHttpException'], $array[$i++]);
+        $this->assertSame(['object', 'RuntimeException'], $array[$i++]);
         $this->assertSame(['incomplete-object', 'BogusTestClass'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
@@ -135,7 +132,7 @@ class FlattenExceptionTest extends TestCase
         $this->assertSame(['float', INF], $array[$i++]);
 
         // assertEquals() does not like NAN values.
-        $this->assertEquals($array[$i][0], 'float');
+        $this->assertEquals('float', $array[$i][0]);
         $this->assertTrue(is_nan($array[$i++][1]));
     }
 
@@ -146,7 +143,7 @@ class FlattenExceptionTest extends TestCase
         });
 
         $flattened = new FlattenException($exception);
-        $this->assertContains('Closure', serialize($flattened));
+        $this->assertStringContainsString('Closure', serialize($flattened));
     }
 
     public function testRecursionInArguments(): void
@@ -157,7 +154,7 @@ class FlattenExceptionTest extends TestCase
 
         $flattened = new FlattenException($exception);
         $trace = $flattened->getTrace();
-        $this->assertContains('*DEEP NESTED ARRAY*', serialize($trace));
+        $this->assertStringContainsString('*DEEP NESTED ARRAY*', serialize($trace));
     }
 
     public function testTooBigArray(): void
@@ -181,11 +178,11 @@ class FlattenExceptionTest extends TestCase
 
         $serializeTrace = serialize($trace);
 
-        $this->assertContains('*SKIPPED over 10000 entries*', $serializeTrace);
-        $this->assertNotContains('*value1*', $serializeTrace);
+        $this->assertStringContainsString('*SKIPPED over 10000 entries*', $serializeTrace);
+        $this->assertStringNotContainsString('*value1*', $serializeTrace);
     }
 
-    private function createException($foo)
+    private function createException($foo): \Exception
     {
         return new \Exception();
     }
