@@ -1,8 +1,8 @@
 <?php
 
-use Yiisoft\Yii\Debug\Target\MemTarget;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
+use Yiisoft\Yii\Debug\Storage\MemStorage;
+use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 return [
-    TargetInterface::class => MemTarget::class,
+    StorageInterface::class => MemStorage::class,
 ];

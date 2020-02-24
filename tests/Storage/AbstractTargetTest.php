@@ -1,10 +1,10 @@
 <?php
 
-namespace Yiisoft\Yii\Debug\Tests\Target;
+namespace Yiisoft\Yii\Debug\Tests\Storage;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Target\TargetInterface;
+use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 abstract class AbstractTargetTest extends TestCase
 {
@@ -40,7 +40,7 @@ abstract class AbstractTargetTest extends TestCase
         $this->assertEquals([], $target->getData());
     }
 
-    abstract public function getTarget(): TargetInterface;
+    abstract public function getTarget(): StorageInterface;
 
     public function dataProvider(): array
     {

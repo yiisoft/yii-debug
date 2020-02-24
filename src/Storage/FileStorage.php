@@ -1,11 +1,11 @@
 <?php
 
-namespace Yiisoft\Yii\Debug\Target;
+namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-class FileTarget implements TargetInterface
+class FileStorage implements StorageInterface
 {
     private array $collectors = [];
     private array $data = [];
