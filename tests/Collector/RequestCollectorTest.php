@@ -14,7 +14,7 @@ class RequestCollectorTest extends AbstractCollectorTestCase
     /**
      * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|RequestCollector $collector
      */
-    protected function somethingDoTestExport(CollectorInterface $collector): void
+    protected function collectTestData(CollectorInterface $collector): void
     {
         $collector->collect(new BeforeRequest($this->createMock(ServerRequestInterface::class)));
         usleep(123_000);
@@ -26,9 +26,9 @@ class RequestCollectorTest extends AbstractCollectorTestCase
         return new RequestCollector();
     }
 
-    protected function assertExportedData(CollectorInterface $collector): void
+    protected function checkCollectedData(CollectorInterface $collector): void
     {
-        parent::assertExportedData($collector);
+        parent::checkCollectedData($collector);
         $data = $collector->collected();
 
         $this->assertGreaterThan(0.123, $data['request_processing_time']);
