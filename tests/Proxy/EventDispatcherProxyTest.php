@@ -9,12 +9,6 @@ use Yiisoft\Yii\Debug\Proxy\EventDispatcherProxy;
 
 class EventDispatcherProxyTest extends TestCase
 {
-    public function testImplementInterface(): void
-    {
-        $interfaces = class_implements(EventDispatcherProxy::class);
-        $this->assertContains(EventDispatcherInterface::class, $interfaces);
-    }
-
     public function testDispatch(): void
     {
         $event = new \stdClass();
