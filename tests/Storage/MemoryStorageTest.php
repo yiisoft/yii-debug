@@ -7,7 +7,7 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 class MemoryStorageTest extends AbstractStorageTest
 {
-    public function getTarget(): StorageInterface
+    public function getStorage(): StorageInterface
     {
         return new MemoryStorage();
     }

@@ -14,15 +14,15 @@ abstract class AbstractStorageTest extends TestCase
      */
     public function testAddAndGet(array $data): void
     {
-        $target = $this->getTarget();
+        $storage = $this->getStorage();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())
             ->method('collected')
             ->willReturn($data);
 
-        $this->assertEquals([], $target->getData());
-        $target->addCollector($collector);
-        $this->assertEquals([$data], $target->getData());
+        $this->assertEquals([], $storage->getData());
+        $storage->addCollector($collector);
+        $this->assertEquals([$data], $storage->getData());
     }
 
     /**
@@ -32,15 +32,15 @@ abstract class AbstractStorageTest extends TestCase
     public function testFlush(array $data): void
     {
         $this->markTestIncomplete('the "getData" method should return an empty array after flush');
-        $target = $this->getTarget();
+        $storage = $this->getStorage();
         $collector = $this->createFakeCollector($data);
 
-        $target->addCollector($collector);
-        $target->flush();
-        $this->assertEquals([], $target->getData());
+        $storage->addCollector($collector);
+        $storage->flush();
+        $this->assertEquals([], $storage->getData());
     }
 
-    abstract public function getTarget(): StorageInterface;
+    abstract public function getStorage(): StorageInterface;
 
     public function dataProvider(): array
     {
