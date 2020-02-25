@@ -22,7 +22,7 @@ class EventDispatcherProxyTest extends TestCase
         $collector = $this->createMock(CollectorInterface::class);
         $collector
             ->expects($this->once())
-            ->method('dispatch')
+            ->method('collect')
             ->with($event);
 
         $proxy = new EventDispatcherProxy($eventDispatcher, $collector);

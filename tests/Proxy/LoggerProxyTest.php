@@ -25,7 +25,7 @@ class LoggerProxyTest extends TestCase
         $collector = $this->createMock(CollectorInterface::class);
         $collector
             ->expects($this->once())
-            ->method('dispatch')
+            ->method('collect')
             ->with($level, $message, $context);
         $proxy = new LoggerProxy($logger, $collector);
 
@@ -41,7 +41,7 @@ class LoggerProxyTest extends TestCase
         $collector = $this->createMock(CollectorInterface::class);
         $collector
             ->expects($this->once())
-            ->method('dispatch')
+            ->method('collect')
             ->with($level, $message, $context);
         $proxy = new LoggerProxy($logger, $collector);
 

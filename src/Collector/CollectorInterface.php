@@ -20,14 +20,13 @@ interface CollectorInterface
     public function shutdown(): void;
 
     /**
-     * Collect data.
      * @return array data collected
      */
-    public function collect(): array;
+    public function collected(): array;
 
     /**
-     * Dispatch data collected for further processing.
+     * Collect data payload
      * @param mixed ...$payload
      */
-    public function dispatch(...$payload): void;
+    public function collect(...$payload): void;
 }

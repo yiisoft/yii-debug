@@ -27,32 +27,32 @@ return [
     'debugger.event_handlers' => [
         ApplicationStartup::class => [
             function (ContainerInterface $container) {
-                return [$container->get(RequestCollector::class), 'dispatch'];
+                return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         ApplicationShutdown::class => [
             function (ContainerInterface $container) {
-                return [$container->get(RequestCollector::class), 'dispatch'];
+                return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         BeforeRequest::class => [
             function (ContainerInterface $container) {
-                return [$container->get(RequestCollector::class), 'dispatch'];
+                return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         AfterRequest::class => [
             function (ContainerInterface $container) {
-                return [$container->get(RequestCollector::class), 'dispatch'];
+                return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         BeforeMiddleware::class => [
             function (ContainerInterface $container) {
-                return [$container->get(MiddlewareCollector::class), 'dispatch'];
+                return [$container->get(MiddlewareCollector::class), 'collect'];
             },
         ],
         AfterMiddleware::class => [
             function (ContainerInterface $container) {
-                return [$container->get(MiddlewareCollector::class), 'dispatch'];
+                return [$container->get(MiddlewareCollector::class), 'collect'];
             },
         ],
     ],

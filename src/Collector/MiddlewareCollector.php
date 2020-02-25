@@ -12,7 +12,7 @@ final class MiddlewareCollector implements CollectorInterface
     private array $beforeStack = [];
     private array $afterStack = [];
 
-    public function collect(): array
+    public function collected(): array
     {
         return [
             'beforeStack' => $this->beforeStack,
@@ -20,7 +20,7 @@ final class MiddlewareCollector implements CollectorInterface
         ];
     }
 
-    public function dispatch(...$payload): void
+    public function collect(...$payload): void
     {
         $event = current($payload);
         if (!is_object($event) || !$this->isActive()) {

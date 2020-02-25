@@ -16,7 +16,7 @@ final class RequestCollector implements CollectorInterface
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
 
-    public function collect(): array
+    public function collected(): array
     {
         return [
             'application_processing_time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
@@ -26,7 +26,7 @@ final class RequestCollector implements CollectorInterface
         ];
     }
 
-    public function dispatch(...$payload): void
+    public function collect(...$payload): void
     {
         $event = current($payload);
         if (!is_object($event) || !$this->isActive()) {

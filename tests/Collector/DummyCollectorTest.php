@@ -9,7 +9,7 @@ class DummyCollectorTest extends AbstractCollectorTestCase
     protected function getCollector(): CollectorInterface
     {
         $collector = $this->createMock(CollectorInterface::class);
-        $collector->method('collect')
+        $collector->method('collected')
             ->willReturn(
                 [
                     'int' => 123,

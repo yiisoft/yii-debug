@@ -22,6 +22,6 @@ abstract class AbstractCollectorTestCase extends TestCase
 
     protected function assertExportedData(CollectorInterface $collector): void
     {
-        $this->assertNotEmpty($collector->collect());
+        $this->assertNotEmpty($collector->collected());
     }
 }
