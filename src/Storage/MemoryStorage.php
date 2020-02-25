@@ -4,7 +4,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-class MemStorage implements StorageInterface
+class MemoryStorage implements StorageInterface
 {
     /**
      * @var CollectorInterface[]

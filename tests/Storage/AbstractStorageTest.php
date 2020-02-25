@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-abstract class AbstractTargetTest extends TestCase
+abstract class AbstractStorageTest extends TestCase
 {
     /**
      * @dataProvider dataProvider()
