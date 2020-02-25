@@ -6,7 +6,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 interface StorageInterface
 {
-    public function persist(CollectorInterface $collector): void;
+    public function addCollector(CollectorInterface $collector): void;
 
     public function getData(): array;
 
