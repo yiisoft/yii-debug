@@ -31,7 +31,6 @@ abstract class AbstractStorageTest extends TestCase
      */
     public function testFlush(array $data): void
     {
-        $this->markTestIncomplete('the "getData" method should return an empty array after flush');
         $storage = $this->getStorage();
         $collector = $this->createFakeCollector($data);
 
@@ -59,7 +58,7 @@ abstract class AbstractStorageTest extends TestCase
     private function createFakeCollector(array $data)
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())
+        $collector
             ->method('collected')
             ->willReturn($data);
 

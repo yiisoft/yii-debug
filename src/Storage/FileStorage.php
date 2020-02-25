@@ -44,5 +44,6 @@ class FileStorage implements StorageInterface
         if (!$result) {
             throw new \RuntimeException('error ' . (int)$result);
         }
+        $this->collectors = [];
     }
 }
