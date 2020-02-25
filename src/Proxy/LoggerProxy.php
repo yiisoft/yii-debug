@@ -68,6 +68,6 @@ final class LoggerProxy implements LoggerInterface
     public function log($level, $message, array $context = [])
     {
         $this->collector->collect($level, $message, $context);
-        $this->logger->log($message, $context);
+        $this->logger->log($level, $message, $context);
     }
 }
