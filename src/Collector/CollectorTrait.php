@@ -16,7 +16,7 @@ trait CollectorTrait
         $this->isActive = false;
     }
 
-    public function isActive(): bool
+    private function isActive(): bool
     {
         return $this->isActive;
     }
