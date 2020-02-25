@@ -16,9 +16,9 @@ class RequestCollectorTest extends AbstractCollectorTestCase
      */
     protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $collector->dispatch(new BeforeRequest($this->createMock(ServerRequestInterface::class)));
+        $collector->collect(new BeforeRequest($this->createMock(ServerRequestInterface::class)));
         usleep(123_000);
-        $collector->dispatch(new AfterRequest($this->createMock(ResponseInterface::class)));
+        $collector->collect(new AfterRequest($this->createMock(ResponseInterface::class)));
     }
 
     protected function getCollector(): CollectorInterface
@@ -29,7 +29,7 @@ class RequestCollectorTest extends AbstractCollectorTestCase
     protected function assertExportedData(CollectorInterface $collector): void
     {
         parent::assertExportedData($collector);
-        $data = $collector->collect();
+        $data = $collector->collected();
 
         $this->assertGreaterThan(0.123, $data['request_processing_time']);
     }

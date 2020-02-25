@@ -12,7 +12,7 @@ class EventCollectorTest extends AbstractCollectorTestCase
      */
     protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $collector->dispatch(new \stdClass());
+        $collector->collect(new \stdClass());
     }
 
     protected function getCollector(): CollectorInterface

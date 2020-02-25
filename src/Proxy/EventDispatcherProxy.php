@@ -18,7 +18,7 @@ final class EventDispatcherProxy implements EventDispatcherInterface
 
     public function dispatch(object $event)
     {
-        $this->collector->dispatch($event);
+        $this->collector->collect($event);
 
         return $this->dispatcher->dispatch($event);
     }

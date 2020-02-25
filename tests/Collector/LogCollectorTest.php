@@ -13,7 +13,7 @@ class LogCollectorTest extends AbstractCollectorTestCase
      */
     protected function somethingDoTestExport(CollectorInterface $collector): void
     {
-        $collector->dispatch(LogLevel::ALERT, 'test', ['context']);
+        $collector->collect(LogLevel::ALERT, 'test', ['context']);
     }
 
     protected function getCollector(): CollectorInterface

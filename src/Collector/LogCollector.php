@@ -8,12 +8,12 @@ final class LogCollector implements CollectorInterface
 
     private array $messages = [];
 
-    public function collect(): array
+    public function collected(): array
     {
         return $this->messages;
     }
 
-    public function dispatch(...$payload): void
+    public function collect(...$payload): void
     {
         if (count($payload) !== 3) {
             throw new \InvalidArgumentException('$payload should contain $level, $message and $context variables');

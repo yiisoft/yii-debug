@@ -21,7 +21,7 @@ class MemStorage implements StorageInterface
         $data = [];
 
         foreach ($this->collectors as $collector) {
-            $data[] = $collector->collect();
+            $data[] = $collector->collected();
         }
 
         return $data;

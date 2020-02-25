@@ -10,12 +10,12 @@ final class EventCollector implements CollectorInterface
 
     private array $events = [];
 
-    public function collect(): array
+    public function collected(): array
     {
         return $this->events;
     }
 
-    public function dispatch(...$payload): void
+    public function collect(...$payload): void
     {
         $event = current($payload);
         if (!is_object($event) || (!$this->isActive() && !$event instanceof ApplicationStartup)) {

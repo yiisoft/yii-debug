@@ -17,7 +17,7 @@ abstract class AbstractTargetTest extends TestCase
         $target = $this->getTarget();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())
-            ->method('collect')
+            ->method('collected')
             ->willReturn($data);
 
         $this->assertEquals([], $target->getData());
@@ -60,7 +60,7 @@ abstract class AbstractTargetTest extends TestCase
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())
-            ->method('collect')
+            ->method('collected')
             ->willReturn($data);
 
         return $collector;

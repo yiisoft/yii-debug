@@ -62,7 +62,7 @@ class ModuleTest extends TestCase
     {
         $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
-            ->setMethods(['dispatch'])
+            ->setMethods(['collect'])
             ->getMock();
         $this->container->set('logger', $logger);
 
@@ -82,7 +82,7 @@ HTML
     {
         $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
-            ->setMethods(['dispatch'])
+            ->setMethods(['collect'])
             ->getMock();
         $this->container->set('logger', $logger);
 
@@ -119,7 +119,7 @@ HTML
     {
         $logger = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([[]])
-            ->setMethods(['dispatch'])
+            ->setMethods(['collect'])
             ->getMock();
         $this->container->set('logger', $logger);
 
