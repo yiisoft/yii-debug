@@ -11,7 +11,7 @@ class LogCollectorTest extends AbstractCollectorTestCase
     /**
      * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\LogCollector $collector
      */
-    protected function somethingDoTestExport(CollectorInterface $collector): void
+    protected function collectTestData(CollectorInterface $collector): void
     {
         $collector->collect(LogLevel::ALERT, 'test', ['context']);
     }

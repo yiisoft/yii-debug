@@ -21,7 +21,7 @@ class DummyCollectorTest extends AbstractCollectorTestCase
         return $collector;
     }
 
-    protected function somethingDoTestExport(CollectorInterface $collector): void
+    protected function collectTestData(CollectorInterface $collector): void
     {
         // pass
     }

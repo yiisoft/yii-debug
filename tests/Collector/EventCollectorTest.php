@@ -10,7 +10,7 @@ class EventCollectorTest extends AbstractCollectorTestCase
     /**
      * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\EventCollector $collector
      */
-    protected function somethingDoTestExport(CollectorInterface $collector): void
+    protected function collectTestData(CollectorInterface $collector): void
     {
         $collector->collect(new \stdClass());
     }
