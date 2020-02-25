@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-abstract class AbstractCollectorTestCase extends TestCase
+abstract class CollectorTestCase extends TestCase
 {
     public function testCollect(): void
     {

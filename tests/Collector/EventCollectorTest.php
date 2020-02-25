@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 
-class EventCollectorTest extends AbstractCollectorTestCase
+final class EventCollectorTest extends CollectorTestCase
 {
     /**
      * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\EventCollector $collector
