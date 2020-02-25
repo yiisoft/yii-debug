@@ -7,6 +7,9 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
 class FileStorage implements StorageInterface
 {
+    /**
+     * @var CollectorInterface[]
+     */
     private array $collectors = [];
     private string $path;
 
@@ -24,7 +27,7 @@ class FileStorage implements StorageInterface
     {
         $data = [];
         foreach ($this->collectors as $collector) {
-            $data[get_class($collector)] = $collector->collect();
+            $data[get_class($collector)] = $collector->collected();
         }
 
         return $data;
