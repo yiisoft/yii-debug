@@ -15,7 +15,7 @@ class FileStorage implements StorageInterface
         $this->path = $path;
     }
 
-    public function persist(CollectorInterface $collector): void
+    public function addCollector(CollectorInterface $collector): void
     {
         $this->collectors[get_class($collector)] = $collector;
     }

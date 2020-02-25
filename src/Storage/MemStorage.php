@@ -11,7 +11,7 @@ class MemStorage implements StorageInterface
      */
     private array $collectors = [];
 
-    public function persist(CollectorInterface $collector): void
+    public function addCollector(CollectorInterface $collector): void
     {
         $this->collectors[get_class($collector)] = $collector;
     }

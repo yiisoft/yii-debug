@@ -21,7 +21,7 @@ abstract class AbstractTargetTest extends TestCase
             ->willReturn($data);
 
         $this->assertEquals([], $target->getData());
-        $target->persist($collector);
+        $target->addCollector($collector);
         $this->assertEquals([$data], $target->getData());
     }
 
@@ -35,7 +35,7 @@ abstract class AbstractTargetTest extends TestCase
         $target = $this->getTarget();
         $collector = $this->createFakeCollector($data);
 
-        $target->persist($collector);
+        $target->addCollector($collector);
         $target->flush();
         $this->assertEquals([], $target->getData());
     }

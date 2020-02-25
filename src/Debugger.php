@@ -28,7 +28,7 @@ final class Debugger
     public function startup(): void
     {
         foreach ($this->collectors as $collector) {
-            $this->target->persist($collector);
+            $this->target->addCollector($collector);
             $collector->startup();
         }
     }
