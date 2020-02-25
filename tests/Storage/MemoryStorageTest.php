@@ -2,13 +2,13 @@
 
 namespace Yiisoft\Yii\Debug\Tests\Storage;
 
-use Yiisoft\Yii\Debug\Storage\MemStorage;
+use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-class MemTargetTest extends AbstractTargetTest
+class MemoryStorageTest extends AbstractStorageTest
 {
     public function getTarget(): StorageInterface
     {
-        return new MemStorage();
+        return new MemoryStorage();
     }
 }
