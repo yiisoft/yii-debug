@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-class RequestCollectorTest extends AbstractCollectorTestCase
+final class RequestCollectorTest extends CollectorTestCase
 {
     /**
      * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|RequestCollector $collector

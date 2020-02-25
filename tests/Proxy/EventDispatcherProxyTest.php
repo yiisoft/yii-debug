@@ -7,7 +7,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherProxy;
 
-class EventDispatcherProxyTest extends TestCase
+final class EventDispatcherProxyTest extends TestCase
 {
     public function testDispatch(): void
     {

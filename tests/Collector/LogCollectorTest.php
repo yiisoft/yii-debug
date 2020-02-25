@@ -6,7 +6,7 @@ use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 
-class LogCollectorTest extends AbstractCollectorTestCase
+final class LogCollectorTest extends CollectorTestCase
 {
     /**
      * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\LogCollector $collector
