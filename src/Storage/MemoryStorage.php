@@ -29,5 +29,6 @@ class MemoryStorage implements StorageInterface
 
     public function flush(): void
     {
+        $this->collectors = [];
     }
 }
