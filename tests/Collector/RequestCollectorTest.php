@@ -29,7 +29,7 @@ final class RequestCollectorTest extends CollectorTestCase
     protected function checkCollectedData(CollectorInterface $collector): void
     {
         parent::checkCollectedData($collector);
-        $data = $collector->collected();
+        $data = $collector->getCollected();
 
         $this->assertGreaterThan(0.123, $data['request_processing_time']);
     }

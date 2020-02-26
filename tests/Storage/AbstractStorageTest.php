@@ -17,7 +17,7 @@ abstract class AbstractStorageTest extends TestCase
         $storage = $this->getStorage();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())
-            ->method('collected')
+            ->method('getCollected')
             ->willReturn($data);
 
         $this->assertEquals([], $storage->getData());
@@ -59,7 +59,7 @@ abstract class AbstractStorageTest extends TestCase
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector
-            ->method('collected')
+            ->method('getCollected')
             ->willReturn($data);
 
         return $collector;

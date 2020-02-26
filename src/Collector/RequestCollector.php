@@ -16,7 +16,7 @@ final class RequestCollector implements CollectorInterface
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
 
-    public function collected(): array
+    public function getCollected(): array
     {
         return [
             'application_processing_time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,

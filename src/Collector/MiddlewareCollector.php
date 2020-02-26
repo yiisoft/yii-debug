@@ -12,7 +12,7 @@ final class MiddlewareCollector implements CollectorInterface
     private array $beforeStack = [];
     private array $afterStack = [];
 
-    public function collected(): array
+    public function getCollected(): array
     {
         return [
             'beforeStack' => $this->beforeStack,

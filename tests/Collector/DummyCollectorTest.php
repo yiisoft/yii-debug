@@ -9,7 +9,7 @@ final class DummyCollectorTest extends CollectorTestCase
     protected function getCollector(): CollectorInterface
     {
         $collector = $this->createMock(CollectorInterface::class);
-        $collector->method('collected')
+        $collector->method('getCollected')
             ->willReturn(
                 [
                     'int' => 123,

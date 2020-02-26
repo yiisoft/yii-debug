@@ -27,7 +27,7 @@ class FileStorage implements StorageInterface
     {
         $data = [];
         foreach ($this->collectors as $collector) {
-            $data[get_class($collector)] = $collector->collected();
+            $data[get_class($collector)] = $collector->getCollected();
         }
 
         return $data;

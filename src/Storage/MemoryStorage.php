@@ -21,7 +21,7 @@ class MemoryStorage implements StorageInterface
         $data = [];
 
         foreach ($this->collectors as $collector) {
-            $data[] = $collector->collected();
+            $data[] = $collector->getCollected();
         }
 
         return $data;
