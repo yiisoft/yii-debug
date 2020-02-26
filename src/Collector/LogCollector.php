@@ -8,7 +8,7 @@ final class LogCollector implements CollectorInterface
 
     private array $messages = [];
 
-    public function collected(): array
+    public function getCollected(): array
     {
         return $this->messages;
     }

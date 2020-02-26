@@ -22,7 +22,7 @@ interface CollectorInterface
     /**
      * @return array data collected
      */
-    public function collected(): array;
+    public function getCollected(): array;
 
     /**
      * Collect data payload

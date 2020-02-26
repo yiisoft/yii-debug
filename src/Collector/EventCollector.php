@@ -10,7 +10,7 @@ final class EventCollector implements CollectorInterface
 
     private array $events = [];
 
-    public function collected(): array
+    public function getCollected(): array
     {
         return $this->events;
     }
