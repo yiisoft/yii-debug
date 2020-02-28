@@ -26,9 +26,13 @@ return [
     EventCollectorInterface::class => EventCollector::class,
     StorageInterface::class => function (ContainerInterface $container) {
         $runtime = $container->get(Aliases::class)->get('@runtime');
+        $path = "$runtime/debug";
         $id = time();
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
 
-        return new FileStorage("$runtime/debug/$id.data");
+        return new FileStorage("$path/$id.data");
     },
     Debugger::class => function (ContainerInterface $container) use ($params) {
         return new Debugger(
