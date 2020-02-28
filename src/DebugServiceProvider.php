@@ -28,7 +28,8 @@ class DebugServiceProvider implements ServiceProviderInterface
                 EventDispatcherInterface::class => function (ContainerInterface $container) use ($dispatcher) {
                     $debugger =  $container->get(Debugger::class);
                     $debugEventDispatcher =  $dispatcher = $container->get(DebugEventDispatcher::class);
-                    return new EventDispatcherProxy($dispatcher, $debugEventDispatcher, $container->get(EventCollectorInterface::class), $debugger);
+                    $collector = $container->get(EventCollectorInterface::class);
+                    return new EventDispatcherProxy($dispatcher, $debugEventDispatcher, $collector, $debugger);
                 },
             ]
         );
