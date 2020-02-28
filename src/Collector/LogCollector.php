@@ -2,7 +2,7 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class LogCollector implements CollectorInterface
+final class LogCollector implements LogCollectorInterface
 {
     use CollectorTrait;
 

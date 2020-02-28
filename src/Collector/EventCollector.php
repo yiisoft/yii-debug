@@ -4,7 +4,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
 
-final class EventCollector implements CollectorInterface
+final class EventCollector implements EventCollectorInterface
 {
     use CollectorTrait;
 

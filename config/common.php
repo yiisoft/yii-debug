@@ -8,6 +8,10 @@ use Yiisoft\Yii\Debug\DebugEventDispatcher;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
+use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
 
 /**
  * @var $params array
@@ -18,6 +22,8 @@ if (!(bool)($params['debugger.enabled'] ?? false)) {
 }
 
 return [
+    LogCollectorInterface::class => LogCollector::class,
+    EventCollectorInterface::class => EventCollector::class,
     StorageInterface::class => function (ContainerInterface $container) {
         $runtime = $container->get(Aliases::class)->get('@runtime');
         $id = time();
