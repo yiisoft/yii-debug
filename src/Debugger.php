@@ -47,27 +47,25 @@ final class Debugger
             $container->addProvider(new DebugServiceProvider());
         }
     }
-public
-function getId(): string
-{
-    return $this->id;
-}
 
-public
-function startup(): void
-{
-    foreach ($this->collectors as $collector) {
-        $this->target->addCollector($collector);
-        $collector->startup();
+    public function getId(): string
+    {
+        return $this->id;
     }
-}
 
-public
-function shutdown(): void
-{
-    foreach ($this->collectors as $collector) {
-        $collector->shutdown();
+    public function startup(): void
+    {
+        foreach ($this->collectors as $collector) {
+            $this->target->addCollector($collector);
+            $collector->startup();
+        }
     }
-    $this->target->flush();
-}
+
+    public function shutdown(): void
+    {
+        foreach ($this->collectors as $collector) {
+            $collector->shutdown();
+        }
+        $this->target->flush();
+    }
 }

@@ -8,7 +8,7 @@ use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
-final class LoggerInterfaceProxyTest extends TestCase
+final class LoggerProxyTest extends TestCase
 {
     /**
      * @dataProvider logMethodsProvider()

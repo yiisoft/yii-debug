@@ -11,4 +11,3 @@ final class CompositeEventDispatcherProxy extends EventDispatcherInterfaceProxy
         return $this->dispatcher->attach($event);
     }
 }
-
