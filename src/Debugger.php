@@ -5,6 +5,7 @@ namespace Yiisoft\Yii\Debug;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
+use Yiisoft\Di\ContainerProxyInterface;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
 use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
@@ -42,6 +43,10 @@ final class Debugger
             $provider->attach(function (ApplicationShutdown $event) use ($debugger) {
                 $debugger->shutdown();
             });
+            //uncomment after di-proxy PR
+//            if ($container->has(ContainerProxyInterface::class)) {
+//                return;
+//            }
 
             //The bad practice, think about avoiding this
             $container->addProvider(new DebugServiceProvider());
