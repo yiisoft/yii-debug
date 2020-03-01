@@ -2,7 +2,15 @@
 
 namespace Yiisoft\Yii\Debug;
 
+use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\EventDispatcher\ListenerProviderInterface;
+use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
+use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
+use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
+use Yiisoft\Yii\Web\Event\ApplicationStartup;
+use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 
 final class Debugger
 {
@@ -20,24 +28,46 @@ final class Debugger
         $this->id = uniqid('yii-debug-', true);
     }
 
-    public function getId(): string
+    public static function register(array $params, ContainerInterface $container): void
     {
-        return $this->id;
-    }
+        $debugEnabled = (bool)($params['debugger.enabled'] ?? false);
+        if ($container->has(self::class) && $debugEnabled) {
+            $debugger = $container->get(self::class);
 
-    public function startup(): void
-    {
-        foreach ($this->collectors as $collector) {
-            $this->target->addCollector($collector);
-            $collector->startup();
+            //The bad practice, think about avoiding this
+            $provider = $container->get(ListenerProviderInterface::class);
+            $provider->attach(function (ApplicationStartup $event) use ($debugger) {
+                $debugger->startup();
+            });
+            $provider->attach(function (ApplicationShutdown $event) use ($debugger) {
+                $debugger->shutdown();
+            });
+
+            //The bad practice, think about avoiding this
+            $container->addProvider(new DebugServiceProvider());
         }
     }
+public
+function getId(): string
+{
+    return $this->id;
+}
 
-    public function shutdown(): void
-    {
-        foreach ($this->collectors as $collector) {
-            $collector->shutdown();
-        }
-        $this->target->flush();
+public
+function startup(): void
+{
+    foreach ($this->collectors as $collector) {
+        $this->target->addCollector($collector);
+        $collector->startup();
     }
+}
+
+public
+function shutdown(): void
+{
+    foreach ($this->collectors as $collector) {
+        $collector->shutdown();
+    }
+    $this->target->flush();
+}
 }

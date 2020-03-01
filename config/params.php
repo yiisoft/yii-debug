@@ -3,16 +3,16 @@
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Yiisoft\Yii\Debug\Debugger;
+use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
+use Yiisoft\Yii\Debug\DebugEventDispatcher;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerProxy;
-use Yiisoft\Yii\Debug\DebugEventDispatcher;
+use Yiisoft\Yii\Debug\Proxy\CompositeEventDispatcherProxy;
+use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 use Yiisoft\Yii\Web\Event\AfterMiddleware;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
@@ -32,10 +32,15 @@ return [
         MiddlewareCollector::class,
     ],
     'debugger.trackedServices' => [
-        LoggerInterface::class => [LoggerProxy::class, LogCollectorInterface::class],
-        EventDispatcherInterface::class => [
-            EventDispatcherProxy::class, DebugEventDispatcher::class, EventCollectorInterface::class, Debugger::class
-        ]
+        LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+        EventDispatcherInterface::class => function (ContainerInterface $container) {
+            $dispatcher = $container->get(EventDispatcherInterface::class);
+            $compositeDispatcher = new CompositeDispatcher();
+            $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));
+            $compositeDispatcher->attach($dispatcher);
+
+            return new CompositeEventDispatcherProxy($compositeDispatcher, $container->get(EventCollectorInterface::class));
+        },
     ],
     'debugger.event_handlers' => [
         ApplicationStartup::class => [

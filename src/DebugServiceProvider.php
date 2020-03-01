@@ -7,10 +7,11 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\Contracts\ServiceProviderInterface;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerProxy;
+use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Proxy\CompositeEventDispatcherProxy;
+use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
 class DebugServiceProvider implements ServiceProviderInterface
 {
@@ -23,13 +24,14 @@ class DebugServiceProvider implements ServiceProviderInterface
             [
                 // interfaces overriding
                 LoggerInterface::class => function (ContainerInterface $container) use ($logger) {
-                    return new LoggerProxy($logger, $container->get(LogCollectorInterface::class));
+                    return new LoggerInterfaceProxy($logger, $container->get(LogCollector::class));
                 },
                 EventDispatcherInterface::class => function (ContainerInterface $container) use ($dispatcher) {
-                    $debugger =  $container->get(Debugger::class);
-                    $debugEventDispatcher = $container->get(DebugEventDispatcher::class);
-                    $collector = $container->get(EventCollectorInterface::class);
-                    return new EventDispatcherProxy($dispatcher, $debugEventDispatcher, $collector, $debugger);
+                    $compositeDispatcher = new CompositeDispatcher();
+                    $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));
+                    $compositeDispatcher->attach($dispatcher);
+
+                    return new CompositeEventDispatcherProxy($compositeDispatcher, $container->get(EventCollector::class));
                 },
             ]
         );
