@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Yiisoft\Di\ContainerProxyInterface;
+use Yiisoft\Di\ProxyMethodCallEvent;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
 use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
@@ -27,30 +28,6 @@ final class Debugger
         $this->collectors = $collectors;
         $this->target = $target;
         $this->id = uniqid('yii-debug-', true);
-    }
-
-    public static function register(array $params, ContainerInterface $container): void
-    {
-        $debugEnabled = (bool)($params['debugger.enabled'] ?? false);
-        if ($container->has(self::class) && $debugEnabled) {
-            $debugger = $container->get(self::class);
-
-            //The bad practice, think about avoiding this
-            $provider = $container->get(ListenerProviderInterface::class);
-            $provider->attach(function (ApplicationStartup $event) use ($debugger) {
-                $debugger->startup();
-            });
-            $provider->attach(function (ApplicationShutdown $event) use ($debugger) {
-                $debugger->shutdown();
-            });
-            //uncomment after di-proxy PR
-//            if ($container->has(ContainerProxyInterface::class)) {
-//                return;
-//            }
-
-            //The bad practice, think about avoiding this
-            $container->addProvider(new DebugServiceProvider());
-        }
     }
 
     public function getId(): string
