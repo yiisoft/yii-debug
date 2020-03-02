@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
-use Yiisoft\Yii\Debug\Proxy\CompositeEventDispatcherProxy;
+use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 use Yiisoft\Yii\Web\Event\AfterMiddleware;
 use Yiisoft\Yii\Web\Event\AfterRequest;
@@ -43,7 +43,7 @@ return [
             $compositeDispatcher->attach($dispatcher);
             $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
 
-            return new CompositeEventDispatcherProxy($compositeDispatcher, $container->get(EventCollectorInterface::class));
+            return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollectorInterface::class));
         },
     ],
     'debugger.event_handlers' => [

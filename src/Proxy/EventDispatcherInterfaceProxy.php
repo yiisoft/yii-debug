@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Proxy;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 
-class EventDispatcherInterfaceProxy implements EventDispatcherInterface
+final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 {
     protected EventDispatcherInterface $dispatcher;
     protected EventCollectorInterface $collector;

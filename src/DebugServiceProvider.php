@@ -12,7 +12,7 @@ use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
-use Yiisoft\Yii\Debug\Proxy\CompositeEventDispatcherProxy;
+use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
 class DebugServiceProvider implements ServiceProviderInterface
@@ -35,7 +35,7 @@ class DebugServiceProvider implements ServiceProviderInterface
                     $compositeDispatcher->attach($dispatcher);
                     $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
 
-                    return new CompositeEventDispatcherProxy($compositeDispatcher, $container->get(EventCollector::class));
+                    return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollector::class));
                 },
             ]
         );
