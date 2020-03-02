@@ -6,6 +6,7 @@ use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
+use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Web\Event\AfterMiddleware;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
@@ -22,6 +23,7 @@ return [
         LogCollector::class,
         EventCollector::class,
         RequestCollector::class,
+        RouterCollector::class,
         MiddlewareCollector::class,
     ],
     'debugger.event_handlers' => [
