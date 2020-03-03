@@ -4,10 +4,8 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Di\ContainerProxyInterface;
 use Yiisoft\Proxy\ProxyManager;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
@@ -20,21 +18,13 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
 
     protected ContainerInterface $container;
 
-    private int $logLevel = 0;
-
     private array $decoratedServices = [];
 
-    private bool $active = false;
-
-    private ?EventDispatcherInterface $dispatcher = null;
-
-    private ?CommonServiceCollectorInterface $commonCollector = null;
+    private ContainerProxyConfig $config;
 
     private array $serviceProxy = [];
 
     private ?object $currentError = null;
-
-    private ?string $proxyCachePath = null;
 
     private ProxyManager $proxyManager;
 
@@ -42,27 +32,22 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         ContainerInterface $container,
         ContainerProxyConfig $config
     ) {
+        $this->config = $config;
         $this->container = $container;
-        $this->active = $config->getIsActive();
-        $this->decoratedServices = $config->getDecoratedServices();
-        $this->dispatcher = $config->getDispatcher();
-        $this->commonCollector = $config->getCollector();
-        $this->proxyCachePath = $config->getProxyCachePath();
-        $this->logLevel = $config->getLogLevel();
-        $this->proxyManager = new ProxyManager($this->proxyCachePath);
+        $this->proxyManager = new ProxyManager($this->config->getProxyCachePath());
     }
 
     public function withDecoratedServices(array $decoratedServices): ContainerProxyInterface
     {
         $proxy = clone $this;
-        $proxy->decoratedServices = array_merge($this->decoratedServices, $decoratedServices);
+        $proxy->decoratedServices = array_merge($this->config->getDecoratedServices(), $decoratedServices);
 
         return $proxy;
     }
 
     public function isActive(): bool
     {
-        return $this->active && $this->decoratedServices !== [];
+        return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
     }
 
     public function get($id, array $params = [])
@@ -123,33 +108,33 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         $error = $this->currentError;
         $this->processLogData($arguments, $result, $error);
 
-        if ($this->commonCollector !== null) {
+        if ($this->config->getCollector() !== null) {
             $this->logToCollector($method, $arguments, $result, $error, $timeStart);
         }
 
-        if ($this->dispatcher !== null) {
+        if ($this->config->getDispatcher() !== null) {
             $this->logToEvent($method, $arguments, $result, $error, $timeStart);
         }
     }
 
     private function processLogData(array &$arguments, &$result, ?object &$error): void
     {
-        if (!($this->logLevel & self::LOG_ARGUMENTS)) {
+        if (!($this->config->getLogLevel() & self::LOG_ARGUMENTS)) {
             $arguments = null;
         }
 
-        if (!($this->logLevel & self::LOG_RESULT)) {
+        if (!($this->config->getLogLevel() & self::LOG_RESULT)) {
             $result = null;
         }
 
-        if (!($this->logLevel & self::LOG_ERROR)) {
+        if (!($this->config->getLogLevel() & self::LOG_ERROR)) {
             $error = null;
         }
     }
 
     private function logToCollector(string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
     {
-        $this->commonCollector->collect(
+        $this->config->getCollector()->collect(
             ContainerInterface::class,
             get_class($this->container),
             $method,
@@ -164,7 +149,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
 
     private function logToEvent(string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
     {
-        $this->dispatcher->dispatch(new ProxyMethodCallEvent(
+        $this->config->getDispatcher()->dispatch(new ProxyMethodCallEvent(
             ContainerInterface::class,
             get_class($this->container),
             $method,
@@ -179,7 +164,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
 
     private function isDecorated(string $service): bool
     {
-        return isset($this->decoratedServices[$service]) || in_array($service, $this->decoratedServices, true);
+        return isset($this->config->getDecoratedServices()[$service]) || in_array($service, $this->config->getDecoratedServices(), true);
     }
 
     private function getServiceProxy(string $service, object $instance): ?object
@@ -188,14 +173,14 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
             return null;
         }
 
-        if (isset($this->decoratedServices[$service]) && is_callable($this->decoratedServices[$service])) {
+        if (isset($this->config->getDecoratedServices()[$service]) && is_callable($this->config->getDecoratedServices()[$service])) {
             return $this->getServiceProxyFromCallable($service, $instance);
-        } elseif (isset($this->decoratedServices[$service]) && is_array($this->decoratedServices[$service]) &&
-            !isset($this->decoratedServices[$service][0])) {
-            return $this->getCommonMethodProxy($service, $instance, $this->decoratedServices[$service]);
-        } elseif (isset($this->decoratedServices[$service]) && is_array($this->decoratedServices[$service])) {
+        } elseif (isset($this->config->getDecoratedServices()[$service]) && is_array($this->config->getDecoratedServices()[$service]) &&
+            !isset($this->config->getDecoratedServices()[$service][0])) {
+            return $this->getCommonMethodProxy($service, $instance, $this->config->getDecoratedServices()[$service]);
+        } elseif (isset($this->config->getDecoratedServices()[$service]) && is_array($this->config->getDecoratedServices()[$service])) {
             return $this->getServiceProxyFromArray($service, $instance);
-        } elseif (interface_exists($service) && ($this->commonCollector !== null || $this->dispatcher !== null)) {
+        } elseif (interface_exists($service) && ($this->config->getCollector() !== null || $this->config->getDispatcher() !== null)) {
             return $this->getCommonServiceProxy($service, $instance);
         }
 
@@ -216,19 +201,19 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $this->proxyManager->createObjectProxyFromInterface(
             $service,
             CommonMethodProxy::class,
-            [$service, $instance, $methods, $this->commonCollector, $this->dispatcher, $this->logLevel]
+            [$service, $instance, $methods, $this->config->getCollector(), $this->config->getDispatcher(), $this->config->getLogLevel()]
         );
     }
 
     private function getServiceProxyFromCallable(string $service, object $instance): ?object
     {
-        return $this->decoratedServices[$service]($this->container);
+        return $this->config->getDecoratedServices()[$service]($this->container);
     }
 
     private function getServiceProxyFromArray(string $service, object $instance): ?object
     {
         try {
-            $params = $this->decoratedServices[$service];
+            $params = $this->config->getDecoratedServices()[$service];
             $proxyClass = array_shift($params);
             foreach ($params as $index => $param) {
                 if (is_string($param)) {
@@ -250,7 +235,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $this->proxyManager->createObjectProxyFromInterface(
             $service,
             CommonServiceProxy::class,
-            [$service, $instance, $this->commonCollector, $this->dispatcher, $this->logLevel]
+            [$service, $instance, $this->config->getCollector(), $this->config->getDispatcher(), $this->config->getLogLevel()]
         );
     }
 

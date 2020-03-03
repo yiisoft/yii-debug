@@ -17,7 +17,7 @@ class CommonServiceProxy extends ObjectProxy
 
     private string $service;
 
-    private $logLevel = 0;
+    private int $logLevel = 0;
 
     private ?CommonServiceCollectorInterface $collector = null;
 
