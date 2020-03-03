@@ -15,6 +15,7 @@ use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Web\Event\AfterMiddleware;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
@@ -31,6 +32,7 @@ return [
         LogCollector::class,
         EventCollector::class,
         RequestCollector::class,
+        RouterCollector::class,
         MiddlewareCollector::class,
     ],
     'debugger.trackedServices' => [
