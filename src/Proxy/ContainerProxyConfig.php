@@ -26,8 +26,7 @@ class ContainerProxyConfig
         CommonServiceCollectorInterface $commonCollector = null,
         string $proxyCachePath = null,
         int $logLevel = 0
-    )
-    {
+    ) {
         $this->active = $active;
         $this->decoratedServices = $decoratedServices;
         $this->dispatcher = $dispatcher;

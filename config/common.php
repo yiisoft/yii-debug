@@ -40,8 +40,8 @@ return [
         $decoratedServices = (array)($params['container.decorators'] ?? []);
         $runtime = $container->get(Aliases::class)->get('@runtime');
         $path = "$runtime/cache/container-proxy";
-        if (!is_dir($path)) {
-            mkdir($path);
+        if (!is_dir($path) && !mkdir($path)) {
+            throw new \RuntimeException("Proxy cache directory '$path' can not be created");
         }
         $logLevel = ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR;
         return new ContainerProxyConfig(
@@ -57,7 +57,7 @@ return [
         $path = "$runtime/debug";
         $id = time();
         if (!is_dir($path) && !mkdir($path)) {
-            throw new \RuntimeException("Proxy cache directory '$path' can not be created");
+            throw new \RuntimeException("Debugger directory '$path' can not be created");
         }
 
         return new FileStorage("$path/$id.data");
@@ -66,7 +66,7 @@ return [
         return new Debugger(
             $container->get(StorageInterface::class),
             array_map(
-                fn($class) => $container->get($class),
+                fn ($class) => $container->get($class),
                 $params['debugger.collectors']
             )
         );
