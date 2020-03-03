@@ -17,6 +17,7 @@ use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 
 /**
  * @var $params array
@@ -30,7 +31,8 @@ return [
     LogCollectorInterface::class => LogCollector::class,
     EventCollectorInterface::class => EventCollector::class,
     CommonServiceCollectorInterface::class => CommonServiceCollector::class,
-    ContainerProxyInterface::class => static function (ContainerInterface $container) use ($params) {
+    ContainerProxyInterface::class => ContainerProxy::class,
+    ContainerProxyConfig::class => static function (ContainerInterface $container) use ($params) {
         $collector = $container->get(CommonServiceCollectorInterface::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
         $debuggerEnabled = (bool)($params['debugger.enabled'] ?? false);
@@ -41,16 +43,14 @@ return [
         if (!is_dir($path)) {
             mkdir($path);
         }
-        $logLevel = \Yiisoft\Yii\Debug\Proxy\ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR;
-        return new ContainerProxy(
+        $logLevel = ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR;
+        return new ContainerProxyConfig(
             $debuggerEnabled,
             array_merge($trackedServices, $decoratedServices),
-            $container,
             $dispatcher,
             $collector,
             $path,
-            $logLevel
-        );
+            $logLevel);
     },
     StorageInterface::class => function (ContainerInterface $container) {
         $runtime = $container->get(Aliases::class)->get('@runtime');
@@ -66,7 +66,7 @@ return [
         return new Debugger(
             $container->get(StorageInterface::class),
             array_map(
-                fn ($class) => $container->get($class),
+                fn($class) => $container->get($class),
                 $params['debugger.collectors']
             )
         );

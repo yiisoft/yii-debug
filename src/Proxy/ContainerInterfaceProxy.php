@@ -39,21 +39,16 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
     private ProxyManager $proxyManager;
 
     public function __construct(
-        bool $active,
-        array $decoratedServices,
         ContainerInterface $container,
-        EventDispatcherInterface $dispatcher = null,
-        CommonServiceCollectorInterface $commonCollector = null,
-        string $proxyCachePath = null,
-        int $logLevel = 0
+        ContainerProxyConfig $config
     ) {
-        $this->active = $active;
-        $this->decoratedServices = $decoratedServices;
         $this->container = $container;
-        $this->dispatcher = $dispatcher;
-        $this->commonCollector = $commonCollector;
-        $this->proxyCachePath = $proxyCachePath;
-        $this->logLevel = $logLevel;
+        $this->active = $config->getIsActive();
+        $this->decoratedServices = $config->getDecoratedServices();
+        $this->dispatcher = $config->getDispatcher();
+        $this->commonCollector = $config->getCollector();
+        $this->proxyCachePath = $config->getProxyCachePath();
+        $this->logLevel = $config->getLogLevel();
         $this->proxyManager = new ProxyManager($this->proxyCachePath);
     }
 

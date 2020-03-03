@@ -11,16 +11,11 @@ use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
 final class ContainerProxy extends ContainerInterfaceProxy
 {
     public function __construct(
-        bool $active,
-        array $decoratedServices,
         ContainerInterface $container,
-        EventDispatcherInterface $dispatcher = null,
-        CommonServiceCollectorInterface $commonCollector = null,
-        string $proxyCachePath = null,
-        int $logLevel = 0
+        ContainerProxyConfig $config
     ) {
         $container = $container instanceof Container ? $container->withParentContainer($this) : $container;
-        parent::__construct($active, $decoratedServices, $container, $dispatcher, $commonCollector, $proxyCachePath, $logLevel);
+        parent::__construct($container, $config);
     }
 
     public function set(string $id, $definition): void
