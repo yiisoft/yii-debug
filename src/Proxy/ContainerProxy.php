@@ -7,7 +7,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerDelegateInterface;
 
-final class ContainerProxy extends ContainerInterfaceProxy
+final class ContainerProxy extends ContainerInterfaceProxy implements ContainerDelegateInterface
 {
     public function __construct(
         ContainerInterface $container,
@@ -59,10 +59,10 @@ final class ContainerProxy extends ContainerInterfaceProxy
         }
     }
 
-    public function withParentContainer(ContainerInterface $container): ContainerInterface
+    public function withRootContainer(ContainerInterface $container): ContainerInterface
     {
         $this->checkNativeContainer();
-        $this->container = $this->container->withParentContainer($container);
+        $this->container = $this->container->withRootContainer($container);
 
         return $this;
     }
