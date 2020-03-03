@@ -15,7 +15,7 @@ class ContainerProxyConfig
 
     private ?EventDispatcherInterface $dispatcher = null;
 
-    private ?CommonServiceCollectorInterface $commonCollector = null;
+    private ?CommonServiceCollectorInterface $collector = null;
 
     private ?string $proxyCachePath = null;
 
@@ -23,16 +23,58 @@ class ContainerProxyConfig
         bool $active,
         array $decoratedServices,
         EventDispatcherInterface $dispatcher = null,
-        CommonServiceCollectorInterface $commonCollector = null,
+        CommonServiceCollectorInterface $collector = null,
         string $proxyCachePath = null,
         int $logLevel = 0
     ) {
         $this->active = $active;
         $this->decoratedServices = $decoratedServices;
         $this->dispatcher = $dispatcher;
-        $this->commonCollector = $commonCollector;
+        $this->collector = $collector;
         $this->proxyCachePath = $proxyCachePath;
         $this->logLevel = $logLevel;
+    }
+
+    public function activate(): self
+    {
+        $config = clone $this;
+        $config->active = true;
+        return $config;
+    }
+
+    public function withDispatcher(EventDispatcherInterface $dispatcher): self
+    {
+        $config = clone $this;
+        $config->dispatcher = $dispatcher;
+        return $config;
+    }
+
+    public function withLogLevel(int $logLevel): self
+    {
+        $config = clone $this;
+        $config->logLevel = $logLevel;
+        return $config;
+    }
+
+    public function withProxyCachePath(int $proxyCachePath): self
+    {
+        $config = clone $this;
+        $config->proxyCachePath = $proxyCachePath;
+        return $config;
+    }
+
+    public function withCollector(CommonServiceCollectorInterface $collector): self
+    {
+        $config = clone $this;
+        $config->collector = $collector;
+        return $config;
+    }
+
+    public function withDecoratedServices(array $decoratedServices): self
+    {
+        $config = clone $this;
+        $config->decoratedServices = $decoratedServices;
+        return $config;
     }
 
     public function getIsActive(): bool
@@ -57,7 +99,7 @@ class ContainerProxyConfig
 
     public function getCollector(): CommonServiceCollectorInterface
     {
-        return $this->commonCollector;
+        return $this->collector;
     }
 
     public function getProxyCachePath(): string
