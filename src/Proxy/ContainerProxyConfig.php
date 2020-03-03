@@ -92,17 +92,17 @@ class ContainerProxyConfig
         return $this->decoratedServices;
     }
 
-    public function getDispatcher(): EventDispatcherInterface
+    public function getDispatcher(): ?EventDispatcherInterface
     {
         return $this->dispatcher;
     }
 
-    public function getCollector(): CommonServiceCollectorInterface
+    public function getCollector(): ?CommonServiceCollectorInterface
     {
         return $this->collector;
     }
 
-    public function getProxyCachePath(): string
+    public function getProxyCachePath(): ?string
     {
         return $this->proxyCachePath;
     }
