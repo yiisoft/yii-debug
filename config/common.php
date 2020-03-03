@@ -28,8 +28,8 @@ return [
         $runtime = $container->get(Aliases::class)->get('@runtime');
         $path = "$runtime/debug";
         $id = time();
-        if (!is_dir($path)) {
-            mkdir($path);
+        if (!is_dir($path) && !mkdir($path)) {
+            throw new \RuntimeException("Proxy cache directory '$path' can not be created");
         }
 
         return new FileStorage("$path/$id.data");
