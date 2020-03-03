@@ -20,8 +20,8 @@ class ContainerProxyConfig
     private ?string $proxyCachePath = null;
 
     public function __construct(
-        bool $active,
-        array $decoratedServices,
+        bool $active = false,
+        array $decoratedServices = [],
         EventDispatcherInterface $dispatcher = null,
         CommonServiceCollectorInterface $collector = null,
         string $proxyCachePath = null,
