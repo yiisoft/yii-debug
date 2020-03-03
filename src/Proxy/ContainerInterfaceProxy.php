@@ -10,11 +10,11 @@ use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
 {
-    const LOG_ARGUMENTS = 1 << 0;
+    public const LOG_ARGUMENTS = 1 << 0;
 
-    const LOG_RESULT = 1 << 1;
+    public const LOG_RESULT = 1 << 1;
 
-    const LOG_ERROR = 1 << 2;
+    public const LOG_ERROR = 1 << 2;
 
     protected ContainerInterface $container;
 

@@ -9,12 +9,6 @@ use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
 class CommonServiceProxy extends ObjectProxy
 {
-    const LOG_ARGUMENTS = 1 << 0;
-
-    const LOG_RESULT = 1 << 1;
-
-    const LOG_ERROR = 1 << 2;
-
     private string $service;
 
     private int $logLevel = 0;
@@ -64,15 +58,15 @@ class CommonServiceProxy extends ObjectProxy
 
     private function processLogData(array &$arguments, &$result, ?object &$error): void
     {
-        if (!($this->logLevel & self::LOG_ARGUMENTS)) {
+        if (!($this->logLevel & ContainerInterfaceProxy::LOG_ARGUMENTS)) {
             $arguments = null;
         }
 
-        if (!($this->logLevel & self::LOG_RESULT)) {
+        if (!($this->logLevel & ContainerInterfaceProxy::LOG_RESULT)) {
             $result = null;
         }
 
-        if (!($this->logLevel & self::LOG_ERROR)) {
+        if (!($this->logLevel & ContainerInterfaceProxy::LOG_ERROR)) {
             $error = null;
         }
     }
@@ -82,12 +76,12 @@ class CommonServiceProxy extends ObjectProxy
         return $this->service;
     }
 
-    protected function getCollector(): CommonServiceCollectorInterface
+    protected function getCollector(): ?CommonServiceCollectorInterface
     {
         return $this->collector;
     }
 
-    protected function getDispatcher(): EventDispatcherInterface
+    protected function getDispatcher(): ?EventDispatcherInterface
     {
         return $this->dispatcher;
     }
