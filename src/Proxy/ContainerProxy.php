@@ -62,9 +62,10 @@ final class ContainerProxy extends ContainerInterfaceProxy implements ContainerD
     public function withRootContainer(ContainerInterface $container): ContainerInterface
     {
         $this->checkNativeContainer();
-        $this->container = $this->container->withRootContainer($container);
+        $newContainer = clone $this;
+        $newContainer->container = $this->container->withRootContainer($container);
 
-        return $this;
+        return $newContainer;
     }
 
     private function checkNativeContainer(): void
