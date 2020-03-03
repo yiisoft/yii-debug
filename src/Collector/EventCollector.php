@@ -15,10 +15,9 @@ final class EventCollector implements EventCollectorInterface
         return $this->events;
     }
 
-    public function collect(...$payload): void
+    public function collect(object $event): void
     {
-        $event = current($payload);
-        if (!is_object($event) || (!$this->isActive() && !$event instanceof ApplicationStartup)) {
+        if (!$this->isActive() && !$event instanceof ApplicationStartup) {
             return;
         }
 

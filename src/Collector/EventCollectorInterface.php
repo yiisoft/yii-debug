@@ -9,7 +9,7 @@ interface EventCollectorInterface extends CollectorInterface
 {
     /**
      * Collect data payload
-     * @param mixed ...$payload
+     * @param object $event
      */
-    public function collect(...$payload): void;
+    public function collect(object $event): void;
 }

@@ -13,13 +13,8 @@ final class LogCollector implements LogCollectorInterface
         return $this->messages;
     }
 
-    public function collect(...$payload): void
+    public function collect(string $level, string $message, array $context): void
     {
-        if (count($payload) !== 3) {
-            throw new \InvalidArgumentException('$payload should contain $level, $message and $context variables');
-        }
-        [$level, $message, $context] = $payload;
-
         $this->messages[] = [
             'time' => microtime(true),
             'level' => $level,
