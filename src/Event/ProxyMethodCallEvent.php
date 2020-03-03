@@ -4,6 +4,24 @@ namespace Yiisoft\Yii\Debug\Event;
 
 final class ProxyMethodCallEvent
 {
+    public string $service;
+
+    public string $class;
+
+    public string $methodName;
+
+    public ?array $arguments = null;
+
+    public $result = null;
+
+    public string $status;
+
+    public ?object $error = null;
+
+    public float $timeStart;
+
+    public float $timeEnd;
+
     public function __construct(
         string $service,
         string $class,
@@ -25,22 +43,4 @@ final class ProxyMethodCallEvent
         $this->timeStart = $timeStart;
         $this->timeEnd = $timeEnd;
     }
-
-    public string $service;
-
-    public string $class;
-
-    public string $methodName;
-
-    public ?array $arguments = null;
-
-    public $result = null;
-
-    public string $status;
-
-    public ?object $error = null;
-
-    public float $timeStart;
-
-    public float $timeEnd;
 }
