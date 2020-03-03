@@ -2,17 +2,7 @@
 
 namespace Yiisoft\Yii\Debug;
 
-use Psr\Container\ContainerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\EventDispatcher\ListenerProviderInterface;
-use Yiisoft\Di\ContainerProxyInterface;
-use Yiisoft\Di\ProxyMethodCallEvent;
-use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
-use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
-use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Web\Event\ApplicationStartup;
-use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 
 final class Debugger
 {
