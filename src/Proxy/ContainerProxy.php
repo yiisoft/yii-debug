@@ -4,9 +4,8 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Di\Container;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
+use Yiisoft\Di\ContainerDelegateInterface;
 
 final class ContainerProxy extends ContainerInterfaceProxy
 {
@@ -14,7 +13,7 @@ final class ContainerProxy extends ContainerInterfaceProxy
         ContainerInterface $container,
         ContainerProxyConfig $config
     ) {
-        $container = $container instanceof Container ? $container->withParentContainer($this) : $container;
+        $container = $container instanceof ContainerDelegateInterface ? $container->withRootContainer($this) : $container;
         parent::__construct($container, $config);
     }
 
