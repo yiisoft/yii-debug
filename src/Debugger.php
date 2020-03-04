@@ -6,7 +6,7 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class Debugger
 {
-    private static ?string $id = null;
+    private string $id;
     /**
      * @var \Yiisoft\Yii\Debug\Collector\CollectorInterface[]
      */
@@ -17,12 +17,12 @@ final class Debugger
     {
         $this->collectors = $collectors;
         $this->target = $target;
+        $this->id = uniqid('yii-debug-', true);
     }
 
-    public static function getId(): string
+    public function getId(): string
     {
-        self::$id = self::$id ?? uniqid('yii-debug-', true);
-        return self::$id;
+        return $this->id;
     }
 
     public function startup(): void

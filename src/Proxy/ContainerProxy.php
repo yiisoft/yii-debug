@@ -17,6 +17,7 @@ final class ContainerProxy extends ContainerInterfaceProxy
 
     public function delegateLookup(ContainerInterface $container): void
     {
+        $this->checkNativeContainer();
         $this->container->delegateLookup($container);
     }
 
