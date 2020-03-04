@@ -11,17 +11,13 @@ final class ContainerProxy extends ContainerInterfaceProxy
         ContainerInterface $container,
         ContainerProxyConfig $config
     ) {
-        $container = $container instanceof Container ? $container->delegateLookup($this) : $container;
+        $container instanceof Container ? $container->delegateLookup($this) : null;
         parent::__construct($container, $config);
     }
 
-    public function delegateLookup(ContainerInterface $container): ContainerInterface
+    public function delegateLookup(ContainerInterface $container): void
     {
-        $this->checkNativeContainer();
-        $newContainer = clone $this;
-        $newContainer->container = $this->container->delegateLookup($container);
-
-        return $newContainer;
+        $this->container->delegateLookup($container);
     }
 
     private function checkNativeContainer(): void
