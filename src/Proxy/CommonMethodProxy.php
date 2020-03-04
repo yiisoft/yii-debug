@@ -31,8 +31,9 @@ class CommonMethodProxy extends CommonServiceProxy
             }
         } finally {
             $this->log($method, $arguments, $result, $timeStart);
-            return $result;
         }
+
+        return $result;
     }
 
     protected function getNewStaticInstance(object $instance): ObjectProxy

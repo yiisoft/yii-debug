@@ -10,11 +10,11 @@ use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
 {
-    public const LOG_ARGUMENTS = 1 << 0;
+    public const LOG_ARGUMENTS = 1;
 
-    public const LOG_RESULT = 1 << 1;
+    public const LOG_RESULT = 2;
 
-    public const LOG_ERROR = 1 << 2;
+    public const LOG_ERROR = 4;
 
     protected ContainerInterface $container;
 
@@ -174,12 +174,13 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
             return null;
         }
 
-        if (isset($this->config->getDecoratedServices()[$service]) && is_callable($this->config->getDecoratedServices()[$service])) {
+        $decoratedServices = $this->config->getDecoratedServices();
+        if (isset($decoratedServices[$service]) && is_callable($decoratedServices[$service])) {
             return $this->getServiceProxyFromCallable($service, $instance);
-        } elseif (isset($this->config->getDecoratedServices()[$service]) && is_array($this->config->getDecoratedServices()[$service]) &&
-            !isset($this->config->getDecoratedServices()[$service][0])) {
-            return $this->getCommonMethodProxy($service, $instance, $this->config->getDecoratedServices()[$service]);
-        } elseif (isset($this->config->getDecoratedServices()[$service]) && is_array($this->config->getDecoratedServices()[$service])) {
+        } elseif (isset($decoratedServices[$service]) && is_array($decoratedServices[$service]) &&
+            !isset($decoratedServices[$service][0])) {
+            return $this->getCommonMethodProxy($service, $instance, $decoratedServices[$service]);
+        } elseif (isset($decoratedServices[$service]) && is_array($decoratedServices[$service])) {
             return $this->getServiceProxyFromArray($service, $instance);
         } elseif (interface_exists($service) && ($this->config->getCollector() !== null || $this->config->getDispatcher() !== null)) {
             return $this->getCommonServiceProxy($service, $instance);
