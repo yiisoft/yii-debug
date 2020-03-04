@@ -245,10 +245,10 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
     private function getInstance(string $id, array $params)
     {
         if ($params === []) {
-            return $instance = $this->container->get($id);
+            return $this->container->get($id);
         }
 
-        return $instance = $this->container->get($id, $params);
+        return $this->container->get($id, $params);
     }
 
     private function getServiceProxyCache(string $service): ?object
