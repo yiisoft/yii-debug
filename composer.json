@@ -24,6 +24,7 @@
         "yiisoft/assets": "dev-master",
         "yiisoft/view": "^3.0@dev",
         "yiisoft/proxy": "dev-master",
+        "yiisoft/container-proxy": "dev-master",
         "psr/log": "^1.1",
         "yiisoft/yii-web": "^3.0@dev",
         "ext-mbstring": "*",

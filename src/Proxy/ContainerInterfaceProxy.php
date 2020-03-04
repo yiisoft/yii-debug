@@ -4,11 +4,12 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
-use Yiisoft\Di\ContainerProxyInterface;
+use Yiisoft\Container\Proxy\ContainerProxyInterface;
+use Yiisoft\Di\AbstractContainerConfigurator;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
-class ContainerInterfaceProxy implements ContainerProxyInterface
+class ContainerInterfaceProxy extends AbstractContainerConfigurator implements ContainerProxyInterface
 {
     public const LOG_ARGUMENTS = 1;
 

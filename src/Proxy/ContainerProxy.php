@@ -3,6 +3,7 @@
 namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Container\ContainerInterface;
+use Yiisoft\Di\AbstractContainerConfigurator;
 use Yiisoft\Di\Container;
 
 final class ContainerProxy extends ContainerInterfaceProxy
