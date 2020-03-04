@@ -5,7 +5,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
-use Yiisoft\Di\ContainerProxyInterface;
+use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Yii\Debug\Collector\CommonServiceCollector;
 use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
 use Yiisoft\Yii\Debug\DebugEventDispatcher;
