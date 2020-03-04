@@ -53,9 +53,9 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
     public function get($id, array $params = [])
     {
         $this->resetCurrentError();
+        $timeStart = microtime(true);
         try {
             $instance = null;
-            $timeStart = microtime(true);
             $instance = $this->getInstance($id, $params);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
@@ -74,16 +74,17 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
     public function has($id): bool
     {
         $this->resetCurrentError();
+        $timeStart = microtime(true);
         try {
             $result = null;
-            $timeStart = microtime(true);
             $result = $this->container->has($id);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
             $this->log('has', [$id], $result, $timeStart);
-            return $result;
         }
+
+        return $result;
     }
 
     protected function getCurrentResultStatus(): string

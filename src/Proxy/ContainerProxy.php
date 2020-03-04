@@ -13,7 +13,7 @@ final class ContainerProxy extends ContainerInterfaceProxy implements ContainerD
         ContainerInterface $container,
         ContainerProxyConfig $config
     ) {
-        $container = $container instanceof ContainerDelegateInterface ? $container->withRootContainer($this) : $container;
+        $container = $container instanceof ContainerDelegateInterface ? $container->delegateLookup($this) : $container;
         parent::__construct($container, $config);
     }
 
@@ -21,8 +21,8 @@ final class ContainerProxy extends ContainerInterfaceProxy implements ContainerD
     {
         $this->checkNativeContainer();
         $this->resetCurrentError();
+        $timeStart = microtime(true);
         try {
-            $timeStart = microtime(true);
             $this->container->set($id, $definition);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
@@ -35,8 +35,8 @@ final class ContainerProxy extends ContainerInterfaceProxy implements ContainerD
     {
         $this->checkNativeContainer();
         $this->resetCurrentError();
+        $timeStart = microtime(true);
         try {
-            $timeStart = microtime(true);
             $this->container->setMultiple($config);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
@@ -49,8 +49,8 @@ final class ContainerProxy extends ContainerInterfaceProxy implements ContainerD
     {
         $this->checkNativeContainer();
         $this->resetCurrentError();
+        $timeStart = microtime(true);
         try {
-            $timeStart = microtime(true);
             $this->container->addProvider($providerDefinition);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
@@ -59,11 +59,11 @@ final class ContainerProxy extends ContainerInterfaceProxy implements ContainerD
         }
     }
 
-    public function withRootContainer(ContainerInterface $container): ContainerInterface
+    public function delegateLookup(ContainerInterface $container): ContainerInterface
     {
         $this->checkNativeContainer();
         $newContainer = clone $this;
-        $newContainer->container = $this->container->withRootContainer($container);
+        $newContainer->container = $this->container->delegateLookup($container);
 
         return $newContainer;
     }
