@@ -14,17 +14,4 @@ final class ContainerProxy extends ContainerInterfaceProxy
         $container instanceof Container ? $container->delegateLookup($this) : null;
         parent::__construct($container, $config);
     }
-
-    public function delegateLookup(ContainerInterface $container): void
-    {
-        $this->checkNativeContainer();
-        $this->container->delegateLookup($container);
-    }
-
-    private function checkNativeContainer(): void
-    {
-        if (!$this->container instanceof Container) {
-            throw new \RuntimeException('This method is for Yiisoft\Di\Container only');
-        }
-    }
 }
