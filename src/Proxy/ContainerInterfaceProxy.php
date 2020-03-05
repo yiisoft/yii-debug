@@ -64,7 +64,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
             $this->log('get', [$id, $params], $instance, $timeStart);
         }
 
-        if (is_object($instance) && $this->isDecorated($id) && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))) {
+        if ($this->isDecorated($id) && is_object($instance) && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))) {
             $this->setServiceProxyCache($id, $proxy);
             return $proxy;
         }
@@ -166,7 +166,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
 
     private function isDecorated(string $service): bool
     {
-        return isset($this->config->getDecoratedServices()[$service]) || in_array($service, $this->config->getDecoratedServices(), true);
+        return $this->isActive() && $this->config->hasDecoratedService($service);
     }
 
     private function getServiceProxy(string $service, object $instance): ?object
@@ -175,15 +175,19 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
             return null;
         }
 
-        $decoratedServices = $this->config->getDecoratedServices();
-        if (isset($decoratedServices[$service]) && is_callable($decoratedServices[$service])) {
-            return $this->getServiceProxyFromCallable($service, $instance);
-        } elseif (isset($decoratedServices[$service]) && is_array($decoratedServices[$service]) &&
-            !isset($decoratedServices[$service][0])) {
-            return $this->getCommonMethodProxy($service, $instance, $decoratedServices[$service]);
-        } elseif (isset($decoratedServices[$service]) && is_array($decoratedServices[$service])) {
-            return $this->getServiceProxyFromArray($service, $instance);
-        } elseif (interface_exists($service) && ($this->config->getCollector() !== null || $this->config->getDispatcher() !== null)) {
+        if ($this->config->hasDecoratedServiceCallableConfig($service)) {
+            return $this->getServiceProxyFromCallable($this->config->getDecoratedServiceConfig($service));
+        }
+
+        if ($this->config->hasDecoratedServiceArrayConfigWithStringKeys($service)) {
+            return $this->getCommonMethodProxy($service, $instance, $this->config->getDecoratedServiceConfig($service));
+        }
+
+        if ($this->config->hasDecoratedServiceArrayConfig($service)) {
+            return $this->getServiceProxyFromArray($instance, $this->config->getDecoratedServiceConfig($service));
+        }
+
+        if (interface_exists($service) && ($this->config->hasCollector() || $this->config->hasDispatcher())) {
             return $this->getCommonServiceProxy($service, $instance);
         }
 
@@ -195,10 +199,10 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
         $methods = [];
         while ($callback = current($callbacks)) {
             $method = key($callbacks);
-            next($callbacks);
             if (is_string($method) && is_callable($callback)) {
                 $methods[$method] = $callback;
             }
+            next($callbacks);
         }
 
         return $this->proxyManager->createObjectProxyFromInterface(
@@ -208,15 +212,14 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
         );
     }
 
-    private function getServiceProxyFromCallable(string $service, object $instance): ?object
+    private function getServiceProxyFromCallable(callable $callback): ?object
     {
-        return $this->config->getDecoratedServices()[$service]($this->container);
+        return $callback($this->container);
     }
 
-    private function getServiceProxyFromArray(string $service, object $instance): ?object
+    private function getServiceProxyFromArray(object $instance, array $params): ?object
     {
         try {
-            $params = $this->config->getDecoratedServices()[$service];
             $proxyClass = array_shift($params);
             foreach ($params as $index => $param) {
                 if (is_string($param)) {

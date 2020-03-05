@@ -106,4 +106,39 @@ class ContainerProxyConfig
     {
         return $this->proxyCachePath;
     }
+
+    public function getDecoratedServiceConfig($service)
+    {
+        return $this->decoratedServices[$service];
+    }
+
+    public function hasDecoratedService(string $service): bool
+    {
+        return isset($this->decoratedServices[$service]) || in_array($service, $this->decoratedServices, true);
+    }
+
+    public function hasDecoratedServiceArrayConfig(string $service): bool
+    {
+        return isset($this->decoratedServices[$service]) && is_array($this->decoratedServices[$service]);
+    }
+
+    public function hasDecoratedServiceArrayConfigWithStringKeys(string $service): bool
+    {
+        return $this->hasDecoratedServiceArrayConfig($service) && !isset($this->decoratedServices[$service][0]);
+    }
+
+    public function hasDecoratedServiceCallableConfig(string $service): bool
+    {
+        return isset($this->decoratedServices[$service]) && is_callable($this->decoratedServices[$service]);
+    }
+
+    public function hasDispatcher(): bool
+    {
+        return $this->dispatcher !== null;
+    }
+
+    public function hasCollector(): bool
+    {
+        return $this->collector !== null;
+    }
 }
