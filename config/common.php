@@ -39,9 +39,6 @@ return [
         $trackedServices = (array)($params['debugger.trackedServices'] ?? []);
         $decoratedServices = (array)($params['container.decorators'] ?? []);
         $path = $container->get(Aliases::class)->get("@runtime/cache/container-proxy");
-        if (!is_dir($path) && !mkdir($path)) {
-            throw new \RuntimeException("Proxy cache directory '$path' can not be created");
-        }
         $logLevel = ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR;
         return new ContainerProxyConfig(
             $debuggerEnabled,
