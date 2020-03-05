@@ -38,8 +38,7 @@ return [
         $debuggerEnabled = (bool)($params['debugger.enabled'] ?? false);
         $trackedServices = (array)($params['debugger.trackedServices'] ?? []);
         $decoratedServices = (array)($params['container.decorators'] ?? []);
-        $runtime = $container->get(Aliases::class)->get('@runtime');
-        $path = "$runtime/cache/container-proxy";
+        $path = $container->get(Aliases::class)->get("@runtime/cache/container-proxy");
         if (!is_dir($path) && !mkdir($path)) {
             throw new \RuntimeException("Proxy cache directory '$path' can not be created");
         }
@@ -53,8 +52,7 @@ return [
             $logLevel);
     },
     StorageInterface::class => function (ContainerInterface $container) {
-        $runtime = $container->get(Aliases::class)->get('@runtime');
-        $path = "$runtime/debug";
+        $path = $container->get(Aliases::class)->get("@runtime/debug");
         $id = time();
         if (!is_dir($path) && !mkdir($path)) {
             throw new \RuntimeException("Debugger directory '$path' can not be created");
