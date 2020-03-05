@@ -53,7 +53,7 @@ return [
     },
     StorageInterface::class => function (ContainerInterface $container) {
         $path = $container->get(Aliases::class)->get("@runtime/debug");
-        $id = time();
+        $id = (string)microtime(true);
         if (!is_dir($path) && !mkdir($path)) {
             throw new \RuntimeException("Debugger directory '$path' can not be created");
         }
