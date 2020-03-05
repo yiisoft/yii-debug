@@ -3,7 +3,7 @@
 namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 
 class ContainerProxyConfig
 {
@@ -15,7 +15,7 @@ class ContainerProxyConfig
 
     private ?EventDispatcherInterface $dispatcher = null;
 
-    private ?CommonServiceCollectorInterface $collector = null;
+    private ?ServiceCollectorInterface $collector = null;
 
     private ?string $proxyCachePath = null;
 
@@ -23,7 +23,7 @@ class ContainerProxyConfig
         bool $active = false,
         array $decoratedServices = [],
         EventDispatcherInterface $dispatcher = null,
-        CommonServiceCollectorInterface $collector = null,
+        ServiceCollectorInterface $collector = null,
         string $proxyCachePath = null,
         int $logLevel = 0
     ) {
@@ -63,7 +63,7 @@ class ContainerProxyConfig
         return $config;
     }
 
-    public function withCollector(CommonServiceCollectorInterface $collector): self
+    public function withCollector(ServiceCollectorInterface $collector): self
     {
         $config = clone $this;
         $config->collector = $collector;
@@ -97,7 +97,7 @@ class ContainerProxyConfig
         return $this->dispatcher;
     }
 
-    public function getCollector(): ?CommonServiceCollectorInterface
+    public function getCollector(): ?ServiceCollectorInterface
     {
         return $this->collector;
     }

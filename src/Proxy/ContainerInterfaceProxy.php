@@ -207,7 +207,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
 
         return $this->proxyManager->createObjectProxyFromInterface(
             $service,
-            CommonMethodProxy::class,
+            ServiceMethodProxy::class,
             [$service, $instance, $methods, $this->config->getCollector(), $this->config->getDispatcher(), $this->config->getLogLevel()]
         );
     }
@@ -240,7 +240,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
     {
         return $this->proxyManager->createObjectProxyFromInterface(
             $service,
-            CommonServiceProxy::class,
+            ServiceProxy::class,
             [$service, $instance, $this->config->getCollector(), $this->config->getDispatcher(), $this->config->getLogLevel()]
         );
     }

@@ -6,8 +6,8 @@ use Yiisoft\Aliases\Aliases;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollector;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollector;
+use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\DebugEventDispatcher;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
@@ -30,10 +30,10 @@ if (!(bool)($params['debugger.enabled'] ?? false)) {
 return [
     LogCollectorInterface::class => LogCollector::class,
     EventCollectorInterface::class => EventCollector::class,
-    CommonServiceCollectorInterface::class => CommonServiceCollector::class,
+    ServiceCollectorInterface::class => ServiceCollector::class,
     ContainerProxyInterface::class => ContainerProxy::class,
     ContainerProxyConfig::class => static function (ContainerInterface $container) use ($params) {
-        $collector = $container->get(CommonServiceCollectorInterface::class);
+        $collector = $container->get(ServiceCollectorInterface::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
         $debuggerEnabled = (bool)($params['debugger.enabled'] ?? false);
         $trackedServices = (array)($params['debugger.trackedServices'] ?? []);

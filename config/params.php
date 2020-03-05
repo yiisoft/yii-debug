@@ -9,6 +9,7 @@ use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
@@ -34,6 +35,7 @@ return [
         RequestCollector::class,
         RouterCollector::class,
         MiddlewareCollector::class,
+        ServiceCollector::class
     ],
     'debugger.trackedServices' => [
         LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],

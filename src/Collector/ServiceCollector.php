@@ -2,7 +2,7 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class CommonServiceCollector implements CommonServiceCollectorInterface
+final class ServiceCollector implements ServiceCollectorInterface
 {
     use CollectorTrait;
 

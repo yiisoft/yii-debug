@@ -4,9 +4,9 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Proxy\ObjectProxy;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 
-class CommonMethodProxy extends CommonServiceProxy
+class ServiceMethodProxy extends ServiceProxy
 {
     private array $methods;
 
@@ -14,7 +14,7 @@ class CommonMethodProxy extends CommonServiceProxy
         string $service,
         object $instance,
         array $methods,
-        CommonServiceCollectorInterface $collector = null,
+        ServiceCollectorInterface $collector = null,
         EventDispatcherInterface $dispatcher = null,
         int $logLevel = 0
     ) {

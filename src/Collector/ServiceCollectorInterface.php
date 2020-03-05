@@ -2,7 +2,7 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-interface CommonServiceCollectorInterface extends CollectorInterface
+interface ServiceCollectorInterface extends CollectorInterface
 {
     public function collect(
         string $service,

@@ -4,23 +4,23 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Proxy\ObjectProxy;
-use Yiisoft\Yii\Debug\Collector\CommonServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
-class CommonServiceProxy extends ObjectProxy
+class ServiceProxy extends ObjectProxy
 {
     private string $service;
 
     private int $logLevel = 0;
 
-    private ?CommonServiceCollectorInterface $collector = null;
+    private ?ServiceCollectorInterface $collector = null;
 
     private ?EventDispatcherInterface $dispatcher = null;
 
     public function __construct(
         string $service,
         object $instance,
-        CommonServiceCollectorInterface $collector = null,
+        ServiceCollectorInterface $collector = null,
         EventDispatcherInterface $dispatcher = null,
         int $logLevel = 0
     ) {
@@ -76,7 +76,7 @@ class CommonServiceProxy extends ObjectProxy
         return $this->service;
     }
 
-    protected function getCollector(): ?CommonServiceCollectorInterface
+    protected function getCollector(): ?ServiceCollectorInterface
     {
         return $this->collector;
     }
