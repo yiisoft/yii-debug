@@ -6,7 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Di\Container;
-use Yiisoft\Di\Contracts\ServiceProviderInterface;
+use Yiisoft\Di\Support\ServiceProvider;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
@@ -15,7 +15,7 @@ use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
-class DebugServiceProvider implements ServiceProviderInterface
+class DebugServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
     {
