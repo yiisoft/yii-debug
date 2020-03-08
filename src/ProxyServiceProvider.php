@@ -8,7 +8,6 @@ use Yiisoft\Di\Support\ServiceProvider;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 
-
 class ProxyServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
