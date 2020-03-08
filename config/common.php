@@ -69,7 +69,7 @@ return [
     },
     DebugEventDispatcher::class => function (ContainerInterface $container) use ($params) {
         $provider = new ConcreteProvider();
-        foreach ($params['debugger.event_handlers'] as $event => $eventHandlers) {
+        foreach ($params['debugger.eventHandlers'] as $event => $eventHandlers) {
             foreach ($eventHandlers as $eventHandler) {
                 $provider->attach($event, $eventHandler($container));
             }

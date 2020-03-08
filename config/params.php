@@ -50,7 +50,7 @@ return [
             return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollectorInterface::class));
         },
     ],
-    'debugger.event_handlers' => [
+    'debugger.eventHandlers' => [
         ApplicationStartup::class => [
             function (ContainerInterface $container) {
                 return [$container->get(RequestCollector::class), 'collect'];
