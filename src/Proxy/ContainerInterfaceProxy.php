@@ -5,12 +5,12 @@ namespace Yiisoft\Yii\Debug\Proxy;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
-use Yiisoft\Di\AbstractContainerConfigurator;
 use Yiisoft\Proxy\ProxyManager;
-use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
-class ContainerInterfaceProxy extends AbstractContainerConfigurator implements ContainerProxyInterface
+class ContainerInterfaceProxy implements ContainerProxyInterface
 {
+    use ProxyTrait, ProxyLogTrait;
+
     public const LOG_ARGUMENTS = 1;
 
     public const LOG_RESULT = 2;
@@ -19,20 +19,14 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
 
     protected ContainerInterface $container;
 
-    private array $decoratedServices = [];
+    private ProxyManager $proxyManager;
 
-    private ContainerProxyConfig $config;
+    private array $decoratedServices = [];
 
     private array $serviceProxy = [];
 
-    private ?object $currentError = null;
-
-    private ProxyManager $proxyManager;
-
-    public function __construct(
-        ContainerInterface $container,
-        ContainerProxyConfig $config
-    ) {
+    public function __construct(ContainerInterface $container, ContainerProxyConfig $config)
+    {
         $this->config = $config;
         $this->container = $container;
         $this->proxyManager = new ProxyManager($this->config->getProxyCachePath());
@@ -41,7 +35,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
     public function withDecoratedServices(array $decoratedServices): ContainerProxyInterface
     {
         $proxy = clone $this;
-        $proxy->decoratedServices = array_merge($this->config->getDecoratedServices(), $decoratedServices);
+        $this->config = $this->config->withDecoratedServices($decoratedServices);
 
         return $proxy;
     }
@@ -61,7 +55,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log('get', [$id, $params], $instance, $timeStart);
+            $this->log(ContainerInterface::class, $this->container, 'get', [$id, $params], $instance, $timeStart);
         }
 
         if ($this->isDecorated($id) && is_object($instance) && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))) {
@@ -82,86 +76,10 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log('has', [$id], $result, $timeStart);
+            $this->log(ContainerInterface::class, $this->container,'has', [$id], $result, $timeStart);
         }
 
         return $result;
-    }
-
-    protected function getCurrentResultStatus(): string
-    {
-        return $this->currentError === null ? 'success' : 'failed';
-    }
-
-    protected function repeatError(object $error): void
-    {
-        $this->currentError = $error;
-        $errorClass = get_class($error);
-        throw new $errorClass($error->getMessage());
-    }
-
-    protected function resetCurrentError(): void
-    {
-        $this->currentError = null;
-    }
-
-    protected function log(string $method, array $arguments, $result, float $timeStart): void
-    {
-        $error = $this->currentError;
-        $this->processLogData($arguments, $result, $error);
-
-        if ($this->config->getCollector() !== null) {
-            $this->logToCollector($method, $arguments, $result, $error, $timeStart);
-        }
-
-        if ($this->config->getDispatcher() !== null) {
-            $this->logToEvent($method, $arguments, $result, $error, $timeStart);
-        }
-    }
-
-    private function processLogData(array &$arguments, &$result, ?object &$error): void
-    {
-        if (!($this->config->getLogLevel() & self::LOG_ARGUMENTS)) {
-            $arguments = null;
-        }
-
-        if (!($this->config->getLogLevel() & self::LOG_RESULT)) {
-            $result = null;
-        }
-
-        if (!($this->config->getLogLevel() & self::LOG_ERROR)) {
-            $error = null;
-        }
-    }
-
-    private function logToCollector(string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
-    {
-        $this->config->getCollector()->collect(
-            ContainerInterface::class,
-            get_class($this->container),
-            $method,
-            $arguments,
-            $result,
-            $this->getCurrentResultStatus(),
-            $error,
-            $timeStart,
-            microtime(true),
-            );
-    }
-
-    private function logToEvent(string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
-    {
-        $this->config->getDispatcher()->dispatch(new ProxyMethodCallEvent(
-            ContainerInterface::class,
-            get_class($this->container),
-            $method,
-            $arguments,
-            $result,
-            $this->getCurrentResultStatus(),
-            $error,
-            $timeStart,
-            microtime(true),
-            ));
     }
 
     private function isDecorated(string $service): bool
@@ -208,7 +126,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
         return $this->proxyManager->createObjectProxyFromInterface(
             $service,
             ServiceMethodProxy::class,
-            [$service, $instance, $methods, $this->config->getCollector(), $this->config->getDispatcher(), $this->config->getLogLevel()]
+            [$service, $instance, $methods, $this->config]
         );
     }
 
@@ -241,7 +159,7 @@ class ContainerInterfaceProxy extends AbstractContainerConfigurator implements C
         return $this->proxyManager->createObjectProxyFromInterface(
             $service,
             ServiceProxy::class,
-            [$service, $instance, $this->config->getCollector(), $this->config->getDispatcher(), $this->config->getLogLevel()]
+            [$service, $instance, $this->config]
         );
     }
 

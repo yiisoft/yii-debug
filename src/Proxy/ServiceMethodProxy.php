@@ -2,9 +2,7 @@
 
 namespace Yiisoft\Yii\Debug\Proxy;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Proxy\ObjectProxy;
-use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 
 class ServiceMethodProxy extends ServiceProxy
 {
@@ -14,12 +12,10 @@ class ServiceMethodProxy extends ServiceProxy
         string $service,
         object $instance,
         array $methods,
-        ServiceCollectorInterface $collector = null,
-        EventDispatcherInterface $dispatcher = null,
-        int $logLevel = 0
+        ContainerProxyConfig $config
     ) {
         $this->methods = $methods;
-        parent::__construct($service, $instance, $collector, $dispatcher, $logLevel);
+        parent::__construct($service, $instance, $config);
     }
 
     protected function executeMethodProxy(string $method, array $arguments, $result, float $timeStart)
@@ -30,7 +26,7 @@ class ServiceMethodProxy extends ServiceProxy
                 $result = $callback($result, ...$arguments);
             }
         } finally {
-            $this->log($method, $arguments, $result, $timeStart);
+            $this->log($this->getService(), $this->getInstance(), $method, $arguments, $result, $timeStart);
         }
 
         return $result;
@@ -38,13 +34,6 @@ class ServiceMethodProxy extends ServiceProxy
 
     protected function getNewStaticInstance(object $instance): ObjectProxy
     {
-        return new static(
-            $this->getService(),
-            $instance,
-            $this->methods,
-            $this->getCollector(),
-            $this->getDispatcher(),
-            $this->getLogLevel()
-        );
+        return new static($this->getService(), $instance, $this->methods, $this->getConfig());
     }
 }

@@ -39,6 +39,7 @@ class ContainerProxyConfig
     {
         $config = clone $this;
         $config->active = true;
+
         return $config;
     }
 
@@ -46,6 +47,7 @@ class ContainerProxyConfig
     {
         $config = clone $this;
         $config->dispatcher = $dispatcher;
+
         return $config;
     }
 
@@ -53,6 +55,7 @@ class ContainerProxyConfig
     {
         $config = clone $this;
         $config->logLevel = $logLevel;
+
         return $config;
     }
 
@@ -60,6 +63,7 @@ class ContainerProxyConfig
     {
         $config = clone $this;
         $config->proxyCachePath = $proxyCachePath;
+
         return $config;
     }
 
@@ -67,13 +71,15 @@ class ContainerProxyConfig
     {
         $config = clone $this;
         $config->collector = $collector;
+
         return $config;
     }
 
     public function withDecoratedServices(array $decoratedServices): self
     {
         $config = clone $this;
-        $config->decoratedServices = $decoratedServices;
+        $config->decoratedServices = array_merge($this->decoratedServices, $decoratedServices);
+
         return $config;
     }
 
