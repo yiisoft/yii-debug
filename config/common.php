@@ -46,7 +46,8 @@ return [
             $dispatcher,
             $collector,
             $path,
-            $logLevel);
+            $logLevel
+        );
     },
     StorageInterface::class => function (ContainerInterface $container) {
         $path = $container->get(Aliases::class)->get("@runtime/debug");

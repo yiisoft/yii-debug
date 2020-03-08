@@ -6,7 +6,8 @@ use Yiisoft\Proxy\ObjectProxy;
 
 class ServiceProxy extends ObjectProxy
 {
-    use ProxyTrait, ProxyLogTrait;
+    use ProxyTrait;
+    use ProxyLogTrait;
 
     private string $service;
 

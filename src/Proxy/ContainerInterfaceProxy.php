@@ -9,7 +9,8 @@ use Yiisoft\Proxy\ProxyManager;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
 {
-    use ProxyTrait, ProxyLogTrait;
+    use ProxyTrait;
+    use ProxyLogTrait;
 
     public const LOG_ARGUMENTS = 1;
 
@@ -76,7 +77,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log(ContainerInterface::class, $this->container,'has', [$id], $result, $timeStart);
+            $this->log(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
         }
 
         return $result;

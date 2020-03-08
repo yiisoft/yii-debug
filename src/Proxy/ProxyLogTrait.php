@@ -49,7 +49,7 @@ trait ProxyLogTrait
             $error,
             $timeStart,
             microtime(true),
-            );
+        );
     }
 
     private function logToEvent(string $service, object $instance, string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
@@ -64,6 +64,6 @@ trait ProxyLogTrait
             $error,
             $timeStart,
             microtime(true),
-            ));
+        ));
     }
 }
