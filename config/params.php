@@ -14,6 +14,7 @@ use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
+use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
@@ -50,6 +51,7 @@ return [
             return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollectorInterface::class));
         },
     ],
+    'debugger.logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
     'debugger.eventHandlers' => [
         ApplicationStartup::class => [
             function (ContainerInterface $container) {
