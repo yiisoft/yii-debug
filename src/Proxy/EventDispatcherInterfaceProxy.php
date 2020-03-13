@@ -7,8 +7,8 @@ use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 
 final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 {
-    protected EventDispatcherInterface $dispatcher;
-    protected EventCollectorInterface $collector;
+    private EventDispatcherInterface $dispatcher;
+    private EventCollectorInterface $collector;
 
     public function __construct(EventDispatcherInterface $dispatcher, EventCollectorInterface $collector)
     {

@@ -10,13 +10,13 @@ final class ProxyMethodCallEvent
 
     public string $methodName;
 
-    public ?array $arguments = null;
+    public ?array $arguments;
 
-    public $result = null;
+    public $result;
 
     public string $status;
 
-    public ?object $error = null;
+    public ?object $error;
 
     public float $timeStart;
 

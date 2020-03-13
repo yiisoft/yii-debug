@@ -6,10 +6,10 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 
-class LoggerInterfaceProxy implements LoggerInterface
+final class LoggerInterfaceProxy implements LoggerInterface
 {
-    protected LoggerInterface $logger;
-    protected LogCollectorInterface $collector;
+    private LoggerInterface $logger;
+    private LogCollectorInterface $collector;
 
     public function __construct(LoggerInterface $logger, LogCollectorInterface $collector)
     {

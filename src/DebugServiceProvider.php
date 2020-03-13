@@ -15,7 +15,7 @@ use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
-class DebugServiceProvider extends ServiceProvider
+final class DebugServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
     {

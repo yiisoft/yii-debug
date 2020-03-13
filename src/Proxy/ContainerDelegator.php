@@ -6,7 +6,7 @@ use Psr\Container\ContainerInterface;
 use Yiisoft\Di\AbstractContainerConfigurator;
 use Yiisoft\Di\Container;
 
-class ContainerDelegator extends AbstractContainerConfigurator
+final class ContainerDelegator extends AbstractContainerConfigurator
 {
     private Container $container;
 

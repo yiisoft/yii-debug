@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Proxy;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 
-class ContainerProxyConfig
+final class ContainerProxyConfig
 {
     private int $logLevel;
 

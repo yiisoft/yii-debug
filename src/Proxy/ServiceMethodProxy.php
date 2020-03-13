@@ -4,7 +4,7 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Yiisoft\Proxy\ObjectProxy;
 
-class ServiceMethodProxy extends ServiceProxy
+final class ServiceMethodProxy extends ServiceProxy
 {
     private array $methods;
 

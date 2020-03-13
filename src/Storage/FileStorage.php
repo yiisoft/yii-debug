@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-class FileStorage implements StorageInterface
+final class FileStorage implements StorageInterface
 {
     /**
      * @var CollectorInterface[]

@@ -7,7 +7,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
 
-class DebugStartupDispatcher implements EventDispatcherInterface
+final class DebugStartupDispatcher implements EventDispatcherInterface
 {
     private ContainerInterface $container;
 

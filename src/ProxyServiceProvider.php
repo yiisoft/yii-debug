@@ -8,11 +8,11 @@ use Yiisoft\Di\Support\ServiceProvider;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 
-class ProxyServiceProvider extends ServiceProvider
+final class ProxyServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
     {
-        $container->set(ContainerInterface::class, function (ContainerInterface $container) {
+        $container->set(ContainerInterface::class, static function (ContainerInterface $container) {
             return new ContainerProxy($container, $container->get(ContainerProxyConfig::class));
         });
     }
