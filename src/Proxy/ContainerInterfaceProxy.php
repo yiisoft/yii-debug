@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Proxy\ProxyManager;
+use Yiisoft\Proxy\ProxyTrait;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
 {

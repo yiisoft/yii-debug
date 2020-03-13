@@ -3,5 +3,5 @@
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
 return [
-  'Debugger' => ProxyServiceProvider::class
+    'Debugger' => ProxyServiceProvider::class
 ];
