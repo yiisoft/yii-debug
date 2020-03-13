@@ -59,7 +59,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
             $this->log(ContainerInterface::class, $this->container, 'get', [$id, $params], $instance, $timeStart);
         }
 
-        if ($this->isDecorated($id) && is_object($instance) && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))) {
+        if (is_object($instance) && $this->isDecorated($id) && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))) {
             $this->setServiceProxyCache($id, $proxy);
             return $proxy;
         }

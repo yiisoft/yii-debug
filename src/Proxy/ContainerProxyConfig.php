@@ -7,17 +7,17 @@ use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 
 class ContainerProxyConfig
 {
-    private int $logLevel = 0;
+    private int $logLevel;
 
-    private array $decoratedServices = [];
+    private array $decoratedServices;
 
-    private bool $active = false;
+    private bool $active;
 
-    private ?EventDispatcherInterface $dispatcher = null;
+    private ?EventDispatcherInterface $dispatcher;
 
-    private ?ServiceCollectorInterface $collector = null;
+    private ?ServiceCollectorInterface $collector;
 
-    private ?string $proxyCachePath = null;
+    private ?string $proxyCachePath;
 
     public function __construct(
         bool $active = false,

@@ -25,10 +25,10 @@ class DebugServiceProvider extends ServiceProvider
         $container->setMultiple(
             [
                 // interfaces overriding
-                LoggerInterface::class => function (ContainerInterface $container) use ($logger) {
+                LoggerInterface::class => static function (ContainerInterface $container) use ($logger) {
                     return new LoggerInterfaceProxy($logger, $container->get(LogCollector::class));
                 },
-                EventDispatcherInterface::class => function (ContainerInterface $container) use ($dispatcher) {
+                EventDispatcherInterface::class => static function (ContainerInterface $container) use ($dispatcher) {
                     $compositeDispatcher = new CompositeDispatcher();
                     $compositeDispatcher->attach($container->get(DebugStartupDispatcher::class));
                     $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));

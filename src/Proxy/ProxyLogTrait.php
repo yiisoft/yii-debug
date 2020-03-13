@@ -22,7 +22,7 @@ trait ProxyLogTrait
         }
     }
 
-    private function processLogData(array &$arguments, &$result, ?object &$error): void
+    private function processLogData(?array &$arguments, &$result, ?object &$error): void
     {
         if (!($this->config->getLogLevel() & ContainerInterfaceProxy::LOG_ARGUMENTS)) {
             $arguments = null;
