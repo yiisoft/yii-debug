@@ -7,7 +7,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 
-class DebugShutdownDispatcher implements EventDispatcherInterface
+final class DebugShutdownDispatcher implements EventDispatcherInterface
 {
     private ContainerInterface $container;
 

@@ -6,16 +6,16 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Di\Container;
-use Yiisoft\Di\Contracts\ServiceProviderInterface;
+use Yiisoft\Di\Support\ServiceProvider;
 use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
 use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerProxy;
+use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
-class DebugServiceProvider implements ServiceProviderInterface
+final class DebugServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
     {
@@ -25,17 +25,17 @@ class DebugServiceProvider implements ServiceProviderInterface
         $container->setMultiple(
             [
                 // interfaces overriding
-                LoggerInterface::class => function (ContainerInterface $container) use ($logger) {
-                    return new LoggerProxy($logger, $container->get(LogCollector::class));
+                LoggerInterface::class => static function (ContainerInterface $container) use ($logger) {
+                    return new LoggerInterfaceProxy($logger, $container->get(LogCollector::class));
                 },
-                EventDispatcherInterface::class => function (ContainerInterface $container) use ($dispatcher) {
+                EventDispatcherInterface::class => static function (ContainerInterface $container) use ($dispatcher) {
                     $compositeDispatcher = new CompositeDispatcher();
                     $compositeDispatcher->attach($container->get(DebugStartupDispatcher::class));
                     $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));
                     $compositeDispatcher->attach($dispatcher);
                     $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
 
-                    return new EventDispatcherProxy($compositeDispatcher, $container->get(EventCollector::class));
+                    return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollector::class));
                 },
             ]
         );

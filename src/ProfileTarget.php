@@ -7,7 +7,7 @@ use Yiisoft\Profiler\Target;
 /**
  * ProfileTarget
  */
-class ProfileTarget extends Target
+final class ProfileTarget extends Target
 {
     /**
      * @var array complete profiling messages.
