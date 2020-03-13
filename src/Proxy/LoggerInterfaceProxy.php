@@ -4,14 +4,14 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 
-final class LoggerProxy implements LoggerInterface
+final class LoggerInterfaceProxy implements LoggerInterface
 {
     private LoggerInterface $logger;
-    private CollectorInterface $collector;
+    private LogCollectorInterface $collector;
 
-    public function __construct(LoggerInterface $logger, CollectorInterface $collector)
+    public function __construct(LoggerInterface $logger, LogCollectorInterface $collector)
     {
         $this->logger = $logger;
         $this->collector = $collector;

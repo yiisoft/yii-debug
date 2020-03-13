@@ -5,8 +5,8 @@ namespace Yiisoft\Yii\Debug\Tests\Proxy;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Proxy\LoggerProxy;
+use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
 final class LoggerProxyTest extends TestCase
 {
@@ -16,12 +16,12 @@ final class LoggerProxyTest extends TestCase
     public function testLogMethods(string $method, string $level, string $message, array $context): void
     {
         $logger = $this->createMock(LoggerInterface::class);
-        $collector = $this->createMock(CollectorInterface::class);
+        $collector = $this->createMock(LogCollectorInterface::class);
         $collector
             ->expects($this->once())
             ->method('collect')
             ->with($level, $message, $context);
-        $proxy = new LoggerProxy($logger, $collector);
+        $proxy = new LoggerInterfaceProxy($logger, $collector);
 
         $proxy->$method($message, $context);
     }
@@ -32,12 +32,12 @@ final class LoggerProxyTest extends TestCase
     public function testMethodLog($method, string $level, string $message, array $context): void
     {
         $logger = $this->createMock(LoggerInterface::class);
-        $collector = $this->createMock(CollectorInterface::class);
+        $collector = $this->createMock(LogCollectorInterface::class);
         $collector
             ->expects($this->once())
             ->method('collect')
             ->with($level, $message, $context);
-        $proxy = new LoggerProxy($logger, $collector);
+        $proxy = new LoggerInterfaceProxy($logger, $collector);
 
         $proxy->log($level, $message, $context);
     }

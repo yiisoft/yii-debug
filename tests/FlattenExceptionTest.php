@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\FlattenException;
 
-class FlattenExceptionTest extends TestCase
+final class FlattenExceptionTest extends TestCase
 {
     public function testMessage(): void
     {

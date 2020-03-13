@@ -23,10 +23,4 @@ interface CollectorInterface
      * @return array data collected
      */
     public function getCollected(): array;
-
-    /**
-     * Collect data payload
-     * @param mixed ...$payload
-     */
-    public function collect(...$payload): void;
 }
