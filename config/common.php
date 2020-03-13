@@ -39,7 +39,7 @@ return [
         $trackedServices = (array)($params['debugger.trackedServices'] ?? []);
         $decoratedServices = (array)($params['container.decorators'] ?? []);
         $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
-        $logLevel = $params['debugger.logLevel'] ?? null;
+        $logLevel = $params['debugger.logLevel'] ?? 0;
         return new ContainerProxyConfig(
             $debuggerEnabled,
             array_merge($trackedServices, $decoratedServices),
