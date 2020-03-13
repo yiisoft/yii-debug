@@ -54,32 +54,32 @@ return [
     'debugger.logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
     'debugger.eventHandlers' => [
         ApplicationStartup::class => [
-            function (ContainerInterface $container) {
+            static function (ContainerInterface $container) {
                 return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         ApplicationShutdown::class => [
-            function (ContainerInterface $container) {
+            static function (ContainerInterface $container) {
                 return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         BeforeRequest::class => [
-            function (ContainerInterface $container) {
+            static function (ContainerInterface $container) {
                 return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         AfterRequest::class => [
-            function (ContainerInterface $container) {
+            static function (ContainerInterface $container) {
                 return [$container->get(RequestCollector::class), 'collect'];
             },
         ],
         BeforeMiddleware::class => [
-            function (ContainerInterface $container) {
+            static function (ContainerInterface $container) {
                 return [$container->get(MiddlewareCollector::class), 'collect'];
             },
         ],
         AfterMiddleware::class => [
-            function (ContainerInterface $container) {
+            static function (ContainerInterface $container) {
                 return [$container->get(MiddlewareCollector::class), 'collect'];
             },
         ],

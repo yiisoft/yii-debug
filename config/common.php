@@ -38,7 +38,7 @@ return [
         $debuggerEnabled = (bool)($params['debugger.enabled'] ?? false);
         $trackedServices = (array)($params['debugger.trackedServices'] ?? []);
         $decoratedServices = (array)($params['container.decorators'] ?? []);
-        $path = $container->get(Aliases::class)->get("@runtime/cache/container-proxy");
+        $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
         $logLevel = $params['debugger.logLevel'] ?? null;
         return new ContainerProxyConfig(
             $debuggerEnabled,
@@ -50,7 +50,7 @@ return [
         );
     },
     StorageInterface::class => function (ContainerInterface $container) {
-        $path = $container->get(Aliases::class)->get("@runtime/debug");
+        $path = $container->get(Aliases::class)->get('@runtime/debug');
         $id = (string)microtime(true);
         if (!is_dir($path) && !mkdir($path)) {
             throw new \RuntimeException("Debugger directory '$path' can not be created");
@@ -58,7 +58,7 @@ return [
 
         return new FileStorage("$path/$id.data");
     },
-    Debugger::class => function (ContainerInterface $container) use ($params) {
+    Debugger::class => static function (ContainerInterface $container) use ($params) {
         return new Debugger(
             $container->get(StorageInterface::class),
             array_map(
@@ -67,7 +67,7 @@ return [
             )
         );
     },
-    DebugEventDispatcher::class => function (ContainerInterface $container) use ($params) {
+    DebugEventDispatcher::class => static function (ContainerInterface $container) use ($params) {
         $provider = new ConcreteProvider();
         foreach ($params['debugger.eventHandlers'] as $event => $eventHandlers) {
             foreach ($eventHandlers as $eventHandler) {
