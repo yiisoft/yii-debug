@@ -18,6 +18,7 @@ final class Debugger
         $this->collectors = $collectors;
         $this->target = $target;
         $this->id = uniqid('yii-debug-', true);
+        $this->target->setDebugId($this->id);
     }
 
     public function getId(): string

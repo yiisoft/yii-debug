@@ -18,6 +18,7 @@ use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 /**
  * @var $params array
@@ -50,13 +51,8 @@ return [
         );
     },
     StorageInterface::class => function (ContainerInterface $container) {
-        $path = $container->get(Aliases::class)->get('@runtime/debug');
-        $id = (string)microtime(true);
-        if (!is_dir($path) && !mkdir($path)) {
-            throw new \RuntimeException("Debugger directory '$path' can not be created");
-        }
-
-        return new FileStorage("$path/$id.data");
+        $filesystem = $container->get(FilesystemInterface::class);
+        return new FileStorage('@runtime/debug', $filesystem);
     },
     Debugger::class => static function (ContainerInterface $container) use ($params) {
         return new Debugger(
