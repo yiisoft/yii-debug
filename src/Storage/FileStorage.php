@@ -17,7 +17,7 @@ final class FileStorage implements StorageInterface
 
     private ?string $debugId = null;
 
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     public function __construct(string $path, FilesystemInterface $filesystem)
     {
