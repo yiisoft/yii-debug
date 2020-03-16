@@ -50,7 +50,7 @@ return [
             $logLevel
         );
     },
-    StorageInterface::class => function (ContainerInterface $container) use ($params){
+    StorageInterface::class => function (ContainerInterface $container) use ($params) {
         $filesystem = $container->get(FilesystemInterface::class);
         return new FileStorage($params['debugger.path'], $filesystem);
     },
