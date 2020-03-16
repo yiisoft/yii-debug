@@ -52,6 +52,7 @@ return [
         },
     ],
     'debugger.logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
+    'debugger.path' => '@runtime/debug',
     'debugger.eventHandlers' => [
         ApplicationStartup::class => [
             static function (ContainerInterface $container) {

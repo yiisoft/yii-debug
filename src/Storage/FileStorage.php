@@ -52,7 +52,7 @@ final class FileStorage implements StorageInterface
         $jsonData = VarDumper::dumpAsJson($this->getData());
         $this->filesystem->write($this->path . '/' . $this->debugId . '.data.json', $jsonData);
 
-        $jsonObjects = VarDumper::dumpObjectsAsJson();
+        $jsonObjects = VarDumper::dumpCurrentObjectsCacheAsJson();
         $this->filesystem->write($this->path . '/' . $this->debugId . '.obj.json', $jsonObjects);
 
         $this->collectors = [];
