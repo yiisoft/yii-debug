@@ -27,8 +27,10 @@
         "yiisoft/proxy": "dev-master",
         "yiisoft/di": "^3.0@dev",
         "yiisoft/container-proxy": "dev-master",
-        "psr/log": "^1.1",
+        "yiisoft/var-dumper": "^3.0@dev",
+        "yiisoft/yii-filesystem": "dev-master",
         "yiisoft/yii-web": "^3.0@dev",
+        "psr/log": "^1.1",
         "ext-mbstring": "*",
         "php": "^7.4"
     },

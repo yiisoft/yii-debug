@@ -11,6 +11,8 @@ final class MemoryStorage implements StorageInterface
      */
     private array $collectors = [];
 
+    private ?string $debugId = null;
+
     public function addCollector(CollectorInterface $collector): void
     {
         $this->collectors[get_class($collector)] = $collector;
@@ -25,6 +27,13 @@ final class MemoryStorage implements StorageInterface
         }
 
         return $data;
+    }
+
+    public function setDebugId(string $id): void
+    {
+        if ($this->debugId === null) {
+            $this->debugId = $id;
+        }
     }
 
     public function flush(): void

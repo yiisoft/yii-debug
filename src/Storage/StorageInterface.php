@@ -17,6 +17,8 @@ interface StorageInterface
 
     public function getData(): array;
 
+    public function setDebugId(string $id): void;
+
     /**
      * Flush data from collectors into storage
      */

@@ -4,6 +4,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 final class FileStorage implements StorageInterface
 {
@@ -11,11 +12,24 @@ final class FileStorage implements StorageInterface
      * @var CollectorInterface[]
      */
     private array $collectors = [];
+
     private string $path;
 
-    public function __construct(string $path)
+    private ?string $debugId = null;
+
+    private FilesystemInterface $filesystem;
+
+    public function __construct(string $path, FilesystemInterface $filesystem)
     {
         $this->path = $path;
+        $this->filesystem = $filesystem;
+    }
+
+    public function setDebugId(string $id): void
+    {
+        if ($this->debugId === null) {
+            $this->debugId = $id;
+        }
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -35,15 +49,13 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
-        $content = VarDumper::dumpAsString($this->getData());
-        if (file_exists($this->path)) {
-            $result = file_put_contents($this->path, $content, FILE_APPEND);
-        } else {
-            $result = file_put_contents($this->path, $content);
-        }
-        if (!$result) {
-            throw new \RuntimeException('error ' . (int)$result);
-        }
+        $varDumper = VarDumper::create($this->getData());
+        $jsonData = $varDumper->asJson();
+        $this->filesystem->write($this->path . '/' . $this->debugId . '.data.json', $jsonData);
+
+        $jsonObjects = $varDumper->asJsonObjectsMap();
+        $this->filesystem->write($this->path . '/' . $this->debugId . '.obj.json', $jsonObjects);
+
         $this->collectors = [];
     }
 }
