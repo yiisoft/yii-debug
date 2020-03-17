@@ -3,41 +3,38 @@
 namespace Yiisoft\Yii\Debug;
 
 use Psr\Container\ContainerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\LoggerInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\Support\ServiceProvider;
-use Yiisoft\EventDispatcher\Dispatcher\CompositeDispatcher;
-use Yiisoft\Yii\Debug\Collector\EventCollector;
-use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Dispatcher\DebugShutdownDispatcher;
-use Yiisoft\Yii\Debug\Dispatcher\DebugStartupDispatcher;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Storage\FileStorage;
+use Yiisoft\Yii\Debug\Storage\StorageInterface;
+use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 final class DebugServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
     {
-        $logger = $container->get(LoggerInterface::class);
-        $dispatcher = $container->get(EventDispatcherInterface::class);
+        $debugSessionId = 'yii-debug-' . microtime(true);
 
-        $container->setMultiple(
-            [
-                // interfaces overriding
-                LoggerInterface::class => static function (ContainerInterface $container) use ($logger) {
-                    return new LoggerInterfaceProxy($logger, $container->get(LogCollector::class));
-                },
-                EventDispatcherInterface::class => static function (ContainerInterface $container) use ($dispatcher) {
-                    $compositeDispatcher = new CompositeDispatcher();
-                    $compositeDispatcher->attach($container->get(DebugStartupDispatcher::class));
-                    $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));
-                    $compositeDispatcher->attach($dispatcher);
-                    $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
+        $container->setMultiple([
+            StorageInterface::class => function (ContainerInterface $container) use ($debugSessionId) {
+                $params = $container->get('params');
+                $filesystem = $container->get(FilesystemInterface::class);
+                $path = $params['debugger.path'] . DIRECTORY_SEPARATOR . $debugSessionId . '.data';
 
-                    return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollector::class));
-                },
-            ]
-        );
+                return new FileStorage($path, $filesystem);
+            },
+            Debugger::class => static function (ContainerInterface $container) use ($debugSessionId) {
+                $params = $container->get('params');
+
+                return new Debugger(
+                    $debugSessionId,
+                    $container->get(StorageInterface::class),
+                    array_map(
+                        fn($class) => $container->get($class),
+                        $params['debugger.collectors']
+                    )
+                );
+            },
+        ]);
     }
 }

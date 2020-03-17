@@ -3,22 +3,18 @@
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
+use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
-use Yiisoft\Container\Proxy\ContainerProxyInterface;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\DebugEventDispatcher;
-use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
-use Yiisoft\Yii\Debug\Storage\FileStorage;
-use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
-use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 /**
  * @var $params array
@@ -29,6 +25,9 @@ if (!(bool)($params['debugger.enabled'] ?? false)) {
 }
 
 return [
+    'params' => static function () use ($params) {
+        return $params;
+    },
     LogCollectorInterface::class => LogCollector::class,
     EventCollectorInterface::class => EventCollector::class,
     ServiceCollectorInterface::class => ServiceCollector::class,
@@ -48,19 +47,6 @@ return [
             $collector,
             $path,
             $logLevel
-        );
-    },
-    StorageInterface::class => function (ContainerInterface $container) use ($params) {
-        $filesystem = $container->get(FilesystemInterface::class);
-        return new FileStorage($params['debugger.path'], $filesystem);
-    },
-    Debugger::class => static function (ContainerInterface $container) use ($params) {
-        return new Debugger(
-            $container->get(StorageInterface::class),
-            array_map(
-                fn ($class) => $container->get($class),
-                $params['debugger.collectors']
-            )
         );
     },
     DebugEventDispatcher::class => static function (ContainerInterface $container) use ($params) {

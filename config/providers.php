@@ -1,7 +1,9 @@
 <?php
 
+use Yiisoft\Yii\Debug\DebugServiceProvider;
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
 return [
-    'Debugger' => ProxyServiceProvider::class
+    'DebugContainerProxy' => ProxyServiceProvider::class,
+    'Debugger' => DebugServiceProvider::class,
 ];
