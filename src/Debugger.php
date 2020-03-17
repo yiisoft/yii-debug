@@ -13,12 +13,11 @@ final class Debugger
     private array $collectors;
     private StorageInterface $target;
 
-    public function __construct(StorageInterface $target, array $collectors)
+    public function __construct(string $id, StorageInterface $target, array $collectors)
     {
         $this->collectors = $collectors;
         $this->target = $target;
-        $this->id = uniqid('yii-debug-', true);
-        $this->target->setDebugId($this->id);
+        $this->id = $id;
     }
 
     public function getId(): string
