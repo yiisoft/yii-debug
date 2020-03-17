@@ -11,12 +11,12 @@ final class Debugger
      * @var \Yiisoft\Yii\Debug\Collector\CollectorInterface[]
      */
     private array $collectors;
-    private StorageInterface $target;
+    private StorageInterface $storage;
 
-    public function __construct(string $id, StorageInterface $target, array $collectors)
+    public function __construct(string $id, StorageInterface $storage, array $collectors)
     {
         $this->collectors = $collectors;
-        $this->target = $target;
+        $this->storage = $storage;
         $this->id = $id;
     }
 
@@ -28,7 +28,7 @@ final class Debugger
     public function startup(): void
     {
         foreach ($this->collectors as $collector) {
-            $this->target->addCollector($collector);
+            $this->storage->addCollector($collector);
             $collector->startup();
         }
     }
@@ -38,6 +38,6 @@ final class Debugger
         foreach ($this->collectors as $collector) {
             $collector->shutdown();
         }
-        $this->target->flush();
+        $this->storage->flush();
     }
 }
