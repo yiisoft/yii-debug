@@ -44,13 +44,15 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
-        $varDumper = VarDumper::create($this->getData());
-        $jsonData = $varDumper->asJson();
-        $this->filesystem->write($this->path . '/' . $this->debugId . '.data.json', $jsonData);
+        try {
+            $varDumper = VarDumper::create($this->getData());
+            $jsonData = $varDumper->asJson();
+            $this->filesystem->write($this->path . '/' . $this->debugId . '.data.json', $jsonData);
 
-        $jsonObjects = $varDumper->asJsonObjectsMap();
-        $this->filesystem->write($this->path . '/' . $this->debugId . '.obj.json', $jsonObjects);
-
-        $this->collectors = [];
+            $jsonObjects = $varDumper->asJsonObjectsMap();
+            $this->filesystem->write($this->path . '/' . $this->debugId . '.obj.json', $jsonObjects);
+        } finally {
+            $this->collectors = [];
+        }
     }
 }
