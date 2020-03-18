@@ -4,6 +4,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 final class FileStorage implements StorageInterface
@@ -19,17 +20,11 @@ final class FileStorage implements StorageInterface
 
     private FilesystemInterface $filesystem;
 
-    public function __construct(string $path, FilesystemInterface $filesystem)
+    public function __construct(string $path, FilesystemInterface $filesystem, DebuggerIdGenerator $idGenerator)
     {
         $this->path = $path;
         $this->filesystem = $filesystem;
-    }
-
-    public function setDebugId(string $id): void
-    {
-        if ($this->debugId === null) {
-            $this->debugId = $id;
-        }
+        $this->debugId = $idGenerator->getId();
     }
 
     public function addCollector(CollectorInterface $collector): void
