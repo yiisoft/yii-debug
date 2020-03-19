@@ -10,6 +10,6 @@ final class MemoryStorageTest extends AbstractStorageTest
 {
     public function getStorage(): StorageInterface
     {
-        return new MemoryStorage(new DebuggerIdGenerator());
+        return new MemoryStorage();
     }
 }
