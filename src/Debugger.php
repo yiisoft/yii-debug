@@ -37,9 +37,9 @@ final class Debugger
 
     public function shutdown(): void
     {
+        $this->target->flush();
         foreach ($this->collectors as $collector) {
             $collector->shutdown();
         }
-        $this->target->flush();
     }
 }

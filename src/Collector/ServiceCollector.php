@@ -36,4 +36,9 @@ final class ServiceCollector implements ServiceCollectorInterface
             'timeEnd' => $timeEnd,
         ];
     }
+
+    private function reset()
+    {
+        $this->items = [];
+    }
 }

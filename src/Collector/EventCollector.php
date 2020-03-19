@@ -31,4 +31,9 @@ final class EventCollector implements EventCollectorInterface
             'time' => microtime(true),
         ];
     }
+
+    private function reset()
+    {
+        $this->events = [];
+    }
 }

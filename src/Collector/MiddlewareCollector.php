@@ -43,4 +43,10 @@ final class MiddlewareCollector implements CollectorInterface
             ];
         }
     }
+
+    private function reset()
+    {
+        $this->beforeStack = [];
+        $this->afterStack = [];
+    }
 }

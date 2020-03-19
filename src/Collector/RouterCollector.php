@@ -20,4 +20,8 @@ final class RouterCollector implements CollectorInterface
     {
         return $this->container->get(RouteCollectorInterface::class)->getItems();
     }
+
+    private function reset()
+    {
+    }
 }

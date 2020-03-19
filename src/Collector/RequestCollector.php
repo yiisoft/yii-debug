@@ -43,4 +43,12 @@ final class RequestCollector implements CollectorInterface
             $this->applicationProcessingTimeStopped = microtime(true);
         }
     }
+
+    private function reset()
+    {
+        $this->applicationProcessingTimeStarted = 0;
+        $this->applicationProcessingTimeStopped = 0;
+        $this->requestProcessingTimeStarted = 0;
+        $this->requestProcessingTimeStopped = 0;
+    }
 }

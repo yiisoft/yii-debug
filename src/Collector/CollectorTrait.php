@@ -13,6 +13,7 @@ trait CollectorTrait
 
     public function shutdown(): void
     {
+        $this->reset();
         $this->isActive = false;
     }
 
