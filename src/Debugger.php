@@ -12,21 +12,23 @@ final class Debugger
      */
     private array $collectors;
     private StorageInterface $target;
+    private DebuggerIdGenerator $idGenerator;
 
     public function __construct(DebuggerIdGenerator $idGenerator, StorageInterface $target, array $collectors)
     {
         $this->collectors = $collectors;
         $this->target = $target;
-        $this->id = $idGenerator->getId();
+        $this->idGenerator = $idGenerator;
     }
 
     public function getId(): string
     {
-        return $this->id;
+        return $this->idGenerator->getId();
     }
 
     public function startup(): void
     {
+        $this->idGenerator->reset();
         foreach ($this->collectors as $collector) {
             $this->target->addCollector($collector);
             $collector->startup();

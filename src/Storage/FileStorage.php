@@ -16,7 +16,7 @@ final class FileStorage implements StorageInterface
 
     private string $path;
 
-    private ?string $debugId = null;
+    private DebuggerIdGenerator $idGenerator;
 
     private FilesystemInterface $filesystem;
 
@@ -24,7 +24,7 @@ final class FileStorage implements StorageInterface
     {
         $this->path = $path;
         $this->filesystem = $filesystem;
-        $this->debugId = $idGenerator->getId();
+        $this->idGenerator = $idGenerator;
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -47,10 +47,10 @@ final class FileStorage implements StorageInterface
         try {
             $varDumper = VarDumper::create($this->getData());
             $jsonData = $varDumper->asJson();
-            $this->filesystem->write($this->path . '/' . $this->debugId . '.data.json', $jsonData);
+            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.data.json', $jsonData);
 
             $jsonObjects = $varDumper->asJsonObjectsMap();
-            $this->filesystem->write($this->path . '/' . $this->debugId . '.obj.json', $jsonObjects);
+            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
         } finally {
             $this->collectors = [];
         }

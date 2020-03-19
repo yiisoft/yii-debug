@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Dispatcher;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Debugger;
-use Yiisoft\Yii\Web\Event\ApplicationShutdown;
+use Yiisoft\Yii\Web\Event\AfterRequest;
 
 final class DebugShutdownDispatcher implements EventDispatcherInterface
 {
@@ -18,7 +18,7 @@ final class DebugShutdownDispatcher implements EventDispatcherInterface
 
     public function dispatch(object $event)
     {
-        if ($event instanceof ApplicationShutdown) {
+        if ($event instanceof AfterRequest) {
             $this->container->get(Debugger::class)->shutdown();
         }
 

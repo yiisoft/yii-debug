@@ -8,11 +8,21 @@ class DebuggerIdGenerator
 
     public function __construct()
     {
-        $this->id = uniqid('yii-debug-', true);
+        $this->generateId();
     }
 
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function reset(): void
+    {
+        $this->generateId();
+    }
+
+    private function generateId(): void
+    {
+        $this->id = uniqid('yii-debug-', true);
     }
 }
