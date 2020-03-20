@@ -21,4 +21,8 @@ trait CollectorTrait
     {
         return $this->isActive;
     }
+
+    private function reset(): void
+    {
+    }
 }
