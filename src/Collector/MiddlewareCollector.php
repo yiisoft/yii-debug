@@ -44,7 +44,7 @@ final class MiddlewareCollector implements CollectorInterface
         }
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->beforeStack = [];
         $this->afterStack = [];
