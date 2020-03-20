@@ -3,7 +3,6 @@
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 
 final class MemoryStorage implements StorageInterface
 {

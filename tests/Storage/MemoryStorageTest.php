@@ -2,7 +2,6 @@
 
 namespace Yiisoft\Yii\Debug\Tests\Storage;
 
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
