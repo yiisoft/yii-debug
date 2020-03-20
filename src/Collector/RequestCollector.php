@@ -44,7 +44,7 @@ final class RequestCollector implements CollectorInterface
         }
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->applicationProcessingTimeStarted = 0;
         $this->applicationProcessingTimeStopped = 0;

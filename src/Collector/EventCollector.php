@@ -32,7 +32,7 @@ final class EventCollector implements EventCollectorInterface
         ];
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->events = [];
     }

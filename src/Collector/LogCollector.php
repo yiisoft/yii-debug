@@ -23,7 +23,7 @@ final class LogCollector implements LogCollectorInterface
         ];
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->messages = [];
     }

@@ -37,7 +37,7 @@ final class ServiceCollector implements ServiceCollectorInterface
         ];
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->items = [];
     }
