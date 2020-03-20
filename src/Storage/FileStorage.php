@@ -4,6 +4,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 final class FileStorage implements StorageInterface
@@ -15,21 +16,15 @@ final class FileStorage implements StorageInterface
 
     private string $path;
 
-    private ?string $debugId = null;
+    private DebuggerIdGenerator $idGenerator;
 
     private FilesystemInterface $filesystem;
 
-    public function __construct(string $path, FilesystemInterface $filesystem)
+    public function __construct(string $path, FilesystemInterface $filesystem, DebuggerIdGenerator $idGenerator)
     {
         $this->path = $path;
         $this->filesystem = $filesystem;
-    }
-
-    public function setDebugId(string $id): void
-    {
-        if ($this->debugId === null) {
-            $this->debugId = $id;
-        }
+        $this->idGenerator = $idGenerator;
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -49,13 +44,15 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
-        $varDumper = VarDumper::create($this->getData());
-        $jsonData = $varDumper->asJson();
-        $this->filesystem->write($this->path . '/' . $this->debugId . '.data.json', $jsonData);
+        try {
+            $varDumper = VarDumper::create($this->getData());
+            $jsonData = $varDumper->asJson();
+            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.data.json', $jsonData);
 
-        $jsonObjects = $varDumper->asJsonObjectsMap();
-        $this->filesystem->write($this->path . '/' . $this->debugId . '.obj.json', $jsonObjects);
-
-        $this->collectors = [];
+            $jsonObjects = $varDumper->asJsonObjectsMap();
+            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
+        } finally {
+            $this->collectors = [];
+        }
     }
 }
