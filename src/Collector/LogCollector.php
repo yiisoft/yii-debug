@@ -22,4 +22,9 @@ final class LogCollector implements LogCollectorInterface
             'context' => $context,
         ];
     }
+
+    private function reset(): void
+    {
+        $this->messages = [];
+    }
 }

@@ -13,11 +13,16 @@ trait CollectorTrait
 
     public function shutdown(): void
     {
+        $this->reset();
         $this->isActive = false;
     }
 
     private function isActive(): bool
     {
         return $this->isActive;
+    }
+
+    private function reset(): void
+    {
     }
 }

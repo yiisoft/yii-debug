@@ -18,6 +18,7 @@ use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 /**
@@ -52,10 +53,11 @@ return [
     },
     StorageInterface::class => function (ContainerInterface $container) use ($params) {
         $filesystem = $container->get(FilesystemInterface::class);
-        return new FileStorage($params['debugger.path'], $filesystem);
+        return new FileStorage($params['debugger.path'], $filesystem, $container->get(DebuggerIdGenerator::class));
     },
     Debugger::class => static function (ContainerInterface $container) use ($params) {
         return new Debugger(
+            $container->get(DebuggerIdGenerator::class),
             $container->get(StorageInterface::class),
             array_map(
                 fn ($class) => $container->get($class),

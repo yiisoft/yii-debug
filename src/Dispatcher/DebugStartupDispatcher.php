@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Dispatcher;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Debugger;
-use Yiisoft\Yii\Web\Event\ApplicationStartup;
+use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 final class DebugStartupDispatcher implements EventDispatcherInterface
 {
@@ -18,7 +18,7 @@ final class DebugStartupDispatcher implements EventDispatcherInterface
 
     public function dispatch(object $event)
     {
-        if ($event instanceof ApplicationStartup) {
+        if ($event instanceof BeforeRequest) {
             $this->container->get(Debugger::class)->startup();
         }
 

@@ -12,22 +12,23 @@ final class Debugger
      */
     private array $collectors;
     private StorageInterface $target;
+    private DebuggerIdGenerator $idGenerator;
 
-    public function __construct(StorageInterface $target, array $collectors)
+    public function __construct(DebuggerIdGenerator $idGenerator, StorageInterface $target, array $collectors)
     {
         $this->collectors = $collectors;
         $this->target = $target;
-        $this->id = uniqid('yii-debug-', true);
-        $this->target->setDebugId($this->id);
+        $this->idGenerator = $idGenerator;
     }
 
     public function getId(): string
     {
-        return $this->id;
+        return $this->idGenerator->getId();
     }
 
     public function startup(): void
     {
+        $this->idGenerator->reset();
         foreach ($this->collectors as $collector) {
             $this->target->addCollector($collector);
             $collector->startup();
@@ -36,9 +37,12 @@ final class Debugger
 
     public function shutdown(): void
     {
-        foreach ($this->collectors as $collector) {
-            $collector->shutdown();
+        try {
+            $this->target->flush();
+        } finally {
+            foreach ($this->collectors as $collector) {
+                $collector->shutdown();
+            }
         }
-        $this->target->flush();
     }
 }
