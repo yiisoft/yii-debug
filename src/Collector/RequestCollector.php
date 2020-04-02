@@ -2,6 +2,7 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\ApplicationShutdown;
 use Yiisoft\Yii\Web\Event\ApplicationStartup;
@@ -26,20 +27,21 @@ final class RequestCollector implements CollectorInterface
         ];
     }
 
-    public function collect(...$payload): void
+    public function collect(object $event): void
     {
-        $event = current($payload);
         if (!is_object($event) || !$this->isActive()) {
             return;
         }
 
-        if ($event instanceof ApplicationStartup) {
-            $this->applicationProcessingTimeStarted = microtime(true);
-        } elseif ($event instanceof BeforeRequest) {
+        if ($event instanceof BeforeRequest) {
             $this->requestProcessingTimeStarted = microtime(true);
+            $this->applicationProcessingTimeStarted = $event->getRequest()->getAttribute(
+                'applicationStartTime',
+                $this->requestProcessingTimeStarted
+            );
         } elseif ($event instanceof AfterRequest) {
             $this->requestProcessingTimeStopped = microtime(true);
-        } elseif ($event instanceof ApplicationShutdown) {
+        } elseif ($event instanceof AfterEmit) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
     }

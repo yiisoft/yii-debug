@@ -3,7 +3,7 @@
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\Container\ContainerInterface;
-use Yiisoft\Router\RouteCollectorInterface;
+use Yiisoft\Router\UrlMatcherInterface;
 
 final class RouterCollector implements CollectorInterface
 {
@@ -18,6 +18,6 @@ final class RouterCollector implements CollectorInterface
 
     public function getCollected(): array
     {
-        return $this->container->get(RouteCollectorInterface::class)->getItems();
+        return $this->container->get(UrlMatcherInterface::class)->getRouteCollection()->getRouteTree();
     }
 }

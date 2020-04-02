@@ -29,13 +29,7 @@ final class DebugServiceProvider extends ServiceProvider
                     return new LoggerInterfaceProxy($logger, $container->get(LogCollector::class));
                 },
                 EventDispatcherInterface::class => static function (ContainerInterface $container) use ($dispatcher) {
-                    $compositeDispatcher = new CompositeDispatcher();
-                    $compositeDispatcher->attach($container->get(DebugStartupDispatcher::class));
-                    $compositeDispatcher->attach($container->get(DebugEventDispatcher::class));
-                    $compositeDispatcher->attach($dispatcher);
-                    $compositeDispatcher->attach($container->get(DebugShutdownDispatcher::class));
-
-                    return new EventDispatcherInterfaceProxy($compositeDispatcher, $container->get(EventCollector::class));
+                    return new EventDispatcherInterfaceProxy($dispatcher, $container->get(EventCollector::class));
                 },
             ]
         );
