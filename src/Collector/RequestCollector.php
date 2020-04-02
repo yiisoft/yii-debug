@@ -23,6 +23,7 @@ final class RequestCollector implements CollectorInterface
             'application_processing_time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
             'application_preload' => $this->requestProcessingTimeStarted - $this->applicationProcessingTimeStarted,
             'request_processing_time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+            'application_emit' => $this->applicationProcessingTimeStopped - $this->requestProcessingTimeStopped,
             'memory_peak_usage' => memory_get_peak_usage(true),
             'memory_usage' => memory_get_usage(true),
         ];
