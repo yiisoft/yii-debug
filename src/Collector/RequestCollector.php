@@ -4,8 +4,6 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
-use Yiisoft\Yii\Web\Event\ApplicationShutdown;
-use Yiisoft\Yii\Web\Event\ApplicationStartup;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 final class RequestCollector implements CollectorInterface

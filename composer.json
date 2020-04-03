@@ -60,8 +60,7 @@
             "tests": "config/tests.php",
             "params": "config/params.php",
             "common": "config/common.php",
-            "providers": "config/providers.php",
-            "events":  "config/events.php"
+            "providers": "config/providers.php"
         }
     },
     "repositories": [
