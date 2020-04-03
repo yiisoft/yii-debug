@@ -6,7 +6,6 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class Debugger
 {
-    private string $id;
     /**
      * @var \Yiisoft\Yii\Debug\Collector\CollectorInterface[]
      */
