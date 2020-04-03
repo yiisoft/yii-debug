@@ -3,12 +3,9 @@
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
-use Yiisoft\EventDispatcher\Provider\ConcreteProvider;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
-use Yiisoft\Yii\Debug\DebugEventDispatcher;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
@@ -39,12 +36,11 @@ return [
         $dispatcher = $container->get(EventDispatcherInterface::class);
         $debuggerEnabled = (bool)($params['debugger.enabled'] ?? false);
         $trackedServices = (array)($params['debugger.trackedServices'] ?? []);
-        $decoratedServices = (array)($params['container.decorators'] ?? []);
         $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
         $logLevel = $params['debugger.logLevel'] ?? 0;
         return new ContainerProxyConfig(
             $debuggerEnabled,
-            array_merge($trackedServices, $decoratedServices),
+            $trackedServices,
             $dispatcher,
             $collector,
             $path,
@@ -64,15 +60,5 @@ return [
                 $params['debugger.collectors']
             )
         );
-    },
-    DebugEventDispatcher::class => static function (ContainerInterface $container) use ($params) {
-        $provider = new ConcreteProvider();
-        foreach ($params['debugger.eventHandlers'] as $event => $eventHandlers) {
-            foreach ($eventHandlers as $eventHandler) {
-                $provider->attach($event, $eventHandler($container));
-            }
-        }
-
-        return new Dispatcher($provider);
     },
 ];

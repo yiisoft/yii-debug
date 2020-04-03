@@ -16,7 +16,10 @@ final class RequestCollectorTest extends CollectorTestCase
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
-        $collector->collect(new BeforeRequest($this->createMock(ServerRequestInterface::class)));
+        $requestMock = $this->createMock(ServerRequestInterface::class);
+        $requestMock->method('getAttribute')
+            ->willReturn(\microtime(true));
+        $collector->collect(new BeforeRequest($requestMock));
         usleep(123_000);
         $collector->collect(new AfterRequest($this->createMock(ResponseInterface::class)));
     }
