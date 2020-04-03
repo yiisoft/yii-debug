@@ -17,8 +17,6 @@ final class DebugServiceProvider extends ServiceProvider
 {
     public function register(Container $container): void
     {
-        $eventConfigurator = $container->get(EventConfigurator::class);
-        $eventConfigurator->registerListeners(require dirname(__DIR__) . '/config/events.php');
         $logger = $container->get(LoggerInterface::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
 
@@ -33,5 +31,7 @@ final class DebugServiceProvider extends ServiceProvider
                 },
             ]
         );
+        $eventConfigurator = $container->get(EventConfigurator::class);
+        $eventConfigurator->registerListeners(require dirname(__DIR__) . '/config/events.php');
     }
 }
