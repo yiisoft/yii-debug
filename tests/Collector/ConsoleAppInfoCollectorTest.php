@@ -5,7 +5,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
@@ -21,7 +21,7 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new WebAppInfoCollector();
+        return new ConsoleAppInfoCollector();
     }
 
     protected function checkCollectedData(CollectorInterface $collector): void
