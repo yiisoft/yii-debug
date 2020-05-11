@@ -6,7 +6,7 @@ use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-final class RequestCollector implements CollectorInterface
+final class WebAppInfoCollector implements CollectorInterface
 {
     use CollectorTrait;
 

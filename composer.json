@@ -30,6 +30,7 @@
         "yiisoft/var-dumper": "^3.0@dev",
         "yiisoft/yii-filesystem": "dev-master",
         "yiisoft/yii-web": "^3.0@dev",
+        "yiisoft/yii-console": "^3.0@dev",
         "psr/log": "^1.1",
         "ext-mbstring": "*",
         "php": "^7.4"
@@ -60,7 +61,11 @@
             "tests": "config/tests.php",
             "params": "config/params.php",
             "common": "config/common.php",
-            "providers": "config/providers.php"
+            "console": "config/console.php",
+            "web": "config/web.php",
+            "providers": "config/providers.php",
+            "events-web":"config/events-web.php",
+            "events-console":"config/events-console.php"
         }
     },
     "repositories": [
