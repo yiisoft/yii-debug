@@ -2,7 +2,8 @@
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Yiisoft\Yii\Web\Event\ApplicationStartup;
+use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
+use Yiisoft\Yii\Web\Event\ApplicationStartup as WebApplicationStartup;
 
 final class EventCollector implements EventCollectorInterface
 {
@@ -17,7 +18,7 @@ final class EventCollector implements EventCollectorInterface
 
     public function collect(object $event): void
     {
-        if (!$this->isActive() && !$event instanceof ApplicationStartup) {
+        if (!$this->isActive() && !$event instanceof WebApplicationStartup && !$event instanceof ConsoleApplicationStartup) {
             return;
         }
 
