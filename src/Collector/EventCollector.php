@@ -27,7 +27,8 @@ final class EventCollector implements EventCollectorInterface
     private function collectEvent(object $event): void
     {
         $this->events[] = [
-            'event' => get_class($event),
+            'name' => get_class($event),
+            'event' => $event,
             'time' => microtime(true),
         ];
     }
