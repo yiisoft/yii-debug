@@ -11,7 +11,6 @@ use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
-use Yiisoft\Yii\Web\Config\EventConfigurator;
 
 final class DebugServiceProvider extends ServiceProvider
 {
@@ -31,7 +30,5 @@ final class DebugServiceProvider extends ServiceProvider
                 },
             ]
         );
-        $eventConfigurator = $container->get(EventConfigurator::class);
-        $eventConfigurator->registerListeners(require dirname(__DIR__) . '/config/events.php');
     }
 }

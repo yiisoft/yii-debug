@@ -21,7 +21,7 @@ return [
     ConsoleCommandEvent::class => [
         [CommandCollector::class, 'collect']
     ],
-   ConsoleErrorEvent::class => [
+    ConsoleErrorEvent::class => [
         [CommandCollector::class, 'collect']
     ],
     ConsoleTerminateEvent::class => [
