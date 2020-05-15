@@ -6,6 +6,7 @@ use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {

@@ -2,6 +2,7 @@
 
 use Psr\Log\LoggerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
@@ -30,7 +31,7 @@ return [
     ],
     'debugger.collectors.console' => [
         ConsoleAppInfoCollector::class,
-        \Yiisoft\Yii\Debug\Collector\CommandCollector::class,
+        CommandCollector::class,
     ],
     'debugger.trackedServices' => [
         LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
