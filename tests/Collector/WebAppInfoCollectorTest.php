@@ -5,14 +5,14 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\RequestCollector;
+use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-final class RequestCollectorTest extends CollectorTestCase
+final class WebAppInfoCollectorTest extends CollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|RequestCollector $collector
+     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|WebAppInfoCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -26,7 +26,7 @@ final class RequestCollectorTest extends CollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new RequestCollector();
+        return new WebAppInfoCollector();
     }
 
     protected function checkCollectedData(CollectorInterface $collector): void

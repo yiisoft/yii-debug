@@ -16,7 +16,5 @@ final class ProxyServiceProvider extends ServiceProvider
         $container->set(ContainerInterface::class, static function (ContainerInterface $container) {
             return new ContainerProxy($container, $container->get(ContainerProxyConfig::class));
         });
-        $eventConfigurator = $container->get(EventConfigurator::class);
-        $eventConfigurator->registerListeners(require dirname(__DIR__) . '/config/events.php');
     }
 }
