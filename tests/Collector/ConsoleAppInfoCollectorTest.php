@@ -16,7 +16,7 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
     {
         $collector->collect(new ApplicationStartup());
         usleep(123_000);
-        $collector->collect(new ApplicationShutdown());
+        $collector->collect(new ApplicationShutdown(0));
     }
 
     protected function getCollector(): CollectorInterface
