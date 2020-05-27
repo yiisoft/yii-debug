@@ -21,7 +21,7 @@ use Yiisoft\Yii\Filesystem\FilesystemInterface;
  * @var $params array
  */
 
-if (!(bool)($params['debugger.enabled'] ?? false)) {
+if (!(bool)($params['yiisoft/yii-debugger']['enabled'] ?? false)) {
     return [];
 }
 
@@ -31,12 +31,13 @@ return [
     ServiceCollectorInterface::class => ServiceCollector::class,
     ContainerProxyInterface::class => ContainerProxy::class,
     ContainerProxyConfig::class => static function (ContainerInterface $container) use ($params) {
+        $params = $params['yiisoft/yii-debugger'];
         $collector = $container->get(ServiceCollectorInterface::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
-        $debuggerEnabled = (bool)($params['debugger.enabled'] ?? false);
-        $trackedServices = (array)($params['debugger.trackedServices'] ?? []);
+        $debuggerEnabled = (bool)($params['enabled'] ?? false);
+        $trackedServices = (array)($params['trackedServices'] ?? []);
         $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
-        $logLevel = $params['debugger.logLevel'] ?? 0;
+        $logLevel = $params['logLevel'] ?? 0;
         return new ContainerProxyConfig(
             $debuggerEnabled,
             $trackedServices,
@@ -47,7 +48,8 @@ return [
         );
     },
     StorageInterface::class => function (ContainerInterface $container) use ($params) {
+        $params = $params['yiisoft/yii-debugger'];
         $filesystem = $container->get(FilesystemInterface::class);
-        return new FileStorage($params['debugger.path'], $filesystem, $container->get(DebuggerIdGenerator::class));
+        return new FileStorage($params['path'], $filesystem, $container->get(DebuggerIdGenerator::class));
     },
 ];

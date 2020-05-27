@@ -2,10 +2,10 @@
 
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
-if (!(bool)($params['debugger.enabled'] ?? false)) {
+if (!(bool)($params['yiisoft/yii-debugger']['enabled'] ?? false)) {
     return [];
 }
 
 return [
-    'Debugger' => ProxyServiceProvider::class
+    'yiisoft/yii-debugger/Debugger' => ProxyServiceProvider::class
 ];

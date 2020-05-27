@@ -11,6 +11,10 @@ use Yiisoft\Yii\Web\Event\ApplicationStartup;
 use Yiisoft\Yii\Web\Event\BeforeMiddleware;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
+if (!(bool)($params['yiisoft/yii-debugger']['enabled'] ?? false)) {
+    return [];
+}
+
 return [
     ApplicationStartup::class => [
         [WebAppInfoCollector::class, 'collect'],
