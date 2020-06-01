@@ -19,7 +19,7 @@ use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
  */
 
 return [
-    'yiisoft/yii-debugger' => [
+    'yiisoft/yii-debug' => [
         'enabled' => true,
         'collectors' => [
             LogCollectorInterface::class,

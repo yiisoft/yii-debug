@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Debugger;
 
-if (!(bool)($params['yiisoft/yii-debugger']['enabled'] ?? false)) {
+if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
 }
 

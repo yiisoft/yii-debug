@@ -21,7 +21,7 @@ use Yiisoft\Yii\Filesystem\FilesystemInterface;
  * @var $params array
  */
 
-if (!(bool)($params['yiisoft/yii-debugger']['enabled'] ?? false)) {
+if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
 }
 
@@ -31,7 +31,7 @@ return [
     ServiceCollectorInterface::class => ServiceCollector::class,
     ContainerProxyInterface::class => ContainerProxy::class,
     ContainerProxyConfig::class => static function (ContainerInterface $container) use ($params) {
-        $params = $params['yiisoft/yii-debugger'];
+        $params = $params['yiisoft/yii-debug'];
         $collector = $container->get(ServiceCollectorInterface::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
         $debuggerEnabled = (bool)($params['enabled'] ?? false);
@@ -48,7 +48,7 @@ return [
         );
     },
     StorageInterface::class => function (ContainerInterface $container) use ($params) {
-        $params = $params['yiisoft/yii-debugger'];
+        $params = $params['yiisoft/yii-debug'];
         $filesystem = $container->get(FilesystemInterface::class);
         return new FileStorage($params['path'], $filesystem, $container->get(DebuggerIdGenerator::class));
     },
