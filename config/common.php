@@ -47,9 +47,8 @@ return [
             $logLevel
         );
     },
-    StorageInterface::class => function (ContainerInterface $container) use ($params) {
-        $params = $params['yiisoft/yii-debug'];
+    StorageInterface::class => static function (ContainerInterface $container) use ($params) {
         $filesystem = $container->get(FilesystemInterface::class);
-        return new FileStorage($params['path'], $filesystem, $container->get(DebuggerIdGenerator::class));
+        return new FileStorage($params['yiisoft/yii-debug']['path'], $filesystem, $container->get(DebuggerIdGenerator::class));
     },
 ];
