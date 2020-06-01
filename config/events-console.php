@@ -9,6 +9,10 @@ use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Debugger;
 
+if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
+    return [];
+}
+
 return [
     ApplicationStartup::class => [
         [Debugger::class, 'startup'],

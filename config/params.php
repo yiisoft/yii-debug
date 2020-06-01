@@ -19,24 +19,27 @@ use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
  */
 
 return [
-    'debugger.collectors' => [
-        LogCollectorInterface::class,
-        EventCollectorInterface::class,
-        ServiceCollectorInterface::class
-    ],
-    'debugger.collectors.web' => [
-        WebAppInfoCollector::class,
-        RouterCollector::class,
-        MiddlewareCollector::class,
-    ],
-    'debugger.collectors.console' => [
-        ConsoleAppInfoCollector::class,
-        CommandCollector::class,
-    ],
-    'debugger.trackedServices' => [
-        LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
-        EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
-    ],
-    'debugger.logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
-    'debugger.path' => '@runtime/debug',
+    'yiisoft/yii-debug' => [
+        'enabled' => true,
+        'collectors' => [
+            LogCollectorInterface::class,
+            EventCollectorInterface::class,
+            ServiceCollectorInterface::class
+        ],
+        'collectors.web' => [
+            WebAppInfoCollector::class,
+            RouterCollector::class,
+            MiddlewareCollector::class,
+        ],
+        'collectors.console' => [
+            ConsoleAppInfoCollector::class,
+            CommandCollector::class,
+        ],
+        'trackedServices' => [
+            LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+            EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
+        ],
+        'logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
+        'path' => '@runtime/debug',
+    ]
 ];
