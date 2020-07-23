@@ -4,6 +4,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
@@ -51,8 +52,51 @@ final class FileStorage implements StorageInterface
 
             $jsonObjects = $varDumper->asJsonObjectsMap();
             $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
+
+            $this->updateManifest();
         } finally {
             $this->collectors = [];
         }
+    }
+
+    private function updateManifest(): void
+    {
+        $summary = $this->collectSummary();
+        $indexFile = $this->path . '/index.data';
+        if (!$this->filesystem->fileExists($indexFile)) {
+            $this->filesystem->write($indexFile, '');
+        } elseif (($manifest = $this->filesystem->read($indexFile)) === false) {
+            throw new \RuntimeException("Unable to open debug data index file: $indexFile");
+        }
+
+        if (empty($manifest)) {
+            // error while reading index data, ignore and create new
+            $manifest = [];
+        } else {
+            $manifest = json_decode($manifest, true, 512, JSON_THROW_ON_ERROR);
+        }
+
+        $manifest[$this->idGenerator->getId()] = $summary;
+
+        $this->filesystem->write($indexFile, VarDumper::create($manifest)->asJson());
+    }
+
+    public function collectSummary(): array
+    {
+        if (!array_key_exists(WebAppInfoCollector::class, $this->getData())) {
+            return [];
+        }
+
+        $data = $this->getData()[WebAppInfoCollector::class];
+
+        return [
+            'tag' => $this->idGenerator->getId(),
+            'url' => $data['request_url'],
+            'ajax' => (int)$data['request_is_ajax'],
+            'method' => $data['request_method'],
+            'ip' => $data['user_ip'],
+            'time' => $data['request_processing_time'],
+            'statusCode' => $data['response_status_code'],
+        ];
     }
 }
