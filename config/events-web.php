@@ -1,6 +1,7 @@
 <?php
 
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
+use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Web\Event\AfterEmit;
@@ -25,9 +26,11 @@ return [
     BeforeRequest::class => [
         [Debugger::class, 'startup'],
         [WebAppInfoCollector::class, 'collect'],
+        [RequestCollector::class, 'collect']
     ],
     AfterRequest::class => [
         [WebAppInfoCollector::class, 'collect'],
+        [RequestCollector::class, 'collect']
     ],
     AfterEmit::class => [
         [WebAppInfoCollector::class, 'collect'],

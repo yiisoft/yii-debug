@@ -4,6 +4,7 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
@@ -83,11 +84,15 @@ final class FileStorage implements StorageInterface
 
     public function collectSummary(): array
     {
-        if (!array_key_exists(WebAppInfoCollector::class, $this->getData())) {
+        if (
+            !array_key_exists(RequestCollector::class, $this->getData())
+            || !array_key_exists(WebAppInfoCollector::class, $this->getData())
+        ) {
             return [];
         }
 
-        $data = $this->getData()[WebAppInfoCollector::class];
+        $data = $this->getData()[RequestCollector::class];
+        $appInfoData = $this->getData()[WebAppInfoCollector::class];
 
         return [
             'tag' => $this->idGenerator->getId(),
@@ -95,7 +100,7 @@ final class FileStorage implements StorageInterface
             'ajax' => (int)$data['request_is_ajax'],
             'method' => $data['request_method'],
             'ip' => $data['user_ip'],
-            'time' => $data['request_processing_time'],
+            'time' => $appInfoData['request_processing_time'],
             'statusCode' => $data['response_status_code'],
         ];
     }
