@@ -6,6 +6,7 @@ use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
@@ -28,6 +29,7 @@ return [
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
+            RequestCollector::class,
             RouterCollector::class,
             MiddlewareCollector::class,
         ],
