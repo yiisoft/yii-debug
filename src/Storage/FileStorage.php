@@ -61,7 +61,7 @@ final class FileStorage implements StorageInterface
             $jsonObjects = $varDumper->asJsonObjectsMap();
             $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
 
-            $this->updateManifest();
+            $this->updateIndex();
         } finally {
             $this->collectors = [];
         }
@@ -72,7 +72,7 @@ final class FileStorage implements StorageInterface
      * @throws \JsonException
      * @throws \League\Flysystem\FilesystemException
      */
-    private function updateManifest(): void
+    private function updateIndex(): void
     {
         $summary = $this->collectSummary();
         $indexFile = $this->path . '/index.json';
@@ -108,17 +108,17 @@ final class FileStorage implements StorageInterface
             return [];
         }
 
-        $data = $this->getData()[RequestCollector::class];
+        $requestData = $this->getData()[RequestCollector::class];
         $appInfoData = $this->getData()[WebAppInfoCollector::class];
 
         return [
             'tag' => $this->idGenerator->getId(),
-            'url' => $data['request_url'],
-            'ajax' => (int)$data['request_is_ajax'],
-            'method' => $data['request_method'],
-            'ip' => $data['user_ip'],
+            'url' => $requestData['request_url'],
+            'ajax' => (int)$requestData['request_is_ajax'],
+            'method' => $requestData['request_method'],
+            'ip' => $requestData['user_ip'],
             'time' => $appInfoData['request_processing_time'],
-            'statusCode' => $data['response_status_code'],
+            'statusCode' => $requestData['response_status_code'],
         ];
     }
 
