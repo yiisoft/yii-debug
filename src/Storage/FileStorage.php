@@ -26,8 +26,12 @@ final class FileStorage implements StorageInterface
 
     private Aliases $aliases;
 
-    public function __construct(string $path, FilesystemInterface $filesystem, DebuggerIdGenerator $idGenerator, Aliases $aliases)
-    {
+    public function __construct(
+        string $path,
+        FilesystemInterface $filesystem,
+        DebuggerIdGenerator $idGenerator,
+        Aliases $aliases
+    ) {
         $this->path = $path;
         $this->filesystem = $filesystem;
         $this->idGenerator = $idGenerator;
@@ -98,7 +102,7 @@ final class FileStorage implements StorageInterface
     {
         $indexFiles = \glob($this->aliases->get($this->path) . '/yii-debug*.index.json', GLOB_NOSORT);
         if (\count($indexFiles) >= $this->historySize + 1) {
-            \uasort($indexFiles, fn($a, $b) => @\filemtime($b) <=> @\filemtime($a));
+            \uasort($indexFiles, fn ($a, $b) => @\filemtime($b) <=> @\filemtime($a));
             $excessFiles = \array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {
                 $tag = \basename($file, '.index.json');
