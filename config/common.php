@@ -49,6 +49,8 @@ return [
     },
     StorageInterface::class => static function (ContainerInterface $container) use ($params) {
         $filesystem = $container->get(FilesystemInterface::class);
-        return new FileStorage($params['yiisoft/yii-debug']['path'], $filesystem, $container->get(DebuggerIdGenerator::class));
+        $debuggerIdGenerator = $container->get(DebuggerIdGenerator::class);
+        $aliases = $container->get(Aliases::class);
+        return new FileStorage($params['yiisoft/yii-debug']['path'], $filesystem, $debuggerIdGenerator, $aliases);
     },
 ];

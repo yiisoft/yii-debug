@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-final class RequestCollector implements CollectorInterface
+final class RequestCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -48,5 +48,16 @@ final class RequestCollector implements CollectorInterface
         $this->requestIsAjax = false;
         $this->userIp = null;
         $this->responseStatusCode = 200;
+    }
+
+    public function getIndexed(): array
+    {
+        return [
+            'requestUrl' => $this->requestUrl,
+            'requestMethod' => $this->requestMethod,
+            'requestIsAjax' => $this->requestIsAjax,
+            'userIp' => $this->userIp,
+            'responseStatusCode' => $this->responseStatusCode
+        ];
     }
 }

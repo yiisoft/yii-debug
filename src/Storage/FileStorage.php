@@ -2,10 +2,10 @@
 
 namespace Yiisoft\Yii\Debug\Storage;
 
+use Yiisoft\Aliases\Aliases;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\RequestCollector;
-use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
@@ -24,11 +24,14 @@ final class FileStorage implements StorageInterface
 
     private FilesystemInterface $filesystem;
 
-    public function __construct(string $path, FilesystemInterface $filesystem, DebuggerIdGenerator $idGenerator)
+    private Aliases $aliases;
+
+    public function __construct(string $path, FilesystemInterface $filesystem, DebuggerIdGenerator $idGenerator, Aliases $aliases)
     {
         $this->path = $path;
         $this->filesystem = $filesystem;
         $this->idGenerator = $idGenerator;
+        $this->aliases = $aliases;
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -61,85 +64,50 @@ final class FileStorage implements StorageInterface
             $jsonObjects = $varDumper->asJsonObjectsMap();
             $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
 
-            $this->updateIndex();
+            $indexData = VarDumper::create($this->collectIndex())->asJson();
+            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.index.json', $indexData);
+
+            $this->gc();
         } finally {
             $this->collectors = [];
         }
     }
 
     /**
-     * Updates index file with summary log data
-     * @throws \JsonException
-     * @throws \League\Flysystem\FilesystemException
-     */
-    private function updateIndex(): void
-    {
-        $summary = $this->collectSummary();
-        $indexFile = $this->path . '/index.json';
-        if (!$this->filesystem->fileExists($indexFile)) {
-            $this->filesystem->write($indexFile, '');
-        } elseif (($manifest = $this->filesystem->read($indexFile)) === false) {
-            throw new \RuntimeException("Unable to open debug data index file: $indexFile");
-        }
-
-        if (empty($manifest)) {
-            // error while reading index data, ignore and create new
-            $manifest = [];
-        } else {
-            $manifest = json_decode($manifest, true, 512, JSON_THROW_ON_ERROR);
-        }
-
-        $manifest[$this->idGenerator->getId()] = $summary;
-
-        $this->gc($manifest);
-        $this->filesystem->write($indexFile, VarDumper::create($manifest)->asJson());
-    }
-
-    /**
      * Collects summary data of current request.
      * @return array
      */
-    private function collectSummary(): array
+    private function collectIndex(): array
     {
-        if (
-            !array_key_exists(RequestCollector::class, $this->getData())
-            || !array_key_exists(WebAppInfoCollector::class, $this->getData())
-        ) {
-            return [];
+        $indexed = ['tag' => $this->idGenerator->getId()];
+
+        foreach ($this->collectors as $collector) {
+            if ($collector instanceof IndexCollectorInterface) {
+                $indexed = \array_merge($indexed, $collector->getIndexed());
+            }
         }
 
-        $requestData = $this->getData()[RequestCollector::class];
-        $appInfoData = $this->getData()[WebAppInfoCollector::class];
-
-        return [
-            'tag' => $this->idGenerator->getId(),
-            'url' => $requestData['request_url'],
-            'ajax' => (int)$requestData['request_is_ajax'],
-            'method' => $requestData['request_method'],
-            'ip' => $requestData['user_ip'],
-            'time' => $appInfoData['request_processing_time'],
-            'statusCode' => $requestData['response_status_code'],
-        ];
+        return $indexed;
     }
 
     /**
      * Removes obsolete data files
-     * @param array $manifest
      * @throws \League\Flysystem\FilesystemException
      */
-    private function gc(array &$manifest): void
+    private function gc(): void
     {
-        if (count($manifest) > $this->historySize + 1) {
-            $n = count($manifest) - $this->historySize;
-            foreach (array_keys($manifest) as $tag) {
+        $indexFiles = \glob($this->aliases->get($this->path) . '/yii-debug*.index.json', GLOB_NOSORT);
+        if (\count($indexFiles) >= $this->historySize + 1) {
+            \uasort($indexFiles, fn($a, $b) => @\filemtime($b) <=> @\filemtime($a));
+            $excessFiles = \array_slice($indexFiles, $this->historySize);
+            foreach ($excessFiles as $file) {
+                $tag = \basename($file, '.index.json');
+                $indexFile = $this->path . "/$tag.index.json";
                 $dataFile = $this->path . "/$tag.data.json";
                 $objFile = $this->path . "/$tag.obj.json";
+                $this->filesystem->delete($indexFile);
                 $this->filesystem->delete($dataFile);
                 $this->filesystem->delete($objFile);
-                unset($manifest[$tag]);
-                if (--$n <= 0) {
-                    break;
-                }
             }
         }
     }
