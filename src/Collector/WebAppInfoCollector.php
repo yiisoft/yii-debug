@@ -6,7 +6,7 @@ use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-final class WebAppInfoCollector implements CollectorInterface
+final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -52,5 +52,13 @@ final class WebAppInfoCollector implements CollectorInterface
         $this->applicationProcessingTimeStopped = 0;
         $this->requestProcessingTimeStarted = 0;
         $this->requestProcessingTimeStopped = 0;
+    }
+
+    public function getIndexData(): array
+    {
+        return [
+            'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+            'memory' => memory_get_peak_usage(true)
+        ];
     }
 }
