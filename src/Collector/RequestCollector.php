@@ -50,7 +50,7 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         $this->responseStatusCode = 200;
     }
 
-    public function getIndexed(): array
+    public function getIndexData(): array
     {
         return [
             'requestUrl' => $this->requestUrl,

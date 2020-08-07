@@ -68,7 +68,7 @@ final class FileStorage implements StorageInterface
             $jsonObjects = $varDumper->asJsonObjectsMap();
             $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
 
-            $indexData = VarDumper::create($this->collectIndex())->asJson();
+            $indexData = VarDumper::create($this->collectIndexData())->asJson();
             $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.index.json', $indexData);
 
             $this->gc();
@@ -81,17 +81,17 @@ final class FileStorage implements StorageInterface
      * Collects summary data of current request.
      * @return array
      */
-    private function collectIndex(): array
+    private function collectIndexData(): array
     {
-        $indexed = ['tag' => $this->idGenerator->getId()];
+        $indexData = ['tag' => $this->idGenerator->getId()];
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof IndexCollectorInterface) {
-                $indexed = \array_merge($indexed, $collector->getIndexed());
+                $indexData = \array_merge($indexData, $collector->getIndexData());
             }
         }
 
-        return $indexed;
+        return $indexData;
     }
 
     /**
@@ -102,7 +102,7 @@ final class FileStorage implements StorageInterface
     {
         $indexFiles = \glob($this->aliases->get($this->path) . '/yii-debug*.index.json', GLOB_NOSORT);
         if (\count($indexFiles) >= $this->historySize + 1) {
-            \uasort($indexFiles, fn ($a, $b) => @\filemtime($b) <=> @\filemtime($a));
+            \uasort($indexFiles, fn ($a, $b) => \filemtime($b) <=> \filemtime($a));
             $excessFiles = \array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {
                 $tag = \basename($file, '.index.json');

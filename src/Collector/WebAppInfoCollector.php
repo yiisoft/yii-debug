@@ -54,7 +54,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
         $this->requestProcessingTimeStopped = 0;
     }
 
-    public function getIndexed(): array
+    public function getIndexData(): array
     {
         return [
             'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,

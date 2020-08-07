@@ -13,5 +13,5 @@ interface IndexCollectorInterface
     /**
      * @return array data indexed
      */
-    public function getIndexed(): array;
+    public function getIndexData(): array;
 }
