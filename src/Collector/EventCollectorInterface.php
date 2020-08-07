@@ -3,7 +3,7 @@
 namespace Yiisoft\Yii\Debug\Collector;
 
 /**
- * Event data collector responsibility is to collect data during application lifecycle.
+ * Event data collector responsibility is to collect verbose debug data during application lifecycle.
  */
 interface EventCollectorInterface extends CollectorInterface
 {
