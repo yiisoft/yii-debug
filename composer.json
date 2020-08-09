@@ -33,15 +33,16 @@
         "yiisoft/yii-console": "^3.0@dev",
         "psr/log": "^1.1",
         "ext-mbstring": "*",
-        "php": "^7.4"
+        "php": "^7.4|^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^9.3",
         "yiisoft/log": "^3.0@dev",
         "yiisoft/cache": "^3.0@dev",
         "yiisoft/composer-config-plugin": "^1.0@dev",
         "nyholm/psr7": "^1.0",
-        "yiisoft/event-dispatcher": "^3.0@dev"
+        "yiisoft/event-dispatcher": "^3.0@dev",
+        "phan/phan": "^3.0"
     },
     "autoload": {
         "psr-4": {
@@ -64,8 +65,8 @@
             "console": "config/console.php",
             "web": "config/web.php",
             "providers": "config/providers.php",
-            "events-web":"config/events-web.php",
-            "events-console":"config/events-console.php"
+            "events-web": "config/events-web.php",
+            "events-console": "config/events-console.php"
         }
     },
     "repositories": [
