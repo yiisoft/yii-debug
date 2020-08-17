@@ -83,7 +83,7 @@ final class FileStorage implements StorageInterface
      */
     private function collectIndexData(): array
     {
-        $indexData = ['tag' => $this->idGenerator->getId()];
+        $indexData = ['id' => $this->idGenerator->getId()];
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof IndexCollectorInterface) {
@@ -105,10 +105,10 @@ final class FileStorage implements StorageInterface
             \uasort($indexFiles, fn ($a, $b) => \filemtime($b) <=> \filemtime($a));
             $excessFiles = \array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {
-                $tag = \basename($file, '.index.json');
-                $indexFile = $this->path . "/$tag.index.json";
-                $dataFile = $this->path . "/$tag.data.json";
-                $objFile = $this->path . "/$tag.obj.json";
+                $id = \basename($file, '.index.json');
+                $indexFile = $this->path . "/$id.index.json";
+                $dataFile = $this->path . "/$id.data.json";
+                $objFile = $this->path . "/$id.obj.json";
                 $this->filesystem->delete($indexFile);
                 $this->filesystem->delete($dataFile);
                 $this->filesystem->delete($objFile);
