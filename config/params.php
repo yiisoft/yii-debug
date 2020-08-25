@@ -43,5 +43,6 @@ return [
         ],
         'logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
         'path' => '@runtime/debug',
+        'optionalRequests' => []
     ]
 ];

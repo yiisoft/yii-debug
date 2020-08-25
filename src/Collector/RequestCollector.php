@@ -30,6 +30,10 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
     public function collect(object $event): void
     {
+        if (!is_object($event) || !$this->isActive()) {
+            return;
+        }
+
         if ($event instanceof BeforeRequest) {
             $this->requestUrl = (string)$event->getRequest()->getUri();
             $this->requestMethod = $event->getRequest()->getMethod();

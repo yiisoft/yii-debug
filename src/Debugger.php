@@ -2,7 +2,10 @@
 
 namespace Yiisoft\Yii\Debug;
 
+use Psr\Http\Message\ServerRequestInterface;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
+use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 final class Debugger
 {
@@ -10,12 +13,19 @@ final class Debugger
      * @var \Yiisoft\Yii\Debug\Collector\CollectorInterface[]
      */
     private array $collectors;
+    private bool $skipCollect = false;
+    private array $optionalRequests;
     private StorageInterface $target;
     private DebuggerIdGenerator $idGenerator;
 
-    public function __construct(DebuggerIdGenerator $idGenerator, StorageInterface $target, array $collectors)
-    {
+    public function __construct(
+        DebuggerIdGenerator $idGenerator,
+        StorageInterface $target,
+        array $collectors,
+        array $optionalRequests = []
+    ) {
         $this->collectors = $collectors;
+        $this->optionalRequests = $optionalRequests;
         $this->target = $target;
         $this->idGenerator = $idGenerator;
     }
@@ -25,8 +35,13 @@ final class Debugger
         return $this->idGenerator->getId();
     }
 
-    public function startup(): void
+    public function startup(object $event): void
     {
+        if ($event instanceof BeforeRequest && $this->isOptionalRequest($event->getRequest())) {
+            $this->skipCollect = true;
+            return;
+        }
+
         $this->idGenerator->reset();
         foreach ($this->collectors as $collector) {
             $this->target->addCollector($collector);
@@ -37,11 +52,32 @@ final class Debugger
     public function shutdown(): void
     {
         try {
-            $this->target->flush();
+            if (!$this->skipCollect) {
+                $this->target->flush();
+            }
         } finally {
             foreach ($this->collectors as $collector) {
                 $collector->shutdown();
             }
+            $this->skipCollect = false;
         }
+    }
+
+    public function withOptionalRequests(array $optionalRequests): self
+    {
+        $new = clone $this;
+        $new->optionalRequests = $optionalRequests;
+        return $new;
+    }
+
+    private function isOptionalRequest(ServerRequestInterface $request): bool
+    {
+        $path = $request->getUri()->getPath();
+        foreach ($this->optionalRequests as $pattern) {
+            if (StringHelper::matchWildcard($pattern, $path)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

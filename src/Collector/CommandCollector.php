@@ -19,6 +19,10 @@ final class CommandCollector implements CollectorInterface
 
     public function collect(object $event): void
     {
+        if (!is_object($event) || !$this->isActive()) {
+            return;
+        }
+
         if ($event instanceof ConsoleCommandEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),

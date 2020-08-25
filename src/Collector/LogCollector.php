@@ -15,6 +15,10 @@ final class LogCollector implements LogCollectorInterface
 
     public function collect(string $level, string $message, array $context): void
     {
+        if (!$this->isActive()) {
+            return;
+        }
+
         $this->messages[] = [
             'time' => microtime(true),
             'level' => $level,
