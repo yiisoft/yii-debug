@@ -18,7 +18,8 @@ return [
             array_map(
                 fn ($class) => $container->get($class),
                 array_merge($params['collectors'], $params['collectors.web'] ?? [])
-            )
+            ),
+            $params['optionalRequests']
         );
     },
 ];

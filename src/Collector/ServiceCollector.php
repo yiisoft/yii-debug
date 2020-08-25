@@ -24,6 +24,10 @@ final class ServiceCollector implements ServiceCollectorInterface
         float $timeStart,
         float $timeEnd
     ): void {
+        if (!$this->isActive()) {
+            return;
+        }
+
         $this->items[] = [
             'service' => $service,
             'class' => $class,
