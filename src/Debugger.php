@@ -3,7 +3,7 @@
 namespace Yiisoft\Yii\Debug;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Yiisoft\Strings\StringHelper;
+use Yiisoft\Strings\WildcardPattern;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
@@ -74,7 +74,7 @@ final class Debugger
     {
         $path = $request->getUri()->getPath();
         foreach ($this->optionalRequests as $pattern) {
-            if (StringHelper::matchWildcard($pattern, $path)) {
+            if ((new WildcardPattern($pattern))->match($path)) {
                 return true;
             }
         }
