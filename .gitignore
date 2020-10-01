@@ -28,3 +28,5 @@ phpunit.phar
 # local tests configuration
 /tests/data/config.local.php
 /tests/runtime
+
+.phpunit.result.cache
