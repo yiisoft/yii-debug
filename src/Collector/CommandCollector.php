@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Symfony\Component\Console\Event\ConsoleCommandEvent;

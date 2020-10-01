@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Debug\Proxy;
 
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
