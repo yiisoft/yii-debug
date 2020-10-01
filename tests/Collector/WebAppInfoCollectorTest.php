@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Psr\Http\Message\ResponseInterface;

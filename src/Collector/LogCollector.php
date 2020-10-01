@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Debug\Collector;
 
 final class LogCollector implements LogCollectorInterface

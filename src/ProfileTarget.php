@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Debug;
 
 use Yiisoft\Profiler\Target;
@@ -13,7 +15,7 @@ final class ProfileTarget extends Target
      * @var array complete profiling messages.
      */
     public array $messages = [];
-    public function export(array $messages)
+    public function export(array $messages): void
     {
         $this->messages = $messages;
     }
