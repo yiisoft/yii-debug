@@ -18,7 +18,12 @@ final class RouterCollector implements CollectorInterface
 
     public function getCollected(): array
     {
-        return $this->container->has(UrlMatcherInterface::class) ?
-            $this->container->get(UrlMatcherInterface::class)->getRouteCollection()->getRouteTree() : [];
+        $urlMatcher = $this->container->has(UrlMatcherInterface::class) ? $this->container->get(UrlMatcherInterface::class) : null;
+
+        return $urlMatcher === null ? [] :
+            [
+                'routesTree' => $urlMatcher->getRouteCollection()->getRouteTree(),
+                'routes' => $urlMatcher->getRouteCollection()->getRoutes(),
+            ];
     }
 }
