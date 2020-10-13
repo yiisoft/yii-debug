@@ -20,15 +20,15 @@ class ServiceMethodProxy extends ServiceProxy
         parent::__construct($service, $instance, $config);
     }
 
-    protected function executeMethodProxy(string $method, array $arguments, $result, float $timeStart)
+    protected function executeMethodProxy(string $methodName, array $arguments, $result, float $timeStart)
     {
         try {
-            if (isset($this->methods[$method])) {
-                $callback = $this->methods[$method];
+            if (isset($this->methods[$methodName])) {
+                $callback = $this->methods[$methodName];
                 $result = $callback($result, ...$arguments);
             }
         } finally {
-            $this->log($this->getService(), $this->getInstance(), $method, $arguments, $result, $timeStart);
+            $this->log($this->getService(), $this->getInstance(), $methodName, $arguments, $result, $timeStart);
         }
 
         return $result;

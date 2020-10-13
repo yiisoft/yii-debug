@@ -28,14 +28,14 @@ final class CommandCollector implements CollectorInterface
         if ($event instanceof ConsoleCommandEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),
-                'input' => (string)$event->getInput(),
+                'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
             ];
         }
         if ($event instanceof ConsoleErrorEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),
-                'input' => (string)$event->getInput(),
+                'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
                 'error' => $event->getError()->getMessage(),
                 'exitCode' => $event->getExitCode(),
@@ -44,7 +44,7 @@ final class CommandCollector implements CollectorInterface
         if ($event instanceof ConsoleTerminateEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),
-                'input' => (string)$event->getInput(),
+                'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
                 'exitCode' => $event->getExitCode(),
             ];

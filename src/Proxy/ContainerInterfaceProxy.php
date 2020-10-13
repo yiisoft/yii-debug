@@ -49,6 +49,9 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
     }
 
+    /**
+     * @psalm-suppress InvalidCatch
+     */
     public function get($id, array $params = [])
     {
         $this->resetCurrentError();
@@ -70,6 +73,9 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $instance;
     }
 
+    /**
+     * @psalm-suppress InvalidCatch
+     */
     public function has($id): bool
     {
         $this->resetCurrentError();

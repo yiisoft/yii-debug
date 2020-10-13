@@ -61,7 +61,7 @@ final class ContainerProxyConfig
         return $config;
     }
 
-    public function withProxyCachePath(int $proxyCachePath): self
+    public function withProxyCachePath(string $proxyCachePath): self
     {
         $config = clone $this;
         $config->proxyCachePath = $proxyCachePath;
