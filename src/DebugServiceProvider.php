@@ -21,6 +21,9 @@ final class DebugServiceProvider extends ServiceProvider
         $logger = $container->get(LoggerInterface::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
 
+        /**
+         * @psalm-suppress InaccessibleMethod
+         */
         $container->setMultiple(
             [
                 // interfaces overriding

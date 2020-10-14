@@ -17,6 +17,9 @@ final class ContainerDelegator extends AbstractContainerConfigurator
         $this->container = $container;
     }
 
+    /**
+     * @psalm-suppress InaccessibleMethod
+     */
     public function delegateLookup(ContainerInterface $container): void
     {
         $this->container->delegateLookup($container);

@@ -12,6 +12,9 @@ use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 
 final class ProxyServiceProvider extends ServiceProvider
 {
+    /**
+     * @psalm-suppress InaccessibleMethod
+     */
     public function register(Container $container): void
     {
         $container->set(ContainerInterface::class, static function (ContainerInterface $container) {
