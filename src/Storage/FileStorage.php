@@ -62,16 +62,17 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
+        $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
             $varDumper = VarDumper::create($this->getData());
             $jsonData = $varDumper->asJson();
-            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.data.json', $jsonData);
+            $this->filesystem->write($basePath . 'data.json', $jsonData);
 
             $jsonObjects = $varDumper->asJsonObjectsMap();
-            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.obj.json', $jsonObjects);
+            $this->filesystem->write($basePath . 'objects.json', $jsonObjects);
 
             $indexData = VarDumper::create($this->collectIndexData())->asJson();
-            $this->filesystem->write($this->path . '/' . $this->idGenerator->getId() . '.index.json', $indexData);
+            $this->filesystem->write($basePath . 'index.json', $indexData);
 
             $this->gc();
         } finally {
@@ -102,18 +103,23 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $indexFiles = \glob($this->aliases->get($this->path) . '/yii-debug*.index.json', GLOB_NOSORT);
+        $indexFiles = \glob($this->aliases->get($this->path) . '/**/**/index.json', GLOB_NOSORT);
         if (\count($indexFiles) >= $this->historySize + 1) {
             \uasort($indexFiles, fn ($a, $b) => \filemtime($b) <=> \filemtime($a));
             $excessFiles = \array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {
-                $id = \basename($file, '.index.json');
-                $indexFile = $this->path . "/$id.index.json";
-                $dataFile = $this->path . "/$id.data.json";
-                $objFile = $this->path . "/$id.obj.json";
-                $this->filesystem->delete($indexFile);
-                $this->filesystem->delete($dataFile);
-                $this->filesystem->delete($objFile);
+                $path1 = \dirname($file);
+                $path2 = \dirname($file, 2);
+                $path3 = \dirname($file, 3);
+                $resource = substr($path1, strlen($path3));
+                $this->filesystem->deleteDirectory($this->path . $resource);
+
+                // Clean empty group directories
+                $group = substr($path2, strlen($path3));
+                $list = $this->filesystem->listContents($this->path . $group);
+                if (empty($list->toArray())) {
+                    $this->filesystem->deleteDirectory($this->path . $group);
+                }
             }
         }
     }
