@@ -25,6 +25,6 @@ class DebuggerIdGenerator
 
     private function generateId(): void
     {
-        $this->id = uniqid('yii-debug-', true);
+        $this->id = uniqid('', true);
     }
 }
