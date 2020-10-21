@@ -48,9 +48,14 @@ return [
         );
     },
     StorageInterface::class => static function (ContainerInterface $container) use ($params) {
+        $params = $params['yiisoft/yii-debug'];
         $filesystem = $container->get(FilesystemInterface::class);
         $debuggerIdGenerator = $container->get(DebuggerIdGenerator::class);
         $aliases = $container->get(Aliases::class);
-        return new FileStorage($params['yiisoft/yii-debug']['path'], $filesystem, $debuggerIdGenerator, $aliases);
+        $fileStorage = new FileStorage($params['path'], $filesystem, $debuggerIdGenerator, $aliases);
+        if (isset($params['historySize'])) {
+            $fileStorage->setHistorySize((int)$params['historySize']);
+        }
+        return $fileStorage;
     },
 ];
