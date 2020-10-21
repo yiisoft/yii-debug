@@ -62,7 +62,7 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
-        $basePath = $this->path . '/' . date('Y-m-d H:i:s') . '/' . $this->idGenerator->getId() . '/';
+        $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
             $varDumper = VarDumper::create($this->getData());
             $jsonData = $varDumper->asJson();
