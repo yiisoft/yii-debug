@@ -37,7 +37,7 @@
     },
     "require-dev": {
         "infection/infection": "^0.20.0",
-        "phpunit/phpunit": "^9.3",
+        "phpunit/phpunit": "^9.4",
         "vimeo/psalm": "^4.0",
         "yiisoft/log": "^3.0@dev",
         "yiisoft/cache": "^3.0@dev",
