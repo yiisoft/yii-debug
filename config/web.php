@@ -16,7 +16,7 @@ return [
             $container->get(DebuggerIdGenerator::class),
             $container->get(StorageInterface::class),
             array_map(
-                fn ($class) => $container->get($class),
+                static fn ($class) => $container->get($class),
                 array_merge($params['collectors'], $params['collectors.web'] ?? [])
             ),
             $params['optionalRequests']
