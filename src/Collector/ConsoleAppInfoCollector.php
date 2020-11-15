@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 
-final class ConsoleAppInfoCollector implements CollectorInterface
+final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -36,6 +36,15 @@ final class ConsoleAppInfoCollector implements CollectorInterface
         } elseif ($event instanceof ApplicationShutdown) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
+    }
+
+    public function getIndexData(): array
+    {
+        return [
+            'time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
+            'memory' => memory_get_peak_usage(true),
+            'timestamp' => $this->applicationProcessingTimeStarted
+        ];
     }
 
     private function reset(): void
