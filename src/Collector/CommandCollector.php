@@ -8,7 +8,7 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
-final class CommandCollector implements CollectorInterface
+final class CommandCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -49,6 +49,15 @@ final class CommandCollector implements CollectorInterface
                 'exitCode' => $event->getExitCode(),
             ];
         }
+    }
+
+    public function getIndexData(): array
+    {
+        $command = $this->commands[ConsoleCommandEvent::class];
+        return [
+            'command' => $command['input'],
+            'commandClass' => get_class($command['command'])
+        ];
     }
 
     private function reset(): void
