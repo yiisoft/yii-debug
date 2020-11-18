@@ -10,6 +10,9 @@ jobs:
   mutation:
     name: PHP ${{ matrix.php }}-${{ matrix.os }}
 
+    env:
+      extensions: fileinfo, mbstring, openssl
+
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -28,6 +31,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
+          extensions: ${{ env.extensions }}
           ini-values: memory_limit=-1
           coverage: "pcov"
           tools: composer:v2
