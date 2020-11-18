@@ -64,5 +64,8 @@ jobs:
         if: matrix.php == '8.0'
         run: composer update --ignore-platform-reqs --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
+      - name: view php.ini
+        run: php -i
+
       - name: Run tests with phpunit
         run: vendor/bin/phpunit --colors=always
