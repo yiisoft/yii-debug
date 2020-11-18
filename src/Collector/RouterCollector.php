@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\Container\ContainerInterface;
-use Yiisoft\Router\UrlMatcherInterface;
+use Yiisoft\Router\RouteCollectionInterface;
 
 final class RouterCollector implements CollectorInterface
 {
@@ -20,12 +20,12 @@ final class RouterCollector implements CollectorInterface
 
     public function getCollected(): array
     {
-        $urlMatcher = $this->container->has(UrlMatcherInterface::class) ? $this->container->get(UrlMatcherInterface::class) : null;
+        $routeCollection = $this->container->has(RouteCollectionInterface::class) ? $this->container->get(RouteCollectionInterface::class) : null;
 
-        return $urlMatcher === null ? [] :
+        return $routeCollection === null ? [] :
             [
-                'routesTree' => $urlMatcher->getRouteCollection()->getRouteTree(),
-                'routes' => $urlMatcher->getRouteCollection()->getRoutes(),
+                'routesTree' => $routeCollection->getRouteTree(),
+                'routes' => $routeCollection->getRoutes(),
             ];
     }
 }
