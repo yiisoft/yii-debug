@@ -137,7 +137,7 @@ final class FlattenExceptionTest extends TestCase
 
         // assertEquals() does not like NAN values.
         $this->assertEquals('float', $array[$i][0]);
-        $this->assertTrue(is_nan($array[$i++][1]));
+        $this->assertNan($array[$i++][1]);
     }
 
     public function testClosureSerialize(): void

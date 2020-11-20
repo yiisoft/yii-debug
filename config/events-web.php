@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
