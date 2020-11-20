@@ -43,7 +43,7 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
         return [
             'time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
             'memory' => memory_get_peak_usage(true),
-            'timestamp' => $this->applicationProcessingTimeStarted
+            'timestamp' => $this->applicationProcessingTimeStarted,
         ];
     }
 

@@ -15,6 +15,7 @@ final class ProfileTarget extends Target
      * @var array complete profiling messages.
      */
     public array $messages = [];
+
     public function export(array $messages): void
     {
         $this->messages = $messages;

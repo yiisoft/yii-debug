@@ -24,7 +24,7 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             'request_method' => $this->requestMethod,
             'request_is_ajax' => $this->requestIsAjax,
             'user_ip' => $this->userIp,
-            'response_status_code' => $this->responseStatusCode
+            'response_status_code' => $this->responseStatusCode,
         ];
     }
 
@@ -61,7 +61,7 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             'requestMethod' => $this->requestMethod,
             'requestIsAjax' => $this->requestIsAjax,
             'userIp' => $this->userIp,
-            'responseStatusCode' => $this->responseStatusCode
+            'responseStatusCode' => $this->responseStatusCode,
         ];
     }
 }
