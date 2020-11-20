@@ -14,7 +14,7 @@ use Yiisoft\Yii\Web\Event\BeforeRequest;
 final class WebAppInfoCollectorTest extends CollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|WebAppInfoCollector $collector
+     * @param WebAppInfoCollector|\Yiisoft\Yii\Debug\Collector\CollectorInterface $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
