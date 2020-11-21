@@ -13,6 +13,7 @@ interface StorageInterface
 {
     /**
      * Add collector to get debug data from
+     *
      * @param CollectorInterface $collector
      */
     public function addCollector(CollectorInterface $collector): void;

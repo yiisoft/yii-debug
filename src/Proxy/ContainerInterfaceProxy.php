@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Proxy;
 
-use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\ProxyTrait;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
 {
-    use ProxyTrait;
     use ProxyLogTrait;
+    use ProxyTrait;
 
     public const LOG_ARGUMENTS = 1;
 
