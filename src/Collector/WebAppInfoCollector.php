@@ -61,7 +61,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
         return [
             'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'memory' => memory_get_peak_usage(),
-            'timestamp' => $this->requestProcessingTimeStarted
+            'timestamp' => $this->requestProcessingTimeStarted,
         ];
     }
 }
