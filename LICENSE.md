@@ -1,6 +1,3 @@
-The Yii framework is free software. It is released under the terms of
-the following BSD License.
-
 Copyright © 2008 by Yii Software (https://www.yiiframework.com/)
 All rights reserved.
 
@@ -30,4 +27,3 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
-
