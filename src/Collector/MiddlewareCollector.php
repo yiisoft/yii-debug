@@ -33,14 +33,14 @@ final class MiddlewareCollector implements CollectorInterface
             $this->beforeStack[] = [
                 'name' => get_class($event->getMiddleware()),
                 'time' => microtime(true),
-                'memory' => memory_get_usage(true),
+                'memory' => memory_get_usage(),
                 'request' => $event->getRequest(),
             ];
         } elseif ($event instanceof AfterMiddleware) {
             $this->afterStack[] = [
                 'name' => get_class($event->getMiddleware()),
                 'time' => microtime(true),
-                'memory' => memory_get_usage(true),
+                'memory' => memory_get_usage(),
                 'response' => $event->getResponse(),
             ];
         }
