@@ -11,6 +11,7 @@ interface LogCollectorInterface extends CollectorInterface
 {
     /**
      * Collect data payload
+     *
      * @param string $level
      * @param string $message
      * @param array $context

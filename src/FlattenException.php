@@ -17,7 +17,7 @@ class FlattenException
      */
     protected string $message;
     /**
-     * @var mixed|int
+     * @var int|mixed
      */
     protected $code;
     /**
@@ -48,6 +48,7 @@ class FlattenException
 
     /**
      * FlattenException constructor.
+     *
      * @param \Throwable $exception
      */
     public function __construct(\Throwable $exception)
@@ -68,6 +69,7 @@ class FlattenException
 
     /**
      * Gets the Exception message
+     *
      * @return string the Exception message as a string.
      */
     public function getMessage(): string
@@ -77,7 +79,8 @@ class FlattenException
 
     /**
      * Gets the Exception code
-     * @return mixed|int the exception code as integer.
+     *
+     * @return int|mixed the exception code as integer.
      */
     public function getCode()
     {
@@ -86,6 +89,7 @@ class FlattenException
 
     /**
      * Gets the file in which the exception occurred
+     *
      * @return string the filename in which the exception was created.
      */
     public function getFile(): string
@@ -95,6 +99,7 @@ class FlattenException
 
     /**
      * Gets the line in which the exception occurred
+     *
      * @return int the line number where the exception was created.
      */
     public function getLine(): int
@@ -104,6 +109,7 @@ class FlattenException
 
     /**
      * Gets the stack trace
+     *
      * @return array the Exception stack trace as an array.
      */
     public function getTrace(): array
@@ -113,15 +119,17 @@ class FlattenException
 
     /**
      * Returns previous Exception
+     *
      * @return FlattenException|null the previous `FlattenException` if available or null otherwise.
      */
-    public function getPrevious(): ?FlattenException
+    public function getPrevious(): ?self
     {
         return $this->_previous;
     }
 
     /**
      * Gets the stack trace as a string
+     *
      * @return string the Exception stack trace as a string.
      */
     public function getTraceAsString(): string
@@ -136,6 +144,7 @@ class FlattenException
 
     /**
      * String representation of the exception
+     *
      * @return string the string representation of the exception.
      */
     public function __toString()
@@ -160,7 +169,7 @@ class FlattenException
     }
 
     /**
-     * @param mixed|int $code the exception code as integer.
+     * @param int|mixed $code the exception code as integer.
      */
     protected function setCode($code): void
     {
@@ -201,11 +210,11 @@ class FlattenException
             $this->_trace[] = [
                 'namespace' => $namespace,
                 'short_class' => $class,
-                'class' => isset($entry['class']) ? $entry['class'] : '',
-                'type' => isset($entry['type']) ? $entry['type'] : '',
-                'function' => isset($entry['function']) ? $entry['function'] : null,
-                'file' => isset($entry['file']) ? $entry['file'] : null,
-                'line' => isset($entry['line']) ? $entry['line'] : null,
+                'class' => $entry['class'] ?? '',
+                'type' => $entry['type'] ?? '',
+                'function' => $entry['function'] ?? null,
+                'file' => $entry['file'] ?? null,
+                'line' => $entry['line'] ?? null,
                 'args' => isset($entry['args']) ? $this->flattenArgs($entry['args']) : [],
             ];
         }
@@ -222,7 +231,7 @@ class FlattenException
     /**
      * @param FlattenException $previous previous Exception.
      */
-    protected function setPrevious(FlattenException $previous): void
+    protected function setPrevious(self $previous): void
     {
         $this->_previous = $previous;
     }
@@ -237,9 +246,11 @@ class FlattenException
 
     /**
      * Allows you to sterilize the Exception trace arguments
+     *
      * @param array $args
      * @param int $level recursion level
      * @param int $count number of records counter
+     *
      * @return array arguments tracing.
      */
     private function flattenArgs($args, $level = 0, &$count = 0): array
@@ -280,6 +291,7 @@ class FlattenException
 
     /**
      * @param \__PHP_Incomplete_Class $value
+     *
      * @return string the real class name of an incomplete class
      */
     private function getClassNameFromIncomplete(\__PHP_Incomplete_Class $value): string

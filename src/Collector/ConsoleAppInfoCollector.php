@@ -20,8 +20,8 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
     {
         return [
             'application_processing_time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
-            'memory_peak_usage' => memory_get_peak_usage(true),
-            'memory_usage' => memory_get_usage(true),
+            'memory_peak_usage' => memory_get_peak_usage(),
+            'memory_usage' => memory_get_usage(),
         ];
     }
 
@@ -42,8 +42,8 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
     {
         return [
             'time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
-            'memory' => memory_get_peak_usage(true),
-            'timestamp' => $this->applicationProcessingTimeStarted
+            'memory' => memory_get_peak_usage(),
+            'timestamp' => $this->applicationProcessingTimeStarted,
         ];
     }
 

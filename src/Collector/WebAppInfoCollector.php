@@ -24,8 +24,8 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             'application_preload' => $this->requestProcessingTimeStarted - $this->applicationProcessingTimeStarted,
             'request_processing_time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'application_emit' => $this->applicationProcessingTimeStopped - $this->requestProcessingTimeStopped,
-            'memory_peak_usage' => memory_get_peak_usage(true),
-            'memory_usage' => memory_get_usage(true),
+            'memory_peak_usage' => memory_get_peak_usage(),
+            'memory_usage' => memory_get_usage(),
         ];
     }
 
@@ -60,8 +60,8 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     {
         return [
             'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
-            'memory' => memory_get_peak_usage(true),
-            'timestamp' => $this->requestProcessingTimeStarted
+            'memory' => memory_get_peak_usage(),
+            'timestamp' => $this->requestProcessingTimeStarted,
         ];
     }
 }

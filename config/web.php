@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use Psr\Container\ContainerInterface;
-use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Debugger;
+use Yiisoft\Yii\Debug\DebuggerIdGenerator;
+use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];

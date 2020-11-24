@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
-use Yiisoft\Yii\Debug\Collector\ServiceCollector;
-use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
-use Yiisoft\Yii\Debug\Storage\FileStorage;
-use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\EventCollector;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollector;
+use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
+use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
+use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Storage\FileStorage;
+use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 /**
