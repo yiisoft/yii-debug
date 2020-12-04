@@ -68,8 +68,9 @@ final class FileStorage implements StorageInterface
             $jsonData = $varDumper->asJson();
             $this->filesystem->write($basePath . 'data.json', $jsonData);
 
-            $jsonObjects = $varDumper->asJsonObjectsMap();
-            $this->filesystem->write($basePath . 'objects.json', $jsonObjects);
+            $jsonObjects = json_decode($varDumper->asJsonObjectsMap(), true);
+            $jsonObjects = $this->reindexObjects($jsonObjects);
+            $this->filesystem->write($basePath . 'objects.json', VarDumper::create($jsonObjects)->asJson());
 
             $indexData = VarDumper::create($this->collectIndexData())->asJson();
             $this->filesystem->write($basePath . 'index.json', $indexData);
@@ -124,5 +125,15 @@ final class FileStorage implements StorageInterface
                 }
             }
         }
+    }
+
+    private function reindexObjects(array $objectsAsArraysCollection): array
+    {
+        $result = [];
+        foreach ($objectsAsArraysCollection as $objectAsArray) {
+            $result = array_merge($result, $objectAsArray);
+        }
+
+        return $result;
     }
 }
