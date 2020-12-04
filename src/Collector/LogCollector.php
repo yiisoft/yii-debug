@@ -15,7 +15,7 @@ final class LogCollector implements LogCollectorInterface
         return $this->messages;
     }
 
-    public function collect(string $level, string $message, array $context): void
+    public function collect(string $level, $message, array $context): void
     {
         if (!$this->isActive()) {
             return;
