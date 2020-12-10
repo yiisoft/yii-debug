@@ -60,19 +60,34 @@ final class FileStorage implements StorageInterface
         return $data;
     }
 
+    public function read($type = self::TYPE_INDEX): array
+    {
+        clearstatcache();
+        $data = [];
+        $path = $this->aliases->get($this->path);
+        $dataFiles = \glob($path . '/**/**/' . $type . '.json', GLOB_NOSORT);
+        foreach ($dataFiles as $file) {
+            $dir = \dirname($file);
+            $id = \substr($dir, \strlen(\dirname($file, 2)) + 1);
+            $data[$id] = file_get_contents($file);
+        }
+
+        return $data;
+    }
+
     public function flush(): void
     {
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
             $varDumper = VarDumper::create($this->getData());
             $jsonData = $varDumper->asJson();
-            $this->filesystem->write($basePath . 'data.json', $jsonData);
+            $this->filesystem->write($basePath . self::TYPE_DATA . '.json', $jsonData);
 
             $jsonObjects = $varDumper->asJsonObjectsMap();
-            $this->filesystem->write($basePath . 'objects.json', $jsonObjects);
+            $this->filesystem->write($basePath . self::TYPE_OBJECTS . '.json', $jsonObjects);
 
             $indexData = VarDumper::create($this->collectIndexData())->asJson();
-            $this->filesystem->write($basePath . 'index.json', $indexData);
+            $this->filesystem->write($basePath . self::TYPE_INDEX . '.json', $indexData);
 
             $this->gc();
         } finally {
@@ -105,7 +120,7 @@ final class FileStorage implements StorageInterface
     {
         $indexFiles = \glob($this->aliases->get($this->path) . '/**/**/index.json', GLOB_NOSORT);
         if (\count($indexFiles) >= $this->historySize + 1) {
-            \uasort($indexFiles, fn ($a, $b) => \filemtime($b) <=> \filemtime($a));
+            \uasort($indexFiles, static fn ($a, $b) => \filemtime($b) <=> \filemtime($a));
             $excessFiles = \array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {
                 $path1 = \dirname($file);
