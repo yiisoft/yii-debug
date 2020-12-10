@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug;
 
+use __PHP_Incomplete_Class;
+use ArrayObject;
+use Exception;
+use Throwable;
+
 /**
  * FlattenException wraps a PHP Exception to be able to serialize it.
  * Implements the Throwable interface
@@ -49,9 +54,9 @@ class FlattenException
     /**
      * FlattenException constructor.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      */
-    public function __construct(\Throwable $exception)
+    public function __construct(Throwable $exception)
     {
         $this->setMessage($exception->getMessage());
         $this->setCode($exception->getCode());
@@ -62,9 +67,17 @@ class FlattenException
         $this->setClass(get_class($exception));
 
         $previous = $exception->getPrevious();
-        if ($previous instanceof \Exception) {
+        if ($previous instanceof Exception) {
             $this->setPrevious(new self($previous));
         }
+    }
+
+    /**
+     * @param string $string the string representation of the thrown object.
+     */
+    protected function setToString($string): void
+    {
+        $this->_toString = $string;
     }
 
     /**
@@ -78,6 +91,14 @@ class FlattenException
     }
 
     /**
+     * @param string $message the Exception message as a string.
+     */
+    protected function setMessage($message): void
+    {
+        $this->message = $message;
+    }
+
+    /**
      * Gets the Exception code
      *
      * @return int|mixed the exception code as integer.
@@ -85,6 +106,14 @@ class FlattenException
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * @param int|mixed $code the exception code as integer.
+     */
+    protected function setCode($code): void
+    {
+        $this->code = $code;
     }
 
     /**
@@ -98,6 +127,14 @@ class FlattenException
     }
 
     /**
+     * @param string $file the filename in which the exception was created.
+     */
+    protected function setFile($file): void
+    {
+        $this->file = $file;
+    }
+
+    /**
      * Gets the line in which the exception occurred
      *
      * @return int the line number where the exception was created.
@@ -105,6 +142,14 @@ class FlattenException
     public function getLine(): int
     {
         return $this->line;
+    }
+
+    /**
+     * @param int $line the line number where the exception was created.
+     */
+    protected function setLine($line): void
+    {
+        $this->line = $line;
     }
 
     /**
@@ -118,6 +163,34 @@ class FlattenException
     }
 
     /**
+     * @param array $trace the Exception stack trace as an array.
+     */
+    protected function setTrace($trace): void
+    {
+        $this->_trace = [];
+        foreach ($trace as $entry) {
+            $class = '';
+            $namespace = '';
+            if (isset($entry['class'])) {
+                $parts = explode('\\', $entry['class']);
+                $class = array_pop($parts);
+                $namespace = implode('\\', $parts);
+            }
+
+            $this->_trace[] = [
+                'namespace' => $namespace,
+                'short_class' => $class,
+                'class' => $entry['class'] ?? '',
+                'type' => $entry['type'] ?? '',
+                'function' => $entry['function'] ?? null,
+                'file' => $entry['file'] ?? null,
+                'line' => $entry['line'] ?? null,
+                'args' => isset($entry['args']) ? $this->flattenArgs($entry['args']) : [],
+            ];
+        }
+    }
+
+    /**
      * Returns previous Exception
      *
      * @return FlattenException|null the previous `FlattenException` if available or null otherwise.
@@ -125,6 +198,14 @@ class FlattenException
     public function getPrevious(): ?self
     {
         return $this->_previous;
+    }
+
+    /**
+     * @param FlattenException $previous previous Exception.
+     */
+    protected function setPrevious(self $previous): void
+    {
+        $this->_previous = $previous;
     }
 
     /**
@@ -161,82 +242,6 @@ class FlattenException
     }
 
     /**
-     * @param string $message the Exception message as a string.
-     */
-    protected function setMessage($message): void
-    {
-        $this->message = $message;
-    }
-
-    /**
-     * @param int|mixed $code the exception code as integer.
-     */
-    protected function setCode($code): void
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @param string $file the filename in which the exception was created.
-     */
-    protected function setFile($file): void
-    {
-        $this->file = $file;
-    }
-
-    /**
-     * @param int $line the line number where the exception was created.
-     */
-    protected function setLine($line): void
-    {
-        $this->line = $line;
-    }
-
-    /**
-     * @param array $trace the Exception stack trace as an array.
-     */
-    protected function setTrace($trace): void
-    {
-        $this->_trace = [];
-        foreach ($trace as $entry) {
-            $class = '';
-            $namespace = '';
-            if (isset($entry['class'])) {
-                $parts = explode('\\', $entry['class']);
-                $class = array_pop($parts);
-                $namespace = implode('\\', $parts);
-            }
-
-            $this->_trace[] = [
-                'namespace' => $namespace,
-                'short_class' => $class,
-                'class' => $entry['class'] ?? '',
-                'type' => $entry['type'] ?? '',
-                'function' => $entry['function'] ?? null,
-                'file' => $entry['file'] ?? null,
-                'line' => $entry['line'] ?? null,
-                'args' => isset($entry['args']) ? $this->flattenArgs($entry['args']) : [],
-            ];
-        }
-    }
-
-    /**
-     * @param string $string the string representation of the thrown object.
-     */
-    protected function setToString($string): void
-    {
-        $this->_toString = $string;
-    }
-
-    /**
-     * @param FlattenException $previous previous Exception.
-     */
-    protected function setPrevious(self $previous): void
-    {
-        $this->_previous = $previous;
-    }
-
-    /**
      * @param string $class the name of the class in which the exception was created.
      */
     protected function setClass($class): void
@@ -260,7 +265,7 @@ class FlattenException
             if (++$count > 10000) {
                 return ['array', '*SKIPPED over 10000 entries*'];
             }
-            if ($value instanceof \__PHP_Incomplete_Class) {
+            if ($value instanceof __PHP_Incomplete_Class) {
                 // is_object() returns false on PHP<=7.1
                 $result[$key] = ['incomplete-object', $this->getClassNameFromIncomplete($value)];
             } elseif (is_object($value)) {
@@ -290,13 +295,13 @@ class FlattenException
     }
 
     /**
-     * @param \__PHP_Incomplete_Class $value
+     * @param __PHP_Incomplete_Class $value
      *
      * @return string the real class name of an incomplete class
      */
-    private function getClassNameFromIncomplete(\__PHP_Incomplete_Class $value): string
+    private function getClassNameFromIncomplete(__PHP_Incomplete_Class $value): string
     {
-        $array = new \ArrayObject($value);
+        $array = new ArrayObject($value);
 
         return $array['__PHP_Incomplete_Class_Name'];
     }

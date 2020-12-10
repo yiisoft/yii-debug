@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Storage;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 abstract class AbstractStorageTest extends TestCase
@@ -17,7 +18,8 @@ abstract class AbstractStorageTest extends TestCase
      */
     public function testAddAndGet(array $data): void
     {
-        $storage = $this->getStorage();
+        $idGenerator = new DebuggerIdGenerator();
+        $storage = $this->getStorage($idGenerator);
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())
             ->method('getCollected')
@@ -33,9 +35,26 @@ abstract class AbstractStorageTest extends TestCase
      *
      * @param array $data
      */
+    public function testRead(array $data): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $storage = $this->getStorage($idGenerator);
+        $collector = $this->createFakeCollector($data);
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $this->assertEquals([$idGenerator->getId() => $storage->getData()], $storage->read());
+    }
+
+    /**
+     * @dataProvider dataProvider()
+     *
+     * @param array $data
+     */
     public function testFlush(array $data): void
     {
-        $storage = $this->getStorage();
+        $idGenerator = new DebuggerIdGenerator();
+        $storage = $this->getStorage($idGenerator);
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
@@ -43,7 +62,7 @@ abstract class AbstractStorageTest extends TestCase
         $this->assertEquals([], $storage->getData());
     }
 
-    abstract public function getStorage(): StorageInterface;
+    abstract public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface;
 
     public function dataProvider(): array
     {

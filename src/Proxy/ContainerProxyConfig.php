@@ -6,6 +6,8 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
+use function in_array;
+use function is_callable;
 
 final class ContainerProxyConfig
 {
@@ -125,14 +127,14 @@ final class ContainerProxyConfig
         return isset($this->decoratedServices[$service]) || in_array($service, $this->decoratedServices, true);
     }
 
-    public function hasDecoratedServiceArrayConfig(string $service): bool
-    {
-        return isset($this->decoratedServices[$service]) && is_array($this->decoratedServices[$service]);
-    }
-
     public function hasDecoratedServiceArrayConfigWithStringKeys(string $service): bool
     {
         return $this->hasDecoratedServiceArrayConfig($service) && !isset($this->decoratedServices[$service][0]);
+    }
+
+    public function hasDecoratedServiceArrayConfig(string $service): bool
+    {
+        return isset($this->decoratedServices[$service]) && is_array($this->decoratedServices[$service]);
     }
 
     public function hasDecoratedServiceCallableConfig(string $service): bool

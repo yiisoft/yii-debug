@@ -6,13 +6,14 @@ namespace Yiisoft\Yii\Debug;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Strings\WildcardPattern;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 final class Debugger
 {
     /**
-     * @var \Yiisoft\Yii\Debug\Collector\CollectorInterface[]
+     * @var CollectorInterface[]
      */
     private array $collectors;
     private bool $skipCollect = false;
@@ -51,6 +52,17 @@ final class Debugger
         }
     }
 
+    private function isOptionalRequest(ServerRequestInterface $request): bool
+    {
+        $path = $request->getUri()->getPath();
+        foreach ($this->optionalRequests as $pattern) {
+            if ((new WildcardPattern($pattern))->match($path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function shutdown(): void
     {
         try {
@@ -70,16 +82,5 @@ final class Debugger
         $new = clone $this;
         $new->optionalRequests = $optionalRequests;
         return $new;
-    }
-
-    private function isOptionalRequest(ServerRequestInterface $request): bool
-    {
-        $path = $request->getUri()->getPath();
-        foreach ($this->optionalRequests as $pattern) {
-            if ((new WildcardPattern($pattern))->match($path)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
