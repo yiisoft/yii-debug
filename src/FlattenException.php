@@ -37,19 +37,19 @@ class FlattenException
     /**
      * @var FlattenException|null
      */
-    private ?FlattenException $_previous;
+    private ?FlattenException $previous;
     /**
      * @var array
      */
-    private array $_trace;
+    private array $trace;
     /**
      * @var string
      */
-    private string $_toString;
+    private string $toString;
     /**
      * @var string
      */
-    private string $_class;
+    private string $class;
 
     /**
      * FlattenException constructor.
@@ -75,9 +75,9 @@ class FlattenException
     /**
      * @param string $string the string representation of the thrown object.
      */
-    protected function setToString($string): void
+    protected function setToString(string $string): void
     {
-        $this->_toString = $string;
+        $this->toString = $string;
     }
 
     /**
@@ -93,7 +93,7 @@ class FlattenException
     /**
      * @param string $message the Exception message as a string.
      */
-    protected function setMessage($message): void
+    protected function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -129,7 +129,7 @@ class FlattenException
     /**
      * @param string $file the filename in which the exception was created.
      */
-    protected function setFile($file): void
+    protected function setFile(string $file): void
     {
         $this->file = $file;
     }
@@ -147,7 +147,7 @@ class FlattenException
     /**
      * @param int $line the line number where the exception was created.
      */
-    protected function setLine($line): void
+    protected function setLine(int $line): void
     {
         $this->line = $line;
     }
@@ -159,15 +159,15 @@ class FlattenException
      */
     public function getTrace(): array
     {
-        return $this->_trace;
+        return $this->trace;
     }
 
     /**
      * @param array $trace the Exception stack trace as an array.
      */
-    protected function setTrace($trace): void
+    protected function setTrace(array $trace): void
     {
-        $this->_trace = [];
+        $this->trace = [];
         foreach ($trace as $entry) {
             $class = '';
             $namespace = '';
@@ -177,7 +177,7 @@ class FlattenException
                 $namespace = implode('\\', $parts);
             }
 
-            $this->_trace[] = [
+            $this->trace[] = [
                 'namespace' => $namespace,
                 'short_class' => $class,
                 'class' => $entry['class'] ?? '',
@@ -197,7 +197,7 @@ class FlattenException
      */
     public function getPrevious(): ?self
     {
-        return $this->_previous;
+        return $this->previous;
     }
 
     /**
@@ -205,7 +205,7 @@ class FlattenException
      */
     protected function setPrevious(self $previous): void
     {
-        $this->_previous = $previous;
+        $this->previous = $previous;
     }
 
     /**
@@ -216,11 +216,11 @@ class FlattenException
     public function getTraceAsString(): string
     {
         $remove = "Stack trace:\n";
-        $len = strpos($this->_toString, $remove);
+        $len = strpos($this->toString, $remove);
         if ($len === false) {
             return '';
         }
-        return substr($this->_toString, $len + strlen($remove));
+        return substr($this->toString, $len + strlen($remove));
     }
 
     /**
@@ -230,7 +230,7 @@ class FlattenException
      */
     public function __toString()
     {
-        return $this->_toString;
+        return $this->toString;
     }
 
     /**
@@ -238,15 +238,15 @@ class FlattenException
      */
     public function getClass(): string
     {
-        return $this->_class;
+        return $this->class;
     }
 
     /**
      * @param string $class the name of the class in which the exception was created.
      */
-    protected function setClass($class): void
+    protected function setClass(string $class): void
     {
-        $this->_class = $class;
+        $this->class = $class;
     }
 
     /**
@@ -258,7 +258,7 @@ class FlattenException
      *
      * @return array arguments tracing.
      */
-    private function flattenArgs($args, $level = 0, &$count = 0): array
+    private function flattenArgs(array $args, $level = 0, &$count = 0): array
     {
         $result = [];
         foreach ($args as $key => $value) {
