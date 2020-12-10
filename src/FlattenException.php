@@ -15,24 +15,24 @@ use Throwable;
  * Basically, this class removes all objects from the trace.
  * Ported from Symfony components @link https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Debug/Exception/FlattenException.php
  */
-class FlattenException
+final class FlattenException
 {
     /**
      * @var string
      */
-    protected string $message;
+    private string $message;
     /**
      * @var int|mixed
      */
-    protected $code;
+    private $code;
     /**
      * @var string
      */
-    protected string $file;
+    private string $file;
     /**
      * @var int
      */
-    protected int $line;
+    private int $line;
 
     /**
      * @var FlattenException|null
@@ -75,7 +75,7 @@ class FlattenException
     /**
      * @param string $string the string representation of the thrown object.
      */
-    protected function setToString(string $string): void
+    private function setToString(string $string): void
     {
         $this->toString = $string;
     }
@@ -93,7 +93,7 @@ class FlattenException
     /**
      * @param string $message the Exception message as a string.
      */
-    protected function setMessage(string $message): void
+    private function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -111,7 +111,7 @@ class FlattenException
     /**
      * @param int|mixed $code the exception code as integer.
      */
-    protected function setCode($code): void
+    private function setCode($code): void
     {
         $this->code = $code;
     }
@@ -129,7 +129,7 @@ class FlattenException
     /**
      * @param string $file the filename in which the exception was created.
      */
-    protected function setFile(string $file): void
+    private function setFile(string $file): void
     {
         $this->file = $file;
     }
@@ -147,7 +147,7 @@ class FlattenException
     /**
      * @param int $line the line number where the exception was created.
      */
-    protected function setLine(int $line): void
+    private function setLine(int $line): void
     {
         $this->line = $line;
     }
@@ -165,7 +165,7 @@ class FlattenException
     /**
      * @param array $trace the Exception stack trace as an array.
      */
-    protected function setTrace(array $trace): void
+    private function setTrace(array $trace): void
     {
         $this->trace = [];
         foreach ($trace as $entry) {
@@ -203,7 +203,7 @@ class FlattenException
     /**
      * @param FlattenException $previous previous Exception.
      */
-    protected function setPrevious(self $previous): void
+    private function setPrevious(self $previous): void
     {
         $this->previous = $previous;
     }
@@ -244,7 +244,7 @@ class FlattenException
     /**
      * @param string $class the name of the class in which the exception was created.
      */
-    protected function setClass(string $class): void
+    private function setClass(string $class): void
     {
         $this->class = $class;
     }
