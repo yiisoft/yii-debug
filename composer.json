@@ -20,6 +20,7 @@
     "require": {
         "yiisoft/aliases": "^1.1",
         "yiisoft/arrays": "^3.0@dev",
+        "yiisoft/json": "^1.0",
         "yiisoft/strings": "^1.1",
         "yiisoft/profiler": "dev-master",
         "yiisoft/assets": "dev-master",

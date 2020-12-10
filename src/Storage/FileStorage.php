@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Aliases\Aliases;
+use Yiisoft\Json\Json;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
@@ -69,7 +70,7 @@ final class FileStorage implements StorageInterface
         foreach ($dataFiles as $file) {
             $dir = \dirname($file);
             $id = \substr($dir, \strlen(\dirname($file, 2)) + 1);
-            $data[$id] = file_get_contents($file);
+            $data[$id] = Json::decode(file_get_contents($file));
         }
 
         return $data;
