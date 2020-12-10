@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
+use function is_object;
 
 final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInterface
 {

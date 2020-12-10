@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
+use function is_object;
 
 final class RequestCollector implements CollectorInterface, IndexCollectorInterface
 {

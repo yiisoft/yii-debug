@@ -10,6 +10,9 @@ use Psr\Container\ContainerInterface;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\ProxyTrait;
+use function is_callable;
+use function is_object;
+use function is_string;
 
 class ContainerInterfaceProxy implements ContainerProxyInterface
 {
