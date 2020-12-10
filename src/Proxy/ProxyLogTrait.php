@@ -10,8 +10,14 @@ trait ProxyLogTrait
 {
     private ContainerProxyConfig $config;
 
-    protected function log(string $service, object $instance, string $method, array $arguments, $result, float $timeStart): void
-    {
+    protected function log(
+        string $service,
+        object $instance,
+        string $method,
+        array $arguments,
+        $result,
+        float $timeStart
+    ): void {
         $error = $this->getCurrentError();
         $this->processLogData($arguments, $result, $error);
 
@@ -39,8 +45,15 @@ trait ProxyLogTrait
         }
     }
 
-    private function logToCollector(string $service, object $instance, string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
-    {
+    private function logToCollector(
+        string $service,
+        object $instance,
+        string $method,
+        ?array $arguments,
+        $result,
+        ?object $error,
+        float $timeStart
+    ): void {
         $this->config->getCollector()->collect(
             $service,
             get_class($instance),
@@ -54,18 +67,27 @@ trait ProxyLogTrait
         );
     }
 
-    private function logToEvent(string $service, object $instance, string $method, ?array $arguments, $result, ?object $error, float $timeStart): void
-    {
-        $this->config->getDispatcher()->dispatch(new ProxyMethodCallEvent(
-            $service,
-            get_class($instance),
-            $method,
-            $arguments,
-            $result,
-            $this->getCurrentResultStatus(),
-            $error,
-            $timeStart,
-            microtime(true),
-        ));
+    private function logToEvent(
+        string $service,
+        object $instance,
+        string $method,
+        ?array $arguments,
+        $result,
+        ?object $error,
+        float $timeStart
+    ): void {
+        $this->config->getDispatcher()->dispatch(
+            new ProxyMethodCallEvent(
+                $service,
+                get_class($instance),
+                $method,
+                $arguments,
+                $result,
+                $this->getCurrentResultStatus(),
+                $error,
+                $timeStart,
+                microtime(true),
+            )
+        );
     }
 }

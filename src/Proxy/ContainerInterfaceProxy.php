@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Proxy;
 
+use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Yiisoft\Container\Proxy\ContainerProxyInterface;
@@ -44,11 +45,6 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $proxy;
     }
 
-    public function isActive(): bool
-    {
-        return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
-    }
-
     /**
      * @psalm-suppress InvalidCatch
      */
@@ -65,7 +61,9 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
             $this->log(ContainerInterface::class, $this->container, 'get', [$id, $params], $instance, $timeStart);
         }
 
-        if (is_object($instance) && $this->isDecorated($id) && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))) {
+        if (is_object($instance) && $this->isDecorated($id) && (($proxy = $this->getServiceProxyCache(
+                    $id
+                )) || ($proxy = $this->getServiceProxy($id, $instance)))) {
             $this->setServiceProxyCache($id, $proxy);
             return $proxy;
         }
@@ -73,28 +71,28 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $instance;
     }
 
-    /**
-     * @psalm-suppress InvalidCatch
-     */
-    public function has($id): bool
+    private function getInstance(string $id, array $params)
     {
-        $this->resetCurrentError();
-        $timeStart = microtime(true);
-        try {
-            $result = null;
-            $result = $this->container->has($id);
-        } catch (ContainerExceptionInterface $e) {
-            $this->repeatError($e);
-        } finally {
-            $this->log(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
+        if ($params === []) {
+            return $this->container->get($id);
         }
 
-        return $result;
+        return $this->container->get($id, $params);
     }
 
     private function isDecorated(string $service): bool
     {
         return $this->isActive() && $this->config->hasDecoratedService($service);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
+    }
+
+    private function getServiceProxyCache(string $service): ?object
+    {
+        return $this->serviceProxy[$service] ?? null;
     }
 
     private function getServiceProxy(string $service, object $instance): ?object
@@ -122,6 +120,11 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return null;
     }
 
+    private function getServiceProxyFromCallable(callable $callback): ?object
+    {
+        return $callback($this->container);
+    }
+
     private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
     {
         $methods = [];
@@ -140,11 +143,6 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         );
     }
 
-    private function getServiceProxyFromCallable(callable $callback): ?object
-    {
-        return $callback($this->container);
-    }
-
     private function getServiceProxyFromArray(object $instance, array $params): ?object
     {
         try {
@@ -153,13 +151,13 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
                 if (is_string($param)) {
                     try {
                         $params[$index] = $this->container->get($param);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         //leave as is
                     }
                 }
             }
             return new $proxyClass($instance, ...$params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
@@ -173,22 +171,27 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         );
     }
 
-    private function getInstance(string $id, array $params)
-    {
-        if ($params === []) {
-            return $this->container->get($id);
-        }
-
-        return $this->container->get($id, $params);
-    }
-
-    private function getServiceProxyCache(string $service): ?object
-    {
-        return $this->serviceProxy[$service] ?? null;
-    }
-
     private function setServiceProxyCache(string $service, object $instance): void
     {
         $this->serviceProxy[$service] = $instance;
+    }
+
+    /**
+     * @psalm-suppress InvalidCatch
+     */
+    public function has($id): bool
+    {
+        $this->resetCurrentError();
+        $timeStart = microtime(true);
+        try {
+            $result = null;
+            $result = $this->container->has($id);
+        } catch (ContainerExceptionInterface $e) {
+            $this->repeatError($e);
+        } finally {
+            $this->log(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
+        }
+
+        return $result;
     }
 }

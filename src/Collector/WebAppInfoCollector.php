@@ -48,14 +48,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
         }
     }
 
-    private function reset(): void
-    {
-        $this->applicationProcessingTimeStarted = 0;
-        $this->applicationProcessingTimeStopped = 0;
-        $this->requestProcessingTimeStarted = 0;
-        $this->requestProcessingTimeStopped = 0;
-    }
-
     public function getIndexData(): array
     {
         return [
@@ -63,5 +55,13 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             'memory' => memory_get_peak_usage(),
             'timestamp' => $this->requestProcessingTimeStarted,
         ];
+    }
+
+    private function reset(): void
+    {
+        $this->applicationProcessingTimeStarted = 0;
+        $this->applicationProcessingTimeStopped = 0;
+        $this->requestProcessingTimeStarted = 0;
+        $this->requestProcessingTimeStopped = 0;
     }
 }

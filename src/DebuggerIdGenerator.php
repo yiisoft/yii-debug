@@ -13,6 +13,11 @@ class DebuggerIdGenerator
         $this->generateId();
     }
 
+    private function generateId(): void
+    {
+        $this->id = uniqid('', true);
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -21,10 +26,5 @@ class DebuggerIdGenerator
     public function reset(): void
     {
         $this->generateId();
-    }
-
-    private function generateId(): void
-    {
-        $this->id = uniqid('', true);
     }
 }

@@ -20,7 +20,8 @@ final class EventCollector implements EventCollectorInterface
 
     public function collect(object $event): void
     {
-        if (!$this->isActive() && !$event instanceof WebApplicationStartup && !$event instanceof ConsoleApplicationStartup) {
+        if (!$this->isActive(
+            ) && !$event instanceof WebApplicationStartup && !$event instanceof ConsoleApplicationStartup) {
             return;
         }
 

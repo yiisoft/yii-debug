@@ -17,8 +17,11 @@ final class ProxyServiceProvider extends ServiceProvider
      */
     public function register(Container $container): void
     {
-        $container->set(ContainerInterface::class, static function (ContainerInterface $container) {
-            return new ContainerProxy($container, $container->get(ContainerProxyConfig::class));
-        });
+        $container->set(
+            ContainerInterface::class,
+            static function (ContainerInterface $container) {
+                return new ContainerProxy($container, $container->get(ContainerProxyConfig::class));
+            }
+        );
     }
 }
