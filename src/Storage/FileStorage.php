@@ -98,6 +98,7 @@ final class FileStorage implements StorageInterface
 
     /**
      * Collects summary data of current request.
+     *
      * @return array
      */
     private function collectIndexData(): array
@@ -115,6 +116,7 @@ final class FileStorage implements StorageInterface
 
     /**
      * Removes obsolete data files
+     *
      * @throws \League\Flysystem\FilesystemException
      */
     private function gc(): void
