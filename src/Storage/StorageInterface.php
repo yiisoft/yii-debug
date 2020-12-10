@@ -31,10 +31,12 @@ interface StorageInterface
 
     /**
      * Read all data from storage
+     *
      * @param string $type type of data being read. Available types:
      * - {@see TYPE_INDEX}
      * - {@see TYPE_DATA}
      * - {@see TYPE_OBJECTS}
+     *
      * @return array data from storage
      */
     public function read(string $type = self::TYPE_INDEX): array;

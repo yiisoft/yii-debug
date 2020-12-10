@@ -48,6 +48,7 @@ abstract class AbstractStorageTest extends TestCase
 
     /**
      * @dataProvider dataProvider()
+     *
      * @param array $data
      */
     public function testFlush(array $data): void
