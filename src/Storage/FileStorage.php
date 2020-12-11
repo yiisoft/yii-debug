@@ -4,12 +4,25 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Storage;
 
+use League\Flysystem\FilesystemException;
 use Yiisoft\Aliases\Aliases;
+use Yiisoft\Json\Json;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
+
+use function array_merge;
+use function array_slice;
+use function count;
+use function dirname;
+use function filemtime;
+use function get_class;
+use function glob;
+use function strlen;
+use function substr;
+use function uasort;
 
 final class FileStorage implements StorageInterface
 {
@@ -50,11 +63,16 @@ final class FileStorage implements StorageInterface
         $this->historySize = $historySize;
     }
 
-    public function getData(): array
+    public function read($type = self::TYPE_INDEX): array
     {
+        clearstatcache();
         $data = [];
-        foreach ($this->collectors as $collector) {
-            $data[get_class($collector)] = $collector->getCollected();
+        $path = $this->aliases->get($this->path);
+        $dataFiles = glob($path . '/**/**/' . $type . '.json', GLOB_NOSORT);
+        foreach ($dataFiles as $file) {
+            $dir = dirname($file);
+            $id = substr($dir, strlen(dirname($file, 2)) + 1);
+            $data[$id] = Json::decode(file_get_contents($file));
         }
 
         return $data;
@@ -66,19 +84,29 @@ final class FileStorage implements StorageInterface
         try {
             $varDumper = VarDumper::create($this->getData());
             $jsonData = $varDumper->asJson();
-            $this->filesystem->write($basePath . 'data.json', $jsonData);
+            $this->filesystem->write($basePath . self::TYPE_DATA . '.json', $jsonData);
 
             $jsonObjects = json_decode($varDumper->asJsonObjectsMap(), true);
             $jsonObjects = $this->reindexObjects($jsonObjects);
-            $this->filesystem->write($basePath . 'objects.json', VarDumper::create($jsonObjects)->asJson());
+            $this->filesystem->write($basePath . self::TYPE_OBJECTS . '.json', VarDumper::create($jsonObjects)->asJson());
 
             $indexData = VarDumper::create($this->collectIndexData())->asJson();
-            $this->filesystem->write($basePath . 'index.json', $indexData);
+            $this->filesystem->write($basePath . self::TYPE_INDEX . '.json', $indexData);
 
             $this->gc();
         } finally {
             $this->collectors = [];
         }
+    }
+
+    public function getData(): array
+    {
+        $data = [];
+        foreach ($this->collectors as $collector) {
+            $data[get_class($collector)] = $collector->getCollected();
+        }
+
+        return $data;
     }
 
     /**
@@ -92,7 +120,7 @@ final class FileStorage implements StorageInterface
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof IndexCollectorInterface) {
-                $indexData = \array_merge($indexData, $collector->getIndexData());
+                $indexData = array_merge($indexData, $collector->getIndexData());
             }
         }
 
@@ -102,18 +130,18 @@ final class FileStorage implements StorageInterface
     /**
      * Removes obsolete data files
      *
-     * @throws \League\Flysystem\FilesystemException
+     * @throws FilesystemException
      */
     private function gc(): void
     {
-        $indexFiles = \glob($this->aliases->get($this->path) . '/**/**/index.json', GLOB_NOSORT);
-        if (\count($indexFiles) >= $this->historySize + 1) {
-            \uasort($indexFiles, fn ($a, $b) => \filemtime($b) <=> \filemtime($a));
-            $excessFiles = \array_slice($indexFiles, $this->historySize);
+        $indexFiles = glob($this->aliases->get($this->path) . '/**/**/index.json', GLOB_NOSORT);
+        if (count($indexFiles) >= $this->historySize + 1) {
+            uasort($indexFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
+            $excessFiles = array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {
-                $path1 = \dirname($file);
-                $path2 = \dirname($file, 2);
-                $path3 = \dirname($file, 3);
+                $path1 = dirname($file);
+                $path2 = dirname($file, 2);
+                $path3 = dirname($file, 3);
                 $resource = substr($path1, strlen($path3));
                 $this->filesystem->deleteDirectory($this->path . $resource);
 

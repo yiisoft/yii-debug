@@ -20,7 +20,9 @@ final class RouterCollector implements CollectorInterface
 
     public function getCollected(): array
     {
-        $routeCollection = $this->container->has(RouteCollectionInterface::class) ? $this->container->get(RouteCollectionInterface::class) : null;
+        $routeCollection = $this->container->has(RouteCollectionInterface::class)
+            ? $this->container->get(RouteCollectionInterface::class)
+            : null;
 
         return $routeCollection === null ? [] :
             [
