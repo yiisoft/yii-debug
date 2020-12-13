@@ -19,12 +19,12 @@ trait CollectorTrait
         $this->isActive = false;
     }
 
+    private function reset(): void
+    {
+    }
+
     private function isActive(): bool
     {
         return $this->isActive;
-    }
-
-    private function reset(): void
-    {
     }
 }
