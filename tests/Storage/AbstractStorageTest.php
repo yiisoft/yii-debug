@@ -27,7 +27,7 @@ abstract class AbstractStorageTest extends TestCase
 
         $this->assertEquals([], $storage->getData());
         $storage->addCollector($collector);
-        $this->assertEquals([$data], $storage->getData());
+        $this->assertEquals([get_class($collector) => $data], $storage->getData());
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class AbstractStorageTest extends TestCase
 
         $storage->addCollector($collector);
         $storage->flush();
-        $this->assertEquals([$idGenerator->getId() => $storage->getData()], $storage->read());
+        $this->assertEquals($storage->getData(), $storage->read(StorageInterface::TYPE_DATA));
     }
 
     /**

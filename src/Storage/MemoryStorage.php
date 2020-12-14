@@ -28,7 +28,11 @@ final class MemoryStorage implements StorageInterface
 
     public function read($type = self::TYPE_INDEX): array
     {
-        return [$this->idGenerator->getId() => $this->getData()];
+        if ($type === self::TYPE_INDEX) {
+            return [$this->idGenerator->getId() => $this->getData()];
+        }
+
+        return $this->getData();
     }
 
     public function getData(): array
@@ -36,7 +40,7 @@ final class MemoryStorage implements StorageInterface
         $data = [];
 
         foreach ($this->collectors as $collector) {
-            $data[] = $collector->getCollected();
+            $data[get_class($collector)] = $collector->getCollected();
         }
 
         return $data;
