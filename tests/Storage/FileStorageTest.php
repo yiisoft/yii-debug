@@ -13,11 +13,19 @@ use Yiisoft\Yii\Filesystem\Filesystem;
 
 final class FileStorageTest extends AbstractStorageTest
 {
-    private string $path = 'runtime/debug';
+    private string $path = 'runtime';
+    private Filesystem $fileSystem;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->fileSystem = new Filesystem(new LocalFilesystemAdapter('tests'));
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
-        //rmdir($this->path);
+        $this->fileSystem->deleteDirectory($this->path);
     }
 
     /**
@@ -27,6 +35,11 @@ final class FileStorageTest extends AbstractStorageTest
      */
     public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface
     {
-        return new FileStorage($this->path, new Filesystem(new LocalFilesystemAdapter('tests')), $idGenerator, new Aliases());
+        return new FileStorage(
+            $this->path,
+            $this->fileSystem,
+            $idGenerator,
+            new Aliases()
+        );
     }
 }
