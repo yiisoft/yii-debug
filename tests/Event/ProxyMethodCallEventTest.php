@@ -13,7 +13,15 @@ class ProxyMethodCallEventTest extends TestCase
     {
         $time = microtime(true);
         $event = new ProxyMethodCallEvent(
-            'test', \stdClass::class, 'test', [], true, 'success', null, $time, $time + 1
+            'test',
+            \stdClass::class,
+            'test',
+            [],
+            true,
+            'success',
+            null,
+            $time,
+            $time + 1
         );
 
         $this->assertEquals($time, $event->timeStart);

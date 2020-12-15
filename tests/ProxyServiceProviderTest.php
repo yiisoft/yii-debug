@@ -14,8 +14,6 @@ use Yiisoft\Di\Container;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
 class ProxyServiceProviderTest extends TestCase
