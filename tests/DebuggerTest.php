@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Debug\Tests;
 
 use Nyholm\Psr7\ServerRequest;
@@ -13,7 +15,6 @@ use Yiisoft\Yii\Web\Event\BeforeRequest;
 
 class DebuggerTest extends TestCase
 {
-
     public function testStartup(): void
     {
         $idGenerator = new DebuggerIdGenerator();
@@ -22,6 +23,16 @@ class DebuggerTest extends TestCase
 
         $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), [$collector]);
         $debugger->startup(new \stdClass());
+    }
+
+    public function testStartupWithSkipCollect(): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
+        $collector->expects($this->once())->method('startup');
+
+        $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), [$collector], ['/test']);
+        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/debug')));
     }
 
     public function testGetId(): void
