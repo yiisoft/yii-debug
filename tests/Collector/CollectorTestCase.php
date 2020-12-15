@@ -16,6 +16,7 @@ abstract class CollectorTestCase extends TestCase
         $collector->startup();
         $this->collectTestData($collector);
         $this->checkCollectedData($collector);
+        $this->checkIndexData($collector);
         $collector->shutdown();
     }
 
