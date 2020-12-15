@@ -29,9 +29,26 @@ final class FileStorageTest extends AbstractStorageTest
     }
 
     /**
+     * @param array $data
+     *
+     * @dataProvider dataProvider()
+     */
+    public function testFlushWithGC(array $data): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $storage = $this->getStorage($idGenerator);
+        $storage->setHistorySize(5);
+        $collector = $this->createFakeCollector($data);
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $this->assertLessThanOrEqual(5, count($storage->read()));
+    }
+
+    /**
      * @param DebuggerIdGenerator $idGenerator
      *
-     * @return StorageInterface
+     * @return StorageInterface|FileStorage
      */
     public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface
     {
