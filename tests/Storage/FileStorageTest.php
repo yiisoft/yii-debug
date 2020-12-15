@@ -48,7 +48,7 @@ final class FileStorageTest extends AbstractStorageTest
     /**
      * @param DebuggerIdGenerator $idGenerator
      *
-     * @return StorageInterface|FileStorage
+     * @return FileStorage|StorageInterface
      */
     public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface
     {
