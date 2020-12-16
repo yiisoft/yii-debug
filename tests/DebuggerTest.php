@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
 
-class DebuggerTest extends TestCase
+final class DebuggerTest extends TestCase
 {
     public function testStartup(): void
     {

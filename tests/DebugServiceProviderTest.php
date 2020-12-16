@@ -16,7 +16,7 @@ use Yiisoft\Yii\Debug\DebugServiceProvider;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
-class DebugServiceProviderTest extends TestCase
+final class DebugServiceProviderTest extends TestCase
 {
     /**
      * @throws \Yiisoft\Factory\Exceptions\InvalidConfigException

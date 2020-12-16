@@ -16,7 +16,7 @@ use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
-class ProxyServiceProviderTest extends TestCase
+final class ProxyServiceProviderTest extends TestCase
 {
     /**
      * @throws \Yiisoft\Factory\Exceptions\InvalidConfigException
