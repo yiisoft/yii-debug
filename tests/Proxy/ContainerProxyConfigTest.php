@@ -14,7 +14,7 @@ use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
-class ContainerProxyConfigTest extends TestCase
+final class ContainerProxyConfigTest extends TestCase
 {
     public function testImmutability(): void
     {
@@ -41,6 +41,7 @@ class ContainerProxyConfigTest extends TestCase
             )
         );
     }
+
     public function testGetters(): void
     {
         $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();

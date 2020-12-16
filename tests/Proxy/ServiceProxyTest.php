@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Proxy\ServiceMethodProxy;
 use Yiisoft\Yii\Debug\Proxy\ServiceProxy;
 
-class ServiceProxyTest extends TestCase
+final class ServiceProxyTest extends TestCase
 {
     public function testServiceProxy(): void
     {

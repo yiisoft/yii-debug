@@ -9,8 +9,6 @@ use Psr\Container\ContainerInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
-use Yiisoft\Yii\Debug\Proxy\ServiceMethodProxy;
-use Yiisoft\Yii\Debug\Proxy\ServiceProxy;
 
 final class ContainerProxyTest extends TestCase
 {
