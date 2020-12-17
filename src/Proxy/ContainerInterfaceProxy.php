@@ -61,12 +61,11 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log(ContainerInterface::class, $this->container, 'get', [$id], $instance, $timeStart);
+            $this->logProxy(ContainerInterface::class, $this->container, 'get', [$id], $instance, $timeStart);
         }
 
         if (
             is_object($instance)
-            && $this->isDecorated($id)
             && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))
         ) {
             $this->setServiceProxyCache($id, $proxy);
@@ -190,7 +189,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
+            $this->logProxy(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
         }
 
         return $result;

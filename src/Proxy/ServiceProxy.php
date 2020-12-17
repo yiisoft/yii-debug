@@ -24,7 +24,7 @@ class ServiceProxy extends ObjectProxy
 
     protected function executeMethodProxy(string $methodName, array $arguments, $result, float $timeStart)
     {
-        $this->log($this->service, $this->getInstance(), $methodName, $arguments, $result, $timeStart);
+        $this->logProxy($this->service, $this->getInstance(), $methodName, $arguments, $result, $timeStart);
         return $result;
     }
 

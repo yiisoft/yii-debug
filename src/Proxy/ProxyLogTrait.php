@@ -11,7 +11,7 @@ trait ProxyLogTrait
 {
     private ContainerProxyConfig $config;
 
-    protected function log(
+    protected function logProxy(
         string $service,
         object $instance,
         string $method,
