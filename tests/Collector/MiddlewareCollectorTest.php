@@ -8,7 +8,7 @@ use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
-use Yiisoft\Yii\Debug\Tests\Mock\DummyMiddleware;
+use Yiisoft\Yii\Debug\Tests\Support\DummyMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 
