@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
 abstract class CollectorTestCase extends TestCase
 {
@@ -15,6 +16,7 @@ abstract class CollectorTestCase extends TestCase
         $collector->startup();
         $this->collectTestData($collector);
         $this->checkCollectedData($collector);
+        $this->checkIndexData($collector);
         $collector->shutdown();
     }
 
@@ -25,5 +27,12 @@ abstract class CollectorTestCase extends TestCase
     protected function checkCollectedData(CollectorInterface $collector): void
     {
         $this->assertNotEmpty($collector->getCollected());
+    }
+
+    protected function checkIndexData(CollectorInterface $collector): void
+    {
+        if ($collector instanceof IndexCollectorInterface) {
+            $this->assertNotEmpty($collector->getIndexData());
+        }
     }
 }

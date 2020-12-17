@@ -28,7 +28,7 @@ class ServiceMethodProxy extends ServiceProxy
                 $result = $callback($result, ...$arguments);
             }
         } finally {
-            $this->log($this->getService(), $this->getInstance(), $methodName, $arguments, $result, $timeStart);
+            $this->logProxy($this->getService(), $this->getInstance(), $methodName, $arguments, $result, $timeStart);
         }
 
         return $result;

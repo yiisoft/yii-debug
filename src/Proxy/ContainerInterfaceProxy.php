@@ -51,22 +51,21 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
     /**
      * @psalm-suppress InvalidCatch
      */
-    public function get($id, array $params = [])
+    public function get($id)
     {
         $this->resetCurrentError();
         $timeStart = microtime(true);
         try {
             $instance = null;
-            $instance = $this->getInstance($id, $params);
+            $instance = $this->getInstance($id);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log(ContainerInterface::class, $this->container, 'get', [$id, $params], $instance, $timeStart);
+            $this->logProxy(ContainerInterface::class, $this->container, 'get', [$id], $instance, $timeStart);
         }
 
         if (
             is_object($instance)
-            && $this->isDecorated($id)
             && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))
         ) {
             $this->setServiceProxyCache($id, $proxy);
@@ -76,13 +75,9 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         return $instance;
     }
 
-    private function getInstance(string $id, array $params)
+    private function getInstance(string $id)
     {
-        if ($params === []) {
-            return $this->container->get($id);
-        }
-
-        return $this->container->get($id, $params);
+        return $this->container->get($id);
     }
 
     private function isDecorated(string $service): bool
@@ -194,7 +189,7 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->log(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
+            $this->logProxy(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
         }
 
         return $result;

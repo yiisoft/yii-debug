@@ -27,7 +27,7 @@ abstract class AbstractStorageTest extends TestCase
 
         $this->assertEquals([], $storage->getData());
         $storage->addCollector($collector);
-        $this->assertEquals([$data], $storage->getData());
+        $this->assertEquals([get_class($collector) => $data], $storage->getData());
     }
 
     /**
@@ -43,7 +43,8 @@ abstract class AbstractStorageTest extends TestCase
 
         $storage->addCollector($collector);
         $storage->flush();
-        $this->assertEquals([$idGenerator->getId() => $storage->getData()], $storage->read());
+        $this->assertIsArray($storage->read());
+        $this->assertEquals($storage->getData(), $storage->read(StorageInterface::TYPE_DATA));
     }
 
     /**
@@ -70,7 +71,7 @@ abstract class AbstractStorageTest extends TestCase
             [[1, 2, 3]],
             [['string']],
             [[[['', 0, false]]]],
-            [[]],
+            [['test']],
             [[false]],
             [[null]],
             [[0]],
@@ -78,7 +79,7 @@ abstract class AbstractStorageTest extends TestCase
         ];
     }
 
-    private function createFakeCollector(array $data)
+    protected function createFakeCollector(array $data)
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector
