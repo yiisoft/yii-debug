@@ -111,7 +111,7 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->assertTrue($containerProxy->isActive());
         $this->assertInstanceOf(LoggerInterface::class, $containerProxy->get(LoggerInterface::class));
 
-        $containerProxy->get(LoggerInterface::class)->log('test','test message');
+        $containerProxy->get(LoggerInterface::class)->log('test', 'test message');
         $this->assertInstanceOf(LoggerInterface::class, $containerProxy->get(LoggerInterface::class));
         $this->assertNotEmpty($config->getCollector()->getCollected());
     }
