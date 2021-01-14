@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
+use Yiisoft\Profiler\ProfilerInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
@@ -35,6 +36,7 @@ return [
         [RequestCollector::class, 'collect'],
     ],
     AfterEmit::class => [
+        [ProfilerInterface::class, 'flush'],
         [WebAppInfoCollector::class, 'collect'],
         [Debugger::class, 'shutdown'],
     ],
