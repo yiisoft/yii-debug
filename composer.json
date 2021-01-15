@@ -45,7 +45,8 @@
         "yiisoft/cache": "^3.0@dev",
         "yiisoft/composer-config-plugin": "^1.0@dev",
         "yiisoft/event-dispatcher": "^3.0@dev",
-        "yiisoft/log": "^3.0@dev"
+        "yiisoft/log": "^3.0@dev",
+        "yiisoft/router-fastroute": "^3.0@dev"
     },
     "autoload": {
         "psr-4": {
