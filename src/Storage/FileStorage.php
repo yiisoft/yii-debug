@@ -7,10 +7,10 @@ namespace Yiisoft\Yii\Debug\Storage;
 use League\Flysystem\FilesystemException;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Json\Json;
-use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
+use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 use function array_merge;
@@ -82,15 +82,15 @@ final class FileStorage implements StorageInterface
     {
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
-            $varDumper = VarDumper::create($this->getData());
-            $jsonData = $varDumper->asJson();
+            $dumper = Dumper::create($this->getData());
+            $jsonData = $dumper->asJson();
             $this->filesystem->write($basePath . self::TYPE_DATA . '.json', $jsonData);
 
-            $jsonObjects = json_decode($varDumper->asJsonObjectsMap(), true);
+            $jsonObjects = json_decode($dumper->asJsonObjectsMap(), true);
             $jsonObjects = $this->reindexObjects($jsonObjects);
-            $this->filesystem->write($basePath . self::TYPE_OBJECTS . '.json', VarDumper::create($jsonObjects)->asJson());
+            $this->filesystem->write($basePath . self::TYPE_OBJECTS . '.json', Dumper::create($jsonObjects)->asJson());
 
-            $indexData = VarDumper::create($this->collectIndexData())->asJson();
+            $indexData = Dumper::create($this->collectIndexData())->asJson();
             $this->filesystem->write($basePath . self::TYPE_INDEX . '.json', $indexData);
 
             $this->gc();
