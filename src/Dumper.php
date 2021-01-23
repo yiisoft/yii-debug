@@ -209,9 +209,9 @@ final class Dumper
      *
      * @param Closure $closure Closure instance.
      *
-     * @return string
      * @throws \ReflectionException
      *
+     * @return string
      */
     private function exportClosure(Closure $closure): string
     {
@@ -221,5 +221,4 @@ final class Dumper
 
         return self::$closureExporter->export($closure);
     }
-
 }

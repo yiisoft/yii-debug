@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-
 namespace Yiisoft\Yii\Debug\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug as D;
-
 
 final class DumperTest extends TestCase
 {
@@ -250,7 +248,6 @@ final class DumperTest extends TestCase
             ],
         ];
     }
-
 
     /**
      * Asserting two strings equality ignoring line endings.
