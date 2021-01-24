@@ -56,7 +56,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         $command = $this->commands[ConsoleCommandEvent::class];
         return [
             'command' => $command['input'],
-            'commandClass' => get_class($command['command']),
+            'commandClass' => $command['command'] !== null ? get_class($command['command']) : null,
         ];
     }
 
