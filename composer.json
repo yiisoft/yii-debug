@@ -42,7 +42,7 @@
         "roave/infection-static-analysis-plugin": "^1.5",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.2",
-        "yiisoft/cache": "^3.0@dev",
+        "yiisoft/cache": "^1.0",
         "yiisoft/composer-config-plugin": "^1.0@dev",
         "yiisoft/event-dispatcher": "^3.0@dev",
         "yiisoft/log": "^3.0@dev",
