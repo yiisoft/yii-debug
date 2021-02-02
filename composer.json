@@ -22,7 +22,7 @@
         "ext-mbstring": "*",
         "psr/log": "^1.1",
         "yiisoft/aliases": "^1.1",
-        "yiisoft/arrays": "^3.0@dev",
+        "yiisoft/arrays": "^1.0",
         "yiisoft/assets": "dev-master",
         "yiisoft/container-proxy": "dev-master",
         "yiisoft/di": "^3.0@dev",
