@@ -77,6 +77,11 @@ final class Debugger
         }
     }
 
+    /**
+     * @param array $optionalRequests Patterns for optional request URLs.
+     * @see WildcardPattern
+     * @return self
+     */
     public function withOptionalRequests(array $optionalRequests): self
     {
         $new = clone $this;
