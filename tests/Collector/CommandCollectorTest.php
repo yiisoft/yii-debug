@@ -73,7 +73,7 @@ final class CommandCollectorTest extends CollectorTestCase
         parent::checkIndexData($collector);
         if ($collector instanceof IndexCollectorInterface) {
             $this->assertArrayHasKey('command', $collector->getIndexData());
-            $this->assertEquals('test', $collector->getIndexData()['command']);
+            $this->assertEquals('test1', $collector->getIndexData()['command']);
         }
     }
 }
