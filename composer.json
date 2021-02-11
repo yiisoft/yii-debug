@@ -45,7 +45,7 @@
         "yiisoft/cache": "^1.0",
         "yiisoft/composer-config-plugin": "^1.0@dev",
         "yiisoft/event-dispatcher": "^3.0@dev",
-        "yiisoft/log": "^3.0@dev",
+        "yiisoft/log": "^1.0",
         "yiisoft/router-fastroute": "^3.0@dev"
     },
     "autoload": {
