@@ -30,7 +30,7 @@
         "yiisoft/profiler": "dev-master",
         "yiisoft/proxy": "dev-master",
         "yiisoft/strings": "^2.0",
-        "yiisoft/var-dumper": "^3.0@dev",
+        "yiisoft/var-dumper": "^1.0",
         "yiisoft/view": "^3.0@dev",
         "yiisoft/yii-console": "^3.0@dev",
         "yiisoft/yii-filesystem": "dev-master",
