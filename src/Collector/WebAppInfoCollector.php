@@ -52,7 +52,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             );
         } elseif ($event instanceof AfterRequest) {
             $this->requestProcessingTimeStopped = microtime(true);
-            [$message] = $this->profiler->findMessages('Matching route');
+            $message = $this->profiler->findMessages('Matching route')[0] ?? null;
             if ($message !== null) {
                 $this->routeMatchTime = $message->context('duration', 0);
             }
