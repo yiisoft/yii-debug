@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use Yiisoft\Profiler\ProfilerInterface;
 use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
@@ -13,11 +14,17 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
 {
     use CollectorTrait;
 
+    private ProfilerInterface $profiler;
     private float $applicationProcessingTimeStarted = 0;
     private float $applicationProcessingTimeStopped = 0;
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
+    private float $routeMatchTime = 0;
 
+    public function __construct(ProfilerInterface $profiler)
+    {
+        $this->profiler = $profiler;
+    }
     public function getCollected(): array
     {
         return [
@@ -44,6 +51,11 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             );
         } elseif ($event instanceof AfterRequest) {
             $this->requestProcessingTimeStopped = microtime(true);
+            [$message] = $this->profiler->findMessages('Matching route');
+            if ($message !== null) {
+                $this->routeMatchTime = $message->context('duration', 0);
+            }
+
         } elseif ($event instanceof AfterEmit) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
@@ -55,6 +67,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'memory' => memory_get_peak_usage(),
             'timestamp' => $this->requestProcessingTimeStarted,
+            'routeTime' => $this->routeMatchTime,
         ];
     }
 
