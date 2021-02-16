@@ -25,6 +25,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     {
         $this->profiler = $profiler;
     }
+
     public function getCollected(): array
     {
         return [
@@ -55,7 +56,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             if ($message !== null) {
                 $this->routeMatchTime = $message->context('duration', 0);
             }
-
         } elseif ($event instanceof AfterEmit) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
