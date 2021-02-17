@@ -6,6 +6,8 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Yiisoft\Profiler\Profiler;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Web\Event\AfterRequest;
@@ -28,7 +30,7 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new WebAppInfoCollector();
+        return new WebAppInfoCollector(new Profiler($this->getMockBuilder(LoggerInterface::class)->getMockForAbstractClass()));
     }
 
     protected function checkCollectedData(CollectorInterface $collector): void
