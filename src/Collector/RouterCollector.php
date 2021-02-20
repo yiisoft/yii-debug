@@ -21,6 +21,9 @@ final class RouterCollector implements RouterCollectorInterface, IndexCollectorI
 
     public function collect(float $matchTime): void
     {
+        if (!$this->isActive()) {
+            return;
+        }
         $this->matchTime = $matchTime;
     }
 
