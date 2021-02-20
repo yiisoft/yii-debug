@@ -22,7 +22,7 @@ class UrlMatcherInterfaceProxyTest extends TestCase
         $time = microtime(true);
 
         $proxy = new UrlMatcherInterfaceProxy($matcher, $collector);
-        $collector->expects($this->once())->method('collect')->with($this->equalToWithDelta(microtime(true) - $time, 0.1));;
+        $collector->expects($this->once())->method('collect')->with($this->equalToWithDelta(microtime(true) - $time, 0.1));
 
         $proxy->match(new ServerRequest('GET', '/'));
     }
