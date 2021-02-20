@@ -17,7 +17,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     private float $applicationProcessingTimeStopped = 0;
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
-    private float $routeMatchTime = 0;
 
     public function getCollected(): array
     {
