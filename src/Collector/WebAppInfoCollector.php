@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Yiisoft\Profiler\ProfilerInterface;
 use Yiisoft\Yii\Web\Event\AfterEmit;
 use Yiisoft\Yii\Web\Event\AfterRequest;
 use Yiisoft\Yii\Web\Event\BeforeRequest;
@@ -14,7 +13,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
 {
     use CollectorTrait;
 
-    private ProfilerInterface $profiler;
     private float $applicationProcessingTimeStarted = 0;
     private float $applicationProcessingTimeStopped = 0;
     private float $requestProcessingTimeStarted = 0;
