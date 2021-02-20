@@ -32,6 +32,7 @@ final class RouterCollectorTest extends CollectorTestCase
         $this->routeCollector
             ->method('getItems')
             ->willReturn($routes);
+        $collector->collect(0.001);
     }
 
     protected function getCollector(): CollectorInterface
@@ -56,13 +57,18 @@ final class RouterCollectorTest extends CollectorTestCase
         parent::checkCollectedData($collector);
         $this->assertArrayHasKey('routes', $collector->getCollected());
         $this->assertArrayHasKey('routesTree', $collector->getCollected());
+        $this->assertArrayHasKey('routeTime', $collector->getCollected());
         $this->assertEquals(
-            $collector->getCollected()['routes'],
-            $this->container->get(RouteCollectionInterface::class)->getRoutes()
+            $this->container->get(RouteCollectionInterface::class)->getRoutes(),
+            $collector->getCollected()['routes']
         );
         $this->assertEquals(
-            $collector->getCollected()['routesTree'],
-            $this->container->get(RouteCollectionInterface::class)->getRouteTree()
+            $this->container->get(RouteCollectionInterface::class)->getRouteTree(),
+            $collector->getCollected()['routesTree']
+        );
+        $this->assertEquals(
+            0.001,
+            $collector->getCollected()['routeTime']
         );
     }
 

@@ -21,11 +21,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     private float $requestProcessingTimeStopped = 0;
     private float $routeMatchTime = 0;
 
-    public function __construct(ProfilerInterface $profiler)
-    {
-        $this->profiler = $profiler;
-    }
-
     public function getCollected(): array
     {
         return [
@@ -52,10 +47,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             );
         } elseif ($event instanceof AfterRequest) {
             $this->requestProcessingTimeStopped = microtime(true);
-            $message = $this->profiler->findMessages('Matching route')[0] ?? null;
-            if ($message !== null) {
-                $this->routeMatchTime = $message->context('duration', 0);
-            }
         } elseif ($event instanceof AfterEmit) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
@@ -67,7 +58,6 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'memory' => memory_get_peak_usage(),
             'timestamp' => $this->requestProcessingTimeStarted,
-            'routeTime' => $this->routeMatchTime,
         ];
     }
 
