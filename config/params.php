@@ -45,7 +45,7 @@ return [
         'trackedServices' => [
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
-            UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollectorInterface::class]
+            UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollectorInterface::class],
         ],
         'logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
         'path' => '@runtime/debug',

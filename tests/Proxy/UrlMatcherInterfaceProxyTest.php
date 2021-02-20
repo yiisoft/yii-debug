@@ -15,7 +15,6 @@ use Yiisoft\Yii\Debug\Proxy\UrlMatcherInterfaceProxy;
 
 class UrlMatcherInterfaceProxyTest extends TestCase
 {
-
     public function testMatch(): void
     {
         $matcher = new UrlMatcher(new RouteCollection(Group::create(null, [Route::get('/')])));
