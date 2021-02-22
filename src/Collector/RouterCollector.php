@@ -7,15 +7,24 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Psr\Container\ContainerInterface;
 use Yiisoft\Router\RouteCollectionInterface;
 
-final class RouterCollector implements CollectorInterface
+final class RouterCollector implements RouterCollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
     private ContainerInterface $container;
+    private float $matchTime = 0;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function collect(float $matchTime): void
+    {
+        if (!$this->isActive()) {
+            return;
+        }
+        $this->matchTime = $matchTime;
     }
 
     public function getCollected(): array
@@ -28,6 +37,14 @@ final class RouterCollector implements CollectorInterface
             [
                 'routesTree' => $routeCollection->getRouteTree(),
                 'routes' => $routeCollection->getRoutes(),
+                'routeTime' => $this->matchTime,
             ];
+    }
+
+    public function getIndexData(): array
+    {
+        return [
+            'routeMatchTime' => $this->matchTime,
+        ];
     }
 }
