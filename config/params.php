@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Psr\SimpleCache\CacheInterface;
-use Yiisoft\Cache\CacheInterface as YiiCacheInterface;
+use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
@@ -48,7 +47,6 @@ return [
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollectorInterface::class],
-            YiiCacheInterface::class,
             CacheInterface::class,
         ],
         'logLevel' => ContainerProxy::LOG_ARGUMENTS | ContainerProxy::LOG_RESULT | ContainerProxy::LOG_ERROR,
