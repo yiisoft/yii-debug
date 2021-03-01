@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-class ClearCommand extends Command
+final class ResetCommand extends Command
 {
     private StorageInterface $storage;
 

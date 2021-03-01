@@ -51,6 +51,9 @@ final class MemoryStorage implements StorageInterface
         $this->collectors = [];
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function clear(): void
     {
     }
