@@ -58,7 +58,7 @@ return [
     ],
     'yiisoft/yii-console' => [
         'commands' => [
-            'debug/storage/clear' => ClearCommand::class
+            'debug/storage/clear' => ClearCommand::class,
         ],
     ],
 ];
