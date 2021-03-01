@@ -45,4 +45,9 @@ interface StorageInterface
      * Flush data from collectors into storage
      */
     public function flush(): void;
+
+    /**
+     * Clear storage data
+     */
+    public function clear(): void;
 }

@@ -46,6 +46,23 @@ final class FileStorageTest extends AbstractStorageTest
     }
 
     /**
+     * @dataProvider dataProvider()
+     *
+     * @param array $data
+     */
+    public function testClear(array $data): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $storage = $this->getStorage($idGenerator);
+        $collector = $this->createFakeCollector($data);
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $storage->clear();
+        $this->assertDirectoryDoesNotExist($this->path);
+    }
+
+    /**
      * @param DebuggerIdGenerator $idGenerator
      *
      * @return FileStorage|StorageInterface

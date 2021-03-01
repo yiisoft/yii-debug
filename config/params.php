@@ -16,6 +16,7 @@ use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
+use Yiisoft\Yii\Debug\Command\ResetCommand;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
@@ -53,6 +54,11 @@ return [
         'path' => '@runtime/debug',
         'optionalRequests' => [
             '/assets/*',
+        ],
+    ],
+    'yiisoft/yii-console' => [
+        'commands' => [
+            'debug/reset' => ResetCommand::class,
         ],
     ],
 ];
