@@ -15,7 +15,7 @@ class ResetCommandTest extends TestCase
     {
         $storage = $this->createMock(StorageInterface::class);
         $storage->expects($this->once())->method('clear');
-        
+
         $command = new ResetCommand($storage);
 
         $commandTester = new CommandTester($command);
