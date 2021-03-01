@@ -109,6 +109,11 @@ final class FileStorage implements StorageInterface
         return $data;
     }
 
+    public function clear(): void
+    {
+        $this->filesystem->deleteDirectory($this->path);
+    }
+
     /**
      * Collects summary data of current request.
      *

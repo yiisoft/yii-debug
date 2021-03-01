@@ -50,4 +50,8 @@ final class MemoryStorage implements StorageInterface
     {
         $this->collectors = [];
     }
+
+    public function clear(): void
+    {
+    }
 }
