@@ -14,7 +14,7 @@ class ClearCommand extends Command
 {
     private StorageInterface $storage;
 
-    protected static $defaultName = 'router/list';
+    protected static $defaultName = 'debug/reset';
 
     public function __construct(StorageInterface $storage)
     {
