@@ -9,7 +9,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-class ResetCommandTest extends TestCase
+final class ResetCommandTest extends TestCase
 {
     public function testCommand()
     {
