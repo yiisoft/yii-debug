@@ -63,6 +63,23 @@ abstract class AbstractStorageTest extends TestCase
         $this->assertEquals([], $storage->getData());
     }
 
+    /**
+     * @dataProvider dataProvider()
+     *
+     * @param array $data
+     */
+    public function testClear(array $data): void
+    {
+        $this->expectNotToPerformAssertions();
+        $idGenerator = new DebuggerIdGenerator();
+        $storage = $this->getStorage($idGenerator);
+        $collector = $this->createFakeCollector($data);
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $storage->clear();
+    }
+
     abstract public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface;
 
     public function dataProvider(): array

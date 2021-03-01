@@ -58,7 +58,7 @@ return [
     ],
     'yiisoft/yii-console' => [
         'commands' => [
-            'debug/reset' => ClearCommand::class
+            'debug/reset' => ClearCommand::class,
         ],
     ],
 ];
