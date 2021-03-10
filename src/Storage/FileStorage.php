@@ -69,6 +69,8 @@ final class FileStorage implements StorageInterface
         $data = [];
         $path = $this->aliases->get($this->path);
         $dataFiles = glob($path . '/**/**/' . $type . '.json', GLOB_NOSORT);
+        uasort($dataFiles, static fn ($a, $b) => filemtime($a) <=> filemtime($b));
+
         foreach ($dataFiles as $file) {
             $dir = dirname($file);
             $id = substr($dir, strlen(dirname($file, 2)) + 1);
