@@ -142,7 +142,7 @@ class ContainerInterfaceProxyTest extends TestCase
     public function testGetAndHasWithWrongId(): void
     {
         $this->expectException(ContainerExceptionInterface::class);
-        $this->expectExceptionMessage(sprintf('No definition for %s', ServiceCollectorInterface::class));
+        $this->expectExceptionMessage(sprintf('No definition or class found for "%s".', ServiceCollectorInterface::class));
 
         $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
 
