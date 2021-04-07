@@ -39,7 +39,7 @@ final class RouterCollectorTest extends CollectorTestCase
     {
         $this->routeCollector = $this->createMock(RouteCollectorInterface::class);
         $routeCollector = Group::create();
-        $routeCollector->addGroup(Group::create(null, $this->createRoutes()));
+        $routeCollector->addGroup(Group::create()->routes(...$this->createRoutes()));
 
         $this->container = new Container(
             [
@@ -76,12 +76,7 @@ final class RouterCollectorTest extends CollectorTestCase
     {
         return [
             Route::get('/'),
-            Group::create(
-                '/api',
-                [
-                    Route::get('/v1'),
-                ]
-            ),
+            Group::create('/api')->routes(Route::get('/v1')),
         ];
     }
 }
