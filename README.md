@@ -40,7 +40,7 @@ return [
     'bootstrap' => ['debug'],
     'modules' => [
         'debug' => [
-            '__class' => Yiisoft\Yii\Debug\Module::class,
+            'class' => Yiisoft\Yii\Debug\Module::class,
             // uncomment and adjust the following to add your IP if you are not connecting from localhost.
             //'allowedIPs' => ['127.0.0.1', '::1'],
         ],
@@ -64,7 +64,7 @@ return [
     'bootstrap' => ['debug'],
     'modules' => [
         'debug' => [
-            '__class' => Yiisoft\Yii\Debug\Module::class,
+            'class' => Yiisoft\Yii\Debug\Module::class,
             'traceLine' => '<a href="phpstorm://open?url={file}&line={line}">{file}:{line}</a>',
             // uncomment and adjust the following to add your IP if you are not connecting from localhost.
             //'allowedIPs' => ['127.0.0.1', '::1'],
