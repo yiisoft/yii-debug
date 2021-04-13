@@ -21,7 +21,7 @@
         "php": "^7.4|^8.0",
         "ext-mbstring": "*",
         "psr/log": "^1.1",
-        "yiisoft/aliases": "^1.1",
+        "yiisoft/aliases": "^1.1|^2.0",
         "yiisoft/arrays": "^1.0",
         "yiisoft/assets": "dev-master",
         "yiisoft/container-proxy": "dev-master",
