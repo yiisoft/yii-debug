@@ -19,7 +19,7 @@ use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 final class DebugServiceProviderTest extends TestCase
 {
     /**
-     * @throws \Yiisoft\Factory\Exceptions\InvalidConfigException
+     * @throws \Yiisoft\Factory\Exception\InvalidConfigException
      *
      * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::register()
      */

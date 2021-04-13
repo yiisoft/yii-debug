@@ -19,7 +19,7 @@ use Yiisoft\Yii\Debug\ProxyServiceProvider;
 final class ProxyServiceProviderTest extends TestCase
 {
     /**
-     * @throws \Yiisoft\Factory\Exceptions\InvalidConfigException
+     * @throws \Yiisoft\Factory\Exception\InvalidConfigException
      *
      * @covers \Yiisoft\Yii\Debug\ProxyServiceProvider::register()
      */
