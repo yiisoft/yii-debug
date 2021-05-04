@@ -27,7 +27,7 @@
         "yiisoft/container-proxy": "dev-master",
         "yiisoft/di": "^3.0@dev",
         "yiisoft/json": "^1.0",
-        "yiisoft/profiler": "dev-master",
+        "yiisoft/profiler": "^1.0",
         "yiisoft/proxy": "dev-master",
         "yiisoft/strings": "^2.0",
         "yiisoft/var-dumper": "^1.0",
