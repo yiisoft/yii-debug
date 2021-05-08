@@ -14,26 +14,31 @@ final class Dumper
      */
     private $variable;
 
+    private array $excludedClasses;
+
     private array $objects = [];
 
     private static ?ClosureExporter $closureExporter = null;
 
     /**
      * @param mixed $variable Variable to dump.
+     * @param array $excludedClasses
      */
-    private function __construct($variable)
+    private function __construct($variable, array $excludedClasses = [])
     {
         $this->variable = $variable;
+        $this->excludedClasses = $excludedClasses;
     }
 
     /**
      * @param mixed $variable Variable to dump.
+     * @param array $excludedClasses
      *
      * @return static An instance containing variable to dump.
      */
-    public static function create($variable): self
+    public static function create($variable, array $excludedClasses = []): self
     {
-        return new self($variable);
+        return new self($variable, $excludedClasses);
     }
 
     /**
@@ -70,7 +75,8 @@ final class Dumper
             return;
         }
         if (is_object($variable)) {
-            if (in_array($variable, $this->objects, true)) {
+            if (in_array($variable, $this->objects, true)
+                || in_array(get_class($variable), $this->excludedClasses, true)) {
                 return;
             }
             $this->objects[] = $variable;
@@ -128,7 +134,7 @@ final class Dumper
                 break;
             case 'object':
                 $objectDescription = $this->getObjectDescription($var);
-                if ($depth <= $level) {
+                if ($depth <= $level || in_array(get_class($var), $this->excludedClasses, true)) {
                     $output = $objectDescription . ' (...)';
                     break;
                 }

@@ -31,7 +31,8 @@ $common = [
         $filesystem = $container->get(FilesystemInterface::class);
         $debuggerIdGenerator = $container->get(DebuggerIdGenerator::class);
         $aliases = $container->get(Aliases::class);
-        $fileStorage = new FileStorage($params['path'], $filesystem, $debuggerIdGenerator, $aliases);
+        $excludedClasses = $params['dumper.excludedClasses'];
+        $fileStorage = new FileStorage($params['path'], $filesystem, $debuggerIdGenerator, $aliases, $excludedClasses);
         if (isset($params['historySize'])) {
             $fileStorage->setHistorySize((int)$params['historySize']);
         }
