@@ -41,16 +41,20 @@ final class FileStorage implements StorageInterface
 
     private Aliases $aliases;
 
+    private array $excludedClasses;
+
     public function __construct(
         string $path,
         FilesystemInterface $filesystem,
         DebuggerIdGenerator $idGenerator,
-        Aliases $aliases
+        Aliases $aliases,
+        array $excludedClasses = []
     ) {
         $this->path = $path;
         $this->filesystem = $filesystem;
         $this->idGenerator = $idGenerator;
         $this->aliases = $aliases;
+        $this->excludedClasses = $excludedClasses;
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -84,7 +88,7 @@ final class FileStorage implements StorageInterface
     {
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
-            $dumper = Dumper::create($this->getData());
+            $dumper = Dumper::create($this->getData(), $this->excludedClasses);
             $jsonData = $dumper->asJson();
             $this->filesystem->write($basePath . self::TYPE_DATA . '.json', $jsonData);
 
