@@ -13,7 +13,7 @@ use function is_callable;
 use function is_object;
 use function is_string;
 
-class ContainerInterfaceProxy
+class ContainerInterfaceProxy implements ContainerInterface
 {
     use ProxyLogTrait;
     use ProxyTrait;
