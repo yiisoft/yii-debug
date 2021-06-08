@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
@@ -49,7 +48,6 @@ return array_merge([
     EventCollectorInterface::class => EventCollector::class,
     RouterCollectorInterface::class => RouterCollector::class,
     ServiceCollectorInterface::class => ServiceCollector::class,
-    ContainerProxyInterface::class => ContainerProxy::class,
     ContainerProxyConfig::class => static function (ContainerInterface $container) use ($params) {
         $params = $params['yiisoft/yii-debug'];
         $collector = $container->get(ServiceCollectorInterface::class);

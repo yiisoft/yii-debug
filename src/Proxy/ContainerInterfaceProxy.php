@@ -7,14 +7,13 @@ namespace Yiisoft\Yii\Debug\Proxy;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Yiisoft\Container\Proxy\ContainerProxyInterface;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\ProxyTrait;
 use function is_callable;
 use function is_object;
 use function is_string;
 
-class ContainerInterfaceProxy implements ContainerProxyInterface
+class ContainerInterfaceProxy
 {
     use ProxyLogTrait;
     use ProxyTrait;
@@ -40,12 +39,11 @@ class ContainerInterfaceProxy implements ContainerProxyInterface
         $this->proxyManager = new ProxyManager($this->config->getProxyCachePath());
     }
 
-    public function withDecoratedServices(array $decoratedServices): ContainerProxyInterface
+    public function withDecoratedServices(array $decoratedServices): self
     {
-        $proxy = clone $this;
-        $this->config = $this->config->withDecoratedServices($decoratedServices);
-
-        return $proxy;
+        $new = clone $this;
+        $new->config = $this->config->withDecoratedServices($decoratedServices);
+        return $new;
     }
 
     /**
