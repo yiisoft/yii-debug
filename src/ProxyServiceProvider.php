@@ -19,7 +19,7 @@ final class ProxyServiceProvider implements ServiceProviderInterface
         return [
             ContainerInterface::class => static function (ContainerInterface $container) {
                 return new ContainerInterfaceProxy($container, $container->get(ContainerProxyConfig::class));
-            }
+            },
         ];
     }
 

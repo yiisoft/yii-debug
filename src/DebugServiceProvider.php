@@ -15,7 +15,6 @@ use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 
 final class DebugServiceProvider implements ServiceProviderInterface
 {
-
     public function getDefinitions(): array
     {
         return [];
