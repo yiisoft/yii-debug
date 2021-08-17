@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Yiisoft\Router\MatchingResult;
-use Yiisoft\Router\Route;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 
@@ -29,21 +27,5 @@ final class UrlMatcherInterfaceProxy implements UrlMatcherInterface
         $this->routerCollector->collect(microtime(true) - $timeStart);
 
         return $result;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getCurrentRoute(): ?Route
-    {
-        return $this->urlMatcher->getCurrentRoute();
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getCurrentUri(): ?UriInterface
-    {
-        return $this->urlMatcher->getCurrentUri();
     }
 }
