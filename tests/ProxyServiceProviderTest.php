@@ -21,7 +21,8 @@ final class ProxyServiceProviderTest extends TestCase
     /**
      * @throws \Yiisoft\Factory\Exception\InvalidConfigException
      *
-     * @covers \Yiisoft\Yii\Debug\ProxyServiceProvider::register()
+     * @covers \Yiisoft\Yii\Debug\ProxyServiceProvider::getDefinitions()
+     * @covers \Yiisoft\Yii\Debug\ProxyServiceProvider::getExtensions()
      */
     public function testRegister(): void
     {

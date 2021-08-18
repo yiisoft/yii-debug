@@ -21,7 +21,8 @@ final class DebugServiceProviderTest extends TestCase
     /**
      * @throws \Yiisoft\Factory\Exception\InvalidConfigException
      *
-     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::register()
+     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getDefinitions()
+     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getExtensions()
      */
     public function testRegister(): void
     {

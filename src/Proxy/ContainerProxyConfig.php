@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Proxy;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
+
 use function in_array;
 use function is_callable;
 
