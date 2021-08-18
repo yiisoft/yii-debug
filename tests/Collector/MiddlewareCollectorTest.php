@@ -6,11 +6,11 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
+use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
+use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyMiddleware;
-use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
-use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 
 final class MiddlewareCollectorTest extends CollectorTestCase
 {

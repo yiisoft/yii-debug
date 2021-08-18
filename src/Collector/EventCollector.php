@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
 use Yiisoft\Yii\Web\Event\ApplicationStartup as WebApplicationStartup;
+
 use function get_class;
 
 final class EventCollector implements EventCollectorInterface

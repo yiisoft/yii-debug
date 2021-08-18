@@ -6,8 +6,8 @@ namespace Yiisoft\Yii\Debug\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug as D;
+use Yiisoft\Yii\Debug\Dumper;
 
 final class DumperTest extends TestCase
 {
@@ -16,6 +16,7 @@ final class DumperTest extends TestCase
      *
      * @param mixed $var
      * @param string $expectedResult
+     *
      * @group JOM
      */
     public function testAsJsonObjectsMap($var, $expectedResult): void

@@ -21,7 +21,8 @@ final class DebugServiceProviderTest extends TestCase
     /**
      * @throws \Yiisoft\Factory\Exception\InvalidConfigException
      *
-     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::register()
+     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getDefinitions()
+     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getExtensions()
      */
     public function testRegister(): void
     {
@@ -31,9 +32,9 @@ final class DebugServiceProviderTest extends TestCase
                 LoggerInterface::class => NullLogger::class,
                 EventDispatcherInterface::class => Dispatcher::class,
                 ListenerProviderInterface::class => Provider::class,
-            ]
+            ],
+            [$provider]
         );
-        $provider->register($container);
 
         $this->assertInstanceOf(LoggerInterfaceProxy::class, $container->get(LoggerInterface::class));
         $this->assertInstanceOf(EventDispatcherInterfaceProxy::class, $container->get(EventDispatcherInterface::class));
