@@ -31,9 +31,9 @@ final class DebugServiceProviderTest extends TestCase
                 LoggerInterface::class => NullLogger::class,
                 EventDispatcherInterface::class => Dispatcher::class,
                 ListenerProviderInterface::class => Provider::class,
-            ]
+            ],
+            [$provider]
         );
-        $provider->register($container);
 
         $this->assertInstanceOf(LoggerInterfaceProxy::class, $container->get(LoggerInterface::class));
         $this->assertInstanceOf(EventDispatcherInterfaceProxy::class, $container->get(EventDispatcherInterface::class));

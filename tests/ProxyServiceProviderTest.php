@@ -13,7 +13,7 @@ use Psr\Log\NullLogger;
 use Yiisoft\Di\Container;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxy;
+use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
 final class ProxyServiceProviderTest extends TestCase
@@ -31,10 +31,10 @@ final class ProxyServiceProviderTest extends TestCase
                 LoggerInterface::class => NullLogger::class,
                 EventDispatcherInterface::class => Dispatcher::class,
                 ListenerProviderInterface::class => Provider::class,
-            ]
+            ],
+            [$provider]
         );
-        $provider->register($container);
 
-        $this->assertInstanceOf(ContainerProxy::class, $container->get(ContainerInterface::class));
+        $this->assertInstanceOf(ContainerInterfaceProxy::class, $container->get(ContainerInterface::class));
     }
 }

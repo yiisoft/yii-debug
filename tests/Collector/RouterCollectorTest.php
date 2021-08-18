@@ -9,6 +9,7 @@ use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
 use Yiisoft\Router\RouteCollection;
 use Yiisoft\Router\RouteCollectionInterface;
+use Yiisoft\Router\RouteCollector;
 use Yiisoft\Router\RouteCollectorInterface;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
@@ -38,7 +39,7 @@ final class RouterCollectorTest extends CollectorTestCase
     protected function getCollector(): CollectorInterface
     {
         $this->routeCollector = $this->createMock(RouteCollectorInterface::class);
-        $routeCollector = Group::create();
+        $routeCollector = new RouteCollector();
         $routeCollector->addGroup(Group::create()->routes(...$this->createRoutes()));
 
         $this->container = new Container(
