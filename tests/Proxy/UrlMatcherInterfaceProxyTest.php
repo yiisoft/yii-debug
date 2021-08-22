@@ -6,7 +6,6 @@ namespace Yiisoft\Yii\Debug\Tests\Proxy;
 
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\FastRoute\UrlMatcher;
 use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
