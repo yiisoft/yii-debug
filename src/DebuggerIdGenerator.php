@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug;
 
-class DebuggerIdGenerator
+final class DebuggerIdGenerator
 {
     private string $id;
 

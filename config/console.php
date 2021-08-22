@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
+use Yiisoft\Di\DynamicReferencesArray;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
@@ -17,10 +18,7 @@ return [
         return new Debugger(
             $container->get(DebuggerIdGenerator::class),
             $container->get(StorageInterface::class),
-            array_map(
-                static fn ($class) => $container->get($class),
-                array_merge($params['collectors'], $params['collectors.console'] ?? [])
-            )
+            DynamicReferencesArray::from(array_merge($params['collectors'], $params['collectors.console'] ?? []))
         );
     },
 ];
