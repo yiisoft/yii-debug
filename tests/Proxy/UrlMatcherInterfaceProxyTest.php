@@ -21,7 +21,7 @@ class UrlMatcherInterfaceProxyTest extends TestCase
     {
         $routeCollector = new RouteCollector();
         $routeCollector->addGroup(Group::create()->routes(Route::get('/')));
-        $matcher = new UrlMatcher(new RouteCollection($routeCollector), new CurrentRoute());
+        $matcher = new UrlMatcher(new RouteCollection($routeCollector));
         $collector = $this->createMock(RouterCollectorInterface::class);
         $time = microtime(true);
 
