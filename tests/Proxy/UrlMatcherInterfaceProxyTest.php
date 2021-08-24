@@ -6,7 +6,6 @@ namespace Yiisoft\Yii\Debug\Tests\Proxy;
 
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\FastRoute\UrlMatcher;
 use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
@@ -21,7 +20,7 @@ class UrlMatcherInterfaceProxyTest extends TestCase
     {
         $routeCollector = new RouteCollector();
         $routeCollector->addGroup(Group::create()->routes(Route::get('/')));
-        $matcher = new UrlMatcher(new RouteCollection($routeCollector), new CurrentRoute());
+        $matcher = new UrlMatcher(new RouteCollection($routeCollector));
         $collector = $this->createMock(RouterCollectorInterface::class);
         $time = microtime(true);
 
