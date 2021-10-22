@@ -45,7 +45,7 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             $this->userIp = $event->getRequest()->getServerParams()['REMOTE_ADDR'] ?? null;
         }
         if ($event instanceof AfterRequest) {
-            $this->responseStatusCode = $event->getResponse()->getStatusCode();
+            $this->responseStatusCode = $event->getResponse() !== null ? $event->getResponse()->getStatusCode() : 500;
         }
     }
 
