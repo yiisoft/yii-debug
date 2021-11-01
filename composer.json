@@ -31,7 +31,7 @@
         "yiisoft/strings": "^2.0",
         "yiisoft/var-dumper": "^1.0",
         "yiisoft/view": "^4.0",
-        "yiisoft/yii-console": "^3.0@dev",
+        "yiisoft/yii-console": "^1.0",
         "yiisoft/yii-filesystem": "dev-master",
         "yiisoft/yii-web": "^3.0@dev"
     },
