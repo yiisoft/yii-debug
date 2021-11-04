@@ -23,7 +23,7 @@
         "psr/log": "^1.1",
         "yiisoft/aliases": "^1.1|^2.0",
         "yiisoft/arrays": "^2.0",
-        "yiisoft/assets": "^1.0",
+        "yiisoft/assets": "^2.0",
         "yiisoft/di": "^3.0@dev",
         "yiisoft/json": "^1.0",
         "yiisoft/profiler": "^1.0",
