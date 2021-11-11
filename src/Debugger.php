@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Strings\WildcardPattern;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Web\Event\BeforeRequest;
+use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class Debugger
 {

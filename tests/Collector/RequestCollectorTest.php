@@ -8,8 +8,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
-use Yiisoft\Yii\Web\Event\AfterRequest;
-use Yiisoft\Yii\Web\Event\BeforeRequest;
+use Yiisoft\Yii\Http\Event\AfterRequest;
+use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class RequestCollectorTest extends CollectorTestCase
 {
