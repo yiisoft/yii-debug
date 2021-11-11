@@ -11,7 +11,7 @@ use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Web\Event\BeforeRequest;
+use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class DebuggerTest extends TestCase
 {

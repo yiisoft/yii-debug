@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use Yiisoft\Yii\Web\Event\AfterEmit;
-use Yiisoft\Yii\Web\Event\AfterRequest;
-use Yiisoft\Yii\Web\Event\BeforeRequest;
+use Yiisoft\Yii\Http\Event\AfterEmit;
+use Yiisoft\Yii\Http\Event\AfterRequest;
+use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function is_object;
 
