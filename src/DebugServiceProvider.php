@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Yiisoft\Di\Contracts\ServiceProviderInterface;
+use Yiisoft\Di\ServiceProviderInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
