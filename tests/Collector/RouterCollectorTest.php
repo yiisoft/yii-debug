@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Yiisoft\Di\Container;
+use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
 use Yiisoft\Router\RouteCollection;
@@ -42,13 +43,13 @@ final class RouterCollectorTest extends CollectorTestCase
         $routeCollector = new RouteCollector();
         $routeCollector->addGroup(Group::create()->routes(...$this->createRoutes()));
 
-        $this->container = new Container(
-            [
+        $config = ContainerConfig::create()
+            ->withDefinitions([
                 UrlMatcherInterface::class => $this->routeCollector,
                 RouteCollectionInterface::class => RouteCollection::class,
                 RouteCollectorInterface::class => $routeCollector,
-            ]
-        );
+            ]);
+        $this->container = new Container($config);
 
         return new RouterCollector($this->container);
     }

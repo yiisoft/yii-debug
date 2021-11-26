@@ -11,6 +11,7 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Yiisoft\Di\Container;
+use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Files\FileHelper;
@@ -37,7 +38,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testImmutability(): void
     {
-        $containerProxy = new ContainerInterfaceProxy(new Container(), new ContainerProxyConfig());
+        $containerProxy = new ContainerInterfaceProxy(new Container(ContainerConfig::create()), new ContainerProxyConfig());
 
         $this->assertNotSame(
             $containerProxy,
@@ -190,14 +191,14 @@ class ContainerInterfaceProxyTest extends TestCase
 
     private function getContainer(): Container
     {
-        return new Container(
-            [
+        $config = ContainerConfig::create()
+            ->withDefinitions([
                 EventDispatcherInterface::class => Dispatcher::class,
                 ListenerProviderInterface::class => Provider::class,
                 LoggerInterface::class => NullLogger::class,
                 LogCollectorInterface::class => LogCollector::class,
                 EventCollectorInterface::class => EventCollector::class,
-            ]
-        );
+            ]);
+        return new Container($config);
     }
 }
