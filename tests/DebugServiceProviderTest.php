@@ -34,7 +34,7 @@ final class DebugServiceProviderTest extends TestCase
                 ListenerProviderInterface::class => Provider::class,
             ])
             ->withProviders([
-                new DebugServiceProvider()
+                new DebugServiceProvider(),
             ]);
         $container = new Container($config);
 
