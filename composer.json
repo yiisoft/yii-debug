@@ -24,7 +24,7 @@
         "yiisoft/aliases": "^1.1|^2.0",
         "yiisoft/arrays": "^2.0",
         "yiisoft/assets": "^2.0",
-        "yiisoft/di": "^3.0@dev",
+        "yiisoft/di": "^1.0",
         "yiisoft/json": "^1.0",
         "yiisoft/profiler": "^1.0",
         "yiisoft/proxy": "dev-master",
