@@ -33,7 +33,7 @@
         "yiisoft/view": "^4.0",
         "yiisoft/yii-console": "^1.0",
         "yiisoft/yii-filesystem": "dev-master",
-        "yiisoft/yii-http": "dev-master"
+        "yiisoft/yii-http": "^1.0"
     },
     "require-dev": {
         "nyholm/psr7": "^1.3",
