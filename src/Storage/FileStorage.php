@@ -18,7 +18,6 @@ use function array_slice;
 use function count;
 use function dirname;
 use function filemtime;
-use function get_class;
 use function glob;
 use function strlen;
 use function substr;
