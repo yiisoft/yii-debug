@@ -49,9 +49,9 @@ final class Dumper
      * @param int $depth Maximum depth that the dumper should go into the variable.
      * @param bool $format Whatever to format exported code.
      *
-     * @return string JSON string.
+     * @return string|bool JSON string.
      */
-    public function asJson(int $depth = 50, bool $format = false): string
+    public function asJson(int $depth = 50, bool $format = false): string|bool
     {
         return $this->asJsonInternal($this->variable, $format, $depth, 0);
     }
@@ -62,9 +62,9 @@ final class Dumper
      * @param int $depth Maximum depth that the dumper should go into the variable.
      * @param bool $prettyPrint Whatever to format exported code.
      *
-     * @return string JSON string containing summary.
+     * @return string|bool JSON string containing summary.
      */
-    public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
+    public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string|bool
     {
         $this->buildObjectsCache($this->variable, $depth);
 
@@ -91,7 +91,7 @@ final class Dumper
         }
     }
 
-    private function asJsonInternal($variable, bool $format, int $depth, int $objectCollapseLevel): bool|string
+    private function asJsonInternal($variable, bool $format, int $depth, int $objectCollapseLevel): string|bool
     {
         $options = JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE;
 
