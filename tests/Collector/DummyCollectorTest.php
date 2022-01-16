@@ -19,6 +19,8 @@ final class DummyCollectorTest extends CollectorTestCase
                     'object' => new \stdClass(),
                 ]
             );
+        $collector->method('getName')
+            ->willReturn(get_class($collector));
 
         return $collector;
     }
