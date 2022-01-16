@@ -10,6 +10,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 interface CollectorInterface
 {
     public function getName(): string;
+
     /**
      * Called once at application startup.
      * Any initialization could be done here.
