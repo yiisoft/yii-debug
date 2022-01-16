@@ -20,14 +20,11 @@ abstract class AbstractStorageTest extends TestCase
     {
         $idGenerator = new DebuggerIdGenerator();
         $storage = $this->getStorage($idGenerator);
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())
-            ->method('getCollected')
-            ->willReturn($data);
+        $collector = $this->createFakeCollector($data);
 
         $this->assertEquals([], $storage->getData());
         $storage->addCollector($collector);
-        $this->assertEquals([get_class($collector) => $data], $storage->getData());
+        $this->assertEquals([$collector->getName() => $data], $storage->getData());
     }
 
     /**
@@ -85,6 +82,9 @@ abstract class AbstractStorageTest extends TestCase
         $collector
             ->method('getCollected')
             ->willReturn($data);
+        $collector
+            ->method('getName')
+            ->willReturn('Mock_Collector');
 
         return $collector;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug;
 
 use Closure;
+use JetBrains\PhpStorm\Pure;
 use Yiisoft\VarDumper\ClosureExporter;
 
 final class Dumper
@@ -12,7 +13,7 @@ final class Dumper
     /**
      * @var mixed Variable to dump.
      */
-    private $variable;
+    private mixed $variable;
 
     private array $excludedClasses;
 
@@ -24,7 +25,7 @@ final class Dumper
      * @param mixed $variable Variable to dump.
      * @param array $excludedClasses
      */
-    private function __construct($variable, array $excludedClasses = [])
+    private function __construct(mixed $variable, array $excludedClasses = [])
     {
         $this->variable = $variable;
         $this->excludedClasses = $excludedClasses;
@@ -34,8 +35,9 @@ final class Dumper
      * @param mixed $variable Variable to dump.
      * @param array $excludedClasses
      *
-     * @return static An instance containing variable to dump.
+     * @return self An instance containing variable to dump.
      */
+    #[Pure]
     public static function create($variable, array $excludedClasses = []): self
     {
         return new self($variable, $excludedClasses);
@@ -89,7 +91,7 @@ final class Dumper
         }
     }
 
-    private function asJsonInternal($variable, bool $format, int $depth, int $objectCollapseLevel)
+    private function asJsonInternal($variable, bool $format, int $depth, int $objectCollapseLevel): bool|string
     {
         $options = JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE;
 
@@ -100,7 +102,7 @@ final class Dumper
         return json_encode($this->dumpNested($variable, $depth, $objectCollapseLevel), $options);
     }
 
-    private function dumpNested($variable, int $depth, int $objectCollapseLevel)
+    private function dumpNested($variable, int $depth, int $objectCollapseLevel): mixed
     {
         $this->buildObjectsCache($variable, $depth);
         return $this->dumpNestedInternal($variable, $depth, 0, $objectCollapseLevel);
@@ -115,7 +117,7 @@ final class Dumper
         return (array)$var;
     }
 
-    private function dumpNestedInternal($var, int $depth, int $level, int $objectCollapseLevel = 0)
+    private function dumpNestedInternal($var, int $depth, int $level, int $objectCollapseLevel = 0): mixed
     {
         $output = $var;
 
@@ -178,6 +180,7 @@ final class Dumper
         return $output;
     }
 
+    #[Pure]
     private function getObjectDescription(object $object): string
     {
         return get_class($object) . '#' . spl_object_id($object);
@@ -187,7 +190,7 @@ final class Dumper
     {
         $property = str_replace("\0", '::', trim($property));
 
-        if (strpos($property, '*::') === 0) {
+        if (str_starts_with($property, '*::')) {
             return 'protected $' . substr($property, 3);
         }
 
@@ -198,7 +201,7 @@ final class Dumper
         return 'public $' . $property;
     }
 
-    private function getResourceDescription($resource)
+    private function getResourceDescription($resource): array|string
     {
         $type = get_resource_type($resource);
         if ($type === 'stream') {
