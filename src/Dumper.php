@@ -49,7 +49,7 @@ final class Dumper
      * @param int $depth Maximum depth that the dumper should go into the variable.
      * @param bool $format Whatever to format exported code.
      *
-     * @return string|bool JSON string.
+     * @return bool|string JSON string.
      */
     public function asJson(int $depth = 50, bool $format = false): string|bool
     {
@@ -62,7 +62,7 @@ final class Dumper
      * @param int $depth Maximum depth that the dumper should go into the variable.
      * @param bool $prettyPrint Whatever to format exported code.
      *
-     * @return string|bool JSON string containing summary.
+     * @return bool|string JSON string containing summary.
      */
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string|bool
     {
