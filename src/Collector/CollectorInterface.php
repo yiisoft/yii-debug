@@ -10,6 +10,11 @@ namespace Yiisoft\Yii\Debug\Collector;
 interface CollectorInterface
 {
     /**
+     * @return string Collector's name.
+     */
+    public function getName(): string;
+
+    /**
      * Called once at application startup.
      * Any initialization could be done here.
      */
@@ -22,7 +27,7 @@ interface CollectorInterface
     public function shutdown(): void;
 
     /**
-     * @return array data collected
+     * @return array Data collected.
      */
     public function getCollected(): array;
 }

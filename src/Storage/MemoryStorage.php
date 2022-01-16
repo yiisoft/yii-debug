@@ -7,8 +7,6 @@ namespace Yiisoft\Yii\Debug\Storage;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 
-use function get_class;
-
 final class MemoryStorage implements StorageInterface
 {
     private DebuggerIdGenerator $idGenerator;
@@ -24,7 +22,7 @@ final class MemoryStorage implements StorageInterface
 
     public function addCollector(CollectorInterface $collector): void
     {
-        $this->collectors[get_class($collector)] = $collector;
+        $this->collectors[$collector->getName()] = $collector;
     }
 
     public function read($type = self::TYPE_INDEX): array
@@ -40,8 +38,8 @@ final class MemoryStorage implements StorageInterface
     {
         $data = [];
 
-        foreach ($this->collectors as $collector) {
-            $data[get_class($collector)] = $collector->getCollected();
+        foreach ($this->collectors as $name => $collector) {
+            $data[$name] = $collector->getCollected();
         }
 
         return $data;

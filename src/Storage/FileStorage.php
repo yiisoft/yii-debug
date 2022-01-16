@@ -18,7 +18,6 @@ use function array_slice;
 use function count;
 use function dirname;
 use function filemtime;
-use function get_class;
 use function glob;
 use function strlen;
 use function substr;
@@ -59,7 +58,7 @@ final class FileStorage implements StorageInterface
 
     public function addCollector(CollectorInterface $collector): void
     {
-        $this->collectors[get_class($collector)] = $collector;
+        $this->collectors[$collector->getName()] = $collector;
     }
 
     public function setHistorySize(int $historySize): void
@@ -108,8 +107,8 @@ final class FileStorage implements StorageInterface
     public function getData(): array
     {
         $data = [];
-        foreach ($this->collectors as $collector) {
-            $data[get_class($collector)] = $collector->getCollected();
+        foreach ($this->collectors as $name => $collector) {
+            $data[$name] = $collector->getCollected();
         }
 
         return $data;

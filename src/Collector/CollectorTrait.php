@@ -19,6 +19,11 @@ trait CollectorTrait
         $this->isActive = false;
     }
 
+    public function getName(): string
+    {
+        return str_replace('\\', '', self::class);
+    }
+
     private function reset(): void
     {
     }

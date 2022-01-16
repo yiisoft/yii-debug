@@ -20,6 +20,7 @@
     "require": {
         "php": "^8.0",
         "ext-mbstring": "*",
+        "jetbrains/phpstorm-attributes": "^1.0",
         "psr/log": "^1.1",
         "yiisoft/aliases": "^1.1|^2.0",
         "yiisoft/arrays": "^2.0",
@@ -64,7 +65,6 @@
             "source-directory": "config"
         },
         "config-plugin": {
-            "tests": "tests.php",
             "params": "params.php",
             "common": "common.php",
             "console": "console.php",
