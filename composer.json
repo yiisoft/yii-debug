@@ -9,12 +9,12 @@
     ],
     "license": "BSD-3-Clause",
     "support": {
-        "source": "https://github.com/yiisoft/yii-debug",
-        "issues": "https://github.com/yiisoft/yii-debug/issues",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
+        "issues": "https://github.com/yiisoft/yii-debug/issues?state=open",
+        "forum": "https://www.yiiframework.com/forum/",
+        "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii",
-        "chat": "https://t.me/yii3en"
+        "chat": "https://t.me/yii3en",
+        "source": "https://github.com/yiisoft/yii-debug"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
