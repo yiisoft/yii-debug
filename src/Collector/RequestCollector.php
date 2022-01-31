@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
@@ -19,14 +20,21 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     private ?string $userIp = null;
     private int $responseStatusCode = 200;
 
+    #[ArrayShape([
+        'requestUrl' => "string",
+        'requestMethod' => "string",
+        'requestIsAjax' => "bool",
+        'userIp' => "null|string",
+        'responseStatusCode' => "int"
+    ])]
     public function getCollected(): array
     {
         return [
-            'request_url' => $this->requestUrl,
-            'request_method' => $this->requestMethod,
-            'request_is_ajax' => $this->requestIsAjax,
-            'user_ip' => $this->userIp,
-            'response_status_code' => $this->responseStatusCode,
+            'requestUrl' => $this->requestUrl,
+            'requestMethod' => $this->requestMethod,
+            'requestIsAjax' => $this->requestIsAjax,
+            'userIp' => $this->userIp,
+            'responseStatusCode' => $this->responseStatusCode,
         ];
     }
 
@@ -49,6 +57,13 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         }
     }
 
+    #[ArrayShape([
+        'requestUrl' => "string",
+        'requestMethod' => "string",
+        'requestIsAjax' => "bool",
+        'userIp' => "null|string",
+        'responseStatusCode' => "int"
+    ])]
     public function getIndexData(): array
     {
         return [

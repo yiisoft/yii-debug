@@ -40,8 +40,8 @@ final class RequestCollectorTest extends CollectorTestCase
         parent::checkCollectedData($collector);
         $data = $collector->getCollected();
 
-        $this->assertEquals('http://test.site/url', $data['request_url']);
-        $this->assertEquals('GET', $data['request_method']);
-        $this->assertEquals(200, $data['response_status_code']);
+        $this->assertEquals('http://test.site/url', $data['requestUrl']);
+        $this->assertEquals('GET', $data['requestMethod']);
+        $this->assertEquals(200, $data['responseStatusCode']);
     }
 }

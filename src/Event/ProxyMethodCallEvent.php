@@ -14,7 +14,7 @@ final class ProxyMethodCallEvent
 
     public ?array $arguments;
 
-    public $result;
+    public mixed $result;
 
     public string $status;
 
@@ -29,7 +29,7 @@ final class ProxyMethodCallEvent
         string $class,
         string $method,
         ?array $arguments,
-        $result,
+        mixed $result,
         string $status,
         ?object $error,
         float $timeStart,

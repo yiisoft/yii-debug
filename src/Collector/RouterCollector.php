@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Psr\Container\ContainerInterface;
+use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\RouteCollectionInterface;
 
 final class RouterCollector implements RouterCollectorInterface, IndexCollectorInterface
@@ -41,10 +43,13 @@ final class RouterCollector implements RouterCollectorInterface, IndexCollectorI
             ];
     }
 
+    #[ArrayShape(['routeMatchTime' => "float|int", 'matchedRoute' => "mixed"])]
     public function getIndexData(): array
     {
+        $currentRoute = $this->container->has(CurrentRoute::class) ? $this->container->get(CurrentRoute::class) : null;
         return [
             'routeMatchTime' => $this->matchTime,
+            'matchedRoute' => $currentRoute?->getName(),
         ];
     }
 }

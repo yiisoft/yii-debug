@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class LogCollector implements LogCollectorInterface
+use JetBrains\PhpStorm\ArrayShape;
+
+final class LogCollector implements LogCollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -32,5 +34,13 @@ final class LogCollector implements LogCollectorInterface
     private function reset(): void
     {
         $this->messages = [];
+    }
+
+    #[ArrayShape(['totalLogs' => "int|void"])]
+    public function getIndexData(): array
+    {
+        return [
+            'totalLogs' => count($this->messages),
+        ];
     }
 }
