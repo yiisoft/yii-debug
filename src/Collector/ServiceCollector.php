@@ -45,7 +45,7 @@ final class ServiceCollector implements ServiceCollectorInterface, IndexCollecto
         ];
     }
 
-    #[ArrayShape(['totalServices' => "int|void"])]
+    #[ArrayShape(['totalServices' => 'int|void'])]
     public function getIndexData(): array
     {
         return [

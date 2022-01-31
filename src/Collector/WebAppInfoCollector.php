@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -23,12 +22,12 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     private float $requestProcessingTimeStopped = 0;
 
     #[ArrayShape([
-        'applicationProcessingTime' => "float|int",
-        'applicationPreload' => "float|int",
-        'requestProcessingTime' => "float|int",
-        'applicationEmit' => "float|int",
-        'memoryPeakUsage' => "int",
-        'memoryUsage' => "int"
+        'applicationProcessingTime' => 'float|int',
+        'applicationPreload' => 'float|int',
+        'requestProcessingTime' => 'float|int',
+        'applicationEmit' => 'float|int',
+        'memoryPeakUsage' => 'int',
+        'memoryUsage' => 'int',
     ])]
     public function getCollected(): array
     {
@@ -59,7 +58,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
         }
     }
 
-    #[ArrayShape(['phpVersion' => "string", 'time' => "float|int", 'memory' => "int", 'timestamp' => "float|int"])]
+    #[ArrayShape(['phpVersion' => 'string', 'time' => 'float|int', 'memory' => 'int', 'timestamp' => 'float|int'])]
     public function getIndexData(): array
     {
         return [

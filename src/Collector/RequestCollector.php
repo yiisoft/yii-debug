@@ -21,11 +21,11 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     private int $responseStatusCode = 200;
 
     #[ArrayShape([
-        'requestUrl' => "string",
-        'requestMethod' => "string",
-        'requestIsAjax' => "bool",
-        'userIp' => "null|string",
-        'responseStatusCode' => "int"
+        'requestUrl' => 'string',
+        'requestMethod' => 'string',
+        'requestIsAjax' => 'bool',
+        'userIp' => 'null|string',
+        'responseStatusCode' => 'int',
     ])]
     public function getCollected(): array
     {
@@ -58,11 +58,11 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     }
 
     #[ArrayShape([
-        'requestUrl' => "string",
-        'requestMethod' => "string",
-        'requestIsAjax' => "bool",
-        'userIp' => "null|string",
-        'responseStatusCode' => "int"
+        'requestUrl' => 'string',
+        'requestMethod' => 'string',
+        'requestIsAjax' => 'bool',
+        'userIp' => 'null|string',
+        'responseStatusCode' => 'int',
     ])]
     public function getIndexData(): array
     {

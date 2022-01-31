@@ -43,7 +43,7 @@ final class EventCollector implements EventCollectorInterface, IndexCollectorInt
         ];
     }
 
-    #[ArrayShape(['totalEvents' => "int|void"])]
+    #[ArrayShape(['totalEvents' => 'int|void'])]
     public function getIndexData(): array
     {
         return [
