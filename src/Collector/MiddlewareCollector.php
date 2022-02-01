@@ -54,7 +54,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
         $this->afterStack = [];
     }
 
-    #[ArrayShape(['totalMiddlewares' => "int|void"])]
+    #[ArrayShape(['totalMiddlewares' => "int"])]
     public function getIndexData(): array
     {
         return [
