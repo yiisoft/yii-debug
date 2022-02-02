@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
@@ -19,15 +21,23 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
 
+    #[ArrayShape([
+        'applicationProcessingTime' => 'float|int',
+        'applicationPreload' => 'float|int',
+        'requestProcessingTime' => 'float|int',
+        'applicationEmit' => 'float|int',
+        'memoryPeakUsage' => 'int',
+        'memoryUsage' => 'int',
+    ])]
     public function getCollected(): array
     {
         return [
-            'application_processing_time' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
-            'application_preload' => $this->requestProcessingTimeStarted - $this->applicationProcessingTimeStarted,
-            'request_processing_time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
-            'application_emit' => $this->applicationProcessingTimeStopped - $this->requestProcessingTimeStopped,
-            'memory_peak_usage' => memory_get_peak_usage(),
-            'memory_usage' => memory_get_usage(),
+            'applicationProcessingTime' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
+            'applicationPreload' => $this->requestProcessingTimeStarted - $this->applicationProcessingTimeStarted,
+            'requestProcessingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+            'applicationEmit' => $this->applicationProcessingTimeStopped - $this->requestProcessingTimeStopped,
+            'memoryPeakUsage' => memory_get_peak_usage(),
+            'memoryUsage' => memory_get_usage(),
         ];
     }
 
@@ -37,12 +47,10 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
             return;
         }
 
-        if ($event instanceof BeforeRequest) {
+        if ($event instanceof ApplicationStartup) {
+            $this->applicationProcessingTimeStarted = microtime(true);
+        } elseif ($event instanceof BeforeRequest) {
             $this->requestProcessingTimeStarted = microtime(true);
-            $this->applicationProcessingTimeStarted = $event->getRequest()->getAttribute(
-                'applicationStartTime',
-                $this->requestProcessingTimeStarted
-            );
         } elseif ($event instanceof AfterRequest) {
             $this->requestProcessingTimeStopped = microtime(true);
         } elseif ($event instanceof AfterEmit) {
@@ -50,9 +58,11 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
         }
     }
 
+    #[ArrayShape(['phpVersion' => 'string', 'time' => 'float|int', 'memory' => 'int', 'timestamp' => 'float|int'])]
     public function getIndexData(): array
     {
         return [
+            'phpVersion' => PHP_VERSION,
             'time' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'memory' => memory_get_peak_usage(),
             'timestamp' => $this->requestProcessingTimeStarted,

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 
-final class MiddlewareCollector implements CollectorInterface
+final class MiddlewareCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
     private array $beforeStack = [];
     private array $afterStack = [];
 
+    #[ArrayShape(['beforeStack' => 'array', 'afterStack' => 'array'])]
     public function getCollected(): array
     {
         return [
@@ -50,5 +52,13 @@ final class MiddlewareCollector implements CollectorInterface
     {
         $this->beforeStack = [];
         $this->afterStack = [];
+    }
+
+    #[ArrayShape(['totalMiddlewares' => 'int'])]
+    public function getIndexData(): array
+    {
+        return [
+            'totalMiddlewares' => count($this->beforeStack),
+        ];
     }
 }

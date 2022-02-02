@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class ServiceCollector implements ServiceCollectorInterface
+use JetBrains\PhpStorm\ArrayShape;
+
+final class ServiceCollector implements ServiceCollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -40,6 +42,14 @@ final class ServiceCollector implements ServiceCollectorInterface
             'error' => $error,
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
+        ];
+    }
+
+    #[ArrayShape(['totalServices' => 'int'])]
+    public function getIndexData(): array
+    {
+        return [
+            'totalServices' => count($this->items),
         ];
     }
 

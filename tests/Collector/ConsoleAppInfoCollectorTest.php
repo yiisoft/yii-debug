@@ -32,6 +32,6 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
         parent::checkCollectedData($collector);
         $data = $collector->getCollected();
 
-        $this->assertGreaterThan(0.122, $data['application_processing_time']);
+        $this->assertGreaterThan(0.122, $data['applicationProcessingTime']);
     }
 }
