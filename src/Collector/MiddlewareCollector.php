@@ -30,7 +30,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
 
     public function collect(...$payload): void
     {
-        /** @var BeforeMiddleware|AfterMiddleware $event */
+        /** @var AfterMiddleware|BeforeMiddleware $event */
         $event = current($payload);
         if (!is_object($event) || !$this->isActive()) {
             return;

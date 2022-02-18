@@ -28,7 +28,7 @@ final class LogCollector implements LogCollectorInterface, IndexCollectorInterfa
             'level' => $level,
             'message' => $message,
             'context' => $context,
-            'line' => $line
+            'line' => $line,
         ];
     }
 
