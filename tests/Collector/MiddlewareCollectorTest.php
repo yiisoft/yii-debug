@@ -34,9 +34,10 @@ final class MiddlewareCollectorTest extends CollectorTestCase
 
         $data = $collector->getCollected();
 
-        $this->assertNotEmpty($data['beforeStack']);
-        $this->assertNotEmpty($data['afterStack']);
-        $this->assertEquals(DummyMiddleware::class, $data['beforeStack'][0]['name']);
-        $this->assertEquals('GET', $data['beforeStack'][0]['request']->getMethod());
+        $this->assertEmpty($data['beforeStack']);
+        $this->assertEmpty($data['afterStack']);
+        $this->assertNotEmpty($data['actionHandler']);
+        $this->assertEquals(DummyMiddleware::class, $data['actionHandler']['name']);
+        $this->assertEquals('GET', $data['actionHandler']['request']->getMethod());
     }
 }

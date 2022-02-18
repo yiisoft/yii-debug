@@ -9,18 +9,17 @@ use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 
 final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 {
-    private EventDispatcherInterface $dispatcher;
-    private EventCollectorInterface $collector;
-
-    public function __construct(EventDispatcherInterface $dispatcher, EventCollectorInterface $collector)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->collector = $collector;
+    public function __construct(
+        private EventDispatcherInterface $dispatcher,
+        private EventCollectorInterface $collector
+    ) {
     }
 
-    public function dispatch(object $event)
+    public function dispatch(object $event): object
     {
-        $this->collector->collect($event);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect($event, $callStack['file'] . ':' . $callStack['line']);
 
         return $this->dispatcher->dispatch($event);
     }

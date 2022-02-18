@@ -14,7 +14,7 @@ final class EventCollectorTest extends CollectorTestCase
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
-        $collector->collect(new \stdClass());
+        $collector->collect(new \stdClass(), __FILE__ . ':' . __LINE__);
     }
 
     protected function getCollector(): CollectorInterface

@@ -16,10 +16,12 @@ final class EventDispatcherProxyTest extends TestCase
         $event = new \stdClass();
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $collector = $this->createMock(EventCollectorInterface::class);
+
+        $eventDispatcher->method('dispatch')->willReturn($event);
         $collector
             ->expects($this->once())
             ->method('collect')
-            ->with($event);
+            ->with($event, __FILE__ . ':28');
 
         $proxy = new EventDispatcherInterfaceProxy($eventDispatcher, $collector);
 

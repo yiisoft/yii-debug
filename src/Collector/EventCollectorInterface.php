@@ -13,6 +13,7 @@ interface EventCollectorInterface extends CollectorInterface
      * Collect data payload
      *
      * @param object $event
+     * @param string $line
      */
-    public function collect(object $event): void;
+    public function collect(object $event, string $line): void;
 }

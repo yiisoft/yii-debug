@@ -56,7 +56,7 @@ trait ProxyLogTrait
         ?object $error,
         float $timeStart
     ): void {
-        $this->config->getCollector()->collect(
+        $this->config->getCollector()?->collect(
             $service,
             get_class($instance),
             $method,
@@ -78,7 +78,7 @@ trait ProxyLogTrait
         ?object $error,
         float $timeStart
     ): void {
-        $this->config->getDispatcher()->dispatch(
+        $this->config->getDispatcher()?->dispatch(
             new ProxyMethodCallEvent(
                 $service,
                 get_class($instance),

@@ -15,7 +15,7 @@ final class LogCollectorTest extends CollectorTestCase
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
-        $collector->collect(LogLevel::ALERT, 'test', ['context']);
+        $collector->collect(LogLevel::ALERT, 'test', ['context'], __FILE__ . ':' . __LINE__);
     }
 
     protected function getCollector(): CollectorInterface

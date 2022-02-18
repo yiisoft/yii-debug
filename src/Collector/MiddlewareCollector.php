@@ -13,34 +13,44 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     use CollectorTrait;
 
     private array $beforeStack = [];
+    private array $actionHandler = [];
     private array $afterStack = [];
 
-    #[ArrayShape(['beforeStack' => 'array', 'afterStack' => 'array'])]
+    #[ArrayShape(['beforeStack' => 'array', 'actionHandler' => 'array', 'afterStack' => 'array'])]
     public function getCollected(): array
     {
+        array_pop($this->beforeStack);
+        array_shift($this->afterStack);
         return [
             'beforeStack' => $this->beforeStack,
+            'actionHandler' => $this->actionHandler,
             'afterStack' => $this->afterStack,
         ];
     }
 
     public function collect(...$payload): void
     {
+        /** @var BeforeMiddleware|AfterMiddleware $event */
         $event = current($payload);
         if (!is_object($event) || !$this->isActive()) {
             return;
         }
 
+        if (method_exists($event->getMiddleware(), '__debugInfo') && (new \ReflectionClass($event->getMiddleware()))->isAnonymous()) {
+            $name = implode('::', $event->getMiddleware()->__debugInfo()['callback']);
+        } else {
+            $name = get_class($event->getMiddleware());
+        }
         if ($event instanceof BeforeMiddleware) {
-            $this->beforeStack[] = [
-                'name' => get_class($event->getMiddleware()),
+            $this->beforeStack[] = $this->actionHandler = [
+                'name' => $name,
                 'time' => microtime(true),
                 'memory' => memory_get_usage(),
                 'request' => $event->getRequest(),
             ];
         } elseif ($event instanceof AfterMiddleware) {
             $this->afterStack[] = [
-                'name' => get_class($event->getMiddleware()),
+                'name' => $name,
                 'time' => microtime(true),
                 'memory' => memory_get_usage(),
                 'response' => $event->getResponse(),
@@ -51,6 +61,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     private function reset(): void
     {
         $this->beforeStack = [];
+        $this->actionHandler = [];
         $this->afterStack = [];
     }
 

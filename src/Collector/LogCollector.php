@@ -17,7 +17,7 @@ final class LogCollector implements LogCollectorInterface, IndexCollectorInterfa
         return $this->messages;
     }
 
-    public function collect(string $level, $message, array $context): void
+    public function collect(string $level, $message, array $context, string $line): void
     {
         if (!$this->isActive()) {
             return;
@@ -28,6 +28,7 @@ final class LogCollector implements LogCollectorInterface, IndexCollectorInterfa
             'level' => $level,
             'message' => $message,
             'context' => $context,
+            'line' => $line
         ];
     }
 
