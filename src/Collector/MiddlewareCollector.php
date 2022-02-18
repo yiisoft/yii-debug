@@ -28,15 +28,17 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
         ];
     }
 
-    public function collect(...$payload): void
+    public function collect(BeforeMiddleware|AfterMiddleware ...$payload): void
     {
-        /** @var AfterMiddleware|BeforeMiddleware $event */
         $event = current($payload);
         if (!is_object($event) || !$this->isActive()) {
             return;
         }
 
-        if (method_exists($event->getMiddleware(), '__debugInfo') && (new \ReflectionClass($event->getMiddleware()))->isAnonymous()) {
+        if (
+            method_exists($event->getMiddleware(), '__debugInfo')
+            && (new \ReflectionClass($event->getMiddleware()))->isAnonymous()
+        ) {
             $name = implode('::', $event->getMiddleware()->__debugInfo()['callback']);
         } else {
             $name = get_class($event->getMiddleware());

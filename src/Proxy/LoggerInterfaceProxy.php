@@ -23,7 +23,12 @@ final class LoggerInterfaceProxy implements LoggerInterface
     {
         [$callStack] = debug_backtrace();
 
-        $this->collector->collect(LogLevel::EMERGENCY, $message, $context, $callStack['file'] . ':' . $callStack['line']);
+        $this->collector->collect(
+            LogLevel::EMERGENCY,
+            $message,
+            $context,
+            $callStack['file'] . ':' . $callStack['line']
+        );
         $this->logger->emergency($message, $context);
     }
 
@@ -39,7 +44,12 @@ final class LoggerInterfaceProxy implements LoggerInterface
     {
         [$callStack] = debug_backtrace();
 
-        $this->collector->collect(LogLevel::CRITICAL, $message, $context, $callStack['file'] . ':' . $callStack['line']);
+        $this->collector->collect(
+            LogLevel::CRITICAL,
+            $message,
+            $context,
+            $callStack['file'] . ':' . $callStack['line']
+        );
         $this->logger->critical($message, $context);
     }
 
