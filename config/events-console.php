@@ -25,12 +25,14 @@ return [
         [Debugger::class, 'shutdown'],
     ],
     ConsoleCommandEvent::class => [
+        [ConsoleAppInfoCollector::class, 'collect'],
         [CommandCollector::class, 'collect'],
     ],
     ConsoleErrorEvent::class => [
         [CommandCollector::class, 'collect'],
     ],
     ConsoleTerminateEvent::class => [
+        [ConsoleAppInfoCollector::class, 'collect'],
         [CommandCollector::class, 'collect'],
     ],
 ];
