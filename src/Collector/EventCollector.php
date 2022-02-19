@@ -21,7 +21,7 @@ final class EventCollector implements EventCollectorInterface, IndexCollectorInt
         return $this->events;
     }
 
-    public function collect(object $event): void
+    public function collect(object $event, string $line): void
     {
         if (
             !$event instanceof HttpApplicationStartup
@@ -31,14 +31,15 @@ final class EventCollector implements EventCollectorInterface, IndexCollectorInt
             return;
         }
 
-        $this->collectEvent($event);
+        $this->collectEvent($event, $line);
     }
 
-    private function collectEvent(object $event): void
+    private function collectEvent(object $event, $line): void
     {
         $this->events[] = [
             'name' => get_class($event),
             'event' => $event,
+            'line' => $line,
             'time' => microtime(true),
         ];
     }

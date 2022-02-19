@@ -15,6 +15,7 @@ interface LogCollectorInterface extends CollectorInterface
      * @param string $level
      * @param mixed $message
      * @param array $context
+     * @param string $line
      */
-    public function collect(string $level, $message, array $context): void;
+    public function collect(string $level, mixed $message, array $context, string $line): void;
 }

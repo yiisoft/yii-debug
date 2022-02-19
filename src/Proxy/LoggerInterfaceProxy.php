@@ -21,55 +21,83 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function emergency($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::EMERGENCY, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(
+            LogLevel::EMERGENCY,
+            $message,
+            $context,
+            $callStack['file'] . ':' . $callStack['line']
+        );
         $this->logger->emergency($message, $context);
     }
 
     public function alert($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::ALERT, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(LogLevel::ALERT, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->alert($message, $context);
     }
 
     public function critical($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::CRITICAL, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(
+            LogLevel::CRITICAL,
+            $message,
+            $context,
+            $callStack['file'] . ':' . $callStack['line']
+        );
         $this->logger->critical($message, $context);
     }
 
     public function error($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::ERROR, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(LogLevel::ERROR, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->error($message, $context);
     }
 
     public function warning($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::WARNING, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(LogLevel::WARNING, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->warning($message, $context);
     }
 
     public function notice($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::NOTICE, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(LogLevel::NOTICE, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->notice($message, $context);
     }
 
     public function info($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::INFO, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(LogLevel::INFO, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->info($message, $context);
     }
 
     public function debug($message, array $context = []): void
     {
-        $this->collector->collect(LogLevel::DEBUG, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect(LogLevel::DEBUG, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->debug($message, $context);
     }
 
     public function log($level, $message, array $context = []): void
     {
-        $this->collector->collect($level, $message, $context);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collect($level, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->log($level, $message, $context);
     }
 }
