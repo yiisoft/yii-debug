@@ -13,25 +13,31 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     use CollectorTrait;
 
     private array $beforeStack = [];
-    private array $actionHandler = [];
     private array $afterStack = [];
 
     #[ArrayShape(['beforeStack' => 'array', 'actionHandler' => 'array', 'afterStack' => 'array'])]
     public function getCollected(): array
     {
-        array_pop($this->beforeStack);
-        array_shift($this->afterStack);
+        $beforeStack = $this->beforeStack;
+        $afterStack = $this->afterStack;
+        $beforeAction = array_pop($beforeStack);
+        $afterAction = array_shift($afterStack);
+        $actionHandler = [];
+
+        if ($beforeAction !== null && $afterAction !== null) {
+            $actionHandler = $this->getActionHandler($beforeAction, $afterAction);
+        }
+
         return [
-            'beforeStack' => $this->beforeStack,
-            'actionHandler' => $this->actionHandler,
-            'afterStack' => $this->afterStack,
+            'beforeStack' => $beforeStack,
+            'actionHandler' => $actionHandler,
+            'afterStack' => $afterStack,
         ];
     }
 
-    public function collect(BeforeMiddleware|AfterMiddleware ...$payload): void
+    public function collect(BeforeMiddleware|AfterMiddleware $event): void
     {
-        $event = current($payload);
-        if (!is_object($event) || !$this->isActive()) {
+        if (!$this->isActive()) {
             return;
         }
 
@@ -44,13 +50,13 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
             $name = get_class($event->getMiddleware());
         }
         if ($event instanceof BeforeMiddleware) {
-            $this->beforeStack[] = $this->actionHandler = [
+            $this->beforeStack[] = [
                 'name' => $name,
                 'time' => microtime(true),
                 'memory' => memory_get_usage(),
                 'request' => $event->getRequest(),
             ];
-        } elseif ($event instanceof AfterMiddleware) {
+        } else {
             $this->afterStack[] = [
                 'name' => $name,
                 'time' => microtime(true),
@@ -63,7 +69,6 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     private function reset(): void
     {
         $this->beforeStack = [];
-        $this->actionHandler = [];
         $this->afterStack = [];
     }
 
@@ -71,7 +76,27 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     public function getIndexData(): array
     {
         return [
-            'totalMiddlewares' => count($this->beforeStack),
+            'totalMiddlewares' => ($total = count($this->beforeStack)) > 0 ? $total - 1 : 0, // Remove action handler
+        ];
+    }
+
+    #[ArrayShape([
+        'name' => 'string',
+        'startTime' => 'float',
+        'request' => 'object',
+        'response' => 'object',
+        'endTime' => 'float',
+        'memory' => 'int',
+    ])]
+    private function getActionHandler(array $beforeAction, array $afterAction): array
+    {
+        return [
+            'name' => $beforeAction['name'],
+            'startTime' => $beforeAction['time'],
+            'request' => $beforeAction['request'],
+            'response' => $afterAction['response'],
+            'endTime' => $afterAction['time'],
+            'memory' => $afterAction['memory'],
         ];
     }
 }
