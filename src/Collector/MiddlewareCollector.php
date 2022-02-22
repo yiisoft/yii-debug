@@ -88,7 +88,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
         'endTime' => 'float',
         'memory' => 'int',
     ])]
-    private function getActionHandler(array $beforeAction, $afterAction): array
+    private function getActionHandler(array $beforeAction, array $afterAction): array
     {
         return [
             'name' => $beforeAction['name'],
