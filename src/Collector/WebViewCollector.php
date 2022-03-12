@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\View\Event\WebView\AfterRender;
 
-final class WebViewCollector implements CollectorInterface, IndexCollectorInterface
+final class WebViewCollector implements CollectorInterface
 {
     use CollectorTrait;
 
@@ -28,13 +27,6 @@ final class WebViewCollector implements CollectorInterface, IndexCollectorInterf
             'output' => $event->getResult(),
             'file' => $event->getFile(),
             'parameters' => $event->getParameters(),
-        ];
-    }
-
-    #[ArrayShape(['totalAssetBundles' => 'int'])]
-    public function getIndexData(): array
-    {
-        return [
         ];
     }
 
