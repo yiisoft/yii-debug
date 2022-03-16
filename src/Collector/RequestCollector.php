@@ -25,12 +25,22 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     private ?ResponseInterface $response = null;
 
     #[ArrayShape([
+        'requestUrl' => "string",
+        'requestMethod' => "string",
+        'requestIsAjax' => "bool",
+        'userIp' => "null|string",
+        'responseStatusCode' => "int",
         'request' => "null|\Psr\Http\Message\ServerRequestInterface",
-        'response' => "null|\Psr\Http\Message\ResponseInterface",
+        'response' => "null|\Psr\Http\Message\ResponseInterface"
     ])]
     public function getCollected(): array
     {
         return [
+            'requestUrl' => $this->requestUrl,
+            'requestMethod' => $this->requestMethod,
+            'requestIsAjax' => $this->requestIsAjax,
+            'userIp' => $this->userIp,
+            'responseStatusCode' => $this->responseStatusCode,
             'request' => $this->request,
             'response' => $this->response,
         ];
@@ -77,6 +87,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
     private function reset(): void
     {
+        $this->request = null;
+        $this->response = null;
         $this->requestUrl = '';
         $this->requestMethod = '';
         $this->requestIsAjax = false;
