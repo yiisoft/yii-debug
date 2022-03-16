@@ -26,7 +26,7 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
     #[ArrayShape([
         'request' => "null|\Psr\Http\Message\ServerRequestInterface",
-        'response' => "null|\Psr\Http\Message\ResponseInterface"
+        'response' => "null|\Psr\Http\Message\ResponseInterface",
     ])]
     public function getCollected(): array
     {
