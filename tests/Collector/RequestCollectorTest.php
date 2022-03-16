@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
@@ -38,10 +39,19 @@ final class RequestCollectorTest extends CollectorTestCase
     protected function checkCollectedData(CollectorInterface $collector): void
     {
         parent::checkCollectedData($collector);
-        $data = $collector->getCollected();
+        $this->assertInstanceOf(ServerRequestInterface::class, $collector->getCollected()['request']);
+        $this->assertInstanceOf(ResponseInterface::class, $collector->getCollected()['response']);
+    }
 
-        $this->assertEquals('http://test.site/url', $data['requestUrl']);
-        $this->assertEquals('GET', $data['requestMethod']);
-        $this->assertEquals(200, $data['responseStatusCode']);
+    protected function checkIndexData(CollectorInterface $collector): void
+    {
+        parent::checkIndexData($collector);
+        if ($collector instanceof IndexCollectorInterface) {
+            $data = $collector->getIndexData();
+
+            $this->assertEquals('http://test.site/url', $data['requestUrl']);
+            $this->assertEquals('GET', $data['requestMethod']);
+            $this->assertEquals(200, $data['responseStatusCode']);
+        }
     }
 }

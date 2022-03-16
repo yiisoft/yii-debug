@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use JetBrains\PhpStorm\ArrayShape;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
@@ -19,22 +21,18 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     private bool $requestIsAjax = false;
     private ?string $userIp = null;
     private int $responseStatusCode = 200;
+    private ?ServerRequestInterface $request = null;
+    private ?ResponseInterface $response = null;
 
     #[ArrayShape([
-        'requestUrl' => 'string',
-        'requestMethod' => 'string',
-        'requestIsAjax' => 'bool',
-        'userIp' => 'null|string',
-        'responseStatusCode' => 'int',
+        'request' => "null|\Psr\Http\Message\ServerRequestInterface",
+        'response' => "null|\Psr\Http\Message\ResponseInterface"
     ])]
     public function getCollected(): array
     {
         return [
-            'requestUrl' => $this->requestUrl,
-            'requestMethod' => $this->requestMethod,
-            'requestIsAjax' => $this->requestIsAjax,
-            'userIp' => $this->userIp,
-            'responseStatusCode' => $this->responseStatusCode,
+            'request' => $this->request,
+            'response' => $this->response,
         ];
     }
 
@@ -45,14 +43,16 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         }
 
         if ($event instanceof BeforeRequest) {
+            $this->request = $event->getRequest();
             $this->requestUrl = (string)$event->getRequest()->getUri();
             $this->requestMethod = $event->getRequest()->getMethod();
             $this->requestIsAjax = strtolower(
-                $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
+                $event->getRequest()->hasHeader('X-Requested-With') ?? ''
             ) === 'xmlhttprequest';
             $this->userIp = $event->getRequest()->getServerParams()['REMOTE_ADDR'] ?? null;
         }
         if ($event instanceof AfterRequest) {
+            $this->response = $event->getResponse();
             $this->responseStatusCode = $event->getResponse() !== null ? $event->getResponse()->getStatusCode() : 500;
         }
     }
