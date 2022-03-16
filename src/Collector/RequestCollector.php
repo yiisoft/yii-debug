@@ -25,13 +25,13 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     private ?ResponseInterface $response = null;
 
     #[ArrayShape([
-        'requestUrl' => "string",
-        'requestMethod' => "string",
-        'requestIsAjax' => "bool",
-        'userIp' => "null|string",
-        'responseStatusCode' => "int",
+        'requestUrl' => 'string',
+        'requestMethod' => 'string',
+        'requestIsAjax' => 'bool',
+        'userIp' => 'null|string',
+        'responseStatusCode' => 'int',
         'request' => "null|\Psr\Http\Message\ServerRequestInterface",
-        'response' => "null|\Psr\Http\Message\ResponseInterface"
+        'response' => "null|\Psr\Http\Message\ResponseInterface",
     ])]
     public function getCollected(): array
     {
