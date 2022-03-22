@@ -10,11 +10,11 @@ final class WebViewCollector implements CollectorInterface
 {
     use CollectorTrait;
 
-    private array $view = [];
+    private array $renders = [];
 
     public function getCollected(): array
     {
-        return $this->view;
+        return $this->renders;
     }
 
     public function collect(AfterRender $event): void
@@ -23,7 +23,7 @@ final class WebViewCollector implements CollectorInterface
             return;
         }
 
-        $this->view[] = [
+        $this->renders[] = [
             'output' => $event->getResult(),
             'file' => $event->getFile(),
             'parameters' => $event->getParameters(),
@@ -32,6 +32,6 @@ final class WebViewCollector implements CollectorInterface
 
     private function reset(): void
     {
-        $this->view = [];
+        $this->renders = [];
     }
 }
