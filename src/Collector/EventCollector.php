@@ -39,6 +39,7 @@ final class EventCollector implements EventCollectorInterface, IndexCollectorInt
         $this->events[] = [
             'name' => get_class($event),
             'event' => $event,
+            'file' => (new \ReflectionClass($event))->getFileName(),
             'line' => $line,
             'time' => microtime(true),
         ];
