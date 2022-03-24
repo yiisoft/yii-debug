@@ -5,9 +5,11 @@ declare(strict_types=1);
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Profiler\ProfilerInterface;
+use Yiisoft\View\Event\WebView\AfterRender;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -45,5 +47,8 @@ return [
     ],
     AfterMiddleware::class => [
         [MiddlewareCollector::class, 'collect'],
+    ],
+    AfterRender::class => [
+        [WebViewCollector::class, 'collect'],
     ],
 ];
