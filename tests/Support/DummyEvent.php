@@ -6,5 +6,4 @@ namespace Yiisoft\Yii\Debug\Tests\Support;
 
 final class DummyEvent
 {
-
 }
