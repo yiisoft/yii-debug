@@ -24,6 +24,7 @@ name: build
 jobs:
   phpunit:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+    extensions: fileinfo
     with:
       os: >-
         ['ubuntu-latest', 'windows-latest']
