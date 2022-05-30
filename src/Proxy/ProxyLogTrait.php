@@ -92,4 +92,13 @@ trait ProxyLogTrait
             )
         );
     }
+
+    private function getCurrentResultStatus(): string
+    {
+        if (!$this->hasCurrentError()) {
+            return 'success';
+        }
+
+        return 'failed';
+    }
 }
