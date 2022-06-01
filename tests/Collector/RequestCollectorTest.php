@@ -21,11 +21,14 @@ final class RequestCollectorTest extends CollectorTestCase
     {
         $requestMock = $this->createMock(ServerRequestInterface::class);
         $responseMock = $this->createMock(ResponseInterface::class);
-        $requestMock->method('getMethod')
+        $requestMock
+            ->method('getMethod')
             ->willReturn('GET');
-        $requestMock->method('getUri')
+        $requestMock
+            ->method('getUri')
             ->willReturn('http://test.site/url');
-        $responseMock->method('getStatusCode')
+        $responseMock
+            ->method('getStatusCode')
             ->willReturn(200);
         $collector->collect(new BeforeRequest($requestMock));
         $collector->collect(new AfterRequest($responseMock));

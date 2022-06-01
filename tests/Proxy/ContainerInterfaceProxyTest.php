@@ -61,7 +61,9 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetAndHasWithCallableServices(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
+            ->getMock();
         $config = new ContainerProxyConfig(
             true,
             [
@@ -81,14 +83,22 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->assertTrue($containerProxy->isActive());
         $this->assertTrue($containerProxy->has(LoggerInterface::class));
 
-        $containerProxy->get(LogCollectorInterface::class)->startup();
-        $containerProxy->get(LoggerInterface::class)->log('test', 'test message');
-        $this->assertNotEmpty($containerProxy->get(LogCollectorInterface::class)->getCollected());
+        $containerProxy
+            ->get(LogCollectorInterface::class)
+            ->startup();
+        $containerProxy
+            ->get(LoggerInterface::class)
+            ->log('test', 'test message');
+        $this->assertNotEmpty($containerProxy
+            ->get(LogCollectorInterface::class)
+            ->getCollected());
     }
 
     public function testGetWithArrayConfigWithStringKeys(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
+            ->getMock();
         $serviceCollector = new ServiceCollector();
         $serviceCollector->startup(); // activate collector
 
@@ -112,14 +122,20 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->assertTrue($containerProxy->isActive());
         $this->assertInstanceOf(LoggerInterface::class, $containerProxy->get(LoggerInterface::class));
 
-        $containerProxy->get(LoggerInterface::class)->log('test', 'test message');
+        $containerProxy
+            ->get(LoggerInterface::class)
+            ->log('test', 'test message');
         $this->assertInstanceOf(LoggerInterface::class, $containerProxy->get(LoggerInterface::class));
-        $this->assertNotEmpty($config->getCollector()->getCollected());
+        $this->assertNotEmpty($config
+            ->getCollector()
+            ->getCollected());
     }
 
     public function testGetWithoutConfig(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
+            ->getMock();
         $config = new ContainerProxyConfig(
             true,
             [
@@ -136,7 +152,9 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->assertInstanceOf(EventDispatcherInterface::class, $containerProxy->get(EventDispatcherInterface::class));
         $this->assertInstanceOf(
             \stdClass::class,
-            $containerProxy->get(EventDispatcherInterface::class)->dispatch(new \stdClass())
+            $containerProxy
+                ->get(EventDispatcherInterface::class)
+                ->dispatch(new \stdClass())
         );
     }
 
@@ -171,7 +189,9 @@ class ContainerInterfaceProxyTest extends TestCase
 
     private function getConfig(): ContainerProxyConfig
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
+            ->getMock();
 
         return new ContainerProxyConfig(
             true,

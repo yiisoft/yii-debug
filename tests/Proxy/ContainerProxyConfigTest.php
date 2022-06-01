@@ -20,7 +20,9 @@ final class ContainerProxyConfigTest extends TestCase
     {
         $config = new ContainerProxyConfig();
 
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
+            ->getMock();
 
         $this->assertNotSame($config, $config->activate());
         $this->assertNotSame($config, $config->withCollector(new ServiceCollector()));
@@ -44,7 +46,9 @@ final class ContainerProxyConfigTest extends TestCase
 
     public function testGetters(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
+            ->getMock();
         $config = new ContainerProxyConfig(
             true,
             [

@@ -53,7 +53,9 @@ final class FlattenExceptionTest extends TestCase
         $flattened = new FlattenException($exception);
         $flattened2 = new FlattenException($exception2);
 
-        $this->assertSame($flattened2->getTrace(), $flattened->getPrevious()->getTrace());
+        $this->assertSame($flattened2->getTrace(), $flattened
+            ->getPrevious()
+            ->getTrace());
     }
 
     public function testTraceAsString(): void

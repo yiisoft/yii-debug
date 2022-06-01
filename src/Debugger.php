@@ -54,7 +54,9 @@ final class Debugger
 
     private function isOptionalRequest(ServerRequestInterface $request): bool
     {
-        $path = $request->getUri()->getPath();
+        $path = $request
+            ->getUri()
+            ->getPath();
         foreach ($this->optionalRequests as $pattern) {
             if ((new WildcardPattern($pattern))->match($path)) {
                 return true;

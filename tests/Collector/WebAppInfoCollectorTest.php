@@ -19,7 +19,8 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
     protected function collectTestData(CollectorInterface $collector): void
     {
         $requestMock = $this->createMock(ServerRequestInterface::class);
-        $requestMock->method('getAttribute')
+        $requestMock
+            ->method('getAttribute')
             ->willReturn(\microtime(true));
         $collector->collect(new BeforeRequest($requestMock));
         usleep(123_000);

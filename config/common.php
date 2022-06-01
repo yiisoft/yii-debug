@@ -53,7 +53,9 @@ return array_merge([
         $dispatcher = $container->get(EventDispatcherInterface::class);
         $debuggerEnabled = (bool)($params['enabled'] ?? false);
         $trackedServices = (array)($params['trackedServices'] ?? []);
-        $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
+        $path = $container
+            ->get(Aliases::class)
+            ->get('@runtime/cache/container-proxy');
         $logLevel = $params['logLevel'] ?? 0;
         return new ContainerProxyConfig(
             $debuggerEnabled,

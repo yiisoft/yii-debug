@@ -17,7 +17,9 @@ final class EventDispatcherProxyTest extends TestCase
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $collector = $this->createMock(EventCollectorInterface::class);
 
-        $eventDispatcher->method('dispatch')->willReturn($event);
+        $eventDispatcher
+            ->method('dispatch')
+            ->willReturn($event);
         $collector
             ->expects($this->once())
             ->method('collect')

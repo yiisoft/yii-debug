@@ -32,9 +32,15 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         if ($event instanceof ConsoleErrorEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),
-                'input' => $event->getInput()->__toString(),
-                'output' => $event->getOutput()->fetch(),
-                'error' => $event->getError()->getMessage(),
+                'input' => $event
+                    ->getInput()
+                    ->__toString(),
+                'output' => $event
+                    ->getOutput()
+                    ->fetch(),
+                'error' => $event
+                    ->getError()
+                    ->getMessage(),
                 'exitCode' => $event->getExitCode(),
             ];
             return;
@@ -43,8 +49,12 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         if ($event instanceof ConsoleTerminateEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),
-                'input' => $event->getInput()->__toString(),
-                'output' => $event->getOutput()->fetch(),
+                'input' => $event
+                    ->getInput()
+                    ->__toString(),
+                'output' => $event
+                    ->getOutput()
+                    ->fetch(),
                 'exitCode' => $event->getExitCode(),
             ];
             return;
@@ -53,8 +63,12 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         if ($event instanceof ConsoleEvent) {
             $this->commands[get_class($event)] = [
                 'command' => $event->getCommand(),
-                'input' => $event->getInput()->__toString(),
-                'output' => $event->getOutput()->fetch(),
+                'input' => $event
+                    ->getInput()
+                    ->__toString(),
+                'output' => $event
+                    ->getOutput()
+                    ->fetch(),
             ];
         }
     }

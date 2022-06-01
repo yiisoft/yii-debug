@@ -61,11 +61,15 @@ final class RouterCollectorTest extends CollectorTestCase
         $this->assertArrayHasKey('routesTree', $collector->getCollected());
         $this->assertArrayHasKey('routeTime', $collector->getCollected());
         $this->assertEquals(
-            $this->container->get(RouteCollectionInterface::class)->getRoutes(),
+            $this->container
+                ->get(RouteCollectionInterface::class)
+                ->getRoutes(),
             $collector->getCollected()['routes']
         );
         $this->assertEquals(
-            $this->container->get(RouteCollectionInterface::class)->getRouteTree(),
+            $this->container
+                ->get(RouteCollectionInterface::class)
+                ->getRouteTree(),
             $collector->getCollected()['routesTree']
         );
         $this->assertEquals(

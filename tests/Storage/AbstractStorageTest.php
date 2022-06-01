@@ -78,7 +78,9 @@ abstract class AbstractStorageTest extends TestCase
 
     protected function createFakeCollector(array $data)
     {
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
+        $collector = $this
+            ->getMockBuilder(CollectorInterface::class)
+            ->getMock();
         $collector
             ->method('getCollected')
             ->willReturn($data);

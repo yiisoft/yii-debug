@@ -54,16 +54,26 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof BeforeRequest) {
             $this->request = $event->getRequest();
-            $this->requestUrl = (string)$event->getRequest()->getUri();
-            $this->requestMethod = $event->getRequest()->getMethod();
+            $this->requestUrl = (string)$event
+                ->getRequest()
+                ->getUri();
+            $this->requestMethod = $event
+                ->getRequest()
+                ->getMethod();
             $this->requestIsAjax = strtolower(
-                $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
-            ) === 'xmlhttprequest';
-            $this->userIp = $event->getRequest()->getServerParams()['REMOTE_ADDR'] ?? null;
+                    $event
+                        ->getRequest()
+                        ->getHeaderLine('X-Requested-With') ?? ''
+                ) === 'xmlhttprequest';
+            $this->userIp = $event
+                    ->getRequest()
+                    ->getServerParams()['REMOTE_ADDR'] ?? null;
         }
         if ($event instanceof AfterRequest) {
             $this->response = $event->getResponse();
-            $this->responseStatusCode = $event->getResponse() !== null ? $event->getResponse()->getStatusCode() : 500;
+            $this->responseStatusCode = $event->getResponse() !== null ? $event
+                ->getResponse()
+                ->getStatusCode() : 500;
         }
     }
 

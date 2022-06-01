@@ -11,7 +11,8 @@ final class DummyCollectorTest extends CollectorTestCase
     protected function getCollector(): CollectorInterface
     {
         $collector = $this->createMock(CollectorInterface::class);
-        $collector->method('getCollected')
+        $collector
+            ->method('getCollected')
             ->willReturn(
                 [
                     'int' => 123,
@@ -19,7 +20,8 @@ final class DummyCollectorTest extends CollectorTestCase
                     'object' => new \stdClass(),
                 ]
             );
-        $collector->method('getName')
+        $collector
+            ->method('getName')
             ->willReturn(get_class($collector));
 
         return $collector;

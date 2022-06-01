@@ -18,8 +18,12 @@ final class DebuggerTest extends TestCase
     public function testStartup(): void
     {
         $idGenerator = new DebuggerIdGenerator();
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('startup');
+        $collector = $this
+            ->getMockBuilder(CollectorInterface::class)
+            ->getMock();
+        $collector
+            ->expects($this->once())
+            ->method('startup');
 
         $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), [$collector]);
         $debugger->startup(new \stdClass());
@@ -28,8 +32,12 @@ final class DebuggerTest extends TestCase
     public function testStartupWithSkipCollect(): void
     {
         $idGenerator = new DebuggerIdGenerator();
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('startup');
+        $collector = $this
+            ->getMockBuilder(CollectorInterface::class)
+            ->getMock();
+        $collector
+            ->expects($this->once())
+            ->method('startup');
 
         $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), [$collector], ['/test']);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/debug')));
@@ -55,8 +63,12 @@ final class DebuggerTest extends TestCase
     public function testShutdown(): void
     {
         $idGenerator = new DebuggerIdGenerator();
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('shutdown');
+        $collector = $this
+            ->getMockBuilder(CollectorInterface::class)
+            ->getMock();
+        $collector
+            ->expects($this->once())
+            ->method('shutdown');
 
         $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), [$collector]);
         $debugger->shutdown();
@@ -65,10 +77,18 @@ final class DebuggerTest extends TestCase
     public function testShutdownWithSkipCollect(): void
     {
         $idGenerator = new DebuggerIdGenerator();
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('shutdown');
-        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->exactly(0))->method('flush');
+        $collector = $this
+            ->getMockBuilder(CollectorInterface::class)
+            ->getMock();
+        $collector
+            ->expects($this->once())
+            ->method('shutdown');
+        $storage = $this
+            ->getMockBuilder(StorageInterface::class)
+            ->getMock();
+        $storage
+            ->expects($this->exactly(0))
+            ->method('flush');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector], ['/test']);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
