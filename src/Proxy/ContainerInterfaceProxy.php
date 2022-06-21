@@ -135,7 +135,7 @@ class ContainerInterfaceProxy implements ContainerInterface
             next($callbacks);
         }
 
-        return $this->proxyManager->createObjectProxyFromInterface(
+        return $this->proxyManager->createObjectProxy(
             $service,
             ServiceMethodProxy::class,
             [$service, $instance, $methods, $this->config]
@@ -163,7 +163,7 @@ class ContainerInterfaceProxy implements ContainerInterface
 
     private function getCommonServiceProxy(string $service, object $instance): object
     {
-        return $this->proxyManager->createObjectProxyFromInterface(
+        return $this->proxyManager->createObjectProxy(
             $service,
             ServiceProxy::class,
             [$service, $instance, $this->config]
