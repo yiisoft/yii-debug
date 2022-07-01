@@ -20,7 +20,7 @@ class ServiceMethodProxy extends ServiceProxy
         parent::__construct($service, $instance, $config);
     }
 
-    protected function executeMethodProxy(string $methodName, array $arguments, $result, float $timeStart)
+    protected function afterCall(string $methodName, array $arguments, mixed $result, float $timeStart): mixed
     {
         try {
             if (isset($this->methods[$methodName])) {
