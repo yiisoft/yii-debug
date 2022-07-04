@@ -22,7 +22,7 @@ class ServiceProxy extends ObjectProxy
         parent::__construct($instance);
     }
 
-    protected function executeMethodProxy(string $methodName, array $arguments, $result, float $timeStart)
+    protected function afterCall(string $methodName, array $arguments, mixed $result, float $timeStart): mixed
     {
         $this->logProxy($this->service, $this->getInstance(), $methodName, $arguments, $result, $timeStart);
         return $result;
