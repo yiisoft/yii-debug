@@ -39,9 +39,9 @@ final class ValidatorCollector implements ValidatorCollectorInterface, IndexColl
     }
 
     #[ArrayShape([
-        'validator.count' => "int",
-        'validator.count_valid' => "int",
-        'validator.count_invalid' => "int",
+        'validator.count' => 'int',
+        'validator.count_valid' => 'int',
+        'validator.count_invalid' => 'int',
     ])]
     public function getIndexData(): array
     {

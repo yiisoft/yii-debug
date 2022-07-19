@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
-use Psr\Log\LogLevel;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 
 final class ValidatorCollectorTest extends CollectorTestCase
