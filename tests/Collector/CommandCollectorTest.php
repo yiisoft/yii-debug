@@ -72,10 +72,11 @@ final class CommandCollectorTest extends CollectorTestCase
     {
         parent::checkIndexData($collector);
         if ($collector instanceof CommandCollector) {
-            $this->assertArrayHasKey('command.input', $collector->getIndexData());
-            $this->assertArrayHasKey('command.class', $collector->getIndexData());
-            $this->assertEquals('test1', $collector->getIndexData()['command.input']);
-            $this->assertEquals(null, $collector->getIndexData()['command.class']);
+            $this->assertArrayHasKey('command', $collector->getIndexData());
+            $this->assertArrayHasKey('input', $collector->getIndexData()['command']);
+            $this->assertArrayHasKey('class', $collector->getIndexData()['command']);
+            $this->assertEquals('test1', $collector->getIndexData()['command']['input']);
+            $this->assertEquals(null, $collector->getIndexData()['command']['class']);
         }
     }
 }

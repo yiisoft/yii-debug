@@ -48,9 +48,9 @@ final class RequestCollectorTest extends CollectorTestCase
         if ($collector instanceof RequestCollector) {
             $data = $collector->getIndexData();
 
-            $this->assertEquals('http://test.site/url', $data['request.url']);
-            $this->assertEquals('GET', $data['request.method']);
-            $this->assertEquals(200, $data['response.statusCode']);
+            $this->assertEquals('http://test.site/url', $data['request']['url']);
+            $this->assertEquals('GET', $data['request']['method']);
+            $this->assertEquals(200, $data['response']['statusCode']);
         }
     }
 }
