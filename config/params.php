@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Yiisoft\Assets\AssetLoaderInterface;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Router\UrlMatcherInterface;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
@@ -17,6 +18,7 @@ use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ValidatorCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
@@ -25,6 +27,7 @@ use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\UrlMatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Proxy\ValidatorInterfaceProxy;
 
 /**
  * @var $params array
@@ -37,6 +40,7 @@ return [
             LogCollectorInterface::class,
             EventCollectorInterface::class,
             ServiceCollectorInterface::class,
+            ValidatorCollectorInterface::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
@@ -52,6 +56,7 @@ return [
         ],
         'trackedServices' => [
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+            ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollectorInterface::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollectorInterface::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],

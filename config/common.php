@@ -13,6 +13,8 @@ use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
+use Yiisoft\Yii\Debug\Collector\ValidatorCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
@@ -43,6 +45,7 @@ if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
 }
 
 return array_merge([
+    ValidatorCollectorInterface::class => ValidatorCollector::class,
     LogCollectorInterface::class => LogCollector::class,
     EventCollectorInterface::class => EventCollector::class,
     RouterCollectorInterface::class => RouterCollector::class,
