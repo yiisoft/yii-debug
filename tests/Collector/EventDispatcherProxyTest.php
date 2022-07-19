@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use stdClass;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 
 final class EventDispatcherProxyTest extends TestCase
@@ -16,13 +16,13 @@ final class EventDispatcherProxyTest extends TestCase
     {
         $event = new stdClass();
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $collector = $this->createMock(EventCollectorInterface::class);
+        $collector = $this->createMock(EventCollector::class);
 
         $eventDispatcher->method('dispatch')->willReturn($event);
         $collector
             ->expects($this->once())
             ->method('collect')
-            ->with($event, __FILE__ . ':28');
+            ->with($event, __FILE__ . ':29');
 
         $proxy = new EventDispatcherInterfaceProxy($eventDispatcher, $collector);
 

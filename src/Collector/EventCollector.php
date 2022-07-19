@@ -11,7 +11,7 @@ use Yiisoft\Yii\Http\Event\ApplicationStartup as HttpApplicationStartup;
 
 use function get_class;
 
-final class EventCollector implements EventCollectorInterface, IndexCollectorInterface
+class EventCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 

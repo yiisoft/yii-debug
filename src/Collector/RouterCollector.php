@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\RouteCollectionInterface;
 
-final class RouterCollector implements RouterCollectorInterface, IndexCollectorInterface
+class RouterCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 

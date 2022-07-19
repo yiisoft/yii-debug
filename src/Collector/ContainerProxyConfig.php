@@ -20,7 +20,7 @@ final class ContainerProxyConfig
 
     private ?EventDispatcherInterface $dispatcher;
 
-    private ?ServiceCollectorInterface $collector;
+    private ?ServiceCollector $collector;
 
     private ?string $proxyCachePath;
 
@@ -28,7 +28,7 @@ final class ContainerProxyConfig
         bool $active = false,
         array $decoratedServices = [],
         EventDispatcherInterface $dispatcher = null,
-        ServiceCollectorInterface $collector = null,
+        ServiceCollector $collector = null,
         string $proxyCachePath = null,
         int $logLevel = 0
     ) {
@@ -72,7 +72,7 @@ final class ContainerProxyConfig
         return $config;
     }
 
-    public function withCollector(ServiceCollectorInterface $collector): self
+    public function withCollector(ServiceCollector $collector): self
     {
         $config = clone $this;
         $config->collector = $collector;
@@ -108,7 +108,7 @@ final class ContainerProxyConfig
         return $this->dispatcher;
     }
 
-    public function getCollector(): ?ServiceCollectorInterface
+    public function getCollector(): ?ServiceCollector
     {
         return $this->collector;
     }

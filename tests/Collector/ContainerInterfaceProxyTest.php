@@ -16,12 +16,10 @@ use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Files\FileHelper;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
-use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
@@ -45,7 +43,7 @@ class ContainerInterfaceProxyTest extends TestCase
             $containerProxy,
             $containerProxy->withDecoratedServices(
                 [
-                    LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+                    LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
                 ]
             )
         );
@@ -69,7 +67,7 @@ class ContainerInterfaceProxyTest extends TestCase
                 LoggerInterface::class => fn (Container $container) => $container->get(LoggerInterfaceProxy::class),
                 EventDispatcherInterface::class => [
                     EventDispatcherInterfaceProxy::class,
-                    EventCollectorInterface::class,
+                    EventCollector::class,
                 ],
             ],
             $dispatcherMock,
@@ -82,9 +80,9 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->assertTrue($containerProxy->isActive());
         $this->assertTrue($containerProxy->has(LoggerInterface::class));
 
-        $containerProxy->get(LogCollectorInterface::class)->startup();
+        $containerProxy->get(LogCollector::class)->startup();
         $containerProxy->get(LoggerInterface::class)->log('test', 'test message');
-        $this->assertNotEmpty($containerProxy->get(LogCollectorInterface::class)->getCollected());
+        $this->assertNotEmpty($containerProxy->get(LogCollector::class)->getCollected());
     }
 
     public function testGetWithArrayConfigWithStringKeys(): void
@@ -99,7 +97,7 @@ class ContainerInterfaceProxyTest extends TestCase
                 LoggerInterface::class => ['logger' => LoggerInterfaceProxy::class],
                 EventDispatcherInterface::class => [
                     EventDispatcherInterfaceProxy::class,
-                    EventCollectorInterface::class,
+                    EventCollector::class,
                 ],
             ],
             $dispatcherMock,
@@ -124,7 +122,7 @@ class ContainerInterfaceProxyTest extends TestCase
         $config = new ContainerProxyConfig(
             true,
             [
-                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
                 EventDispatcherInterface::class,
             ],
             $dispatcherMock,
@@ -147,15 +145,15 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 'No definition or class found or resolvable for "%s" while building "%s".',
-                ServiceCollectorInterface::class,
-                ServiceCollectorInterface::class
+                CollectorInterface::class,
+                CollectorInterface::class
             )
         );
 
         $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
 
-        $containerProxy->has(ServiceCollectorInterface::class);
-        $containerProxy->get(ServiceCollectorInterface::class);
+        $containerProxy->has(CollectorInterface::class);
+        $containerProxy->get(CollectorInterface::class);
     }
 
     public function testGetAndHasWithNotService(): void
@@ -177,10 +175,10 @@ class ContainerInterfaceProxyTest extends TestCase
         return new ContainerProxyConfig(
             true,
             [
-                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
                 EventDispatcherInterface::class => [
                     EventDispatcherInterfaceProxy::class,
-                    EventCollectorInterface::class,
+                    EventCollector::class,
                 ],
             ],
             $dispatcherMock,
@@ -197,8 +195,8 @@ class ContainerInterfaceProxyTest extends TestCase
                 EventDispatcherInterface::class => Dispatcher::class,
                 ListenerProviderInterface::class => Provider::class,
                 LoggerInterface::class => NullLogger::class,
-                LogCollectorInterface::class => LogCollector::class,
-                EventCollectorInterface::class => EventCollector::class,
+                LogCollector::class => LogCollector::class,
+                EventCollector::class => EventCollector::class,
             ]);
         return new Container($config);
     }

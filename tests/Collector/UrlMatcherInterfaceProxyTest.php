@@ -11,7 +11,7 @@ use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
 use Yiisoft\Router\RouteCollection;
 use Yiisoft\Router\RouteCollector;
-use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
 
 class UrlMatcherInterfaceProxyTest extends TestCase
@@ -21,7 +21,7 @@ class UrlMatcherInterfaceProxyTest extends TestCase
         $routeCollector = new RouteCollector();
         $routeCollector->addGroup(Group::create()->routes(Route::get('/')));
         $matcher = new UrlMatcher(new RouteCollection($routeCollector));
-        $collector = $this->createMock(RouterCollectorInterface::class);
+        $collector = $this->createMock(RouterCollector::class);
         $time = microtime(true);
 
         $proxy = new UrlMatcherInterfaceProxy($matcher, $collector);

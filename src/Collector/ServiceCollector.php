@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
-
-final class ServiceCollector implements ServiceCollectorInterface, IndexCollectorInterface
+final class ServiceCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
