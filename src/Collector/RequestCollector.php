@@ -16,6 +16,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     use CollectorTrait;
 
     private string $requestUrl = '';
+    private string $requestPath = '';
+    private string $requestQuery = '';
     private string $requestMethod = '';
     private bool $requestIsAjax = false;
     private ?string $userIp = null;
@@ -27,6 +29,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     {
         return [
             'requestUrl' => $this->requestUrl,
+            'requestPath' => $this->requestPath,
+            'requestQuery' => $this->requestQuery,
             'requestMethod' => $this->requestMethod,
             'requestIsAjax' => $this->requestIsAjax,
             'userIp' => $this->userIp,
@@ -45,6 +49,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         if ($event instanceof BeforeRequest) {
             $this->request = $event->getRequest();
             $this->requestUrl = (string) $event->getRequest()->getUri();
+            $this->requestPath = (string) $event->getRequest()->getUri()->getPath();
+            $this->requestQuery = (string) $event->getRequest()->getUri()->getQuery();
             $this->requestMethod = $event->getRequest()->getMethod();
             $this->requestIsAjax = strtolower(
                 $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
@@ -62,6 +68,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         return [
             'request' => [
                 'url' => $this->requestUrl,
+                'path' => $this->requestPath,
+                'query' => $this->requestQuery,
                 'method' => $this->requestMethod,
                 'isAjax' => $this->requestIsAjax,
                 'userIp' => $this->userIp,
