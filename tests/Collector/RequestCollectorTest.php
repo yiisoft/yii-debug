@@ -15,7 +15,7 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 final class RequestCollectorTest extends CollectorTestCase
 {
     /**
-     * @param RequestCollector|\Yiisoft\Yii\Debug\Collector\CollectorInterface $collector
+     * @param RequestCollector|CollectorInterface $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -46,12 +46,12 @@ final class RequestCollectorTest extends CollectorTestCase
     protected function checkIndexData(CollectorInterface $collector): void
     {
         parent::checkIndexData($collector);
-        if ($collector instanceof IndexCollectorInterface) {
+        if ($collector instanceof RequestCollector) {
             $data = $collector->getIndexData();
 
-            $this->assertEquals('http://test.site/url', $data['requestUrl']);
-            $this->assertEquals('GET', $data['requestMethod']);
-            $this->assertEquals(200, $data['responseStatusCode']);
+            $this->assertEquals('http://test.site/url', $data['request.url']);
+            $this->assertEquals('GET', $data['request.method']);
+            $this->assertEquals(200, $data['response.statusCode']);
         }
     }
 }

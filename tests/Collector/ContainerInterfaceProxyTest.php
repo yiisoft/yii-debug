@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Proxy;
+namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -10,6 +10,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use stdClass;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
@@ -21,10 +22,10 @@ use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
-use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 
 class ContainerInterfaceProxyTest extends TestCase
 {
@@ -135,8 +136,8 @@ class ContainerInterfaceProxyTest extends TestCase
 
         $this->assertInstanceOf(EventDispatcherInterface::class, $containerProxy->get(EventDispatcherInterface::class));
         $this->assertInstanceOf(
-            \stdClass::class,
-            $containerProxy->get(EventDispatcherInterface::class)->dispatch(new \stdClass())
+            stdClass::class,
+            $containerProxy->get(EventDispatcherInterface::class)->dispatch(new stdClass())
         );
     }
 

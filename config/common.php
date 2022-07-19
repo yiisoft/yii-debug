@@ -14,7 +14,7 @@ use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;

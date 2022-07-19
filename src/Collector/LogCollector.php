@@ -37,11 +37,10 @@ final class LogCollector implements LogCollectorInterface, IndexCollectorInterfa
         $this->messages = [];
     }
 
-    #[ArrayShape(['totalLogs' => 'int'])]
     public function getIndexData(): array
     {
         return [
-            'totalLogs' => count($this->messages),
+            'logger.total' => count($this->messages),
         ];
     }
 }

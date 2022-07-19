@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
@@ -17,7 +18,7 @@ use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 final class CommandCollectorTest extends CollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\CommandCollector $collector
+     * @param CollectorInterface|CommandCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -32,7 +33,7 @@ final class CommandCollectorTest extends CollectorTestCase
             new ConsoleErrorEvent(
                 new StringInput('test1'),
                 new ConsoleBufferedOutput(),
-                new \Exception()
+                new Exception()
             )
         );
         $collector->collect(
@@ -71,9 +72,11 @@ final class CommandCollectorTest extends CollectorTestCase
     protected function checkIndexData(CollectorInterface $collector): void
     {
         parent::checkIndexData($collector);
-        if ($collector instanceof IndexCollectorInterface) {
-            $this->assertArrayHasKey('command', $collector->getIndexData());
-            $this->assertEquals('test1', $collector->getIndexData()['command']);
+        if ($collector instanceof CommandCollector) {
+            $this->assertArrayHasKey('command.input', $collector->getIndexData());
+            $this->assertArrayHasKey('command.class', $collector->getIndexData());
+            $this->assertEquals('test1', $collector->getIndexData()['command.input']);
+            $this->assertEquals(null, $collector->getIndexData()['command.class']);
         }
     }
 }

@@ -43,13 +43,12 @@ final class RouterCollector implements RouterCollectorInterface, IndexCollectorI
             ];
     }
 
-    #[ArrayShape(['routeMatchTime' => 'float|int', 'matchedRoute' => 'string'])]
     public function getIndexData(): array
     {
         $currentRoute = $this->container->has(CurrentRoute::class) ? $this->container->get(CurrentRoute::class) : null;
         return [
-            'routeMatchTime' => $this->matchTime,
-            'matchedRoute' => $currentRoute?->getName(),
+            'router.matchTime' => $this->matchTime,
+            'router.matchedRoute' => $currentRoute?->getName(),
         ];
     }
 }

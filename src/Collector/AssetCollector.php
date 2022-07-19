@@ -27,11 +27,10 @@ final class AssetCollector implements CollectorInterface, IndexCollectorInterfac
         $this->assetBundles[] = $assetBundle;
     }
 
-    #[ArrayShape(['totalAssetBundles' => 'int'])]
     public function getIndexData(): array
     {
         return [
-            'totalAssetBundles' => count($this->assetBundles),
+            'asset.bundles.total' => count($this->assetBundles),
         ];
     }
 

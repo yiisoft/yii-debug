@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Proxy;
+namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 
 final class LoggerProxyTest extends TestCase
 {

@@ -45,11 +45,10 @@ final class ServiceCollector implements ServiceCollectorInterface, IndexCollecto
         ];
     }
 
-    #[ArrayShape(['totalServices' => 'int'])]
     public function getIndexData(): array
     {
         return [
-            'totalServices' => count($this->items),
+            'service.total' => count($this->items),
         ];
     }
 

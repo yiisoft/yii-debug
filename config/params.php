@@ -20,11 +20,11 @@ use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
-use Yiisoft\Yii\Debug\Proxy\AssetLoaderInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\UrlMatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\AssetLoaderInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
 
 /**
  * @var $params array

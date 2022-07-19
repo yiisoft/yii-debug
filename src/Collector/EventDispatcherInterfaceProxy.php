@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Proxy;
+namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;

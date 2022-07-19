@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Proxy;
+namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use stdClass;
 use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 
 final class EventDispatcherProxyTest extends TestCase
 {
     public function testDispatch(): void
     {
-        $event = new \stdClass();
+        $event = new stdClass();
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $collector = $this->createMock(EventCollectorInterface::class);
 

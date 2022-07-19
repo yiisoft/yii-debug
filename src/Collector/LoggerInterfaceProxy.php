@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Proxy;
+namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
