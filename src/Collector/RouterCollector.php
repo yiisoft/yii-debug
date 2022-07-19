@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Psr\Container\ContainerInterface;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\RouteCollectionInterface;
@@ -47,8 +46,10 @@ class RouterCollector implements CollectorInterface, IndexCollectorInterface
     {
         $currentRoute = $this->container->has(CurrentRoute::class) ? $this->container->get(CurrentRoute::class) : null;
         return [
-            'router.matchTime' => $this->matchTime,
-            'router.matchedRoute' => $currentRoute?->getName(),
+            'router' => [
+                'matchTime' => $this->matchTime,
+                'matchedRoute' => $currentRoute?->getName(),
+            ],
         ];
     }
 }

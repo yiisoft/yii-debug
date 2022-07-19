@@ -38,7 +38,9 @@ class LogCollector implements CollectorInterface, IndexCollectorInterface
     public function getIndexData(): array
     {
         return [
-            'logger.total' => count($this->messages),
+            'logger' => [
+                'total' => count($this->messages),
+            ],
         ];
     }
 }

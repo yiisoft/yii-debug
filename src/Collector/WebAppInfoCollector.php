@@ -52,10 +52,18 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     public function getIndexData(): array
     {
         return [
-            'web.php.version' => PHP_VERSION,
-            'web.request.startTime' => $this->requestProcessingTimeStarted,
-            'web.request.processingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
-            'web.memory.peakUsage' => memory_get_peak_usage(),
+            'web' => [
+                'php' => [
+                    'version' => PHP_VERSION,
+                ],
+                'request' => [
+                    'startTime' => $this->requestProcessingTimeStarted,
+                    'processingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+                ],
+                'memory' => [
+                    'peakUsage' => memory_get_peak_usage(),
+                ],
+            ],
         ];
     }
 

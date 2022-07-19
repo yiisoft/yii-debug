@@ -46,7 +46,9 @@ final class ServiceCollector implements CollectorInterface, IndexCollectorInterf
     public function getIndexData(): array
     {
         return [
-            'service.total' => count($this->items),
+            'service' => [
+                'total' => count($this->items),
+            ],
         ];
     }
 

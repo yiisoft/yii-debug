@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use ReflectionClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
 use Yiisoft\Yii\Http\Event\ApplicationStartup as HttpApplicationStartup;
@@ -49,7 +48,9 @@ class EventCollector implements CollectorInterface, IndexCollectorInterface
     public function getIndexData(): array
     {
         return [
-            'event.total' => count($this->events),
+            'event' => [
+                'total' => count($this->events),
+            ],
         ];
     }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
@@ -51,10 +50,18 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
     public function getIndexData(): array
     {
         return [
-            'console.php.version' => PHP_VERSION,
-            'console.request.startTime' => $this->requestProcessingTimeStarted,
-            'console.request.processingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
-            'console.memory.peakUsage' => memory_get_peak_usage(),
+            'console' => [
+                'php' => [
+                    'version' => PHP_VERSION,
+                ],
+                'request' => [
+                    'startTime' => $this->requestProcessingTimeStarted,
+                    'processingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+                ],
+                'memory' => [
+                    'peakUsage' => memory_get_peak_usage(),
+                ],
+            ],
         ];
     }
 

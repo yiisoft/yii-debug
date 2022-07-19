@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Assets\AssetBundle;
 
 final class AssetCollector implements CollectorInterface, IndexCollectorInterface
@@ -30,7 +29,11 @@ final class AssetCollector implements CollectorInterface, IndexCollectorInterfac
     public function getIndexData(): array
     {
         return [
-            'asset.bundles.total' => count($this->assetBundles),
+            'asset' => [
+                'bundles' => [
+                    'total' => count($this->assetBundles),
+                ],
+            ],
         ];
     }
 

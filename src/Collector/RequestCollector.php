@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -45,11 +44,11 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof BeforeRequest) {
             $this->request = $event->getRequest();
-            $this->requestUrl = (string)$event->getRequest()->getUri();
+            $this->requestUrl = (string) $event->getRequest()->getUri();
             $this->requestMethod = $event->getRequest()->getMethod();
             $this->requestIsAjax = strtolower(
-                $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
-            ) === 'xmlhttprequest';
+                    $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
+                ) === 'xmlhttprequest';
             $this->userIp = $event->getRequest()->getServerParams()['REMOTE_ADDR'] ?? null;
         }
         if ($event instanceof AfterRequest) {
@@ -61,11 +60,15 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     public function getIndexData(): array
     {
         return [
-            'request.url' => $this->requestUrl,
-            'request.method' => $this->requestMethod,
-            'request.isAjax' => $this->requestIsAjax,
-            'request.userIp' => $this->userIp,
-            'response.statusCode' => $this->responseStatusCode,
+            'request' => [
+                'url' => $this->requestUrl,
+                'method' => $this->requestMethod,
+                'isAjax' => $this->requestIsAjax,
+                'userIp' => $this->userIp,
+            ],
+            'response' => [
+                'statusCode' => $this->responseStatusCode,
+            ],
         ];
     }
 

@@ -84,8 +84,10 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         }
 
         return [
-            'command.input' => $command['input'],
-            'command.class' => $command['command'] !== null ? get_class($command['command']) : null,
+            'command' => [
+                'input' => $command['input'],
+                'class' => $command['command'] !== null ? get_class($command['command']) : null,
+            ],
         ];
     }
 

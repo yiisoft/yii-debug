@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use ReflectionClass;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
@@ -75,7 +74,9 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     public function getIndexData(): array
     {
         return [
-            'middleware.total' => ($total = count($this->beforeStack)) > 0 ? $total - 1 : 0, // Remove action handler
+            'middleware' => [
+                'total' => ($total = count($this->beforeStack)) > 0 ? $total - 1 : 0, // Remove action handler
+            ],
         ];
     }
 
