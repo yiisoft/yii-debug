@@ -14,7 +14,7 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 final class RequestCollectorTest extends CollectorTestCase
 {
     /**
-     * @param RequestCollector|CollectorInterface $collector
+     * @param CollectorInterface|RequestCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {

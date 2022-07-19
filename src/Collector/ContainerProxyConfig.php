@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 
 use function in_array;
 use function is_callable;
