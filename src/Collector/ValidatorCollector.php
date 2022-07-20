@@ -45,9 +45,9 @@ final class ValidatorCollector implements CollectorInterface, IndexCollectorInte
 
         return [
             'validator' => [
-                'count.total' => $count,
-                'count.valid' => $countValid,
-                'count.invalid' => $countInvalid,
+                'total' => $count,
+                'valid' => $countValid,
+                'invalid' => $countInvalid,
             ],
         ];
     }
