@@ -49,8 +49,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         if ($event instanceof BeforeRequest) {
             $this->request = $event->getRequest();
             $this->requestUrl = (string) $event->getRequest()->getUri();
-            $this->requestPath = (string) $event->getRequest()->getUri()->getPath();
-            $this->requestQuery = (string) $event->getRequest()->getUri()->getQuery();
+            $this->requestPath = $event->getRequest()->getUri()->getPath();
+            $this->requestQuery = $event->getRequest()->getUri()->getQuery();
             $this->requestMethod = $event->getRequest()->getMethod();
             $this->requestIsAjax = strtolower(
                 $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
