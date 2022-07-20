@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
 use Yiisoft\Validator\Result;
 
-final class ValidatorCollector implements ValidatorCollectorInterface, IndexCollectorInterface
+final class ValidatorCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -38,11 +37,6 @@ final class ValidatorCollector implements ValidatorCollectorInterface, IndexColl
         $this->validations = [];
     }
 
-    #[ArrayShape([
-        'validator.count' => 'int',
-        'validator.count_valid' => 'int',
-        'validator.count_invalid' => 'int',
-    ])]
     public function getIndexData(): array
     {
         $count = count($this->validations);
@@ -50,9 +44,11 @@ final class ValidatorCollector implements ValidatorCollectorInterface, IndexColl
         $countInvalid = $count - $countValid;
 
         return [
-            'validator.count' => $count,
-            'validator.count_valid' => $countValid,
-            'validator.count_invalid' => $countInvalid,
+            'validator' => [
+                'count.total' => $count,
+                'count.valid' => $countValid,
+                'count.invalid' => $countInvalid,
+            ],
         ];
     }
 }

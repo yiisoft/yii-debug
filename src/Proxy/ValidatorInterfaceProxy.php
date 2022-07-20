@@ -7,13 +7,13 @@ namespace Yiisoft\Yii\Debug\Proxy;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Yii\Debug\Collector\ValidatorCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 
 final class ValidatorInterfaceProxy implements ValidatorInterface
 {
     public function __construct(
         private ValidatorInterface $validator,
-        private ValidatorCollectorInterface $collector,
+        private ValidatorCollector $collector,
     ) {
     }
 
@@ -21,13 +21,8 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
     {
         $result = $this->validator->validate($data, $rules);
 
-        if ($data instanceof RulesProviderInterface) {
-            $explicitRules = $rules;
+        if ($rules === [] && $data instanceof RulesProviderInterface) {
             $rules = (array) $data->getRules();
-
-            foreach ($explicitRules as $key => $value) {
-                $rules[$key] = $value;
-            }
         }
 
         $this->collector->collect(

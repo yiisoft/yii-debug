@@ -18,7 +18,7 @@ use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\ValidatorCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
@@ -40,7 +40,7 @@ return [
             LogCollectorInterface::class,
             EventCollectorInterface::class,
             ServiceCollectorInterface::class,
-            ValidatorCollectorInterface::class,
+            ValidatorCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
@@ -56,7 +56,7 @@ return [
         ],
         'trackedServices' => [
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
-            ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollectorInterface::class],
+            ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollectorInterface::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
