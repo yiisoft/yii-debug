@@ -9,18 +9,19 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Yii\Debug\DebugServiceProvider;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 
 final class DebugServiceProviderTest extends TestCase
 {
     /**
-     * @throws \Yiisoft\Definitions\Exception\InvalidConfigException
+     * @throws InvalidConfigException
      *
      * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getDefinitions()
      * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getExtensions()

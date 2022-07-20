@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -17,6 +16,8 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     use CollectorTrait;
 
     private string $requestUrl = '';
+    private string $requestPath = '';
+    private string $requestQuery = '';
     private string $requestMethod = '';
     private bool $requestIsAjax = false;
     private ?string $userIp = null;
@@ -24,19 +25,12 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
 
-    #[ArrayShape([
-        'requestUrl' => 'string',
-        'requestMethod' => 'string',
-        'requestIsAjax' => 'bool',
-        'userIp' => 'null|string',
-        'responseStatusCode' => 'int',
-        'request' => "null|\Psr\Http\Message\ServerRequestInterface",
-        'response' => "null|\Psr\Http\Message\ResponseInterface",
-    ])]
     public function getCollected(): array
     {
         return [
             'requestUrl' => $this->requestUrl,
+            'requestPath' => $this->requestPath,
+            'requestQuery' => $this->requestQuery,
             'requestMethod' => $this->requestMethod,
             'requestIsAjax' => $this->requestIsAjax,
             'userIp' => $this->userIp,
@@ -54,7 +48,9 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof BeforeRequest) {
             $this->request = $event->getRequest();
-            $this->requestUrl = (string)$event->getRequest()->getUri();
+            $this->requestUrl = (string) $event->getRequest()->getUri();
+            $this->requestPath = $event->getRequest()->getUri()->getPath();
+            $this->requestQuery = $event->getRequest()->getUri()->getQuery();
             $this->requestMethod = $event->getRequest()->getMethod();
             $this->requestIsAjax = strtolower(
                 $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
@@ -67,21 +63,20 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         }
     }
 
-    #[ArrayShape([
-        'requestUrl' => 'string',
-        'requestMethod' => 'string',
-        'requestIsAjax' => 'bool',
-        'userIp' => 'null|string',
-        'responseStatusCode' => 'int',
-    ])]
     public function getIndexData(): array
     {
         return [
-            'requestUrl' => $this->requestUrl,
-            'requestMethod' => $this->requestMethod,
-            'requestIsAjax' => $this->requestIsAjax,
-            'userIp' => $this->userIp,
-            'responseStatusCode' => $this->responseStatusCode,
+            'request' => [
+                'url' => $this->requestUrl,
+                'path' => $this->requestPath,
+                'query' => $this->requestQuery,
+                'method' => $this->requestMethod,
+                'isAjax' => $this->requestIsAjax,
+                'userIp' => $this->userIp,
+            ],
+            'response' => [
+                'statusCode' => $this->responseStatusCode,
+            ],
         ];
     }
 

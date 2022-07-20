@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Proxy;
+namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
 
 final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 {
     public function __construct(
         private EventDispatcherInterface $dispatcher,
-        private EventCollectorInterface $collector
+        private EventCollector $collector
     ) {
     }
 

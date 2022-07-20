@@ -10,17 +10,18 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
-use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\ProxyServiceProvider;
 
 final class ProxyServiceProviderTest extends TestCase
 {
     /**
-     * @throws \Yiisoft\Definitions\Exception\InvalidConfigException
+     * @throws InvalidConfigException
      *
      * @covers \Yiisoft\Yii\Debug\ProxyServiceProvider::getDefinitions()
      * @covers \Yiisoft\Yii\Debug\ProxyServiceProvider::getExtensions()

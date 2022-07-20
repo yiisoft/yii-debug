@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
-
-final class ServiceCollector implements ServiceCollectorInterface, IndexCollectorInterface
+final class ServiceCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -45,11 +43,12 @@ final class ServiceCollector implements ServiceCollectorInterface, IndexCollecto
         ];
     }
 
-    #[ArrayShape(['totalServices' => 'int'])]
     public function getIndexData(): array
     {
         return [
-            'totalServices' => count($this->items),
+            'service' => [
+                'total' => count($this->items),
+            ],
         ];
     }
 

@@ -6,8 +6,8 @@ namespace Yiisoft\Yii\Debug;
 
 use Psr\Container\ContainerInterface;
 use Yiisoft\Di\ServiceProviderInterface;
-use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 
 final class ProxyServiceProvider implements ServiceProviderInterface
 {

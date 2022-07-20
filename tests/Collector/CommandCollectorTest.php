@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
@@ -12,12 +13,11 @@ use Symfony\Component\Console\Input\StringInput;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
 final class CommandCollectorTest extends CollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\CommandCollector $collector
+     * @param CollectorInterface|CommandCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -32,7 +32,7 @@ final class CommandCollectorTest extends CollectorTestCase
             new ConsoleErrorEvent(
                 new StringInput('test1'),
                 new ConsoleBufferedOutput(),
-                new \Exception()
+                new Exception()
             )
         );
         $collector->collect(
@@ -71,9 +71,12 @@ final class CommandCollectorTest extends CollectorTestCase
     protected function checkIndexData(CollectorInterface $collector): void
     {
         parent::checkIndexData($collector);
-        if ($collector instanceof IndexCollectorInterface) {
+        if ($collector instanceof CommandCollector) {
             $this->assertArrayHasKey('command', $collector->getIndexData());
-            $this->assertEquals('test1', $collector->getIndexData()['command']);
+            $this->assertArrayHasKey('input', $collector->getIndexData()['command']);
+            $this->assertArrayHasKey('class', $collector->getIndexData()['command']);
+            $this->assertEquals('test1', $collector->getIndexData()['command']['input']);
+            $this->assertEquals(null, $collector->getIndexData()['command']['class']);
         }
     }
 }
