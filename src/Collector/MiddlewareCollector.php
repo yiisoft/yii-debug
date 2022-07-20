@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-use JetBrains\PhpStorm\ArrayShape;
+use ReflectionClass;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 
@@ -15,7 +15,6 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
     private array $beforeStack = [];
     private array $afterStack = [];
 
-    #[ArrayShape(['beforeStack' => 'array', 'actionHandler' => 'array', 'afterStack' => 'array'])]
     public function getCollected(): array
     {
         $beforeStack = $this->beforeStack;
@@ -43,7 +42,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
 
         if (
             method_exists($event->getMiddleware(), '__debugInfo')
-            && (new \ReflectionClass($event->getMiddleware()))->isAnonymous()
+            && (new ReflectionClass($event->getMiddleware()))->isAnonymous()
         ) {
             $name = implode('::', $event->getMiddleware()->__debugInfo()['callback']);
         } else {
@@ -72,22 +71,15 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
         $this->afterStack = [];
     }
 
-    #[ArrayShape(['totalMiddlewares' => 'int'])]
     public function getIndexData(): array
     {
         return [
-            'totalMiddlewares' => ($total = count($this->beforeStack)) > 0 ? $total - 1 : 0, // Remove action handler
+            'middleware' => [
+                'total' => ($total = count($this->beforeStack)) > 0 ? $total - 1 : 0, // Remove action handler
+            ],
         ];
     }
 
-    #[ArrayShape([
-        'name' => 'string',
-        'startTime' => 'float',
-        'request' => 'object',
-        'response' => 'object',
-        'endTime' => 'float',
-        'memory' => 'int',
-    ])]
     private function getActionHandler(array $beforeAction, array $afterAction): array
     {
         return [

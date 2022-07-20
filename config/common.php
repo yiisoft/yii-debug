@@ -5,16 +5,9 @@ declare(strict_types=1);
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\Yii\Debug\Collector\EventCollector;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\RouterCollector;
-use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
-use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Filesystem\FilesystemInterface;
@@ -43,13 +36,9 @@ if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
 }
 
 return array_merge([
-    LogCollectorInterface::class => LogCollector::class,
-    EventCollectorInterface::class => EventCollector::class,
-    RouterCollectorInterface::class => RouterCollector::class,
-    ServiceCollectorInterface::class => ServiceCollector::class,
     ContainerProxyConfig::class => static function (ContainerInterface $container) use ($params) {
         $params = $params['yiisoft/yii-debug'];
-        $collector = $container->get(ServiceCollectorInterface::class);
+        $collector = $container->get(ServiceCollector::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
         $debuggerEnabled = (bool)($params['enabled'] ?? false);
         $trackedServices = (array)($params['trackedServices'] ?? []);

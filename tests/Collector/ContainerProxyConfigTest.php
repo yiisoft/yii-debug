@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Proxy;
+namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
-use Yiisoft\Yii\Debug\Proxy\ContainerProxyConfig;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 
 final class ContainerProxyConfigTest extends TestCase
 {
@@ -36,7 +36,7 @@ final class ContainerProxyConfigTest extends TestCase
             $config,
             $config->withDecoratedServices(
                 [
-                    LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+                    LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
                 ]
             )
         );
@@ -48,7 +48,7 @@ final class ContainerProxyConfigTest extends TestCase
         $config = new ContainerProxyConfig(
             true,
             [
-                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             ],
             $dispatcherMock,
             new ServiceCollector(),
@@ -63,12 +63,12 @@ final class ContainerProxyConfigTest extends TestCase
         $this->assertEquals('@tests/runtime', $config->getProxyCachePath());
         $this->assertEquals(
             [
-                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+                LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             ],
             $config->getDecoratedServices()
         );
         $this->assertEquals(
-            [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+            [LoggerInterfaceProxy::class, LogCollector::class],
             $config->getDecoratedServiceConfig(LoggerInterface::class)
         );
 

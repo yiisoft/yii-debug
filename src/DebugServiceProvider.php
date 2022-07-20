@@ -10,8 +10,8 @@ use Psr\Log\LoggerInterface;
 use Yiisoft\Di\ServiceProviderInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 
 final class DebugServiceProvider implements ServiceProviderInterface
 {

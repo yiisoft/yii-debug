@@ -6,8 +6,8 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
@@ -15,16 +15,26 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 final class RequestCollectorTest extends CollectorTestCase
 {
     /**
-     * @param RequestCollector|\Yiisoft\Yii\Debug\Collector\CollectorInterface $collector
+     * @param CollectorInterface|RequestCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
         $requestMock = $this->createMock(ServerRequestInterface::class);
         $responseMock = $this->createMock(ResponseInterface::class);
+        $uriMock = $this->createMock(UriInterface::class);
+
+        $uriMock->method('getPath')
+            ->willReturn('url');
+        $uriMock->method('getQuery')
+            ->willReturn('');
+        $uriMock->method('__toString')
+            ->willReturn('http://test.site/url');
+
         $requestMock->method('getMethod')
             ->willReturn('GET');
         $requestMock->method('getUri')
-            ->willReturn('http://test.site/url');
+            ->willReturn($uriMock);
+
         $responseMock->method('getStatusCode')
             ->willReturn(200);
         $collector->collect(new BeforeRequest($requestMock));
@@ -46,12 +56,12 @@ final class RequestCollectorTest extends CollectorTestCase
     protected function checkIndexData(CollectorInterface $collector): void
     {
         parent::checkIndexData($collector);
-        if ($collector instanceof IndexCollectorInterface) {
+        if ($collector instanceof RequestCollector) {
             $data = $collector->getIndexData();
 
-            $this->assertEquals('http://test.site/url', $data['requestUrl']);
-            $this->assertEquals('GET', $data['requestMethod']);
-            $this->assertEquals(200, $data['responseStatusCode']);
+            $this->assertEquals('http://test.site/url', $data['request']['url']);
+            $this->assertEquals('GET', $data['request']['method']);
+            $this->assertEquals(200, $data['response']['statusCode']);
         }
     }
 }

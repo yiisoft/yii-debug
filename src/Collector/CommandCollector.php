@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use RuntimeException;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleEvent;
@@ -79,12 +80,14 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($command === null) {
             $types = array_keys($this->commands);
-            throw new \RuntimeException('Unsupported event type encountered among "' . implode('", "', $types) . '".');
+            throw new RuntimeException('Unsupported event type encountered among "' . implode('", "', $types) . '".');
         }
 
         return [
-            'command' => $command['input'],
-            'commandClass' => $command['command'] !== null ? get_class($command['command']) : null,
+            'command' => [
+                'input' => $command['input'],
+                'class' => $command['command'] !== null ? get_class($command['command']) : null,
+            ],
         ];
     }
 

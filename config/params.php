@@ -11,22 +11,21 @@ use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
-use Yiisoft\Yii\Debug\Collector\EventCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\LogCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
-use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
-use Yiisoft\Yii\Debug\Collector\ServiceCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
-use Yiisoft\Yii\Debug\Proxy\AssetLoaderInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\ContainerInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\LoggerInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\UrlMatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\AssetLoaderInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Proxy\ValidatorInterfaceProxy;
 
 /**
@@ -37,9 +36,9 @@ return [
     'yiisoft/yii-debug' => [
         'enabled' => true,
         'collectors' => [
-            LogCollectorInterface::class,
-            EventCollectorInterface::class,
-            ServiceCollectorInterface::class,
+            LogCollector::class,
+            EventCollector::class,
+            ServiceCollector::class,
             ValidatorCollector::class,
         ],
         'collectors.web' => [
@@ -55,10 +54,10 @@ return [
             CommandCollector::class,
         ],
         'trackedServices' => [
-            LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollectorInterface::class],
+            LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
+            EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
+            UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
             ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
-            EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollectorInterface::class],
-            UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollectorInterface::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
             CacheInterface::class,
         ],

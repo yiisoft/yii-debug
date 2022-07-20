@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Proxy;
+namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Router\MatchingResult;
 use Yiisoft\Router\UrlMatcherInterface;
-use Yiisoft\Yii\Debug\Collector\RouterCollectorInterface;
 
 final class UrlMatcherInterfaceProxy implements UrlMatcherInterface
 {
     private UrlMatcherInterface $urlMatcher;
-    private RouterCollectorInterface $routerCollector;
+    private RouterCollector $routerCollector;
 
-    public function __construct(UrlMatcherInterface $urlMatcher, RouterCollectorInterface $routerCollector)
+    public function __construct(UrlMatcherInterface $urlMatcher, RouterCollector $routerCollector)
     {
         $this->urlMatcher = $urlMatcher;
         $this->routerCollector = $routerCollector;
