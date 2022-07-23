@@ -7,7 +7,6 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 
 final class ValidatorInterfaceProxy implements ValidatorInterface
 {
