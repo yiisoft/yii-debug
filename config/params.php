@@ -26,7 +26,7 @@ use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Proxy\ValidatorInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
 
 /**
  * @var $params array
