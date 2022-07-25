@@ -16,7 +16,6 @@ use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\QueueCollector;
 use Yiisoft\Yii\Debug\Collector\QueueFactoryInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\QueueDecorator;
 use Yiisoft\Yii\Debug\Collector\QueueWorkerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
@@ -32,7 +31,6 @@ use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
 use Yiisoft\Yii\Queue\QueueFactoryInterface;
-use Yiisoft\Yii\Queue\QueueInterface;
 use Yiisoft\Yii\Queue\Worker\WorkerInterface;
 
 /**
