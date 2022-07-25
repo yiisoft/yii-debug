@@ -36,7 +36,8 @@
         "yiisoft/view": "^4.0|^5.0|^6.0",
         "yiisoft/yii-console": "^1.0",
         "yiisoft/yii-filesystem": "dev-master",
-        "yiisoft/yii-http": "^1.0"
+        "yiisoft/yii-http": "^1.0",
+        "yiisoft/yii-queue": "3.0.x-dev"
     },
     "require-dev": {
         "nyholm/psr7": "^1.3",
