@@ -32,7 +32,8 @@ final class QueueCollectorTest extends CollectorTestCase
         $result->addError($ruleNumber->getTooSmallMessage());
 
         $collector->collectStatus('12345');
-        $collector->collectPush($this->pushMessage);
+        $collector->collectPush('chan1', $this->pushMessage);
+        $collector->collectPush('chan2', $this->pushMessage);
         $collector->collectWorkerProcessing(
             $this->pushMessage,
             new DummyQueue('chan1'),
@@ -61,7 +62,7 @@ final class QueueCollectorTest extends CollectorTestCase
             'processingMessages' => $processingMessages,
         ] = $collector->getCollected();
 
-        $this->assertEquals([$this->pushMessage], $pushes);
+        $this->assertEquals(['chan1' => [$this->pushMessage], 'chan2' => [$this->pushMessage]], $pushes);
         $this->assertEquals(['12345'], $statuses);
         $this->assertEquals([
             'chan1' => [$this->pushMessage, $this->pushMessage],
@@ -80,7 +81,7 @@ final class QueueCollectorTest extends CollectorTestCase
             'countProcessingMessages' => $countProcessingMessages,
         ] = $collector->getIndexData()['queue'];
 
-        $this->assertEquals(1, $countPushes);
+        $this->assertEquals(2, $countPushes);
         $this->assertEquals(1, $countStatuses);
         $this->assertEquals(3, $countProcessingMessages);
     }

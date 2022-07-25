@@ -33,12 +33,12 @@ final class QueueCollector implements CollectorInterface, IndexCollectorInterfac
         $this->statuses[] = $id;
     }
 
-    public function collectPush(MessageInterface $message): void
+    public function collectPush(string $channel, MessageInterface $message): void
     {
         if (!$this->isActive()) {
             return;
         }
-        $this->pushes[] = $message;
+        $this->pushes[$channel][] = $message;
     }
 
     public function collectWorkerProcessing(MessageInterface $message, QueueInterface $queue)
@@ -58,7 +58,7 @@ final class QueueCollector implements CollectorInterface, IndexCollectorInterfac
 
     public function getIndexData(): array
     {
-        $countPushes = count($this->pushes);
+        $countPushes = array_sum(array_map(fn($messages) => count($messages), $this->pushes));
         $countStatuses = count($this->statuses);
         $countProcessingMessages = array_sum(array_map(fn($messages) => count($messages), $this->processingMessages));
 

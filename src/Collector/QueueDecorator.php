@@ -28,7 +28,7 @@ final class QueueDecorator implements QueueInterface
     public function push(MessageInterface $message): void
     {
         $this->queue->push($message);
-        $this->collector->collectPush($message);
+        $this->collector->collectPush($this->queue->getChannelName(), $message);
     }
 
     public function run(int $max = 0): void
