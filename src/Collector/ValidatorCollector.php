@@ -18,7 +18,7 @@ final class ValidatorCollector implements CollectorInterface, IndexCollectorInte
         return $this->validations;
     }
 
-    public function collect(mixed $value, iterable $rules, Result $result): void
+    public function collect(mixed $value, Result $result, ?iterable $rules = null): void
     {
         if (!$this->isActive()) {
             return;

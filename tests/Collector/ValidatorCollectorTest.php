@@ -20,7 +20,7 @@ final class ValidatorCollectorTest extends CollectorTestCase
         $result = new Result();
         $result->addError($ruleNumber->getTooSmallMessage());
 
-        $collector->collect(123, [$ruleNumber], $result);
+        $collector->collect(123, $result, [$ruleNumber]);
     }
 
     protected function getCollector(): CollectorInterface
