@@ -26,8 +26,8 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
 
         $this->collector->collect(
             $data,
-            $rules,
             $result,
+            $rules,
         );
 
         return $result;
