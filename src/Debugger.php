@@ -102,4 +102,18 @@ final class Debugger
         $new->ignoredRequests = $ignoredRequests;
         return $new;
     }
+
+    /**
+     * @param array $ignoredCommands Patterns for ignored commands names.
+     *
+     * @return self
+     *
+     * @see WildcardPattern
+     */
+    public function withIgnoredCommands(array $ignoredCommands): self
+    {
+        $new = clone $this;
+        $new->ignoredCommands = $ignoredCommands;
+        return $new;
+    }
 }

@@ -53,6 +53,15 @@ final class DebuggerTest extends TestCase
         $this->assertNotSame($debugger1, $debugger2);
     }
 
+    public function testWithIgnoredCommands(): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $debugger1 = new Debugger($idGenerator, new MemoryStorage($idGenerator), []);
+        $debugger2 = $debugger1->withIgnoredCommands(['command/test']);
+
+        $this->assertNotSame($debugger1, $debugger2);
+    }
+
     public function testShutdown(): void
     {
         $idGenerator = new DebuggerIdGenerator();
