@@ -93,6 +93,7 @@ final class Debugger
      * @param array $ignoredRequests Patterns for ignored request URLs.
      *
      * @return self
+     *
      * @see WildcardPattern
      */
     public function withIgnoredRequests(array $ignoredRequests): self
