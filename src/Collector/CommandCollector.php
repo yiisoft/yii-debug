@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use RuntimeException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleEvent;
@@ -32,6 +33,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof ConsoleErrorEvent) {
             $this->commands[get_class($event)] = [
+                'name' => $event->getCommand()->getName(),
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
@@ -43,6 +45,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof ConsoleTerminateEvent) {
             $this->commands[get_class($event)] = [
+                'name' => $event->getCommand()->getName(),
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
@@ -53,6 +56,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof ConsoleEvent) {
             $this->commands[get_class($event)] = [
+                'name' => $event->getCommand()->getName(),
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
@@ -68,25 +72,28 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
             ConsoleCommandEvent::class,
         ];
 
-        $command = null;
+        $commandEvent = null;
         foreach ($eventTypes as $eventType) {
             if (!array_key_exists($eventType, $this->commands)) {
                 continue;
             }
 
-            $command = $this->commands[$eventType];
+            $commandEvent = $this->commands[$eventType];
             break;
         }
 
-        if ($command === null) {
+        if ($commandEvent === null) {
             $types = array_keys($this->commands);
-            throw new RuntimeException('Unsupported event type encountered among "' . implode('", "', $types) . '".');
+            throw new RuntimeException(
+                'Unsupported event type encountered among "' . implode('", "', $types) . '".'
+            );
         }
 
         return [
             'command' => [
-                'input' => $command['input'],
-                'class' => $command['command'] !== null ? get_class($command['command']) : null,
+                'name' => $commandEvent['name'],
+                'class' => $commandEvent['command'] instanceof Command ? get_class($commandEvent['command']) : null,
+                'input' => $commandEvent['input'],
             ],
         ];
     }
