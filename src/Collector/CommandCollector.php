@@ -33,13 +33,14 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof ConsoleErrorEvent) {
             $this->commands[get_class($event)] = [
-                'name' => $event->getCommand()->getName(),
+                'name' => $event->getInput()->getFirstArgument() ?? '',
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
                 'error' => $event->getError()->getMessage(),
                 'exitCode' => $event->getExitCode(),
             ];
+
             return;
         }
 
