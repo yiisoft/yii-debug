@@ -22,7 +22,7 @@ final class Debugger
          * @var CollectorInterface[]
          */
         private array $collectors,
-        private array $optionalRequests = [],
+        private array $ignoredRequests = [],
         private array $ignoredCommands = [],
     ) {
     }
@@ -34,7 +34,7 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        if ($event instanceof BeforeRequest && $this->isOptionalRequest($event->getRequest())) {
+        if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
             $this->skipCollect = true;
             return;
         }
@@ -51,10 +51,10 @@ final class Debugger
         }
     }
 
-    private function isOptionalRequest(ServerRequestInterface $request): bool
+    private function isRequestIgnored(ServerRequestInterface $request): bool
     {
         $path = $request->getUri()->getPath();
-        foreach ($this->optionalRequests as $pattern) {
+        foreach ($this->ignoredRequests as $pattern) {
             if ((new WildcardPattern($pattern))->match($path)) {
                 return true;
             }
@@ -90,16 +90,15 @@ final class Debugger
     }
 
     /**
-     * @param array $optionalRequests Patterns for optional request URLs.
-     *
-     * @see WildcardPattern
+     * @param array $ignoredRequests Patterns for ignored request URLs.
      *
      * @return self
+     * @see WildcardPattern
      */
-    public function withOptionalRequests(array $optionalRequests): self
+    public function withIgnoredRequests(array $ignoredRequests): self
     {
         $new = clone $this;
-        $new->optionalRequests = $optionalRequests;
+        $new->ignoredRequests = $ignoredRequests;
         return $new;
     }
 }

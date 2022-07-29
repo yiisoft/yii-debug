@@ -15,10 +15,10 @@ return [
             'collectors' => ReferencesArray::from(
                 array_merge(
                     $params['yiisoft/yii-debug']['collectors'],
-                    $params['yiisoft/yii-debug']['collectors.web'] ?? []
+                    $params['yiisoft/yii-debug']['collectors.web'] ?? [],
                 )
             ),
-            'optionalRequests' => $params['yiisoft/yii-debug']['optionalRequests'],
+            'ignoredRequests' => $params['yiisoft/yii-debug']['ignoredRequests'],
         ],
     ],
 ];
