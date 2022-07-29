@@ -86,7 +86,11 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         if ($commandEvent === null) {
             $types = array_keys($this->commands);
             throw new RuntimeException(
-                'Unsupported event type encountered among "' . implode('", "', $types) . '".'
+                sprintf(
+                    'Unsupported event type encountered among "%s". Supported only "%s"',
+                    implode('", "', $types),
+                    implode('", "', $eventTypes),
+                )
             );
         }
 
