@@ -79,6 +79,9 @@ return [
         'optionalRequests' => [
             '/assets/*',
         ],
+        'optionalCommands' => [
+            'debug/reset',
+        ],
     ],
     'yiisoft/yii-console' => [
         'commands' => [

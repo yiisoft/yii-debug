@@ -6,31 +6,25 @@ namespace Yiisoft\Yii\Debug;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Strings\WildcardPattern;
+use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class Debugger
 {
-    /**
-     * @var CollectorInterface[]
-     */
-    private array $collectors;
     private bool $skipCollect = false;
-    private array $optionalRequests;
-    private StorageInterface $target;
-    private DebuggerIdGenerator $idGenerator;
 
     public function __construct(
-        DebuggerIdGenerator $idGenerator,
-        StorageInterface $target,
-        array $collectors,
-        array $optionalRequests = []
+        private DebuggerIdGenerator $idGenerator,
+        private StorageInterface $target,
+        /**
+         * @var CollectorInterface[]
+         */
+        private array $collectors,
+        private array $optionalRequests = [],
+        private array $optionalCommands = [],
     ) {
-        $this->collectors = $collectors;
-        $this->optionalRequests = $optionalRequests;
-        $this->target = $target;
-        $this->idGenerator = $idGenerator;
     }
 
     public function getId(): string
@@ -41,6 +35,11 @@ final class Debugger
     public function startup(object $event): void
     {
         if ($event instanceof BeforeRequest && $this->isOptionalRequest($event->getRequest())) {
+            $this->skipCollect = true;
+            return;
+        }
+
+        if ($event instanceof ApplicationStartup && $this->isOptionalCommand($event->arguments)) {
             $this->skipCollect = true;
             return;
         }
@@ -57,6 +56,21 @@ final class Debugger
         $path = $request->getUri()->getPath();
         foreach ($this->optionalRequests as $pattern) {
             if ((new WildcardPattern($pattern))->match($path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function isOptionalCommand(array $arguments): bool
+    {
+        if ($arguments === []) {
+            return true;
+        }
+        $command = $arguments[0];
+
+        foreach ($this->optionalCommands as $pattern) {
+            if ((new WildcardPattern($pattern))->match($command)) {
                 return true;
             }
         }
