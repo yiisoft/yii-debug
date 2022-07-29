@@ -42,6 +42,10 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
         } elseif ($event instanceof ConsoleCommandEvent) {
             $this->requestProcessingTimeStarted = microtime(true);
         } elseif ($event instanceof ConsoleErrorEvent) {
+            /**
+             * If we receive this event, then {@see ConsoleCommandEvent} hasn't received and won't.
+             * So {@see requestProcessingTimeStarted} equals to 0 now and better to set it at least with application startup time.
+             */
             $this->requestProcessingTimeStarted = $this->applicationProcessingTimeStarted;
             $this->requestProcessingTimeStopped = microtime(true);
         } elseif ($event instanceof ConsoleTerminateEvent) {
