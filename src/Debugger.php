@@ -23,7 +23,7 @@ final class Debugger
          */
         private array $collectors,
         private array $optionalRequests = [],
-        private array $optionalCommands = [],
+        private array $ignoredCommands = [],
     ) {
     }
 
@@ -39,7 +39,7 @@ final class Debugger
             return;
         }
 
-        if ($event instanceof ApplicationStartup && $this->isOptionalCommand($event->arguments)) {
+        if ($event instanceof ApplicationStartup && $this->isCommandIgnored($event->commandName)) {
             $this->skipCollect = true;
             return;
         }
@@ -62,14 +62,12 @@ final class Debugger
         return false;
     }
 
-    private function isOptionalCommand(array $arguments): bool
+    private function isCommandIgnored(?string $command): bool
     {
-        if ($arguments === []) {
+        if ($command === null || $command === '') {
             return true;
         }
-        $command = $arguments[0];
-
-        foreach ($this->optionalCommands as $pattern) {
+        foreach ($this->ignoredCommands as $pattern) {
             if ((new WildcardPattern($pattern))->match($command)) {
                 return true;
             }

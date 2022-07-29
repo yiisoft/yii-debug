@@ -79,7 +79,11 @@ return [
         'optionalRequests' => [
             '/assets/*',
         ],
-        'optionalCommands' => [
+        'ignoredCommands' => [
+            'completion',
+            'help',
+            'list',
+            'serve',
             'debug/reset',
         ],
     ],
