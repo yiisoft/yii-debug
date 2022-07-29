@@ -76,8 +76,15 @@ return [
         ],
         'logLevel' => ContainerInterfaceProxy::LOG_ARGUMENTS | ContainerInterfaceProxy::LOG_RESULT | ContainerInterfaceProxy::LOG_ERROR,
         'path' => '@runtime/debug',
-        'optionalRequests' => [
+        'ignoredRequests' => [
             '/assets/*',
+        ],
+        'ignoredCommands' => [
+            'completion',
+            'help',
+            'list',
+            'serve',
+            'debug/reset',
         ],
     ],
     'yiisoft/yii-console' => [

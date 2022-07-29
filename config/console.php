@@ -18,6 +18,7 @@ return [
                     $params['yiisoft/yii-debug']['collectors.console'] ?? []
                 )
             ),
+            'ignoredCommands' => $params['yiisoft/yii-debug']['ignoredCommands'],
         ],
     ],
 ];

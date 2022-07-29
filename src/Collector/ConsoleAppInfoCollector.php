@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
@@ -22,7 +23,7 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
     {
         return [
             'applicationProcessingTime' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
-            'preloadTime' => $this->requestProcessingTimeStarted - $this->applicationProcessingTimeStarted,
+            'preloadTime' => $this->applicationProcessingTimeStarted - $this->requestProcessingTimeStarted,
             'applicationEmit' => $this->applicationProcessingTimeStopped - $this->requestProcessingTimeStopped,
             'requestProcessingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'memoryPeakUsage' => memory_get_peak_usage(),
@@ -40,6 +41,13 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
             $this->applicationProcessingTimeStarted = microtime(true);
         } elseif ($event instanceof ConsoleCommandEvent) {
             $this->requestProcessingTimeStarted = microtime(true);
+        } elseif ($event instanceof ConsoleErrorEvent) {
+            /**
+             * If we receive this event, then {@see ConsoleCommandEvent} hasn't received and won't.
+             * So {@see requestProcessingTimeStarted} equals to 0 now and better to set it at least with application startup time.
+             */
+            $this->requestProcessingTimeStarted = $this->applicationProcessingTimeStarted;
+            $this->requestProcessingTimeStopped = microtime(true);
         } elseif ($event instanceof ConsoleTerminateEvent) {
             $this->requestProcessingTimeStopped = microtime(true);
         } elseif ($event instanceof ApplicationShutdown) {

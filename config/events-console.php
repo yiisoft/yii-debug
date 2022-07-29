@@ -29,6 +29,7 @@ return [
         [CommandCollector::class, 'collect'],
     ],
     ConsoleErrorEvent::class => [
+        [ConsoleAppInfoCollector::class, 'collect'],
         [CommandCollector::class, 'collect'],
     ],
     ConsoleTerminateEvent::class => [
