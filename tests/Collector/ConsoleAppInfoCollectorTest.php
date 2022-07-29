@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
     /**
-     * @param WebAppInfoCollector|CollectorInterface $collector
+     * @param CollectorInterface|WebAppInfoCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
