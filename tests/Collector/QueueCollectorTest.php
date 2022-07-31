@@ -64,10 +64,11 @@ final class QueueCollectorTest extends CollectorTestCase
 
         $this->assertEquals(['chan1' => [$this->pushMessage], 'chan2' => [$this->pushMessage]], $pushes);
         $this->assertEquals(['12345'], $statuses);
-        $this->assertEquals([
-            'chan1' => [$this->pushMessage, $this->pushMessage],
-            'chan2' => [$this->pushMessage],
-        ],
+        $this->assertEquals(
+            [
+                'chan1' => [$this->pushMessage, $this->pushMessage],
+                'chan2' => [$this->pushMessage],
+            ],
             $processingMessages
         );
     }
