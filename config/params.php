@@ -14,6 +14,9 @@ use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
+use Yiisoft\Yii\Debug\Collector\QueueCollector;
+use Yiisoft\Yii\Debug\Collector\QueueFactoryInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\QueueWorkerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
@@ -27,6 +30,8 @@ use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
+use Yiisoft\Yii\Queue\QueueFactoryInterface;
+use Yiisoft\Yii\Queue\Worker\WorkerInterface;
 
 /**
  * @var $params array
@@ -40,6 +45,7 @@ return [
             EventCollector::class,
             ServiceCollector::class,
             ValidatorCollector::class,
+            QueueCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
@@ -56,6 +62,8 @@ return [
         'trackedServices' => [
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
+            QueueFactoryInterface::class => [QueueFactoryInterfaceProxy::class, QueueCollector::class],
+            WorkerInterface::class => [QueueWorkerInterfaceProxy::class, QueueCollector::class],
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
             ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
