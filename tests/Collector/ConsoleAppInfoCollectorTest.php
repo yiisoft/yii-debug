@@ -13,11 +13,11 @@ use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
     /**
-     * @param WebAppInfoCollector|\Yiisoft\Yii\Debug\Collector\CollectorInterface $collector
+     * @param CollectorInterface|WebAppInfoCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
-        $collector->collect(new ApplicationStartup());
+        $collector->collect(new ApplicationStartup(null));
         usleep(123_000);
         $collector->collect(new ApplicationShutdown(0));
     }

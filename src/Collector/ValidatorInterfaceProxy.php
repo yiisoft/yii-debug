@@ -16,18 +16,18 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
     ) {
     }
 
-    public function validate(mixed $data, iterable $rules = []): Result
+    public function validate(mixed $data, ?iterable $rules = null): Result
     {
         $result = $this->validator->validate($data, $rules);
 
-        if ($rules === [] && $data instanceof RulesProviderInterface) {
+        if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = (array) $data->getRules();
         }
 
         $this->collector->collect(
             $data,
-            $rules,
             $result,
+            $rules,
         );
 
         return $result;

@@ -6,31 +6,25 @@ namespace Yiisoft\Yii\Debug;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Strings\WildcardPattern;
+use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class Debugger
 {
-    /**
-     * @var CollectorInterface[]
-     */
-    private array $collectors;
     private bool $skipCollect = false;
-    private array $optionalRequests;
-    private StorageInterface $target;
-    private DebuggerIdGenerator $idGenerator;
 
     public function __construct(
-        DebuggerIdGenerator $idGenerator,
-        StorageInterface $target,
-        array $collectors,
-        array $optionalRequests = []
+        private DebuggerIdGenerator $idGenerator,
+        private StorageInterface $target,
+        /**
+         * @var CollectorInterface[]
+         */
+        private array $collectors,
+        private array $ignoredRequests = [],
+        private array $ignoredCommands = [],
     ) {
-        $this->collectors = $collectors;
-        $this->optionalRequests = $optionalRequests;
-        $this->target = $target;
-        $this->idGenerator = $idGenerator;
     }
 
     public function getId(): string
@@ -40,7 +34,12 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        if ($event instanceof BeforeRequest && $this->isOptionalRequest($event->getRequest())) {
+        if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
+            $this->skipCollect = true;
+            return;
+        }
+
+        if ($event instanceof ApplicationStartup && $this->isCommandIgnored($event->commandName)) {
             $this->skipCollect = true;
             return;
         }
@@ -52,11 +51,24 @@ final class Debugger
         }
     }
 
-    private function isOptionalRequest(ServerRequestInterface $request): bool
+    private function isRequestIgnored(ServerRequestInterface $request): bool
     {
         $path = $request->getUri()->getPath();
-        foreach ($this->optionalRequests as $pattern) {
+        foreach ($this->ignoredRequests as $pattern) {
             if ((new WildcardPattern($pattern))->match($path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function isCommandIgnored(?string $command): bool
+    {
+        if ($command === null || $command === '') {
+            return true;
+        }
+        foreach ($this->ignoredCommands as $pattern) {
+            if ((new WildcardPattern($pattern))->match($command)) {
                 return true;
             }
         }
@@ -78,16 +90,30 @@ final class Debugger
     }
 
     /**
-     * @param array $optionalRequests Patterns for optional request URLs.
-     *
-     * @see WildcardPattern
+     * @param array $ignoredRequests Patterns for ignored request URLs.
      *
      * @return self
+     *
+     * @see WildcardPattern
      */
-    public function withOptionalRequests(array $optionalRequests): self
+    public function withIgnoredRequests(array $ignoredRequests): self
     {
         $new = clone $this;
-        $new->optionalRequests = $optionalRequests;
+        $new->ignoredRequests = $ignoredRequests;
+        return $new;
+    }
+
+    /**
+     * @param array $ignoredCommands Patterns for ignored commands names.
+     *
+     * @return self
+     *
+     * @see WildcardPattern
+     */
+    public function withIgnoredCommands(array $ignoredCommands): self
+    {
+        $new = clone $this;
+        $new->ignoredCommands = $ignoredCommands;
         return $new;
     }
 }
