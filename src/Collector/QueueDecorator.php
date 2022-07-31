@@ -43,7 +43,7 @@ final class QueueDecorator implements QueueInterface
 
     public function withAdapter(AdapterInterface $adapter): QueueInterface
     {
-        return $this->queue->withAdapter($adapter);
+        return new self($this->queue->withAdapter($adapter), $this->collector);
     }
 
     public function getChannelName(): string
