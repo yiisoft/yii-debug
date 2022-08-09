@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -22,6 +23,8 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
 
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = (array) $data->getRules();
+            $rulesByAttribute = (array) ((new AttributeDataSet($data))->getRules());
+            $rules = array_merge($rulesByAttribute, $rules);
         }
 
         $this->collector->collect(
