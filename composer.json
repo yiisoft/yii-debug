@@ -28,7 +28,7 @@
         "yiisoft/assets": "^2.0.1",
         "yiisoft/di": "^1.0",
         "yiisoft/json": "^1.0",
-        "yiisoft/profiler": "^1.0.3",
+        "yiisoft/profiler": "^2.0.0",
         "yiisoft/proxy": "^1.0.1",
         "yiisoft/strings": "^2.0",
         "yiisoft/validator": "3.0.x-dev",
