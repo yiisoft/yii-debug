@@ -8,6 +8,7 @@ use Exception;
 use Yiisoft\Yii\Queue\Adapter\AdapterInterface;
 use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\MessageInterface;
+use Yiisoft\Yii\Queue\Middleware\Push\MiddlewarePushInterface;
 use Yiisoft\Yii\Queue\QueueInterface;
 
 final class DummyQueue implements QueueInterface
@@ -16,8 +17,11 @@ final class DummyQueue implements QueueInterface
     {
     }
 
-    public function push(MessageInterface $message): void
-    {
+    public function push(
+        MessageInterface $message,
+        string|array|callable|MiddlewarePushInterface ...$middlewareDefinitions
+    ): MessageInterface {
+        return $message;
     }
 
     public function run(int $max = 0): void
