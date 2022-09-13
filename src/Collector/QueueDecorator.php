@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Yiisoft\Yii\Queue\Adapter\AdapterInterface;
 use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\MessageInterface;
+use Yiisoft\Yii\Queue\Middleware\Push\MiddlewarePushInterface;
 use Yiisoft\Yii\Queue\QueueInterface;
 
 final class QueueDecorator implements QueueInterface
@@ -25,10 +26,13 @@ final class QueueDecorator implements QueueInterface
         return $result;
     }
 
-    public function push(MessageInterface $message): void
-    {
-        $this->queue->push($message);
+    public function push(
+        MessageInterface $message,
+        string|array|callable|MiddlewarePushInterface ...$middlewareDefinitions
+    ): MessageInterface {
+        $message = $this->queue->push($message);
         $this->collector->collectPush($this->queue->getChannelName(), $message);
+        return $message;
     }
 
     public function run(int $max = 0): void
