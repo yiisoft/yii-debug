@@ -16,9 +16,9 @@ final class QueueWorkerInterfaceProxy implements WorkerInterface
     ) {
     }
 
-    public function process(MessageInterface $message, QueueInterface $queue): void
+    public function process(MessageInterface $message, QueueInterface $queue): MessageInterface
     {
         $this->collector->collectWorkerProcessing($message, $queue);
-        $this->worker->process($message, $queue);
+        return $this->worker->process($message, $queue);
     }
 }
