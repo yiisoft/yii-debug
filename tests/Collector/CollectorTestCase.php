@@ -18,7 +18,7 @@ abstract class CollectorTestCase extends TestCase
         $this->checkCollectedData($collector);
         $this->checkIndexData($collector);
         $collector->shutdown();
-        $this->assertSame(str_replace('\\', '', get_class($collector)), $collector->getName());
+        $this->assertSame(get_class($collector), $collector->getName());
     }
 
     abstract protected function getCollector(): CollectorInterface;
