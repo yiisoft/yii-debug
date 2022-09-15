@@ -126,7 +126,10 @@ final class FileStorage implements StorageInterface
      */
     private function collectIndexData(): array
     {
-        $indexData = ['id' => $this->idGenerator->getId()];
+        $indexData = [
+            'id' => $this->idGenerator->getId(),
+            'collectors' => array_keys($this->collectors),
+        ];
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof IndexCollectorInterface) {

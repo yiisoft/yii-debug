@@ -21,7 +21,7 @@ trait CollectorTrait
 
     public function getName(): string
     {
-        return str_replace('\\', '', self::class);
+        return self::class;
     }
 
     private function reset(): void
