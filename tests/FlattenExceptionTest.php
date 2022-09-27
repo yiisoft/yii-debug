@@ -40,7 +40,7 @@ final class FlattenExceptionTest extends TestCase
 
         $trace = $flattened->getTrace();
         $this->assertEquals(__NAMESPACE__, $trace[0]['namespace']);
-        $this->assertEquals(__CLASS__, $trace[0]['class']);
+        $this->assertEquals(self::class, $trace[0]['class']);
         $this->assertEquals('FlattenExceptionTest', $trace[0]['short_class']);
         $this->assertEquals(__FUNCTION__, $trace[0]['function']);
     }
@@ -115,14 +115,14 @@ final class FlattenExceptionTest extends TestCase
 
         $i = 0;
         $this->assertSame(['object', 'stdClass'], $array[$i++]);
-        $this->assertSame(['object', 'RuntimeException'], $array[$i++]);
+        $this->assertSame(['object', \RuntimeException::class], $array[$i++]);
         $this->assertSame(['incomplete-object', 'BogusTestClass'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
 
         $args = $array[$i++];
         $this->assertSame($args[0], 'object');
-        $this->assertTrue('Closure' === $args[1] || is_subclass_of($args[1], '\Closure'), 'Expect object class name to be Closure or a subclass of Closure.');
+        $this->assertTrue(\Closure::class === $args[1] || is_subclass_of($args[1], '\\' . \Closure::class), 'Expect object class name to be Closure or a subclass of Closure.');
 
         $this->assertSame(['array', [['integer', 1], ['integer', 2]]], $array[$i++]);
         $this->assertSame(['array', ['foo' => ['integer', 123]]], $array[$i++]);
@@ -142,12 +142,10 @@ final class FlattenExceptionTest extends TestCase
 
     public function testClosureSerialize(): void
     {
-        $exception = $this->createException(function () {
-            return 1 + 1;
-        });
+        $exception = $this->createException(fn () => 1 + 1);
 
         $flattened = new FlattenException($exception);
-        $this->assertStringContainsString('Closure', serialize($flattened));
+        $this->assertStringContainsString(\Closure::class, serialize($flattened));
     }
 
     public function testRecursionInArguments(): void

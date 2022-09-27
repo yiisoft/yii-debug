@@ -11,13 +11,10 @@ use Yiisoft\Router\RouteCollectionInterface;
 class RouterCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
-
-    private ContainerInterface $container;
     private float $matchTime = 0;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     public function collect(float $matchTime): void

@@ -18,10 +18,7 @@ use Yiisoft\Yii\Debug\Collector\RouterCollector;
 
 final class RouterCollectorTest extends CollectorTestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Yiisoft\Router\RouteCollectorInterface
-     */
-    private $routeCollector;
+    private \PHPUnit\Framework\MockObject\MockObject|\Yiisoft\Router\RouteCollectorInterface|null $routeCollector = null;
 
     private ?Container $container = null;
 

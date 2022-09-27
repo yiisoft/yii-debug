@@ -9,15 +9,13 @@ use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 
 final class MemoryStorage implements StorageInterface
 {
-    private DebuggerIdGenerator $idGenerator;
     /**
      * @var CollectorInterface[]
      */
     private array $collectors = [];
 
-    public function __construct(DebuggerIdGenerator $idGenerator)
+    public function __construct(private DebuggerIdGenerator $idGenerator)
     {
-        $this->idGenerator = $idGenerator;
     }
 
     public function addCollector(CollectorInterface $collector): void

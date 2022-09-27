@@ -20,7 +20,7 @@ final class DummyCollectorTest extends CollectorTestCase
                 ]
             );
         $collector->method('getName')
-            ->willReturn(get_class($collector));
+            ->willReturn($collector::class);
 
         return $collector;
     }

@@ -25,18 +25,15 @@ class ContainerInterfaceProxy implements ContainerInterface
 
     public const LOG_ERROR = 4;
 
-    protected ContainerInterface $container;
-
     private ProxyManager $proxyManager;
 
     private array $decoratedServices = [];
 
     private array $serviceProxy = [];
 
-    public function __construct(ContainerInterface $container, ContainerProxyConfig $config)
+    public function __construct(protected ContainerInterface $container, ContainerProxyConfig $config)
     {
         $this->config = $config;
-        $this->container = $container;
         $this->proxyManager = new ProxyManager($this->config->getProxyCachePath());
     }
 
@@ -150,13 +147,13 @@ class ContainerInterfaceProxy implements ContainerInterface
                 if (is_string($param)) {
                     try {
                         $params[$index] = $this->container->get($param);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         //leave as is
                     }
                 }
             }
             return new $proxyClass($instance, ...$params);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }

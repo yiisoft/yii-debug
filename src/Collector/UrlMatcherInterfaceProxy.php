@@ -10,13 +10,8 @@ use Yiisoft\Router\UrlMatcherInterface;
 
 final class UrlMatcherInterfaceProxy implements UrlMatcherInterface
 {
-    private UrlMatcherInterface $urlMatcher;
-    private RouterCollector $routerCollector;
-
-    public function __construct(UrlMatcherInterface $urlMatcher, RouterCollector $routerCollector)
+    public function __construct(private UrlMatcherInterface $urlMatcher, private RouterCollector $routerCollector)
     {
-        $this->urlMatcher = $urlMatcher;
-        $this->routerCollector = $routerCollector;
     }
 
     public function match(ServerRequestInterface $request): MatchingResult
