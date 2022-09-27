@@ -8,8 +8,6 @@ use ReflectionClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
 use Yiisoft\Yii\Http\Event\ApplicationStartup as HttpApplicationStartup;
 
-use function get_class;
-
 class EventCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;

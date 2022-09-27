@@ -252,6 +252,7 @@ final class FlattenException implements \Stringable
      *
      * @param int $level recursion level
      * @param int $count number of records counter
+     *
      * @return array arguments tracing.
      */
     private function flattenArgs(array $args, $level = 0, &$count = 0): array

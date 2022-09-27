@@ -11,7 +11,6 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
-use function get_class;
 use function is_object;
 
 final class CommandCollector implements CollectorInterface, IndexCollectorInterface

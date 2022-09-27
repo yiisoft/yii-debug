@@ -23,8 +23,8 @@ final class DebugServiceProvider implements ServiceProviderInterface
     public function getExtensions(): array
     {
         return [
-            LoggerInterface::class => static fn(ContainerInterface $container, LoggerInterface $logger) => new LoggerInterfaceProxy($logger, $container->get(LogCollector::class)),
-            EventDispatcherInterface::class => static fn(ContainerInterface $container, EventDispatcherInterface $dispatcher) => new EventDispatcherInterfaceProxy($dispatcher, $container->get(EventCollector::class)),
+            LoggerInterface::class => static fn (ContainerInterface $container, LoggerInterface $logger) => new LoggerInterfaceProxy($logger, $container->get(LogCollector::class)),
+            EventDispatcherInterface::class => static fn (ContainerInterface $container, EventDispatcherInterface $dispatcher) => new EventDispatcherInterfaceProxy($dispatcher, $container->get(EventCollector::class)),
         ];
     }
 }
