@@ -58,7 +58,7 @@ trait ProxyLogTrait
     ): void {
         $this->config->getCollector()?->collect(
             $service,
-            get_class($instance),
+            $instance::class,
             $method,
             $arguments,
             $result,
@@ -81,7 +81,7 @@ trait ProxyLogTrait
         $this->config->getDispatcher()?->dispatch(
             new ProxyMethodCallEvent(
                 $service,
-                get_class($instance),
+                $instance::class,
                 $method,
                 $arguments,
                 $result,

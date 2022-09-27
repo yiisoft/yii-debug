@@ -58,9 +58,9 @@ final class QueueCollector implements CollectorInterface, IndexCollectorInterfac
 
     public function getIndexData(): array
     {
-        $countPushes = array_sum(array_map(fn ($messages) => count($messages), $this->pushes));
+        $countPushes = array_sum(array_map(fn ($messages) => is_countable($messages) ? count($messages) : 0, $this->pushes));
         $countStatuses = count($this->statuses);
-        $countProcessingMessages = array_sum(array_map(fn ($messages) => count($messages), $this->processingMessages));
+        $countProcessingMessages = array_sum(array_map(fn ($messages) => is_countable($messages) ? count($messages) : 0, $this->processingMessages));
 
         return [
             'queue' => [

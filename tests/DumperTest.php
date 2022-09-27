@@ -14,12 +14,10 @@ final class DumperTest extends TestCase
     /**
      * @dataProvider asJsonObjectMapDataProvider
      *
-     * @param mixed $var
      * @param string $expectedResult
-     *
      * @group JOM
      */
-    public function testAsJsonObjectsMap($var, $expectedResult): void
+    public function testAsJsonObjectsMap(mixed $var, $expectedResult): void
     {
         $exportResult = Dumper::create($var)->asJsonObjectsMap();
         $this->assertEquals($expectedResult, $exportResult);
@@ -84,16 +82,12 @@ final class DumperTest extends TestCase
         $staticShortFunctionObjectId = spl_object_id($staticShortFunctionObject);
 
         // @formatter:off
-        $functionObject = function () {
-            return 1;
-        };
+        $functionObject = fn() => 1;
         // @formatter:on
         $functionObjectId = spl_object_id($functionObject);
 
         // @formatter:off
-        $staticFunctionObject = static function () {
-            return 1;
-        };
+        $staticFunctionObject = static fn() => 1;
         // @formatter:on
         $staticFunctionObjectId = spl_object_id($staticFunctionObject);
 
@@ -252,10 +246,6 @@ final class DumperTest extends TestCase
 
     /**
      * Asserting two strings equality ignoring line endings.
-     *
-     * @param string $expected
-     * @param string $actual
-     * @param string $message
      */
     protected function assertEqualsWithoutLE(string $expected, string $actual, string $message = ''): void
     {

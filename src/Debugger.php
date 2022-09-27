@@ -92,7 +92,6 @@ final class Debugger
     /**
      * @param array $ignoredRequests Patterns for ignored request URLs.
      *
-     * @return self
      *
      * @see WildcardPattern
      */
@@ -106,7 +105,6 @@ final class Debugger
     /**
      * @param array $ignoredCommands Patterns for ignored commands names.
      *
-     * @return self
      *
      * @see WildcardPattern
      */

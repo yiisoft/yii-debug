@@ -30,30 +30,10 @@ final class FileStorage implements StorageInterface
      */
     private array $collectors = [];
 
-    private string $path;
-
     private int $historySize = 50;
 
-    private DebuggerIdGenerator $idGenerator;
-
-    private FilesystemInterface $filesystem;
-
-    private Aliases $aliases;
-
-    private array $excludedClasses;
-
-    public function __construct(
-        string $path,
-        FilesystemInterface $filesystem,
-        DebuggerIdGenerator $idGenerator,
-        Aliases $aliases,
-        array $excludedClasses = []
-    ) {
-        $this->path = $path;
-        $this->filesystem = $filesystem;
-        $this->idGenerator = $idGenerator;
-        $this->aliases = $aliases;
-        $this->excludedClasses = $excludedClasses;
+    public function __construct(private string $path, private FilesystemInterface $filesystem, private DebuggerIdGenerator $idGenerator, private Aliases $aliases, private array $excludedClasses = [])
+    {
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -91,7 +71,7 @@ final class FileStorage implements StorageInterface
             $jsonData = $dumper->asJson();
             $this->filesystem->write($basePath . self::TYPE_DATA . '.json', $jsonData);
 
-            $jsonObjects = json_decode($dumper->asJsonObjectsMap(), true);
+            $jsonObjects = json_decode($dumper->asJsonObjectsMap(), true, 512, JSON_THROW_ON_ERROR);
             $jsonObjects = $this->reindexObjects($jsonObjects);
             $this->filesystem->write($basePath . self::TYPE_OBJECTS . '.json', Dumper::create($jsonObjects)->asJson());
 
@@ -121,8 +101,6 @@ final class FileStorage implements StorageInterface
 
     /**
      * Collects summary data of current request.
-     *
-     * @return array
      */
     private function collectIndexData(): array
     {
@@ -148,7 +126,7 @@ final class FileStorage implements StorageInterface
     private function gc(): void
     {
         $indexFiles = glob($this->aliases->get($this->path) . '/**/**/index.json', GLOB_NOSORT);
-        if (count($indexFiles) >= $this->historySize + 1) {
+        if ((is_countable($indexFiles) ? count($indexFiles) : 0) >= $this->historySize + 1) {
             uasort($indexFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
             $excessFiles = array_slice($indexFiles, $this->historySize);
             foreach ($excessFiles as $file) {

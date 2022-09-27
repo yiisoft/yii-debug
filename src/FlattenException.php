@@ -15,7 +15,7 @@ use Throwable;
  * Basically, this class removes all objects from the trace.
  * Ported from Symfony components @link https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Debug/Exception/FlattenException.php
  */
-final class FlattenException
+final class FlattenException implements \Stringable
 {
     /**
      * @var string
@@ -37,7 +37,7 @@ final class FlattenException
     /**
      * @var FlattenException|null
      */
-    private ?FlattenException $previous;
+    private ?FlattenException $previous = null;
     /**
      * @var array
      */
@@ -53,8 +53,6 @@ final class FlattenException
 
     /**
      * FlattenException constructor.
-     *
-     * @param Throwable $exception
      */
     public function __construct(Throwable $exception)
     {
@@ -64,7 +62,7 @@ final class FlattenException
         $this->setLine($exception->getLine());
         $this->setTrace($exception->getTrace());
         $this->setToString($exception->__toString());
-        $this->setClass(get_class($exception));
+        $this->setClass($exception::class);
 
         $previous = $exception->getPrevious();
         if ($previous instanceof Exception) {
@@ -228,7 +226,7 @@ final class FlattenException
      *
      * @return string the string representation of the exception.
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString;
     }
@@ -252,10 +250,8 @@ final class FlattenException
     /**
      * Allows you to sterilize the Exception trace arguments
      *
-     * @param array $args
      * @param int $level recursion level
      * @param int $count number of records counter
-     *
      * @return array arguments tracing.
      */
     private function flattenArgs(array $args, $level = 0, &$count = 0): array
@@ -269,7 +265,7 @@ final class FlattenException
                 // is_object() returns false on PHP<=7.1
                 $result[$key] = ['incomplete-object', $this->getClassNameFromIncomplete($value)];
             } elseif (is_object($value)) {
-                $result[$key] = ['object', get_class($value)];
+                $result[$key] = ['object', $value::class];
             } elseif (is_array($value)) {
                 if ($level > 10) {
                     $result[$key] = ['array', '*DEEP NESTED ARRAY*'];
@@ -295,8 +291,6 @@ final class FlattenException
     }
 
     /**
-     * @param __PHP_Incomplete_Class $value
-     *
      * @return string the real class name of an incomplete class
      */
     private function getClassNameFromIncomplete(__PHP_Incomplete_Class $value): string

@@ -37,7 +37,7 @@ class EventCollector implements CollectorInterface, IndexCollectorInterface
     private function collectEvent(object $event, $line): void
     {
         $this->events[] = [
-            'name' => get_class($event),
+            'name' => $event::class,
             'event' => $event,
             'file' => (new ReflectionClass($event))->getFileName(),
             'line' => $line,
