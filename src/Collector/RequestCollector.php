@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -64,19 +65,21 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
         }
 
         if ($event instanceof BeforeRequest) {
-            $this->request = $event->getRequest();
-            $this->requestUrl = (string) $event->getRequest()->getUri();
-            $this->requestPath = $event->getRequest()->getUri()->getPath();
-            $this->requestQuery = $event->getRequest()->getUri()->getQuery();
-            $this->requestMethod = $event->getRequest()->getMethod();
-            $this->requestIsAjax = strtolower(
-                $event->getRequest()->getHeaderLine('X-Requested-With') ?? ''
-            ) === 'xmlhttprequest';
-            $this->userIp = $event->getRequest()->getServerParams()['REMOTE_ADDR'] ?? null;
+            $request = $event->getRequest();
+
+            $this->request = $request;
+            $this->requestUrl = (string) $request->getUri();
+            $this->requestPath = $request->getUri()->getPath();
+            $this->requestQuery = $request->getUri()->getQuery();
+            $this->requestMethod = $request->getMethod();
+            $this->requestIsAjax = strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest';
+            $this->userIp = $request->getServerParams()['REMOTE_ADDR'] ?? null;
         }
         if ($event instanceof AfterRequest) {
-            $this->response = $event->getResponse();
-            $this->responseStatusCode = $event->getResponse() !== null ? $event->getResponse()->getStatusCode() : 500;
+            $response = $event->getResponse();
+
+            $this->response = $response;
+            $this->responseStatusCode = $response !== null ? $response->getStatusCode() : 500;
         }
     }
 
