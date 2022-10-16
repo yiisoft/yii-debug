@@ -27,6 +27,22 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
     public function getCollected(): array
     {
+        $body = null;
+        if ($this->response !== null) {
+            $stream = $this->response->getBody();
+            if ($stream->isReadable() && $stream->isSeekable()) {
+                $position = $stream->tell();
+                $stream->rewind();
+                $body = $stream->getContents();
+                try {
+                    $body = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
+                } catch (JsonException) {
+                    // pass
+                }
+                $stream->seek($position);
+            }
+        }
+
         return [
             'requestUrl' => $this->requestUrl,
             'requestPath' => $this->requestPath,
@@ -37,6 +53,7 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             'responseStatusCode' => $this->responseStatusCode,
             'request' => $this->request,
             'response' => $this->response,
+            'responseRaw' => $body,
         ];
     }
 
