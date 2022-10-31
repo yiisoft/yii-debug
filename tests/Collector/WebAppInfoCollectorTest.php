@@ -12,7 +12,6 @@ use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function usleep;
-use function time_nanosleep;
 
 final class WebAppInfoCollectorTest extends CollectorTestCase
 {
