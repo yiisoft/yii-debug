@@ -11,6 +11,7 @@ use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 
 use function sleep;
+use function usleep;
 
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
@@ -21,7 +22,7 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
     {
         $collector->collect(new ApplicationStartup(null));
 
-        sleep(1);
+        DIRECTORY_SEPARATOR === '\\' ? sleep(1) : usleep(123_000);
 
         $collector->collect(new ApplicationShutdown(0));
     }

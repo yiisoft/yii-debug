@@ -12,6 +12,7 @@ use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function sleep;
+use function usleep;
 
 final class WebAppInfoCollectorTest extends CollectorTestCase
 {
@@ -24,7 +25,7 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
         $requestMock->method('getAttribute')->willReturn(microtime(true));
         $collector->collect(new BeforeRequest($requestMock));
 
-        sleep(1);
+        DIRECTORY_SEPARATOR === '\\' ? sleep(1) : usleep(123_000);
 
         $collector->collect(new AfterRequest($this->createMock(ResponseInterface::class)));
     }
@@ -37,6 +38,7 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
     protected function checkCollectedData(CollectorInterface $collector): void
     {
         parent::checkCollectedData($collector);
+
         $data = $collector->getCollected();
 
         $this->assertGreaterThan(0.122, $data['requestProcessingTime']);
