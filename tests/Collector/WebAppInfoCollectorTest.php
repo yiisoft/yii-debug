@@ -25,7 +25,7 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
         $requestMock->method('getAttribute')->willReturn(microtime(true));
         $collector->collect(new BeforeRequest($requestMock));
 
-        DIRECTORY_SEPARATOR === '\\' ? usleep(130_000) : usleep(123_000);
+        usleep(123_000);
 
         $collector->collect(new AfterRequest($this->createMock(ResponseInterface::class)));
     }
@@ -37,6 +37,10 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
 
     protected function checkCollectedData(CollectorInterface $collector): void
     {
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $this->markTestSkipped('This test is not supported on Windows.');
+        }
+
         parent::checkCollectedData($collector);
         $data = $collector->getCollected();
 
