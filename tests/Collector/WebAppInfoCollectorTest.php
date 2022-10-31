@@ -12,7 +12,7 @@ use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function microtime;
-use function usleep;
+use function time_sleep_until;
 
 final class WebAppInfoCollectorTest extends CollectorTestCase
 {
@@ -25,7 +25,7 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
         $requestMock->method('getAttribute')->willReturn(microtime(true));
         $collector->collect(new BeforeRequest($requestMock));
 
-        usleep(123_000);
+        time_sleep_until(microtime(true) + 0.123);
 
         $collector->collect(new AfterRequest($this->createMock(ResponseInterface::class)));
     }
@@ -37,10 +37,6 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
 
     protected function checkCollectedData(CollectorInterface $collector): void
     {
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $this->markTestSkipped('This test is not supported on Windows.');
-        }
-
         parent::checkCollectedData($collector);
         $data = $collector->getCollected();
 

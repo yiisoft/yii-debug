@@ -10,6 +10,9 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 
+use function microtime;
+use function time_sleep_until;
+
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
     /**
@@ -18,7 +21,9 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
     protected function collectTestData(CollectorInterface $collector): void
     {
         $collector->collect(new ApplicationStartup(null));
-        usleep(123_000);
+
+        time_sleep_until(microtime(true) + 0.123);
+
         $collector->collect(new ApplicationShutdown(0));
     }
 
@@ -29,11 +34,8 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 
     protected function checkCollectedData(CollectorInterface $collector): void
     {
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $this->markTestSkipped('This test is not supported on Windows.');
-        }
-
         parent::checkCollectedData($collector);
+
         $data = $collector->getCollected();
 
         $this->assertGreaterThan(0.122, $data['applicationProcessingTime']);
