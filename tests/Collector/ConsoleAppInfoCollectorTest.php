@@ -29,6 +29,10 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 
     protected function checkCollectedData(CollectorInterface $collector): void
     {
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $this->markTestSkipped('This test is not supported on Windows.');
+        }
+
         parent::checkCollectedData($collector);
         $data = $collector->getCollected();
 
