@@ -11,8 +11,7 @@ use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-use function microtime;
-use function time_sleep_until;
+use function sleep;
 
 final class WebAppInfoCollectorTest extends CollectorTestCase
 {
@@ -25,7 +24,7 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
         $requestMock->method('getAttribute')->willReturn(microtime(true));
         $collector->collect(new BeforeRequest($requestMock));
 
-        time_sleep_until(microtime(true) + 0.123);
+        sleep(1);
 
         $collector->collect(new AfterRequest($this->createMock(ResponseInterface::class)));
     }

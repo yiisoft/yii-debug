@@ -10,8 +10,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 
-use function microtime;
-use function time_sleep_until;
+use function sleep;
 
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
@@ -22,7 +21,7 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
     {
         $collector->collect(new ApplicationStartup(null));
 
-        time_sleep_until(microtime(true) + 0.123);
+        sleep(1);
 
         $collector->collect(new ApplicationShutdown(0));
     }
