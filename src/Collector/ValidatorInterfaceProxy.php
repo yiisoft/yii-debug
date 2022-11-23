@@ -16,7 +16,7 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
     ) {
     }
 
-    public function validate(mixed $data, ?iterable $rules = null): Result
+    public function validate(mixed $data, ?iterable $rules = null, ?ValidatorCollector $context = null): Result
     {
         $result = $this->validator->validate($data, $rules);
 
