@@ -22,7 +22,7 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
         iterable|object|string|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
-        $result = $this->validator->validate($data, $rules);
+        $result = $this->validator->validate($data, $rules, $context);
 
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = (array) $data->getRules();
