@@ -91,7 +91,7 @@ final class DumperTest extends TestCase
         // @formatter:off
         $staticFunctionObject = static function () {
             return 1;
-        };;
+        };
         // @formatter:on
         $staticFunctionObjectId = spl_object_id($staticFunctionObject);
 
