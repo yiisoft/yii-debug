@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 
 final class ValidatorInterfaceProxy implements ValidatorInterface
@@ -16,8 +17,11 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
     ) {
     }
 
-    public function validate(mixed $data, ?iterable $rules = null, ?ValidatorCollector $context = null): Result
-    {
+    public function validate(
+        mixed $data,
+        iterable|object|string|null $rules = null,
+        ?ValidationContext $context = null
+    ): Result {
         $result = $this->validator->validate($data, $rules);
 
         if ($rules === null && $data instanceof RulesProviderInterface) {
