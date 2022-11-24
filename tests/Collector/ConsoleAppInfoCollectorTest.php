@@ -10,6 +10,9 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 
+use function sleep;
+use function usleep;
+
 final class ConsoleAppInfoCollectorTest extends CollectorTestCase
 {
     /**
@@ -18,7 +21,9 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
     protected function collectTestData(CollectorInterface $collector): void
     {
         $collector->collect(new ApplicationStartup(null));
-        usleep(123_000);
+
+        DIRECTORY_SEPARATOR === '\\' ? sleep(1) : usleep(123_000);
+
         $collector->collect(new ApplicationShutdown(0));
     }
 
@@ -30,6 +35,7 @@ final class ConsoleAppInfoCollectorTest extends CollectorTestCase
     protected function checkCollectedData(CollectorInterface $collector): void
     {
         parent::checkCollectedData($collector);
+
         $data = $collector->getCollected();
 
         $this->assertGreaterThan(0.122, $data['applicationProcessingTime']);

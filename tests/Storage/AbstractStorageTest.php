@@ -13,8 +13,6 @@ abstract class AbstractStorageTest extends TestCase
 {
     /**
      * @dataProvider dataProvider()
-     *
-     * @param array $data
      */
     public function testAddAndGet(array $data): void
     {
@@ -29,8 +27,6 @@ abstract class AbstractStorageTest extends TestCase
 
     /**
      * @dataProvider dataProvider()
-     *
-     * @param array $data
      */
     public function testRead(array $data): void
     {
@@ -46,8 +42,6 @@ abstract class AbstractStorageTest extends TestCase
 
     /**
      * @dataProvider dataProvider()
-     *
-     * @param array $data
      */
     public function testFlush(array $data): void
     {

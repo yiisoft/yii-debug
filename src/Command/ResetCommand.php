@@ -12,13 +12,10 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class ResetCommand extends Command
 {
-    private StorageInterface $storage;
-
     protected static $defaultName = 'debug/reset';
 
-    public function __construct(StorageInterface $storage)
+    public function __construct(private StorageInterface $storage)
     {
-        $this->storage = $storage;
         parent::__construct();
     }
 

@@ -46,7 +46,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
         ) {
             $name = implode('::', $event->getMiddleware()->__debugInfo()['callback']);
         } else {
-            $name = get_class($event->getMiddleware());
+            $name = $event->getMiddleware()::class;
         }
         if ($event instanceof BeforeMiddleware) {
             $this->beforeStack[] = [

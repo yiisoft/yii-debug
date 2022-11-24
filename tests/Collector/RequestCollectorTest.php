@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
@@ -22,6 +23,7 @@ final class RequestCollectorTest extends CollectorTestCase
         $requestMock = $this->createMock(ServerRequestInterface::class);
         $responseMock = $this->createMock(ResponseInterface::class);
         $uriMock = $this->createMock(UriInterface::class);
+        $bodyMock = $this->createMock(StreamInterface::class);
 
         $uriMock->method('getPath')
             ->willReturn('url');
@@ -32,11 +34,16 @@ final class RequestCollectorTest extends CollectorTestCase
 
         $requestMock->method('getMethod')
             ->willReturn('GET');
+        $requestMock->method('getHeaderLine')
+            ->willReturn('');
         $requestMock->method('getUri')
             ->willReturn($uriMock);
 
         $responseMock->method('getStatusCode')
             ->willReturn(200);
+        $responseMock->method('getBody')
+            ->willReturn($bodyMock);
+
         $collector->collect(new BeforeRequest($requestMock));
         $collector->collect(new AfterRequest($responseMock));
     }

@@ -10,35 +10,24 @@ use Yiisoft\VarDumper\ClosureExporter;
 
 final class Dumper
 {
-    /**
-     * @var mixed Variable to dump.
-     */
-    private mixed $variable;
-
-    private array $excludedClasses;
-
     private array $objects = [];
 
     private static ?ClosureExporter $closureExporter = null;
 
     /**
      * @param mixed $variable Variable to dump.
-     * @param array $excludedClasses
      */
-    private function __construct(mixed $variable, array $excludedClasses = [])
+    private function __construct(private mixed $variable, private array $excludedClasses = [])
     {
-        $this->variable = $variable;
-        $this->excludedClasses = $excludedClasses;
     }
 
     /**
      * @param mixed $variable Variable to dump.
-     * @param array $excludedClasses
      *
      * @return self An instance containing variable to dump.
      */
     #[Pure]
-    public static function create($variable, array $excludedClasses = []): self
+    public static function create(mixed $variable, array $excludedClasses = []): self
     {
         return new self($variable, $excludedClasses);
     }
@@ -78,7 +67,7 @@ final class Dumper
         }
         if (is_object($variable)) {
             if (in_array($variable, $this->objects, true)
-                || in_array(get_class($variable), $this->excludedClasses, true)) {
+                || in_array($variable::class, $this->excludedClasses, true)) {
                 return;
             }
             $this->objects[] = $variable;
@@ -110,7 +99,7 @@ final class Dumper
 
     private function getObjectProperties($var): array
     {
-        if ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__debugInfo')) {
+        if (\__PHP_Incomplete_Class::class !== $var::class && method_exists($var, '__debugInfo')) {
             $var = $var->__debugInfo();
         }
 
@@ -136,7 +125,7 @@ final class Dumper
                 break;
             case 'object':
                 $objectDescription = $this->getObjectDescription($var);
-                if ($depth <= $level || in_array(get_class($var), $this->excludedClasses, true)) {
+                if ($depth <= $level || in_array($var::class, $this->excludedClasses, true)) {
                     $output = $objectDescription . ' (...)';
                     break;
                 }
@@ -183,7 +172,7 @@ final class Dumper
     #[Pure]
     private function getObjectDescription(object $object): string
     {
-        return get_class($object) . '#' . spl_object_id($object);
+        return $object::class . '#' . spl_object_id($object);
     }
 
     private function normalizeProperty(string $property): string
@@ -219,8 +208,6 @@ final class Dumper
      * @param Closure $closure Closure instance.
      *
      * @throws \ReflectionException
-     *
-     * @return string
      */
     private function exportClosure(Closure $closure): string
     {
