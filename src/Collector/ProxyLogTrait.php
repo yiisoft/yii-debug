@@ -6,8 +6,6 @@ namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
-use function get_class;
-
 trait ProxyLogTrait
 {
     private ContainerProxyConfig $config;
@@ -58,7 +56,7 @@ trait ProxyLogTrait
     ): void {
         $this->config->getCollector()?->collect(
             $service,
-            get_class($instance),
+            $instance::class,
             $method,
             $arguments,
             $result,
@@ -81,7 +79,7 @@ trait ProxyLogTrait
         $this->config->getDispatcher()?->dispatch(
             new ProxyMethodCallEvent(
                 $service,
-                get_class($instance),
+                $instance::class,
                 $method,
                 $arguments,
                 $result,

@@ -10,14 +10,11 @@ class ServiceProxy extends ObjectProxy
 {
     use ProxyLogTrait;
 
-    private string $service;
-
     public function __construct(
-        string $service,
+        private string $service,
         object $instance,
         ContainerProxyConfig $config
     ) {
-        $this->service = $service;
         $this->config = $config;
         parent::__construct($instance);
     }

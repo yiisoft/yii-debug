@@ -11,7 +11,6 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
-use function get_class;
 use function is_object;
 
 final class CommandCollector implements CollectorInterface, IndexCollectorInterface
@@ -32,7 +31,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         }
 
         if ($event instanceof ConsoleErrorEvent) {
-            $this->commands[get_class($event)] = [
+            $this->commands[$event::class] = [
                 'name' => $event->getInput()->getFirstArgument() ?? '',
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
@@ -45,7 +44,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         }
 
         if ($event instanceof ConsoleTerminateEvent) {
-            $this->commands[get_class($event)] = [
+            $this->commands[$event::class] = [
                 'name' => $event->getCommand()->getName(),
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
@@ -56,7 +55,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         }
 
         if ($event instanceof ConsoleEvent) {
-            $this->commands[get_class($event)] = [
+            $this->commands[$event::class] = [
                 'name' => $event->getCommand()->getName(),
                 'command' => $event->getCommand(),
                 'input' => $event->getInput()->__toString(),
@@ -97,7 +96,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         return [
             'command' => [
                 'name' => $commandEvent['name'],
-                'class' => $commandEvent['command'] instanceof Command ? get_class($commandEvent['command']) : null,
+                'class' => $commandEvent['command'] instanceof Command ? $commandEvent['command']::class : null,
                 'input' => $commandEvent['input'],
             ],
         ];

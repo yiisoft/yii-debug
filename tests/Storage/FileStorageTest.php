@@ -29,8 +29,6 @@ final class FileStorageTest extends AbstractStorageTest
     }
 
     /**
-     * @param array $data
-     *
      * @dataProvider dataProvider()
      */
     public function testFlushWithGC(array $data): void
@@ -47,8 +45,6 @@ final class FileStorageTest extends AbstractStorageTest
 
     /**
      * @dataProvider dataProvider()
-     *
-     * @param array $data
      */
     public function testClear(array $data): void
     {
@@ -62,11 +58,6 @@ final class FileStorageTest extends AbstractStorageTest
         $this->assertDirectoryDoesNotExist($this->path);
     }
 
-    /**
-     * @param DebuggerIdGenerator $idGenerator
-     *
-     * @return FileStorage|StorageInterface
-     */
     public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface
     {
         return new FileStorage(
