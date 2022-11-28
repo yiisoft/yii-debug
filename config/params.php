@@ -6,11 +6,14 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Assets\AssetLoaderInterface;
 use Yiisoft\Cache\CacheInterface;
+use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
+use Yiisoft\Yii\Debug\Collector\ConnectionInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\DatabaseCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
@@ -43,6 +46,7 @@ return [
         'collectors' => [
             LogCollector::class,
             EventCollector::class,
+            DatabaseCollector::class,
             ServiceCollector::class,
             ValidatorCollector::class,
             QueueCollector::class,
@@ -62,6 +66,7 @@ return [
         'trackedServices' => [
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
+            ConnectionInterface::class => [ConnectionInterfaceProxy::class, DatabaseCollector::class],
             QueueFactoryInterface::class => [QueueFactoryInterfaceProxy::class, QueueCollector::class],
             WorkerInterface::class => [QueueWorkerInterfaceProxy::class, QueueCollector::class],
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
