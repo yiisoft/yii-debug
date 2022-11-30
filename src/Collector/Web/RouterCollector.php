@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Collector;
+namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Psr\Container\ContainerInterface;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\RouteCollectionInterface;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\CollectorTrait;
+use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
 class RouterCollector implements CollectorInterface, IndexCollectorInterface
 {

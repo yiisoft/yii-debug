@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Collector;
+namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Yiisoft\View\Event\WebView\AfterRender;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 
 final class WebViewCollector implements CollectorInterface
 {
