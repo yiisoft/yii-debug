@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Collector;
+namespace Yiisoft\Yii\Debug\Collector\Database;
 
 use Closure;
 use Yiisoft\Cache\Dependency\Dependency;
