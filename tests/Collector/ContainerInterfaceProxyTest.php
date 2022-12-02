@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
@@ -64,7 +65,7 @@ class ContainerInterfaceProxyTest extends TestCase
         $config = new ContainerProxyConfig(
             true,
             [
-                LoggerInterface::class => fn (Container $container) => $container->get(LoggerInterfaceProxy::class),
+                LoggerInterface::class => fn (ContainerInterface $container) => $container->get(LoggerInterfaceProxy::class),
                 EventDispatcherInterface::class => [
                     EventDispatcherInterfaceProxy::class,
                     EventCollector::class,
