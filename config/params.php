@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Cycle\ORM\ORMInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -11,6 +12,8 @@ use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Injector\Injector;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Yii\Debug\Collector\Database\CycleCollector;
+use Yiisoft\Yii\Debug\Collector\Database\CycleORMInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\Web\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\Database\ConnectionInterfaceProxy;
@@ -75,6 +78,7 @@ return [
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
             ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
+            ORMInterface::class => [CycleORMInterfaceProxy::class, CycleCollector::class],
             CacheInterface::class,
         ],
         'dumper.excludedClasses' => [
