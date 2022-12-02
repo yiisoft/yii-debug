@@ -81,7 +81,6 @@ final class CycleORMInterfaceProxy implements ORMInterface
         ?FactoryInterface $factory = null,
         ?HeapInterface $heap = null
     ): ORMInterface {
-
         $this->collector->collect('with', $schema, $factory, $heap);
         return new self($this->orm->with($schema, $factory, $heap), $this->collector);
     }
