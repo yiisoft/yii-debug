@@ -73,6 +73,10 @@ class ContainerInterfaceProxy implements ContainerInterface
 
     private function getInstance(string $id)
     {
+        if ($id === ContainerInterface::class) {
+            return $this;
+        }
+
         return $this->container->get($id);
     }
 
@@ -118,7 +122,7 @@ class ContainerInterfaceProxy implements ContainerInterface
 
     private function getServiceProxyFromCallable(callable $callback): ?object
     {
-        return $callback($this->container);
+        return $callback($this);
     }
 
     private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
@@ -146,7 +150,7 @@ class ContainerInterfaceProxy implements ContainerInterface
             foreach ($params as $index => $param) {
                 if (is_string($param)) {
                     try {
-                        $params[$index] = $this->container->get($param);
+                        $params[$index] = $this->get($param);
                     } catch (Exception) {
                         //leave as is
                     }
