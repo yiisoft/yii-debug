@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Assets\AssetLoaderInterface;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Injector\Injector;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\Debug\Collector\Web\AssetCollector;
@@ -14,9 +16,12 @@ use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\Database\ConnectionInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\Database\DatabaseCollector;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\QueueCollector;
 use Yiisoft\Yii\Debug\Collector\QueueFactoryInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\QueueWorkerInterfaceProxy;
@@ -26,13 +31,10 @@ use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebViewCollector;
+use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
 use Yiisoft\Yii\Debug\Collector\Web\AssetLoaderInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\Web\UrlMatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
 use Yiisoft\Yii\Queue\QueueFactoryInterface;
 use Yiisoft\Yii\Queue\Worker\WorkerInterface;
 
@@ -64,6 +66,7 @@ return [
             CommandCollector::class,
         ],
         'trackedServices' => [
+            Injector::class => fn (ContainerInterface $container) => new Injector($container),
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
             ConnectionInterface::class => [ConnectionInterfaceProxy::class, DatabaseCollector::class],
