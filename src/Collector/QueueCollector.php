@@ -40,7 +40,7 @@ final class QueueCollector implements CollectorInterface, IndexCollectorInterfac
         };
         $this->statuses[] = [
             'id' => $id,
-            'status' => $statusText
+            'status' => $statusText,
         ];
     }
 
@@ -48,8 +48,7 @@ final class QueueCollector implements CollectorInterface, IndexCollectorInterfac
         string $channel,
         MessageInterface $message,
         string|array|callable|MiddlewarePushInterface ...$middlewareDefinitions,
-    ): void
-    {
+    ): void {
         if (!$this->isActive()) {
             return;
         }
