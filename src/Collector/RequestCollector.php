@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use GuzzleHttp\Psr7\Message;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,15 +29,15 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
     public function getCollected(): array
     {
-        $body = null;
+        $content = null;
         if ($this->response !== null) {
             $stream = $this->response->getBody();
             if ($stream->isReadable() && $stream->isSeekable()) {
                 $position = $stream->tell();
                 $stream->rewind();
-                $body = $stream->getContents();
+                $content = $stream->getContents();
                 try {
-                    $body = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
+                    $content = json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                     // pass
                 }
@@ -53,8 +54,10 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             'userIp' => $this->userIp,
             'responseStatusCode' => $this->responseStatusCode,
             'request' => $this->request,
+            'requestRaw' => Message::toString($this->request),
             'response' => $this->response,
-            'responseRaw' => $body,
+            'responseRaw' => $this->response instanceof ResponseInterface ? Message::toString($this->response) : null,
+            'content' => $content,
         ];
     }
 

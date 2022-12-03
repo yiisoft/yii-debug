@@ -21,6 +21,7 @@
     "require": {
         "php": "^8.0",
         "ext-mbstring": "*",
+        "guzzlehttp/psr7": "^2.4",
         "jetbrains/phpstorm-attributes": "^1.0",
         "psr/container": "^2.0",
         "psr/event-dispatcher": "^1.0",
