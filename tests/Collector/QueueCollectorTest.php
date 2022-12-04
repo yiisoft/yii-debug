@@ -10,6 +10,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\QueueCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyQueue;
+use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\Message;
 
 final class QueueCollectorTest extends CollectorTestCase
@@ -31,7 +32,7 @@ final class QueueCollectorTest extends CollectorTestCase
         $result = new Result();
         $result->addError($ruleNumber->getTooSmallMessage());
 
-        $collector->collectStatus('12345');
+        $collector->collectStatus('12345', JobStatus::done());
         $collector->collectPush('chan1', $this->pushMessage);
         $collector->collectPush('chan2', $this->pushMessage);
         $collector->collectWorkerProcessing(
@@ -62,12 +63,35 @@ final class QueueCollectorTest extends CollectorTestCase
             'processingMessages' => $processingMessages,
         ] = $collector->getCollected();
 
-        $this->assertEquals(['chan1' => [$this->pushMessage], 'chan2' => [$this->pushMessage]], $pushes);
-        $this->assertEquals(['12345'], $statuses);
+        $this->assertEquals([
+            'chan1' => [
+                [
+                    'message' => $this->pushMessage,
+                    'middlewares' => [],
+                ],
+            ],
+            'chan2' => [
+                [
+                    'message' => $this->pushMessage,
+                    'middlewares' => [],
+                ],
+            ],
+        ], $pushes);
+        $this->assertEquals([
+            [
+                'id' => '12345',
+                'status' => 'done',
+            ],
+        ], $statuses);
         $this->assertEquals(
             [
-                'chan1' => [$this->pushMessage, $this->pushMessage],
-                'chan2' => [$this->pushMessage],
+                'chan1' => [
+                    $this->pushMessage,
+                    $this->pushMessage,
+                ],
+                'chan2' => [
+                    $this->pushMessage,
+                ],
             ],
             $processingMessages
         );

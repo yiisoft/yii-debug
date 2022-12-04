@@ -21,7 +21,7 @@ final class QueueDecorator implements QueueInterface
     public function status(string $id): JobStatus
     {
         $result = $this->queue->status($id);
-        $this->collector->collectStatus($id);
+        $this->collector->collectStatus($id, $result);
 
         return $result;
     }
@@ -30,8 +30,8 @@ final class QueueDecorator implements QueueInterface
         MessageInterface $message,
         string|array|callable|MiddlewarePushInterface ...$middlewareDefinitions
     ): MessageInterface {
-        $message = $this->queue->push($message);
-        $this->collector->collectPush($this->queue->getChannelName(), $message);
+        $message = $this->queue->push($message, ...$middlewareDefinitions);
+        $this->collector->collectPush($this->queue->getChannelName(), $message, ...$middlewareDefinitions);
         return $message;
     }
 
