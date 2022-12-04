@@ -34,6 +34,8 @@ final class RequestCollectorTest extends CollectorTestCase
 
         $requestMock->method('getMethod')
             ->willReturn('GET');
+        $requestMock->method('getHeaders')
+            ->willReturn([]);
         $requestMock->method('getHeaderLine')
             ->willReturn('');
         $requestMock->method('getUri')
@@ -41,6 +43,8 @@ final class RequestCollectorTest extends CollectorTestCase
 
         $responseMock->method('getStatusCode')
             ->willReturn(200);
+        $responseMock->method('getHeaders')
+            ->willReturn([]);
         $responseMock->method('getBody')
             ->willReturn($bodyMock);
 
