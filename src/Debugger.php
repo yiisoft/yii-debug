@@ -49,6 +49,8 @@ final class Debugger
             $this->target->addCollector($collector);
             $collector->startup();
         }
+
+        register_shutdown_function([$this, 'shutdown']);
     }
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
