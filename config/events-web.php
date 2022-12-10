@@ -40,7 +40,6 @@ return [
     AfterEmit::class => [
         [ProfilerInterface::class, 'flush'],
         [WebAppInfoCollector::class, 'collect'],
-        [Debugger::class, 'shutdown'],
     ],
     BeforeMiddleware::class => [
         [MiddlewareCollector::class, 'collect'],
