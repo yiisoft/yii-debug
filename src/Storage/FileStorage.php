@@ -34,6 +34,7 @@ final class FileStorage implements StorageInterface
 
     public function __construct(private string $path, private FilesystemInterface $filesystem, private DebuggerIdGenerator $idGenerator, private Aliases $aliases, private array $excludedClasses = [])
     {
+        register_shutdown_function([$this, 'flush']);
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -65,6 +66,9 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
+        if ($this->collectors === []) {
+            return;
+        }
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
             $dumper = Dumper::create($this->getData(), $this->excludedClasses);
