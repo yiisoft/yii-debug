@@ -14,6 +14,7 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 final class Debugger
 {
     private bool $skipCollect = false;
+    private bool $shutdownCompleted = false;
 
     public function __construct(
         private DebuggerIdGenerator $idGenerator,
@@ -34,6 +35,8 @@ final class Debugger
 
     public function startup(object $event): void
     {
+        $this->shutdownCompleted = false;
+
         if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
             $this->skipCollect = true;
             return;
@@ -79,6 +82,10 @@ final class Debugger
 
     public function shutdown(): void
     {
+        if ($this->shutdownCompleted) {
+            return;
+        }
+
         try {
             if (!$this->skipCollect) {
                 $this->target->flush();
@@ -88,6 +95,7 @@ final class Debugger
                 $collector->shutdown();
             }
             $this->skipCollect = false;
+            $this->shutdownCompleted = true;
         }
     }
 
