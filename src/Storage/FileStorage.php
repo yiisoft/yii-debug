@@ -65,6 +65,9 @@ final class FileStorage implements StorageInterface
 
     public function flush(): void
     {
+        if (!$this->hasActiveCollector()) {
+            return;
+        }
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
         try {
             $dumper = Dumper::create($this->getData(), $this->excludedClasses);
@@ -154,5 +157,15 @@ final class FileStorage implements StorageInterface
         }
 
         return $result;
+    }
+
+    private function hasActiveCollector(): bool
+    {
+        foreach ($this->collectors as $collector) {
+            if ($collector->isActive()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
