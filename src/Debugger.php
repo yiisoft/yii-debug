@@ -26,6 +26,7 @@ final class Debugger
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
     ) {
+        register_shutdown_function([$this, 'shutdown']);
     }
 
     public function getId(): string
@@ -35,7 +36,7 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        $this->active = false;
+        $this->active = true;
 
         if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
             $this->skipCollect = true;
@@ -51,9 +52,7 @@ final class Debugger
         foreach ($this->collectors as $collector) {
             $this->target->addCollector($collector);
             $collector->startup();
-        }
-
-        register_shutdown_function([$this, 'shutdown']);
+        }       
     }
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
@@ -82,7 +81,7 @@ final class Debugger
 
     public function shutdown(): void
     {
-        if ($this->active) {
+        if (!$this->active) {
             return;
         }
 
@@ -95,7 +94,7 @@ final class Debugger
                 $collector->shutdown();
             }
             $this->skipCollect = false;
-            $this->active = true;
+            $this->active = false;
         }
     }
 
