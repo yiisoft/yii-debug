@@ -52,7 +52,7 @@ final class Debugger
         foreach ($this->collectors as $collector) {
             $this->target->addCollector($collector);
             $collector->startup();
-        }       
+        }
     }
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
