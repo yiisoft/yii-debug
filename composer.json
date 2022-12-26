@@ -40,7 +40,7 @@
         "yiisoft/strings": "^2.0",
         "yiisoft/validator": "3.0.x-dev",
         "yiisoft/var-dumper": "^1.0",
-        "yiisoft/view": "^7.0.0",
+        "yiisoft/view":"^4.0|^5.0|^6.0|^7.0",
         "yiisoft/yii-console": "^1.0",
         "yiisoft/yii-filesystem": "dev-master",
         "yiisoft/yii-http": "^1.0",
