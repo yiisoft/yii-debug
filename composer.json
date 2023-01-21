@@ -33,7 +33,7 @@
         "yiisoft/assets": "^2.0.1",
         "yiisoft/di": "^1.0",
         "yiisoft/json": "^1.0",
-        "yiisoft/middleware-dispatcher": "^3.0|^4.0",
+        "yiisoft/middleware-dispatcher": "^3.0|^4.0|^5.0",
         "yiisoft/profiler": "^2.0",
         "yiisoft/proxy": "^1.0.1",
         "yiisoft/router": "^2.0",
