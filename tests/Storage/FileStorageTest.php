@@ -12,7 +12,7 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class FileStorageTest extends AbstractStorageTest
 {
-    private string $path = 'runtime';
+    private string $path = __DIR__ . '/runtime';
 
     protected function tearDown(): void
     {

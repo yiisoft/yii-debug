@@ -37,6 +37,7 @@ final class FileStorage implements StorageInterface
         private Aliases $aliases,
         private array $excludedClasses = []
     ) {
+        $this->path = $this->aliases->get($this->path);
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -53,8 +54,7 @@ final class FileStorage implements StorageInterface
     {
         clearstatcache();
         $data = [];
-        $path = $this->aliases->get($this->path);
-        $dataFiles = glob($path . '/**/**/' . $type . '.json', GLOB_NOSORT);
+        $dataFiles = glob($this->path . '/**/**/' . $type . '.json', GLOB_NOSORT);
         uasort($dataFiles, static fn ($a, $b) => filemtime($a) <=> filemtime($b));
 
         foreach ($dataFiles as $file) {
@@ -130,7 +130,7 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $indexFiles = glob($this->aliases->get($this->path) . '/**/**/index.json', GLOB_NOSORT);
+        $indexFiles = glob($this->path . '/**/**/index.json', GLOB_NOSORT);
         if ((is_countable($indexFiles) ? count($indexFiles) : 0) >= $this->historySize + 1) {
             uasort($indexFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
             $excessFiles = array_slice($indexFiles, $this->historySize);
