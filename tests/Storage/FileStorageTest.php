@@ -4,28 +4,20 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Storage;
 
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Yiisoft\Aliases\Aliases;
+use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Filesystem\Filesystem;
 
 final class FileStorageTest extends AbstractStorageTest
 {
     private string $path = 'runtime';
-    private Filesystem $fileSystem;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->fileSystem = new Filesystem(new LocalFilesystemAdapter('tests'));
-    }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->fileSystem->deleteDirectory($this->path);
+        FileHelper::removeDirectory($this->path);
     }
 
     /**
@@ -62,7 +54,6 @@ final class FileStorageTest extends AbstractStorageTest
     {
         return new FileStorage(
             $this->path,
-            $this->fileSystem,
             $idGenerator,
             new Aliases()
         );
