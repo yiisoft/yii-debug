@@ -10,7 +10,6 @@ use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Filesystem\FilesystemInterface;
 
 /**
  * @var $params array
@@ -19,11 +18,10 @@ use Yiisoft\Yii\Filesystem\FilesystemInterface;
 $common = [
     StorageInterface::class => static function (ContainerInterface $container) use ($params) {
         $params = $params['yiisoft/yii-debug'];
-        $filesystem = $container->get(FilesystemInterface::class);
         $debuggerIdGenerator = $container->get(DebuggerIdGenerator::class);
         $aliases = $container->get(Aliases::class);
         $excludedClasses = $params['dumper.excludedClasses'];
-        $fileStorage = new FileStorage($params['path'], $filesystem, $debuggerIdGenerator, $aliases, $excludedClasses);
+        $fileStorage = new FileStorage($params['path'], $debuggerIdGenerator, $aliases, $excludedClasses);
         if (isset($params['historySize'])) {
             $fileStorage->setHistorySize((int)$params['historySize']);
         }
