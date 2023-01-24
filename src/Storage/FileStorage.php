@@ -36,8 +36,7 @@ final class FileStorage implements StorageInterface
         private DebuggerIdGenerator $idGenerator,
         private Aliases $aliases,
         private array $excludedClasses = []
-    )
-    {
+    ) {
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -114,7 +113,7 @@ final class FileStorage implements StorageInterface
             [
                 'id' => $this->idGenerator->getId(),
                 'collectors' => array_keys($this->collectors),
-            ]
+            ],
         ];
 
         foreach ($this->collectors as $collector) {
