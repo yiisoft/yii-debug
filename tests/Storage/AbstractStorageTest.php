@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Storage;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
+use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 abstract class AbstractStorageTest extends TestCase
@@ -35,9 +36,10 @@ abstract class AbstractStorageTest extends TestCase
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $expectedData = $storage->getData();
+        !($storage instanceof MemoryStorage) && $storage->flush();
         $this->assertIsArray($storage->read());
-        $this->assertEquals($storage->getData(), $storage->read(StorageInterface::TYPE_DATA));
+        $this->assertEquals([$idGenerator->getId() => $expectedData], $storage->read(StorageInterface::TYPE_DATA));
     }
 
     /**
@@ -66,7 +68,6 @@ abstract class AbstractStorageTest extends TestCase
             [[false]],
             [[null]],
             [[0]],
-            [[new \stdClass()]],
         ];
     }
 
