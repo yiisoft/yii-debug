@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Assets\AssetLoaderInterface;
 use Yiisoft\Cache\CacheInterface;
@@ -18,6 +19,8 @@ use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
+use Yiisoft\Yii\Debug\Collector\HttpClientCollector;
+use Yiisoft\Yii\Debug\Collector\HttpClientInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
@@ -50,6 +53,7 @@ return [
             ValidatorCollector::class,
             QueueCollector::class,
             FileStreamCollector::class,
+            HttpClientCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
@@ -72,6 +76,7 @@ return [
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
             ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
+            ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
             CacheInterface::class,
         ],
         'dumper.excludedClasses' => [
