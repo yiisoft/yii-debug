@@ -67,7 +67,7 @@ return array_merge([
                 UseStatementParser::class,
                 FileStorage::class,
                 ClassLoader::class,
-            ]
+            ],
         ],
     ],
 ], $common);
