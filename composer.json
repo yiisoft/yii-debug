@@ -30,7 +30,7 @@
         "symfony/console": "^5.4|^6.0",
         "yiisoft/aliases": "^1.1|^2.0",
         "yiisoft/arrays": "^2.0|^3.0",
-        "yiisoft/assets": "^2.0.1",
+        "yiisoft/assets": "^3.0",
         "yiisoft/di": "^1.0",
         "yiisoft/files": "^2.0",
         "yiisoft/json": "^1.0",
