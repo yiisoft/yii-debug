@@ -56,7 +56,7 @@ final class FileStreamCollector implements CollectorInterface, IndexCollectorInt
         return [
             'file' => array_merge(
                 ...array_map(
-                    fn (string $operation) => [$operation => count($this->requests[$operation])],
+                    fn (string $operation) => [$operation => is_countable($this->requests[$operation]) ? count($this->requests[$operation]) : 0],
                     array_keys($this->requests)
                 )
             ),
