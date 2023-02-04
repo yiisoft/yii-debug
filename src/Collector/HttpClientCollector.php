@@ -23,7 +23,7 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
                 'totalTime' => array_sum(
                     array_merge(
                         ...array_map(
-                            fn(array $entry) => array_column($entry, 'totalTime'),
+                            fn (array $entry) => array_column($entry, 'totalTime'),
                             $this->requests
                         )
                     )
