@@ -17,6 +17,7 @@ use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
@@ -48,6 +49,7 @@ return [
             ServiceCollector::class,
             ValidatorCollector::class,
             QueueCollector::class,
+            FileStreamCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
