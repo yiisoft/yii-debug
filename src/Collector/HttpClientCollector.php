@@ -58,7 +58,7 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
         if (!isset($this->requests[spl_object_id($request)])) {
             return;
         }
-        $entry = &$this->requests[spl_object_id($request)][count($this->requests[spl_object_id($request)])-1];
+        $entry = &$this->requests[spl_object_id($request)][(is_countable($this->requests[spl_object_id($request)]) ? count($this->requests[spl_object_id($request)]) : 0)-1];
         $entry['endTime'] = microtime(true);
         $entry['totalTime'] = $entry['endTime'] - $entry['startTime'];
     }
