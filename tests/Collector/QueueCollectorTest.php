@@ -30,7 +30,7 @@ final class QueueCollectorTest extends CollectorTestCase
     {
         $ruleNumber = new Number(min: 200);
         $result = new Result();
-        $result->addError($ruleNumber->getTooSmallMessage());
+        $result->addError($ruleNumber->getLessThanMinMessage());
 
         $collector->collectStatus('12345', JobStatus::done());
         $collector->collectPush('chan1', $this->pushMessage);

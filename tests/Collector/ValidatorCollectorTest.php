@@ -18,7 +18,7 @@ final class ValidatorCollectorTest extends CollectorTestCase
     {
         $ruleNumber = new Number(min: 200);
         $result = new Result();
-        $result->addError($ruleNumber->getTooSmallMessage());
+        $result->addError($ruleNumber->getLessThanMinMessage());
 
         $collector->collect(123, $result, [$ruleNumber]);
     }
