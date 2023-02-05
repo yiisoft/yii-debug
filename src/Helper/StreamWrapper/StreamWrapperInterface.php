@@ -25,7 +25,7 @@ interface StreamWrapperInterface
 
     public function stream_cast(int $castAs);
 
-    public function stream_stat(): array;
+    public function stream_stat(): array|false;
 
     public function dir_closedir(): bool;
 

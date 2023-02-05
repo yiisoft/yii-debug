@@ -100,7 +100,7 @@ final class StreamWrapper implements StreamWrapperInterface
         };
     }
 
-    public function stream_stat(): array
+    public function stream_stat(): array|false
     {
         return fstat($this->stream);
     }

@@ -143,7 +143,7 @@ class FileStreamProxy implements StreamWrapperInterface
         return $this->__call(__FUNCTION__, func_get_args());
     }
 
-    public function stream_stat(): array
+    public function stream_stat(): array|false
     {
         return $this->__call(__FUNCTION__, func_get_args());
     }
