@@ -45,6 +45,18 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             }
         }
 
+        $requestRaw = null;
+        if ($this->request instanceof ServerRequestInterface) {
+            $requestRaw = Message::toString($this->request);
+            Message::rewindBody($this->request);
+        }
+
+        $responseRaw = null;
+        if ($this->response instanceof ResponseInterface) {
+            $responseRaw = Message::toString($this->response);
+            Message::rewindBody($this->response);
+        }
+
         return [
             'requestUrl' => $this->requestUrl,
             'requestPath' => $this->requestPath,
@@ -54,9 +66,9 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             'userIp' => $this->userIp,
             'responseStatusCode' => $this->responseStatusCode,
             'request' => $this->request,
-            'requestRaw' => Message::toString($this->request),
+            'requestRaw' => $requestRaw,
             'response' => $this->response,
-            'responseRaw' => $this->response instanceof ResponseInterface ? Message::toString($this->response) : null,
+            'responseRaw' => $responseRaw,
             'content' => $content,
         ];
     }
