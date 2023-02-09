@@ -17,7 +17,7 @@ use function usleep;
 final class WebAppInfoCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param WebAppInfoCollector|CollectorInterface $collector
+     * @param CollectorInterface|WebAppInfoCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {

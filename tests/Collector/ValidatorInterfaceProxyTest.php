@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 final class ValidatorInterfaceProxyTest extends AbstractCollectorTestCase
 {
     /**
-     * @param ValidatorCollector|CollectorInterface $collector
+     * @param CollectorInterface|ValidatorCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
