@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
 use const SEEK_SET;
 
-class FileStreamProxy implements StreamWrapperInterface
+class FilesystemStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
     /**
@@ -19,7 +19,7 @@ class FileStreamProxy implements StreamWrapperInterface
     public StreamWrapperInterface $decorated;
     public bool $ignored = false;
 
-    public static ?FileStreamCollector $collector = null;
+    public static ?FilesystemStreamCollector $collector = null;
     public static array $ignoredPathPatterns = [];
     public static array $ignoredClasses = [];
 
@@ -107,7 +107,6 @@ class FileStreamProxy implements StreamWrapperInterface
 
     public function stream_read(int $count): string|false
     {
-        $a = debug_backtrace();
         if (!$this->ignored) {
             self::$collector->collect(
                 operation: 'read',

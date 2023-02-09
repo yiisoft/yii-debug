@@ -9,7 +9,7 @@ use Yiisoft\Aliases\Aliases;
 use Yiisoft\VarDumper\ClosureExporter;
 use Yiisoft\VarDumper\UseStatementParser;
 use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
-use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
+use Yiisoft\Yii\Debug\Collector\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
@@ -55,7 +55,7 @@ return array_merge([
             $logLevel
         );
     },
-    FileStreamCollector::class => [
+    FilesystemStreamCollector::class => [
         '__construct()' => [
             'ignoredPathPatterns' => [
                 //'/ClosureExporter/',

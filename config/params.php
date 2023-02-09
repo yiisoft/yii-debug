@@ -18,7 +18,7 @@ use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
+use Yiisoft\Yii\Debug\Collector\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\HttpStreamCollector;
@@ -54,7 +54,7 @@ return [
             ValidatorCollector::class,
             QueueCollector::class,
             HttpClientCollector::class,
-            FileStreamCollector::class,
+            FilesystemStreamCollector::class,
             HttpStreamCollector::class,
         ],
         'collectors.web' => [

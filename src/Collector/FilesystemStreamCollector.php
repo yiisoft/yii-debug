@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class FileStreamCollector implements CollectorInterface, IndexCollectorInterface
+final class FilesystemStreamCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -22,18 +22,18 @@ final class FileStreamCollector implements CollectorInterface, IndexCollectorInt
     public function startup(): void
     {
         $this->isActive = true;
-        FileStreamProxy::register();
-        FileStreamProxy::$collector = $this;
-        FileStreamProxy::$ignoredPathPatterns = $this->ignoredPathPatterns;
-        FileStreamProxy::$ignoredClasses = $this->ignoredClasses;
+        FilesystemStreamProxy::register();
+        FilesystemStreamProxy::$collector = $this;
+        FilesystemStreamProxy::$ignoredPathPatterns = $this->ignoredPathPatterns;
+        FilesystemStreamProxy::$ignoredClasses = $this->ignoredClasses;
     }
 
     public function shutdown(): void
     {
-        FileStreamProxy::unregister();
-        FileStreamProxy::$collector = null;
-        FileStreamProxy::$ignoredPathPatterns = [];
-        FileStreamProxy::$ignoredClasses = [];
+        FilesystemStreamProxy::unregister();
+        FilesystemStreamProxy::$collector = null;
+        FilesystemStreamProxy::$ignoredPathPatterns = [];
+        FilesystemStreamProxy::$ignoredClasses = [];
 
         $this->reset();
         $this->isActive = false;
@@ -54,7 +54,7 @@ final class FileStreamCollector implements CollectorInterface, IndexCollectorInt
     public function getIndexData(): array
     {
         return [
-            'file' => array_merge(
+            'fs_stream' => array_merge(
                 ...array_map(
                     fn (string $operation) => [$operation => is_countable($this->requests[$operation]) ? count($this->requests[$operation]) : 0],
                     array_keys($this->requests)
