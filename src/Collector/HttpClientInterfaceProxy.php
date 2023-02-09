@@ -18,7 +18,7 @@ final class HttpClientInterfaceProxy implements ClientInterface
     {
         [$callStack] = debug_backtrace();
 
-        $uniqueId = random_bytes(12);
+        $uniqueId = random_bytes(36);
         $startTime = microtime(true);
         $this->collector->collect($request, $startTime, $callStack['file'] . ':' . $callStack['line'], $uniqueId);
 

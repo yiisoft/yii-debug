@@ -12,11 +12,14 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
     {
     }
 
-    private array $requests = [];
+    /**
+     * @var array[]
+     */
+    private array $operations = [];
 
     public function getCollected(): array
     {
-        return $this->requests;
+        return array_map('array_values', $this->operations);
     }
 
     public function startup(): void
@@ -45,7 +48,7 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
             return;
         }
 
-        $this->requests[$operation][] = [
+        $this->operations[$operation][] = [
             'path' => $path,
             'args' => $args,
         ];
@@ -56,8 +59,8 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
         return [
             'fs_stream' => array_merge(
                 ...array_map(
-                    fn (string $operation) => [$operation => is_countable($this->requests[$operation]) ? count($this->requests[$operation]) : 0],
-                    array_keys($this->requests)
+                    fn (string $operation) => [$operation => count($this->operations[$operation])],
+                    array_keys($this->operations)
                 )
             ),
         ];
@@ -65,6 +68,6 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
 
     private function reset(): void
     {
-        $this->requests = [];
+        $this->operations = [];
     }
 }

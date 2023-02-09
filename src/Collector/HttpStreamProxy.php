@@ -20,6 +20,7 @@ class HttpStreamProxy implements StreamWrapperInterface
     public bool $ignored = false;
 
     public static ?HttpStreamCollector $collector = null;
+    public array $operations = [];
 
     public function __construct()
     {
@@ -34,6 +35,17 @@ class HttpStreamProxy implements StreamWrapperInterface
             return $this->decorated->{$name}(...$arguments);
         } finally {
             self::register();
+        }
+    }
+
+    public function __destruct()
+    {
+        foreach ($this->operations as $name => $operation) {
+            self::$collector->collect(
+                operation: $name,
+                path: $operation['path'],
+                args: $operation['args'],
+            );
         }
     }
 
@@ -86,18 +98,14 @@ class HttpStreamProxy implements StreamWrapperInterface
             $method = $context['http']['method'] ?? $context['https']['method'] ?? 'GET';
             $headers = (array) ($context['http']['header'] ?? $context['https']['header'] ?? []);
 
-            self::$collector->collect(
-                operation: 'read',
-                path: $this->decorated->filename,
-                args: [
+            $this->operations['read'] = [
+                'path' => $this->decorated->filename,
+                'args' => [
                     'method' => $method,
                     'response_headers' => $metadata['wrapper_data'],
                     'request_headers' => $headers,
-                    // TODO: get rid of?
-                    'metadata' => $metadata,
-                    'context' => $context,
                 ],
-            );
+            ];
         }
         return $this->__call(__FUNCTION__, func_get_args());
     }
@@ -145,11 +153,10 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function dir_readdir(): false|string
     {
         if (!$this->ignored) {
-            self::$collector->collect(
-                operation: __FUNCTION__,
-                path: $this->decorated->filename,
-                args: [],
-            );
+            $this->operations[__FUNCTION__] = [
+                'path' => $this->decorated->filename,
+                'args' => [],
+            ];
         }
         return $this->__call(__FUNCTION__, func_get_args());
     }
@@ -162,14 +169,13 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function mkdir(string $path, int $mode, int $options): bool
     {
         if (!$this->ignored) {
-            self::$collector->collect(
-                operation: __FUNCTION__,
-                path: $path,
-                args: [
+            $this->operations[__FUNCTION__] = [
+                'path' => $path,
+                'args' => [
                     'mode' => $mode,
                     'options' => $options,
-                ]
-            );
+                ],
+            ];
         }
         return $this->__call(__FUNCTION__, func_get_args());
     }
@@ -177,13 +183,12 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function rename(string $path_from, string $path_to): bool
     {
         if (!$this->ignored) {
-            self::$collector->collect(
-                operation: __FUNCTION__,
-                path: $path_from,
-                args: [
+            $this->operations[__FUNCTION__] = [
+                'path' => $path_from,
+                'args' => [
                     'path_to' => $path_to,
                 ],
-            );
+            ];
         }
         return $this->__call(__FUNCTION__, func_get_args());
     }
@@ -191,13 +196,12 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function rmdir(string $path, int $options): bool
     {
         if (!$this->ignored) {
-            self::$collector->collect(
-                operation: __FUNCTION__,
-                path: $path,
-                args: [
+            $this->operations[__FUNCTION__] = [
+                'path' => $path,
+                'args' => [
                     'options' => $options,
                 ],
-            );
+            ];
         }
         return $this->__call(__FUNCTION__, func_get_args());
     }
@@ -230,11 +234,10 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function stream_write(string $data): int
     {
         if (!$this->ignored) {
-            self::$collector->collect(
-                operation: 'write',
-                path: $this->decorated->filename,
-                args: [],
-            );
+            $this->operations['write'] = [
+                'path' => $this->decorated->filename,
+                'args' => [],
+            ];
         }
 
         return $this->__call(__FUNCTION__, func_get_args());
@@ -243,11 +246,10 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function unlink(string $path): bool
     {
         if (!$this->ignored) {
-            self::$collector->collect(
-                operation: __FUNCTION__,
-                path: $path,
-                args: [],
-            );
+            $this->operations[__FUNCTION__] = [
+                'path' => $path,
+                'args' => [],
+            ];
         }
         return $this->__call(__FUNCTION__, func_get_args());
     }
