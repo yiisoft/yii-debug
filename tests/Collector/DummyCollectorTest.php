@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-final class DummyAbstractCollectorTest extends AbstractCollectorTestCase
+final class DummyCollectorTest extends AbstractCollectorTestCase
 {
     protected function getCollector(): CollectorInterface
     {

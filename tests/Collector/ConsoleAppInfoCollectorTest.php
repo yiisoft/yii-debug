@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
 use function sleep;
 use function usleep;
 
-final class ConsoleAppInfoAbstractCollectorTest extends AbstractCollectorTestCase
+final class ConsoleAppInfoCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|WebAppInfoCollector $collector

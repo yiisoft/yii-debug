@@ -12,6 +12,7 @@ abstract class AbstractCollectorTestCase extends TestCase
 {
     public function testCollect(): void
     {
+        $indexData = null;
         $collector = $this->getCollector();
 
         $collector->startup();

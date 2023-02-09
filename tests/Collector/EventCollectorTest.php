@@ -8,7 +8,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyEvent;
 
-final class EventAbstractCollectorTest extends AbstractCollectorTestCase
+final class EventCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|EventCollector $collector

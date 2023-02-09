@@ -10,7 +10,7 @@ use Yiisoft\View\WebView;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 
-final class WebViewAbstractCollectorTest extends AbstractCollectorTestCase
+final class WebViewCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|WebViewCollector $collector

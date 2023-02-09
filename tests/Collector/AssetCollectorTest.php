@@ -8,7 +8,7 @@ use Yiisoft\Assets\AssetBundle;
 use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-final class AssetAbstractCollectorTest extends AbstractCollectorTestCase
+final class AssetCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param AssetCollector|CollectorInterface $collector

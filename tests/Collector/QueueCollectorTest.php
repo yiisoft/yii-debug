@@ -12,7 +12,7 @@ use Yiisoft\Yii\Debug\Tests\Support\DummyQueue;
 use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\Message;
 
-final class QueueAbstractCollectorTest extends AbstractCollectorTestCase
+final class QueueCollectorTest extends AbstractCollectorTestCase
 {
     private Message $pushMessage;
 

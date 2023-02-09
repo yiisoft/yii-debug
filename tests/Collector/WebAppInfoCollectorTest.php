@@ -14,7 +14,7 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 use function sleep;
 use function usleep;
 
-final class WebAppInfoAbstractCollectorTest extends AbstractCollectorTestCase
+final class WebAppInfoCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param WebAppInfoCollector|CollectorInterface $collector

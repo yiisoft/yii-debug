@@ -14,7 +14,7 @@ use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 
-final class CommandAbstractCollectorTest extends AbstractCollectorTestCase
+final class CommandCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|CommandCollector $collector

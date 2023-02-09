@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
+use Yiisoft\Yii\Debug\Collector\FilesystemStreamCollector;
 
-final class FileStreamAbstractCollectorTest extends AbstractCollectorTestCase
+final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param CollectorInterface|FileStreamCollector $collector
+     * @param CollectorInterface|FilesystemStreamCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -42,7 +42,7 @@ final class FileStreamAbstractCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new FileStreamCollector();
+        return new FilesystemStreamCollector();
     }
 
     protected function checkCollectedData(array $data): void
@@ -66,10 +66,10 @@ final class FileStreamAbstractCollectorTest extends AbstractCollectorTestCase
     protected function checkIndexData(array $data): void
     {
         parent::checkIndexData($data);
-        $this->assertArrayHasKey('file', $data);
+        $this->assertArrayHasKey('fs_stream', $data);
         $this->assertEquals(
             ['read' => 2, 'mkdir' => 1],
-            $data['file'],
+            $data['fs_stream'],
             print_r($data, true),
         );
     }

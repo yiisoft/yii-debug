@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-final class RequestAbstractCollectorTest extends AbstractCollectorTestCase
+final class RequestCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|RequestCollector $collector
@@ -24,6 +24,8 @@ final class RequestAbstractCollectorTest extends AbstractCollectorTestCase
         $responseMock = $this->createMock(ResponseInterface::class);
         $uriMock = $this->createMock(UriInterface::class);
         $bodyMock = $this->createMock(StreamInterface::class);
+        $bodyMock->method('tell')
+            ->willReturn(1);
 
         $uriMock->method('getPath')
             ->willReturn('url');
@@ -40,6 +42,8 @@ final class RequestAbstractCollectorTest extends AbstractCollectorTestCase
             ->willReturn('');
         $requestMock->method('getUri')
             ->willReturn($uriMock);
+        $requestMock->method('getBody')
+            ->willReturn($bodyMock);
 
         $responseMock->method('getStatusCode')
             ->willReturn(200);

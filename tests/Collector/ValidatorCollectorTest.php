@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 
-final class ValidatorAbstractCollectorTest extends AbstractCollectorTestCase
+final class ValidatorCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|ValidatorCollector $collector

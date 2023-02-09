@@ -16,7 +16,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyMiddleware;
 
-final class MiddlewareAbstractCollectorTest extends AbstractCollectorTestCase
+final class MiddlewareCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|MiddlewareCollector $collector

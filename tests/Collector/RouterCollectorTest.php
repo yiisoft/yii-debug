@@ -17,7 +17,7 @@ use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
 
-final class RouterAbstractCollectorTest extends AbstractCollectorTestCase
+final class RouterCollectorTest extends AbstractCollectorTestCase
 {
     private MockObject|RouteCollectorInterface|null $routeCollector = null;
 

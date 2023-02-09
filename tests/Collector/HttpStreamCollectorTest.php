@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\HttpStreamCollector;
 
-final class HttpStreamAbstractCollectorTest extends AbstractCollectorTestCase
+final class HttpStreamCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|HttpStreamCollector $collector

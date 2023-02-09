@@ -8,7 +8,7 @@ use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 
-final class ServiceAbstractCollectorTest extends AbstractCollectorTestCase
+final class ServiceCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|ServiceCollector $collector
