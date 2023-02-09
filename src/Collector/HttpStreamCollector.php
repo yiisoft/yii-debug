@@ -23,11 +23,8 @@ final class HttpStreamCollector implements CollectorInterface, IndexCollectorInt
     {
         $this->isActive = true;
         HttpStreamProxy::register();
-        //stream_context_set_default([
-        //    'http' => [
-        //        'proxy' => 'yii-debug-http://127.0.0.1',
-        //    ],
-        //]);
+        // TODO: add cURL support, maybe through proxy?
+        // https://github.com/php/php-src/issues/10509
         //stream_context_set_default([
         //    'http' => [
         //        'proxy' => 'yii-debug-http://127.0.0.1',
