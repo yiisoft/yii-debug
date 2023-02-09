@@ -72,7 +72,7 @@ final class StreamWrapper implements StreamWrapperInterface
         return rmdir($path, $this->context);
     }
 
-    public function stream_cast(int $cast_as)
+    public function stream_cast(int $castAs)
     {
         //????
     }
@@ -177,6 +177,9 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_close(): void
     {
+        /**
+         * @psalm-suppress InvalidPropertyAssignmentValue
+         */
         fclose($this->stream);
         $this->stream = null;
     }
