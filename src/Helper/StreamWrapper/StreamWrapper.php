@@ -15,6 +15,8 @@ use const STREAM_USE_PATH;
 
 final class StreamWrapper implements StreamWrapperInterface
 {
+    private const STREAM_OPEN_FOR_INCLUDE = 128;
+
     /**
      * @var resource|null
      */
@@ -29,37 +31,45 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function dir_closedir(): bool
     {
-        return true;
+        closedir($this->stream);
+        return is_resource($this->stream);
     }
 
     public function dir_opendir(string $path, int $options): bool
     {
-        return true;
+        $this->filename = $path;
+        $this->stream = opendir($path, $this->context);
+        return is_resource($this->stream);
     }
 
-    public function dir_readdir(): string
+    public function dir_readdir(): false|string
     {
         return readdir($this->stream);
     }
 
     public function dir_rewinddir(): bool
     {
+        if (!is_resource($this->stream)) {
+            return false;
+        }
+
         return rewinddir($this->stream);
     }
 
     public function mkdir(string $path, int $mode, int $options): bool
     {
-        return mkdir($path, $mode, ($options & STREAM_MKDIR_RECURSIVE) === STREAM_MKDIR_RECURSIVE);
+        $this->filename = $path;
+        return mkdir($path, $mode, ($options & STREAM_MKDIR_RECURSIVE) === STREAM_MKDIR_RECURSIVE, $this->context);
     }
 
     public function rename(string $path_from, string $path_to): bool
     {
-        return rename($path_from, $path_to);
+        return rename($path_from, $path_to, $this->context);
     }
 
     public function rmdir(string $path, int $options): bool
     {
-        return rmdir($path);
+        return rmdir($path, $this->context);
     }
 
     public function stream_cast(int $cast_as)
@@ -75,22 +85,39 @@ final class StreamWrapper implements StreamWrapperInterface
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
     {
         $this->filename = realpath($path) ?: $path;
-        $this->stream = fopen($path, $mode, ($options & STREAM_USE_PATH) === STREAM_USE_PATH);
 
-        return $this->stream !== false;
+        if ((self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE && function_exists('opcache_invalidate')) {
+            opcache_invalidate($path, false);
+        }
+        $this->stream = fopen(
+            $path,
+            $mode,
+            ($options & STREAM_USE_PATH) === STREAM_USE_PATH,
+            (self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE ? null : $this->context
+        );
+
+        if (!is_resource($this->stream)) {
+            return false;
+        }
+
+        if ($opened_path !== null) {
+            $metaData = stream_get_meta_data($this->stream);
+            $opened_path = $metaData['uri'];
+        }
+        return true;
     }
 
     public function stream_read(int $count): string|false
     {
-        return is_readable($this->filename) ? fread($this->stream, $count) : false;
+        return fread($this->stream, $count);
     }
 
     public function stream_seek(int $offset, int $whence = SEEK_SET): bool
     {
-        return fseek($this->stream, $offset, $whence) === 0;
+        return fseek($this->stream, $offset, $whence) !== -1;
     }
 
-    public function stream_set_option(int $option, int $arg1, ?int $arg2): bool
+    public function stream_set_option(int $option, int $arg1, int $arg2): bool
     {
         return match ($option) {
             STREAM_OPTION_BLOCKING => stream_set_blocking($this->stream, $arg1 === STREAM_OPTION_BLOCKING),
@@ -118,6 +145,9 @@ final class StreamWrapper implements StreamWrapperInterface
     public function url_stat(string $path, int $flags): array|false
     {
         try {
+            if (($flags & STREAM_URL_STAT_QUIET) === STREAM_URL_STAT_QUIET) {
+                return @stat($path);
+            }
             return stat($path);
         } catch (Throwable $e) {
             if (($flags & STREAM_URL_STAT_QUIET) === STREAM_URL_STAT_QUIET) {
@@ -153,6 +183,9 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_lock(int $operation): bool
     {
+        if ($operation === 0) {
+            $operation = LOCK_EX;
+        }
         return flock($this->stream, $operation);
     }
 

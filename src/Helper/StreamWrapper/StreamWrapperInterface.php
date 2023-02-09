@@ -15,7 +15,7 @@ interface StreamWrapperInterface
 
     public function stream_read(int $count): string|false;
 
-    public function stream_set_option(int $option, int $arg1, ?int $arg2): bool;
+    public function stream_set_option(int $option, int $arg1, int $arg2): bool;
 
     public function stream_tell(): int;
 
@@ -31,7 +31,7 @@ interface StreamWrapperInterface
 
     public function dir_opendir(string $path, int $options): bool;
 
-    public function dir_readdir(): string;
+    public function dir_readdir(): false|string;
 
     public function dir_rewinddir(): bool;
 

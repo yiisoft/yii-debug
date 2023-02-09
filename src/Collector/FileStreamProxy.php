@@ -158,7 +158,7 @@ class FileStreamProxy implements StreamWrapperInterface
         return $this->__call(__FUNCTION__, func_get_args());
     }
 
-    public function dir_readdir(): string
+    public function dir_readdir(): false|string
     {
         if (!$this->ignored) {
             self::$collector->collect(
