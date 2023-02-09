@@ -14,10 +14,10 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 use function sleep;
 use function usleep;
 
-final class WebAppInfoCollectorTest extends CollectorTestCase
+final class WebAppInfoAbstractCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param WebAppInfoCollector|\Yiisoft\Yii\Debug\Collector\CollectorInterface $collector
+     * @param WebAppInfoCollector|CollectorInterface $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -35,11 +35,9 @@ final class WebAppInfoCollectorTest extends CollectorTestCase
         return new WebAppInfoCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-
-        $data = $collector->getCollected();
+        parent::checkCollectedData($data);
 
         $this->assertGreaterThan(0.122, $data['requestProcessingTime']);
     }

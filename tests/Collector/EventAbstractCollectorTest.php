@@ -8,10 +8,10 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyEvent;
 
-final class EventCollectorTest extends CollectorTestCase
+final class EventAbstractCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\EventCollector $collector
+     * @param CollectorInterface|EventCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -23,9 +23,8 @@ final class EventCollectorTest extends CollectorTestCase
         return new EventCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-        $this->assertFileExists($collector->getCollected()[0]['file']);
+        $this->assertFileExists($data[0]['file']);
     }
 }

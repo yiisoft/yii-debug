@@ -10,10 +10,10 @@ use Yiisoft\View\WebView;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\WebViewCollector;
 
-final class WebViewCollectorTest extends CollectorTestCase
+final class WebViewAbstractCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\WebViewCollector $collector
+     * @param CollectorInterface|WebViewCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {

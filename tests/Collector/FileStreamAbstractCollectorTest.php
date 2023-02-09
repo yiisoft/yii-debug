@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
-use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\FileStreamCollector;
 
-final class FileStreamCollectorTest extends CollectorTestCase
+final class FileStreamAbstractCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|FileStreamCollector $collector
@@ -45,10 +45,10 @@ final class FileStreamCollectorTest extends CollectorTestCase
         return new FileStreamCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-        $collected = $collector->getCollected();
+        parent::checkCollectedData($data);
+        $collected = $data;
         $this->assertCount(2, $collected);
 
         $this->assertCount(2, $collected['read']);
@@ -63,12 +63,14 @@ final class FileStreamCollectorTest extends CollectorTestCase
         ], $collected['mkdir']);
     }
 
-    protected function checkIndexData(CollectorInterface $collector): void
+    protected function checkIndexData(array $data): void
     {
-        parent::checkIndexData($collector);
-        if ($collector instanceof FileStreamCollector) {
-            $this->assertArrayHasKey('file', $collector->getIndexData());
-            $this->assertEquals(['read' => 2, 'mkdir' => 1], $collector->getIndexData()['file']);
-        }
+        parent::checkIndexData($data);
+        $this->assertArrayHasKey('file', $data);
+        $this->assertEquals(
+            ['read' => 2, 'mkdir' => 1],
+            $data['file'],
+            print_r($data, true),
+        );
     }
 }

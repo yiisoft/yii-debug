@@ -8,10 +8,10 @@ use Yiisoft\Assets\AssetBundle;
 use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-final class AssetCollectorTest extends CollectorTestCase
+final class AssetAbstractCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\AssetCollector|\Yiisoft\Yii\Debug\Collector\CollectorInterface $collector
+     * @param AssetCollector|CollectorInterface $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {

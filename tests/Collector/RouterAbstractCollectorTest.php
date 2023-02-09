@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Router\Group;
@@ -16,14 +17,14 @@ use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\RouterCollector;
 
-final class RouterCollectorTest extends CollectorTestCase
+final class RouterAbstractCollectorTest extends AbstractCollectorTestCase
 {
-    private \PHPUnit\Framework\MockObject\MockObject|\Yiisoft\Router\RouteCollectorInterface|null $routeCollector = null;
+    private MockObject|RouteCollectorInterface|null $routeCollector = null;
 
     private ?Container $container = null;
 
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\RouterCollector $collector
+     * @param CollectorInterface|RouterCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -51,23 +52,23 @@ final class RouterCollectorTest extends CollectorTestCase
         return new RouterCollector($this->container);
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-        $this->assertArrayHasKey('routes', $collector->getCollected());
-        $this->assertArrayHasKey('routesTree', $collector->getCollected());
-        $this->assertArrayHasKey('routeTime', $collector->getCollected());
+        parent::checkCollectedData($data);
+        $this->assertArrayHasKey('routes', $data);
+        $this->assertArrayHasKey('routesTree', $data);
+        $this->assertArrayHasKey('routeTime', $data);
         $this->assertEquals(
             $this->container->get(RouteCollectionInterface::class)->getRoutes(),
-            $collector->getCollected()['routes']
+            $data['routes']
         );
         $this->assertEquals(
             $this->container->get(RouteCollectionInterface::class)->getRouteTree(),
-            $collector->getCollected()['routesTree']
+            $data['routesTree']
         );
         $this->assertEquals(
             0.001,
-            $collector->getCollected()['routeTime']
+            $data['routeTime']
         );
     }
 

@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
+use Psr\Http\Server\MiddlewareInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
@@ -15,10 +16,10 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyMiddleware;
 
-final class MiddlewareCollectorTest extends CollectorTestCase
+final class MiddlewareAbstractCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\MiddlewareCollector $collector
+     * @param CollectorInterface|MiddlewareCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -35,11 +36,9 @@ final class MiddlewareCollectorTest extends CollectorTestCase
         return new MiddlewareCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-
-        $data = $collector->getCollected();
+        parent::checkCollectedData($data);
 
         $this->assertNotEmpty($data['beforeStack']);
         $this->assertNotEmpty($data['afterStack']);
@@ -48,7 +47,7 @@ final class MiddlewareCollectorTest extends CollectorTestCase
         $this->assertEquals('GET', $data['actionHandler']['request']->getMethod());
     }
 
-    private function createCallableMiddleware(callable|array $callable): \Psr\Http\Server\MiddlewareInterface
+    private function createCallableMiddleware(callable|array $callable): MiddlewareInterface
     {
         $factory = new MiddlewareFactory(new Container(ContainerConfig::create()));
         return $factory->create($callable);
