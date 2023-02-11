@@ -99,11 +99,11 @@ class RouterCollector implements CollectorInterface, IndexCollectorInterface
             return null;
         }
         $reflection = new ReflectionObject($currentRoute);
-        /**
-         * @var Route|null $route
-         */
-        $route = $reflection->getProperty('route')->getValue($currentRoute);
-        return $route;
+
+        $reflectionProperty = $reflection->getProperty('route');
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($currentRoute);
     }
 
     private function getMiddlewaresAndAction(?Route $route): array
@@ -112,7 +112,9 @@ class RouterCollector implements CollectorInterface, IndexCollectorInterface
             return [[], null];
         }
         $reflection = new ReflectionObject($route);
-        $middlewareDefinitions = $reflection->getProperty('middlewareDefinitions')->getValue($route);
+        $reflectionProperty = $reflection->getProperty('middlewareDefinitions');
+        $reflectionProperty->setAccessible(true);
+        $middlewareDefinitions = $reflectionProperty->getValue($route);
         $action = array_pop($middlewareDefinitions);
         return [$middlewareDefinitions, $action];
     }
