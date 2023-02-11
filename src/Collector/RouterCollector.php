@@ -102,8 +102,7 @@ class RouterCollector implements CollectorInterface, IndexCollectorInterface
         /**
          * @var Route|null $route
          */
-        $route = $reflection->getProperty('route')->getValue($currentRoute);
-        return $route;
+        return $reflection->getProperty('route')->getValue($currentRoute);
     }
 
     private function getMiddlewaresAndAction(?Route $route): array
