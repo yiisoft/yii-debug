@@ -8,6 +8,7 @@ use Closure;
 use Yiisoft\Cache\Dependency\Dependency;
 use Yiisoft\Db\Command\CommandInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Profiler\ProfilerInterface;
 use Yiisoft\Db\Query\BatchQueryResultInterface;
 use Yiisoft\Db\Query\QueryInterface;
 use Yiisoft\Db\QueryBuilder\QueryBuilderInterface;
@@ -156,5 +157,10 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
     public function transaction(Closure $closure, string $isolationLevel = null): mixed
     {
         return $this->connection->transaction($closure, $isolationLevel);
+    }
+
+    public function setProfiler(?ProfilerInterface $profiler): void
+    {
+        $this->connection->setProfiler($profiler);
     }
 }
