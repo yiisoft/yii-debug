@@ -57,11 +57,7 @@ return array_merge([
     },
     FilesystemStreamCollector::class => [
         '__construct()' => [
-            'ignoredPathPatterns' => [
-                //'/ClosureExporter/',
-                //'/UseStatementParser/',
-                //'/' . preg_quote('yii-debug/src/Dumper', '/') . '/',
-            ],
+            'ignoredPathPatterns' => [],
             'ignoredClasses' => [
                 ClosureExporter::class,
                 UseStatementParser::class,

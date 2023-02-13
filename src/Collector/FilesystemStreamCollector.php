@@ -8,7 +8,16 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
 {
     use CollectorTrait;
 
-    public function __construct(private array $ignoredPathPatterns = [], private array $ignoredClasses = [])
+    public function __construct(
+        /**
+         * Collection of regexps to ignore files sources to sniff.
+         * Examples:
+         * - '/' . preg_quote('yii-debug/src/Dumper', '/') . '/'
+         * - '/ClosureExporter/'
+         */
+        private array $ignoredPathPatterns = [],
+        private array $ignoredClasses = [],
+    )
     {
     }
 
