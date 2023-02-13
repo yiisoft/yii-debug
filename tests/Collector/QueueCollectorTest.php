@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\QueueCollector;
+use Yiisoft\Yii\Debug\Collector\Queue\QueueCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyQueue;
 use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\Message;
