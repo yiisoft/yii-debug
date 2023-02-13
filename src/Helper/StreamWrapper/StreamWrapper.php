@@ -53,7 +53,9 @@ final class StreamWrapper implements StreamWrapperInterface
             return false;
         }
 
-        return rewinddir($this->stream);
+        rewinddir($this->stream);
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
+        return is_resource($this->stream);
     }
 
     public function mkdir(string $path, int $mode, int $options): bool
