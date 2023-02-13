@@ -17,8 +17,7 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
          */
         private array $ignoredPathPatterns = [],
         private array $ignoredClasses = [],
-    )
-    {
+    ) {
     }
 
     /**
