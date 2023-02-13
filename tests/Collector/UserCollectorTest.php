@@ -37,7 +37,6 @@ final class UserCollectorTest extends AbstractCollectorTestCase
             ['id' => 'stub1', 'class' => FakeIdentity::class],
             ['id' => 'stub2', 'class' => FakeIdentity::class],
         ], $data);
-
     }
 
     protected function checkIndexData(array $data): void
