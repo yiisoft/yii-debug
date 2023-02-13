@@ -13,7 +13,7 @@ use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Middleware\Dispatcher\MiddlewareFactory;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
+use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyMiddleware;
 
 final class MiddlewareCollectorTest extends AbstractCollectorTestCase
