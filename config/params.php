@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Cycle\ORM\ORMInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Assets\AssetLoaderInterface;
 use Yiisoft\Cache\CacheInterface;
@@ -22,6 +23,10 @@ use Yiisoft\Yii\Debug\Collector\Database\DatabaseCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\FilesystemStreamCollector;
+use Yiisoft\Yii\Debug\Collector\HttpClientCollector;
+use Yiisoft\Yii\Debug\Collector\HttpClientInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\HttpStreamCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
@@ -55,6 +60,9 @@ return [
             ServiceCollector::class,
             ValidatorCollector::class,
             QueueCollector::class,
+            HttpClientCollector::class,
+            FilesystemStreamCollector::class,
+            HttpStreamCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
@@ -78,6 +86,7 @@ return [
             UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
             ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
+            ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
             ORMInterface::class => [CycleORMInterfaceProxy::class, CycleCollector::class],
             CacheInterface::class,
         ],

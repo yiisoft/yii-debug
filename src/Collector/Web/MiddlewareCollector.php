@@ -47,7 +47,12 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
             method_exists($event->getMiddleware(), '__debugInfo')
             && (new ReflectionClass($event->getMiddleware()))->isAnonymous()
         ) {
-            $name = implode('::', $event->getMiddleware()->__debugInfo()['callback']);
+            $callback = $event->getMiddleware()->__debugInfo()['callback'];
+            if (is_array($callback)) {
+                $name = implode('::', $callback);
+            } else {
+                $name = 'object(Closure)#' . spl_object_id($callback);
+            }
         } else {
             $name = $event->getMiddleware()::class;
         }

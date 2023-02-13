@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
+use GuzzleHttp\Psr7\Message;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,20 +32,32 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
 
     public function getCollected(): array
     {
-        $body = null;
+        $content = null;
         if ($this->response !== null) {
             $stream = $this->response->getBody();
             if ($stream->isReadable() && $stream->isSeekable()) {
                 $position = $stream->tell();
                 $stream->rewind();
-                $body = $stream->getContents();
+                $content = $stream->getContents();
                 try {
-                    $body = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
+                    $content = json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
                 } catch (JsonException) {
                     // pass
                 }
                 $stream->seek($position);
             }
+        }
+
+        $requestRaw = null;
+        if ($this->request instanceof ServerRequestInterface) {
+            $requestRaw = Message::toString($this->request);
+            Message::rewindBody($this->request);
+        }
+
+        $responseRaw = null;
+        if ($this->response instanceof ResponseInterface) {
+            $responseRaw = Message::toString($this->response);
+            Message::rewindBody($this->response);
         }
 
         return [
@@ -56,8 +69,10 @@ final class RequestCollector implements CollectorInterface, IndexCollectorInterf
             'userIp' => $this->userIp,
             'responseStatusCode' => $this->responseStatusCode,
             'request' => $this->request,
+            'requestRaw' => $requestRaw,
             'response' => $this->response,
-            'responseRaw' => $body,
+            'responseRaw' => $responseRaw,
+            'content' => $content,
         ];
     }
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\MessageInterface;
+use Yiisoft\Yii\Queue\Middleware\Push\MiddlewarePushInterface;
 use Yiisoft\Yii\Queue\QueueInterface;
 
 final class QueueCollector implements CollectorInterface, IndexCollectorInterface
@@ -24,21 +26,36 @@ final class QueueCollector implements CollectorInterface, IndexCollectorInterfac
         ];
     }
 
-    public function collectStatus(string $id): void
+    public function collectStatus(string $id, JobStatus $status): void
     {
         if (!$this->isActive()) {
             return;
         }
 
-        $this->statuses[] = $id;
+        $statusText = match (true) {
+            $status->isDone() => 'done',
+            $status->isReserved() => 'reserved',
+            $status->isWaiting() => 'waiting',
+            default => 'unknown'
+        };
+        $this->statuses[] = [
+            'id' => $id,
+            'status' => $statusText,
+        ];
     }
 
-    public function collectPush(string $channel, MessageInterface $message): void
-    {
+    public function collectPush(
+        string $channel,
+        MessageInterface $message,
+        string|array|callable|MiddlewarePushInterface ...$middlewareDefinitions,
+    ): void {
         if (!$this->isActive()) {
             return;
         }
-        $this->pushes[$channel][] = $message;
+        $this->pushes[$channel][] = [
+            'message' => $message,
+            'middlewares' => $middlewareDefinitions,
+        ];
     }
 
     public function collectWorkerProcessing(MessageInterface $message, QueueInterface $queue)
