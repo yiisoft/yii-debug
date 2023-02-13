@@ -7,13 +7,12 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\QueueCollector;
 use Yiisoft\Yii\Debug\Tests\Support\DummyQueue;
 use Yiisoft\Yii\Queue\Enum\JobStatus;
 use Yiisoft\Yii\Queue\Message\Message;
 
-final class QueueCollectorTest extends CollectorTestCase
+final class QueueCollectorTest extends AbstractCollectorTestCase
 {
     private Message $pushMessage;
 
@@ -54,14 +53,14 @@ final class QueueCollectorTest extends CollectorTestCase
         return new QueueCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
+        parent::checkCollectedData($data);
         [
             'pushes' => $pushes,
             'statuses' => $statuses,
             'processingMessages' => $processingMessages,
-        ] = $collector->getCollected();
+        ] = $data;
 
         $this->assertEquals([
             'chan1' => [
@@ -97,14 +96,14 @@ final class QueueCollectorTest extends CollectorTestCase
         );
     }
 
-    protected function checkIndexData(CollectorInterface|IndexCollectorInterface $collector): void
+    protected function checkIndexData(array $data): void
     {
-        parent::checkIndexData($collector);
+        parent::checkIndexData($data);
         [
             'countPushes' => $countPushes,
             'countStatuses' => $countStatuses,
             'countProcessingMessages' => $countProcessingMessages,
-        ] = $collector->getIndexData()['queue'];
+        ] = $data['queue'];
 
         $this->assertEquals(2, $countPushes);
         $this->assertEquals(1, $countStatuses);

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
+use GuzzleHttp\Psr7\Message;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 final class HttpClientCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
@@ -32,34 +36,40 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
         ];
     }
 
-    public function collect(\Psr\Http\Message\RequestInterface $request, string $line)
+    public function collect(RequestInterface $request, float|string $startTime, string $line, ?string $uniqueId)
     {
         if (!$this->isActive()) {
             return;
         }
 
-        $this->requests[spl_object_id($request)][] = [
-            'startTime' => microtime(true),
-            'endTime' => microtime(true),
+        $this->requests[$uniqueId][] = [
+            'startTime' => $startTime,
+            'endTime' => $startTime,
             'totalTime' => 0,
             'method' => $request->getMethod(),
             'uri' => $request->getUri()->__toString(),
             'headers' => $request->getHeaders(),
             'line' => $line,
+            'response' => null,
         ];
     }
 
-    public function collectTotalTime(\Psr\Http\Message\RequestInterface $request)
+    public function collectTotalTime(?ResponseInterface $response, float|string $startTime, ?string $uniqueId): void
     {
         if (!$this->isActive()) {
             return;
         }
 
-        if (!isset($this->requests[spl_object_id($request)])) {
+        if (!isset($this->requests[$uniqueId]) || !is_array($this->requests[$uniqueId])) {
             return;
         }
-        $entry = &$this->requests[spl_object_id($request)][(is_countable($this->requests[spl_object_id($request)]) ? count($this->requests[spl_object_id($request)]) : 0)-1];
-        $entry['endTime'] = microtime(true);
+        $entry = &$this->requests[$uniqueId][count($this->requests[$uniqueId]) - 1];
+        if ($response instanceof ResponseInterface) {
+            $entry['responseRaw'] = Message::toString($response);
+            $entry['responseStatus'] = $response->getStatusCode();
+            Message::rewindBody($response);
+        }
+        $entry['endTime'] = $startTime;
         $entry['totalTime'] = $entry['endTime'] - $entry['startTime'];
     }
 }
