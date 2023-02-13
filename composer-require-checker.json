@@ -1,5 +1,7 @@
 {
     "symbol-whitelist": [
+        "Yiisoft\\Auth\\AuthenticationMethodInterface",
+        "Yiisoft\\Auth\\IdentityInterface",
         "opcache_invalidate"
     ]
 }
