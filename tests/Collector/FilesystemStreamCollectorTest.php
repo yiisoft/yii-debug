@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\FilesystemStreamCollector;
+use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 
 final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 {
