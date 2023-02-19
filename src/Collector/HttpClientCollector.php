@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\Message;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+use function count;
+
 final class HttpClientCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
@@ -23,11 +25,11 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
     {
         return [
             'http' => [
-                'count' => array_sum(array_map(count(...), $this->requests)),
+                'count' => array_sum(array_map(static fn (array $requests) => count($requests), $this->requests)),
                 'totalTime' => array_sum(
                     array_merge(
                         ...array_map(
-                            fn (array $entry) => array_column($entry, 'totalTime'),
+                            static fn (array $entry) => array_column($entry, 'totalTime'),
                             $this->requests
                         )
                     )
