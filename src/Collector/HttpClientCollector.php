@@ -25,7 +25,7 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
     {
         return [
             'http' => [
-                'count' => array_sum(array_map(static fn ($requests) => count($requests), $this->requests)),
+                'count' => array_sum(array_map(static fn ($requests) => is_countable($requests) ? count($requests) : 0, $this->requests)),
                 'totalTime' => array_sum(
                     array_merge(
                         ...array_map(
