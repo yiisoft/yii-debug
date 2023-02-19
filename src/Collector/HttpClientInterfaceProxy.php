@@ -18,12 +18,17 @@ final class HttpClientInterfaceProxy implements ClientInterface
     {
         [$callStack] = debug_backtrace();
 
-        $this->collector->collect($request, $callStack['file'] . ':' . $callStack['line']);
+        $uniqueId = random_bytes(36);
+        $startTime = microtime(true);
+        $this->collector->collect($request, $startTime, $callStack['file'] . ':' . $callStack['line'], $uniqueId);
 
+        $response = null;
         try {
-            return $this->decorated->sendRequest($request);
+            $response = $this->decorated->sendRequest($request);
         } finally {
-            $this->collector->collectTotalTime($request);
+            $endTime = microtime(true);
+            $this->collector->collectTotalTime($response, $endTime, $uniqueId);
+            return $response;
         }
     }
 }

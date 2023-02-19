@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-final class RequestCollectorTest extends CollectorTestCase
+final class RequestCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|RequestCollector $collector
@@ -24,6 +24,8 @@ final class RequestCollectorTest extends CollectorTestCase
         $responseMock = $this->createMock(ResponseInterface::class);
         $uriMock = $this->createMock(UriInterface::class);
         $bodyMock = $this->createMock(StreamInterface::class);
+        $bodyMock->method('tell')
+            ->willReturn(1);
 
         $uriMock->method('getPath')
             ->willReturn('url');
@@ -40,6 +42,8 @@ final class RequestCollectorTest extends CollectorTestCase
             ->willReturn('');
         $requestMock->method('getUri')
             ->willReturn($uriMock);
+        $requestMock->method('getBody')
+            ->willReturn($bodyMock);
 
         $responseMock->method('getStatusCode')
             ->willReturn(200);
@@ -57,22 +61,18 @@ final class RequestCollectorTest extends CollectorTestCase
         return new RequestCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-        $this->assertInstanceOf(ServerRequestInterface::class, $collector->getCollected()['request']);
-        $this->assertInstanceOf(ResponseInterface::class, $collector->getCollected()['response']);
+        parent::checkCollectedData($data);
+        $this->assertInstanceOf(ServerRequestInterface::class, $data['request']);
+        $this->assertInstanceOf(ResponseInterface::class, $data['response']);
     }
 
-    protected function checkIndexData(CollectorInterface $collector): void
+    protected function checkIndexData(array $data): void
     {
-        parent::checkIndexData($collector);
-        if ($collector instanceof RequestCollector) {
-            $data = $collector->getIndexData();
-
-            $this->assertEquals('http://test.site/url', $data['request']['url']);
-            $this->assertEquals('GET', $data['request']['method']);
-            $this->assertEquals(200, $data['response']['statusCode']);
-        }
+        parent::checkIndexData($data);
+        $this->assertEquals('http://test.site/url', $data['request']['url']);
+        $this->assertEquals('GET', $data['request']['method']);
+        $this->assertEquals(200, $data['response']['statusCode']);
     }
 }

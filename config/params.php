@@ -7,19 +7,24 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Assets\AssetLoaderInterface;
+use Yiisoft\Auth\AuthenticationMethodInterface;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Injector\Injector;
 use Yiisoft\Router\UrlMatcherInterface;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\AssetLoaderInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\AuthenticationMethodInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\HttpStreamCollector;
+use Yiisoft\Yii\Debug\Collector\IdentityCollector;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
@@ -52,6 +57,8 @@ return [
             ValidatorCollector::class,
             QueueCollector::class,
             HttpClientCollector::class,
+            FilesystemStreamCollector::class,
+            HttpStreamCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
@@ -60,6 +67,7 @@ return [
             MiddlewareCollector::class,
             AssetCollector::class,
             WebViewCollector::class,
+            IdentityCollector::class,
         ],
         'collectors.console' => [
             ConsoleAppInfoCollector::class,
@@ -75,6 +83,7 @@ return [
             ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
+            AuthenticationMethodInterface::class => [AuthenticationMethodInterfaceProxy::class, IdentityCollector::class],
             CacheInterface::class,
         ],
         'dumper.excludedClasses' => [

@@ -8,10 +8,10 @@ use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 
-final class LogCollectorTest extends CollectorTestCase
+final class LogCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param \Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Yii\Debug\Collector\LogCollector $collector
+     * @param CollectorInterface|LogCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
