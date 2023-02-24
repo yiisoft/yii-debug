@@ -8,7 +8,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-class CycleCollector implements CollectorInterface, IndexCollectorInterface
+final class CycleCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -38,7 +38,7 @@ class CycleCollector implements CollectorInterface, IndexCollectorInterface
     {
         return [
             'cycle' => [
-                'total' => $this->queries,
+                'total' => count($this->queries),
             ],
         ];
     }
