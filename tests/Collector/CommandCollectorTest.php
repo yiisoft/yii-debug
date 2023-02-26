@@ -14,7 +14,7 @@ use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CommandCollector;
 
-final class CommandCollectorTest extends CollectorTestCase
+final class CommandCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|CommandCollector $collector
@@ -59,24 +59,20 @@ final class CommandCollectorTest extends CollectorTestCase
         return new CommandCollector();
     }
 
-    protected function checkCollectedData(CollectorInterface $collector): void
+    protected function checkCollectedData(array $data): void
     {
-        parent::checkCollectedData($collector);
-        $collected = $collector->getCollected();
-        $this->assertCount(3, $collected);
-        $this->assertEquals('test', $collected[ConsoleCommandEvent::class]['input']);
-        $this->assertEmpty($collected[ConsoleCommandEvent::class]['output']);
+        parent::checkCollectedData($data);
+        $this->assertCount(3, $data);
+        $this->assertEquals('test', $data[ConsoleCommandEvent::class]['input']);
+        $this->assertEmpty($data[ConsoleCommandEvent::class]['output']);
     }
 
-    protected function checkIndexData(CollectorInterface $collector): void
+    protected function checkIndexData(array $data): void
     {
-        parent::checkIndexData($collector);
-        if ($collector instanceof CommandCollector) {
-            $this->assertArrayHasKey('command', $collector->getIndexData());
-            $this->assertArrayHasKey('input', $collector->getIndexData()['command']);
-            $this->assertArrayHasKey('class', $collector->getIndexData()['command']);
-            $this->assertEquals('test1', $collector->getIndexData()['command']['input']);
-            $this->assertEquals(null, $collector->getIndexData()['command']['class']);
-        }
+        $this->assertArrayHasKey('command', $data);
+        $this->assertArrayHasKey('input', $data['command']);
+        $this->assertArrayHasKey('class', $data['command']);
+        $this->assertEquals('test1', $data['command']['input']);
+        $this->assertEquals(null, $data['command']['class']);
     }
 }

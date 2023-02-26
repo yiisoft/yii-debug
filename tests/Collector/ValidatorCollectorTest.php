@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
 
-final class ValidatorCollectorTest extends CollectorTestCase
+final class ValidatorCollectorTest extends AbstractCollectorTestCase
 {
     /**
      * @param CollectorInterface|ValidatorCollector $collector
@@ -18,7 +18,7 @@ final class ValidatorCollectorTest extends CollectorTestCase
     {
         $ruleNumber = new Number(min: 200);
         $result = new Result();
-        $result->addError($ruleNumber->getTooSmallMessage());
+        $result->addError($ruleNumber->getLessThanMinMessage());
 
         $collector->collect(123, $result, [$ruleNumber]);
     }

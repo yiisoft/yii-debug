@@ -14,6 +14,7 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 final class Debugger
 {
     private bool $skipCollect = false;
+    private bool $active = false;
 
     public function __construct(
         private DebuggerIdGenerator $idGenerator,
@@ -25,6 +26,7 @@ final class Debugger
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
     ) {
+        register_shutdown_function([$this, 'shutdown']);
     }
 
     public function getId(): string
@@ -34,6 +36,8 @@ final class Debugger
 
     public function startup(object $event): void
     {
+        $this->active = true;
+
         if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
             $this->skipCollect = true;
             return;
@@ -49,8 +53,6 @@ final class Debugger
             $this->target->addCollector($collector);
             $collector->startup();
         }
-
-        register_shutdown_function([$this, 'shutdown']);
     }
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
@@ -79,6 +81,10 @@ final class Debugger
 
     public function shutdown(): void
     {
+        if (!$this->active) {
+            return;
+        }
+
         try {
             if (!$this->skipCollect) {
                 $this->target->flush();
@@ -88,6 +94,7 @@ final class Debugger
                 $collector->shutdown();
             }
             $this->skipCollect = false;
+            $this->active = false;
         }
     }
 

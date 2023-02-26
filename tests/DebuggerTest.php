@@ -69,6 +69,7 @@ final class DebuggerTest extends TestCase
         $collector->expects($this->once())->method('shutdown');
 
         $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), [$collector]);
+        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
         $debugger->shutdown();
     }
 
