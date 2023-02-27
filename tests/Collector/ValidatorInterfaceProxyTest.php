@@ -4,27 +4,64 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
-use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
-use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
 
-final class ValidatorInterfaceProxyTest extends TestCase
+final class ValidatorInterfaceProxyTest extends AbstractCollectorTestCase
 {
-    public function testBase(): void
+    /**
+     * @param CollectorInterface|ValidatorCollector $collector
+     */
+    protected function collectTestData(CollectorInterface $collector): void
     {
-        $validator = new Validator();
-        $collector = new ValidatorCollector();
+        $collector->collect(1, (new Result())->addError('Too low', ['arg1' => 'v1']), [new Number(min: 7)]);
+        $collector->collect(10, new Result(), [new Number(min: 7)]);
+    }
 
-        $proxy = new ValidatorInterfaceProxy($validator, $collector);
+    protected function getCollector(): CollectorInterface
+    {
+        return new ValidatorCollector();
+    }
 
-        $collector->startup();
-        $proxy->validate(1, [new Number(min: 7)]);
+    protected function checkCollectedData(array $data): void
+    {
+        parent::checkCollectedData($data);
 
-        $this->assertSame(
-            ['validator' => ['total' => 1, 'valid' => 0, 'invalid' => 1]],
-            $collector->getIndexData()
+        $this->assertEquals(
+            [
+                [
+                    'value' => 1,
+                    'rules' => [
+                        new Number(min: 7),
+                    ],
+                    'result' => false,
+                    'errors' => [
+                        new Error('Too low', ['arg1' => 'v1']),
+                    ],
+                ],
+                [
+                    'value' => 10,
+                    'rules' => [
+                        new Number(min: 7),
+                    ],
+                    'result' => true,
+                    'errors' => [],
+                ],
+            ],
+            $data
+        );
+    }
+
+    protected function checkIndexData(array $data): void
+    {
+        parent::checkIndexData($data);
+
+        $this->assertEquals(
+            ['total' => 2, 'valid' => 1, 'invalid' => 1],
+            $data['validator']
         );
     }
 }

@@ -46,4 +46,9 @@ final class DummyQueue implements QueueInterface
     {
         return $this->channelName;
     }
+
+    public function withChannelName(string $channel): QueueInterface
+    {
+        throw new Exception('`withChannelName()` method is not implemented yet.');
+    }
 }
