@@ -82,9 +82,6 @@ final class DumperTest extends TestCase
         $staticShortFunctionObjectId = spl_object_id($staticShortFunctionObject);
 
         // @formatter:off
-        /**
-         * @noRector
-         */
         $functionObject = function () {
             return 1;
         };
@@ -92,9 +89,6 @@ final class DumperTest extends TestCase
         $functionObjectId = spl_object_id($functionObject);
 
         // @formatter:off
-        /**
-         * @noRector
-         */
         $staticFunctionObject = static function () {
             return 1;
         };
