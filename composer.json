@@ -40,7 +40,7 @@
         "yiisoft/proxy": "^1.0.1",
         "yiisoft/router": "^3.0",
         "yiisoft/strings": "^2.0",
-        "yiisoft/validator": "3.0.x-dev",
+        "yiisoft/validator": "^1.0",
         "yiisoft/var-dumper": "^1.0",
         "yiisoft/view": "^8.0",
         "yiisoft/yii-console": "^2.0",
