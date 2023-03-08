@@ -8,10 +8,25 @@ use GuzzleHttp\Psr7\Message;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+use function count;
+
 final class HttpClientCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
+    /**
+     * @psalm-var array<string, non-empty-list<array{
+     *     startTime: float|string,
+     *     endTime: float|string,
+     *     totalTime: float,
+     *     method: string,
+     *     uri: string,
+     *     headers: string[][],
+     *     line: string,
+     *     responseRaw?: string,
+     *     responseStatus?: int,
+     * }>>
+     */
     private array $requests = [];
 
     public function getCollected(): array
@@ -23,12 +38,12 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
     {
         return [
             'http' => [
-                'count' => array_sum(array_map(count(...), $this->requests)),
+                'count' => array_sum(array_map(static fn (array $requests) => count($requests), $this->requests)),
                 'totalTime' => array_sum(
                     array_merge(
                         ...array_map(
-                            fn (array $entry) => array_column($entry, 'totalTime'),
-                            $this->requests
+                            static fn (array $entry) => array_column($entry, 'totalTime'),
+                            array_values($this->requests)
                         )
                     )
                 ),
@@ -36,7 +51,7 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
         ];
     }
 
-    public function collect(RequestInterface $request, float|string $startTime, string $line, ?string $uniqueId)
+    public function collect(RequestInterface $request, float|string $startTime, string $line, ?string $uniqueId): void
     {
         if (!$this->isActive()) {
             return;
@@ -45,12 +60,11 @@ final class HttpClientCollector implements CollectorInterface, IndexCollectorInt
         $this->requests[$uniqueId][] = [
             'startTime' => $startTime,
             'endTime' => $startTime,
-            'totalTime' => 0,
+            'totalTime' => 0.0,
             'method' => $request->getMethod(),
-            'uri' => $request->getUri()->__toString(),
+            'uri' => (string) $request->getUri(),
             'headers' => $request->getHeaders(),
             'line' => $line,
-            'response' => null,
         ];
     }
 

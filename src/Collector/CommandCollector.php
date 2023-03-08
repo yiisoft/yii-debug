@@ -17,6 +17,10 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 {
     use CollectorTrait;
 
+    /**
+     * Let -1 mean that it was not set during the process.
+     */
+    private const UNDEFINED_EXIT_CODE = -1;
     private array $commands = [];
 
     public function getCollected(): array
@@ -24,16 +28,18 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         return $this->commands;
     }
 
-    public function collect(object $event): void
+    public function collect(ConsoleEvent|ConsoleErrorEvent|ConsoleTerminateEvent $event): void
     {
         if (!is_object($event) || !$this->isActive()) {
             return;
         }
 
+        $command = $event->getCommand();
+
         if ($event instanceof ConsoleErrorEvent) {
             $this->commands[$event::class] = [
                 'name' => $event->getInput()->getFirstArgument() ?? '',
-                'command' => $event->getCommand(),
+                'command' => $command,
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
                 'error' => $event->getError()->getMessage(),
@@ -45,8 +51,8 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof ConsoleTerminateEvent) {
             $this->commands[$event::class] = [
-                'name' => $event->getCommand()->getName(),
-                'command' => $event->getCommand(),
+                'name' => $command->getName(),
+                'command' => $command,
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
                 'exitCode' => $event->getExitCode(),
@@ -56,10 +62,12 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
 
         if ($event instanceof ConsoleEvent) {
             $this->commands[$event::class] = [
-                'name' => $event->getCommand()->getName(),
-                'command' => $event->getCommand(),
+                'name' => $command->getName(),
+                'command' => $command,
                 'input' => $event->getInput()->__toString(),
                 'output' => $event->getOutput()->fetch(),
+                'arguments' => $command->getDefinition()->getArguments(),
+                'options' => $command->getDefinition()->getOptions(),
             ];
         }
     }
@@ -98,6 +106,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
                 'name' => $commandEvent['name'],
                 'class' => $commandEvent['command'] instanceof Command ? $commandEvent['command']::class : null,
                 'input' => $commandEvent['input'],
+                'exitCode' => $commandEvent['exitCode'] ?? self::UNDEFINED_EXIT_CODE,
             ],
         ];
     }

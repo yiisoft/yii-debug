@@ -10,6 +10,8 @@
         "Cycle\\ORM\\SchemaInterface",
         "Cycle\\ORM\\Select\\SourceInterface",
         "Cycle\\ORM\\Transaction\\CommandGeneratorInterface",
+        "Yiisoft\\Auth\\AuthenticationMethodInterface",
+        "Yiisoft\\Auth\\IdentityInterface",
         "Yiisoft\\Cache\\Dependency\\Dependency",
         "Yiisoft\\Db\\Command\\CommandInterface",
         "Yiisoft\\Db\\Connection\\ConnectionInterface",

@@ -54,4 +54,11 @@ final class QueueDecorator implements QueueInterface
     {
         return $this->queue->getChannelName();
     }
+
+    public function withChannelName(string $channel): QueueInterface
+    {
+        $new = clone $this;
+        $new->queue = $this->queue->withChannelName($channel);
+        return $new;
+    }
 }

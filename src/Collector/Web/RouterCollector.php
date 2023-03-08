@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Psr\Container\ContainerInterface;
+use ReflectionObject;
 use Yiisoft\Router\CurrentRoute;
+use Yiisoft\Router\Route;
 use Yiisoft\Router\RouteCollectionInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
@@ -14,6 +16,7 @@ use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 class RouterCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
+
     private float $matchTime = 0;
 
     public function __construct(private ContainerInterface $container)
@@ -34,22 +37,88 @@ class RouterCollector implements CollectorInterface, IndexCollectorInterface
             ? $this->container->get(RouteCollectionInterface::class)
             : null;
 
-        return $routeCollection === null ? [] :
-            [
-                'routesTree' => $routeCollection->getRouteTree(),
-                'routes' => $routeCollection->getRoutes(),
-                'routeTime' => $this->matchTime,
+        $currentRoute = $this->getCurrentRoute();
+        $route = $this->getRouteByCurrentRoute($currentRoute);
+        [$middlewares, $action] = $this->getMiddlewaresAndAction($route);
+
+        $result = [
+            'currentRoute' => null,
+        ];
+        if ($currentRoute !== null && $route !== null) {
+            $result['currentRoute'] = [
+                'matchTime' => $this->matchTime,
+                'name' => $route->getData('name'),
+                'pattern' => $route->getData('pattern'),
+                'arguments' => $currentRoute->getArguments(),
+                'host' => $route->getData('host'),
+                'uri' => (string) $currentRoute->getUri(),
+                'action' => $action,
+                'middlewares' => $middlewares,
             ];
+        }
+        if ($routeCollection !== null) {
+            $result['routesTree'] = $routeCollection->getRouteTree();
+            $result['routes'] = $routeCollection->getRoutes();
+            $result['routeTime'] = $this->matchTime;
+        }
+        return $result;
     }
 
     public function getIndexData(): array
     {
-        $currentRoute = $this->container->has(CurrentRoute::class) ? $this->container->get(CurrentRoute::class) : null;
+        $currentRoute = $this->getCurrentRoute();
+        $route = $this->getRouteByCurrentRoute($currentRoute);
+
+        if ($currentRoute === null || $route === null) {
+            return [
+                'router' => null,
+            ];
+        }
+
+        [$middlewares, $action] = $this->getMiddlewaresAndAction($route);
+
         return [
             'router' => [
                 'matchTime' => $this->matchTime,
-                'matchedRoute' => $currentRoute?->getName(),
+                'name' => $route->getData('name'),
+                'pattern' => $route->getData('pattern'),
+                'arguments' => $currentRoute->getArguments(),
+                'host' => $route->getData('host'),
+                'uri' => (string) $currentRoute->getUri(),
+                'action' => $action,
+                'middlewares' => $middlewares,
             ],
         ];
+    }
+
+    private function getCurrentRoute(): ?CurrentRoute
+    {
+        return $this->container->has(CurrentRoute::class) ? $this->container->get(CurrentRoute::class) : null;
+    }
+
+    private function getRouteByCurrentRoute(?CurrentRoute $currentRoute): ?Route
+    {
+        if ($currentRoute === null) {
+            return null;
+        }
+        $reflection = new ReflectionObject($currentRoute);
+
+        $reflectionProperty = $reflection->getProperty('route');
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($currentRoute);
+    }
+
+    private function getMiddlewaresAndAction(?Route $route): array
+    {
+        if ($route === null) {
+            return [[], null];
+        }
+        $reflection = new ReflectionObject($route);
+        $reflectionProperty = $reflection->getProperty('middlewareDefinitions');
+        $reflectionProperty->setAccessible(true);
+        $middlewareDefinitions = $reflectionProperty->getValue($route);
+        $action = array_pop($middlewareDefinitions);
+        return [$middlewareDefinitions, $action];
     }
 }
