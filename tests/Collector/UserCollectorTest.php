@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\IdentityCollector;
+use Yiisoft\Yii\Debug\Collector\Web\IdentityCollector;
 use Yiisoft\Yii\Debug\Tests\Support\FakeIdentity;
 
 final class UserCollectorTest extends AbstractCollectorTestCase

@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 
 use function sleep;

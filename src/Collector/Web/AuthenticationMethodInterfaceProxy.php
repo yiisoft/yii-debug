@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Collector;
+namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Auth\AuthenticationMethodInterface;
 use Yiisoft\Auth\IdentityInterface;
+use Yiisoft\Yii\Debug\Collector\IdentityCollector;
 
 final class AuthenticationMethodInterfaceProxy implements AuthenticationMethodInterface
 {

@@ -12,7 +12,7 @@ use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\Console\Input\StringInput;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\CommandCollector;
+use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 
 final class CommandCollectorTest extends AbstractCollectorTestCase
 {
