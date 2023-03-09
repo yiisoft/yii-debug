@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Yiisoft\ErrorHandler\Event\ApplicationError;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Profiler\ProfilerInterface;
 use Yiisoft\View\Event\WebView\AfterRender;
+use Yiisoft\Yii\Debug\Collector\ExceptionCollector;
 use Yiisoft\Yii\Debug\Collector\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
@@ -50,5 +52,8 @@ return [
     ],
     AfterRender::class => [
         [WebViewCollector::class, 'collect'],
+    ],
+    ApplicationError::class => [
+        [ExceptionCollector::class, 'collect'],
     ],
 ];
