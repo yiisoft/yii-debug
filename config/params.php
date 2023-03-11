@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Cycle\ORM\ORMInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
@@ -18,8 +17,6 @@ use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\Database\ConnectionInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Database\CycleCollector;
-use Yiisoft\Yii\Debug\Collector\Database\CycleORMInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\Database\DatabaseCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
@@ -92,7 +89,6 @@ return [
             AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
             AuthenticationMethodInterface::class => [AuthenticationMethodInterfaceProxy::class, IdentityCollector::class],
-            ORMInterface::class => [CycleORMInterfaceProxy::class, CycleCollector::class],
             CacheInterface::class,
         ],
         'dumper.excludedClasses' => [
