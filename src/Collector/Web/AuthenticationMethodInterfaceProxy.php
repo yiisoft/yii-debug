@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Auth\AuthenticationMethodInterface;
 use Yiisoft\Auth\IdentityInterface;
+use Yiisoft\Yii\Debug\Collector\IdentityCollector;
 
 final class AuthenticationMethodInterfaceProxy implements AuthenticationMethodInterface
 {

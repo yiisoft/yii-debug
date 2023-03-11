@@ -48,6 +48,7 @@
         "yiisoft/yii-queue": "3.0.x-dev"
     },
     "require-dev": {
+        "cycle/orm": "^2.2",
         "maglnet/composer-require-checker": "^4.2",
         "nyholm/psr7": "^1.3",
         "phpunit/phpunit": "^9.4",
