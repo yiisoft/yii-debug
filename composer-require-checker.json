@@ -21,6 +21,8 @@
         "Yiisoft\\Db\\Schema\\QuoterInterface",
         "Yiisoft\\Db\\Schema\\SchemaInterface",
         "Yiisoft\\Db\\Transaction\\TransactionInterface",
+        "Yiisoft\\Db\\Query\\Data\\DataReaderInterface",
+        "Yiisoft\\ErrorHandler\\Event\\ApplicationError",
         "opcache_invalidate"
     ]
 }
