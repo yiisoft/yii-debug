@@ -20,6 +20,7 @@ use Yiisoft\Yii\Debug\Collector\Database\ConnectionInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\Database\DatabaseCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ExceptionCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
@@ -63,6 +64,7 @@ return [
             HttpClientCollector::class,
             FilesystemStreamCollector::class,
             HttpStreamCollector::class,
+            ExceptionCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
