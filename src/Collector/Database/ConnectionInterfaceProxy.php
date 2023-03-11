@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Database;
 
 use Closure;
-use Yiisoft\Cache\Dependency\Dependency;
 use Yiisoft\Db\Command\CommandInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Profiler\ProfilerInterface;
@@ -27,12 +26,12 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
 
     public function beginTransaction(string $isolationLevel = null): TransactionInterface
     {
-        return $this->connection->beginTransaction($isolationLevel);
-    }
+        [$callStack] = debug_backtrace();
 
-    public function cache(Closure $closure, int $duration = null, Dependency $dependency = null): mixed
-    {
-        return $this->connection->cache($closure, $duration, $dependency);
+        $result = $this->connection->beginTransaction($isolationLevel);
+
+        $this->collector->collectTransactionStart($isolationLevel, $callStack['file'] . ':' . $callStack['line']);
+        return $result;
     }
 
     public function createBatchQueryResult(QueryInterface $query, bool $each = false): BatchQueryResultInterface
@@ -42,11 +41,10 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
 
     public function createCommand(string $sql = null, array $params = []): CommandInterface
     {
-        [$callStack] = debug_backtrace();
-
-        $this->collector->collect($sql, $params, $callStack['file'] . ':' . $callStack['line']);
-
-        return $this->connection->createCommand($sql, $params);
+        return new CommandInterfaceProxy(
+            $this->connection->createCommand($sql, $params),
+            $this->collector,
+        );
     }
 
     public function createTransaction(): TransactionInterface
@@ -119,24 +117,9 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
         return $this->connection->isSavepointEnabled();
     }
 
-    public function noCache(Closure $closure): mixed
-    {
-        return $this->connection->noCache($closure);
-    }
-
-    public function notProfiler(): void
-    {
-        $this->connection->notProfiler();
-    }
-
     public function open(): void
     {
         $this->connection->open();
-    }
-
-    public function queryCacheEnable(bool $value): void
-    {
-        $this->connection->queryCacheEnable($value);
     }
 
     public function quoteValue(mixed $value): mixed
@@ -156,7 +139,11 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
 
     public function transaction(Closure $closure, string $isolationLevel = null): mixed
     {
-        return $this->connection->transaction($closure, $isolationLevel);
+        [$callStack] = debug_backtrace();
+
+        $this->collector->collectTransactionStart($isolationLevel, $callStack['file'] . ':' . $callStack['line']);
+
+        return $this->connection->transaction(fn () => $closure($this), $isolationLevel);
     }
 
     public function setProfiler(?ProfilerInterface $profiler): void
