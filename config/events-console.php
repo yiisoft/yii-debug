@@ -7,8 +7,8 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
-use Yiisoft\Yii\Debug\Collector\CommandCollector;
-use Yiisoft\Yii\Debug\Collector\ConsoleAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
+use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Debugger;
 
 if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {

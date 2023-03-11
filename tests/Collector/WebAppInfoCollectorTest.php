@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Collector;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\WebAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 

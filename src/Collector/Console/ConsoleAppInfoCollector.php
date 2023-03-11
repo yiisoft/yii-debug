@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Collector;
+namespace Yiisoft\Yii\Debug\Collector\Console;
 
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
+use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
-use Yiisoft\Yii\Http\Event\AfterEmit;
-use Yiisoft\Yii\Http\Event\AfterRequest;
-use Yiisoft\Yii\Http\Event\BeforeRequest;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\CollectorTrait;
+use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-use function is_object;
-
-final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInterface
+final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollectorInterface
 {
     use CollectorTrait;
 
@@ -24,9 +26,9 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     {
         return [
             'applicationProcessingTime' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
-            'requestProcessingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
+            'preloadTime' => $this->applicationProcessingTimeStarted - $this->requestProcessingTimeStarted,
             'applicationEmit' => $this->applicationProcessingTimeStopped - $this->requestProcessingTimeStopped,
-            'preloadTime' => $this->requestProcessingTimeStarted - $this->applicationProcessingTimeStarted,
+            'requestProcessingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
             'memoryPeakUsage' => memory_get_peak_usage(),
             'memoryUsage' => memory_get_usage(),
         ];
@@ -40,11 +42,18 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
 
         if ($event instanceof ApplicationStartup) {
             $this->applicationProcessingTimeStarted = microtime(true);
-        } elseif ($event instanceof BeforeRequest) {
+        } elseif ($event instanceof ConsoleCommandEvent) {
             $this->requestProcessingTimeStarted = microtime(true);
-        } elseif ($event instanceof AfterRequest) {
+        } elseif ($event instanceof ConsoleErrorEvent) {
+            /**
+             * If we receive this event, then {@see ConsoleCommandEvent} hasn't received and won't.
+             * So {@see requestProcessingTimeStarted} equals to 0 now and better to set it at least with application startup time.
+             */
+            $this->requestProcessingTimeStarted = $this->applicationProcessingTimeStarted;
             $this->requestProcessingTimeStopped = microtime(true);
-        } elseif ($event instanceof AfterEmit) {
+        } elseif ($event instanceof ConsoleTerminateEvent) {
+            $this->requestProcessingTimeStopped = microtime(true);
+        } elseif ($event instanceof ApplicationShutdown) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
     }
@@ -52,7 +61,7 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     public function getIndexData(): array
     {
         return [
-            'web' => [
+            'console' => [
                 'php' => [
                     'version' => PHP_VERSION,
                 ],
@@ -71,7 +80,5 @@ final class WebAppInfoCollector implements CollectorInterface, IndexCollectorInt
     {
         $this->applicationProcessingTimeStarted = 0;
         $this->applicationProcessingTimeStopped = 0;
-        $this->requestProcessingTimeStarted = 0;
-        $this->requestProcessingTimeStopped = 0;
     }
 }

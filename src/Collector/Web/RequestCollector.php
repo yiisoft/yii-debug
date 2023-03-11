@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Collector;
+namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use GuzzleHttp\Psr7\Message;
 use JsonException;
@@ -12,6 +12,9 @@ use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function is_object;
+use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\CollectorTrait;
+use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
 final class RequestCollector implements CollectorInterface, IndexCollectorInterface
 {

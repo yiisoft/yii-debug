@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Collector;
 
 use Yiisoft\Assets\AssetBundle;
-use Yiisoft\Yii\Debug\Collector\AssetCollector;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\Web\AssetCollector;
 
 final class AssetCollectorTest extends AbstractCollectorTestCase
 {

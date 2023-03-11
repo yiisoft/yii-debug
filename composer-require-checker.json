@@ -1,7 +1,28 @@
 {
     "symbol-whitelist": [
+        "Cycle\\ORM\\FactoryInterface",
+        "Cycle\\ORM\\Heap\\HeapInterface",
+        "Cycle\\ORM\\Heap\\Node",
+        "Cycle\\ORM\\MapperInterface",
+        "Cycle\\ORM\\ORMInterface",
+        "Cycle\\ORM\\RelationMap",
+        "Cycle\\ORM\\RepositoryInterface",
+        "Cycle\\ORM\\SchemaInterface",
+        "Cycle\\ORM\\Select\\SourceInterface",
+        "Cycle\\ORM\\Transaction\\CommandGeneratorInterface",
         "Yiisoft\\Auth\\AuthenticationMethodInterface",
         "Yiisoft\\Auth\\IdentityInterface",
+        "Yiisoft\\Cache\\Dependency\\Dependency",
+        "Yiisoft\\Db\\Command\\CommandInterface",
+        "Yiisoft\\Db\\Connection\\ConnectionInterface",
+        "Yiisoft\\Db\\QueryBuilder\\QueryBuilderInterface",
+        "Yiisoft\\Db\\Query\\BatchQueryResultInterface",
+        "Yiisoft\\Db\\Query\\QueryInterface",
+        "Yiisoft\\Db\\Schema\\QuoterInterface",
+        "Yiisoft\\Db\\Schema\\SchemaInterface",
+        "Yiisoft\\Db\\Transaction\\TransactionInterface",
+        "Yiisoft\\Db\\Query\\Data\\DataReaderInterface",
+        "Yiisoft\\ErrorHandler\\Event\\ApplicationError",
         "opcache_invalidate"
     ]
 }

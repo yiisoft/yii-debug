@@ -11,8 +11,8 @@ use Yiisoft\Router\Group;
 use Yiisoft\Router\Route;
 use Yiisoft\Router\RouteCollection;
 use Yiisoft\Router\RouteCollector;
-use Yiisoft\Yii\Debug\Collector\RouterCollector;
-use Yiisoft\Yii\Debug\Collector\UrlMatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\Web\RouterCollector;
+use Yiisoft\Yii\Debug\Collector\Web\UrlMatcherInterfaceProxy;
 
 class UrlMatcherInterfaceProxyTest extends TestCase
 {
