@@ -33,7 +33,6 @@
         "yiisoft/arrays": "^2.0|^3.0",
         "yiisoft/assets": "^4.0",
         "yiisoft/di": "^1.0",
-        "yiisoft/error-handler": "^3.0",
         "yiisoft/files": "^2.0",
         "yiisoft/json": "^1.0",
         "yiisoft/middleware-dispatcher": "^3.0|^4.0|^5.0",
@@ -58,6 +57,7 @@
         "vimeo/psalm": "^4.30|^5.7",
         "yiisoft/auth": "^3.0",
         "yiisoft/db": "^3.0@dev",
+        "yiisoft/error-handler": "^3.0",
         "yiisoft/event-dispatcher": "^1.0",
         "yiisoft/log": "^2.0",
         "yiisoft/router-fastroute": "^3.0"
