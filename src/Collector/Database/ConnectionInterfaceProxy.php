@@ -31,7 +31,7 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
         $result = $this->connection->beginTransaction($isolationLevel);
 
         $this->collector->collectTransactionStart($isolationLevel, $callStack['file'] . ':' . $callStack['line']);
-        return $result;
+        return new TransactionInterfaceDecorator($result, $this->collector);
     }
 
     public function createBatchQueryResult(QueryInterface $query, bool $each = false): BatchQueryResultInterface
@@ -49,7 +49,10 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
 
     public function createTransaction(): TransactionInterface
     {
-        return $this->connection->createTransaction();
+        return new TransactionInterfaceDecorator(
+            $this->connection->createTransaction(),
+            $this->collector,
+        );
     }
 
     public function close(): void
@@ -104,7 +107,14 @@ final class ConnectionInterfaceProxy implements ConnectionInterface
 
     public function getTransaction(): TransactionInterface|null
     {
-        return $this->connection->getTransaction();
+        $result = $this->connection->getTransaction();
+
+        return $result === null
+            ? null
+            : new TransactionInterfaceDecorator(
+                $result,
+                $this->collector,
+            );
     }
 
     public function isActive(): bool

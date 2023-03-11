@@ -7,22 +7,12 @@ namespace Yiisoft\Yii\Debug\Collector\Database;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Db\Transaction\TransactionInterface;
 
-final class TransactionInterfaceProxy implements TransactionInterface
+final class TransactionInterfaceDecorator implements TransactionInterface
 {
     public function __construct(
         private TransactionInterface $decorated,
         private DatabaseCollector $collector
     ) {
-    }
-
-    public function beginTransaction(string $isolationLevel = null): TransactionInterface
-    {
-        [$callStack] = debug_backtrace();
-
-        $result = $this->decorated->beginTransaction($isolationLevel);
-
-        $this->collector->collectTransactionStart($isolationLevel, $callStack['file'] . ':' . $callStack['line']);
-        return $result;
     }
 
     public function setLogger(LoggerInterface $logger): void
