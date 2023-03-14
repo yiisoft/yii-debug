@@ -10,6 +10,7 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
@@ -45,7 +46,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
             $this->commands[$event::class] = [
                 'name' => $event->getInput()->getFirstArgument() ?? '',
                 'command' => $command,
-                'input' => $event->getInput()->__toString(),
+                'input' => $this->castInputToString($event->getInput()),
                 'output' => $this->fetchOutput($event->getOutput()),
                 'error' => $event->getError()->getMessage(),
                 'exitCode' => $event->getExitCode(),
@@ -58,7 +59,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
             $this->commands[$event::class] = [
                 'name' => $command->getName(),
                 'command' => $command,
-                'input' => $event->getInput()->__toString(),
+                'input' => $this->castInputToString($event->getInput()),
                 'output' => $this->fetchOutput($event->getOutput()),
                 'exitCode' => $event->getExitCode(),
             ];
@@ -69,7 +70,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
             $this->commands[$event::class] = [
                 'name' => $command->getName(),
                 'command' => $command,
-                'input' => $event->getInput()->__toString(),
+                'input' => $this->castInputToString($event->getInput()),
                 'output' => $this->fetchOutput($event->getOutput()),
                 'arguments' => $command->getDefinition()->getArguments(),
                 'options' => $command->getDefinition()->getOptions(),
@@ -124,5 +125,10 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
     private function fetchOutput(OutputInterface $output): ?string
     {
         return $output instanceof ConsoleBufferedOutput ? $output->fetch() : null;
+    }
+
+    private function castInputToString(InputInterface $input): ?string
+    {
+        return method_exists($input, '__toString') ? $input->__toString() : null;
     }
 }
