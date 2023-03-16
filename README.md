@@ -6,7 +6,7 @@
     <br>
 </p>
 
-This extension provides a debugger for [Yii framework](http://www.yiiframework.com) applications. When this extension is used,
+This extension provides a debugger for [Yii framework](https://www.yiiframework.com) applications. When this extension is used,
 a debugger toolbar will appear at the bottom of every page. The extension also provides
 a set of standalone pages to display more detailed debug information.
 
@@ -24,7 +24,7 @@ For license information check the [LICENSE](LICENSE.md)-file.
 Installation
 ------------
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
 ```
 composer require --prefer-dist yiisoft/yii-debug
