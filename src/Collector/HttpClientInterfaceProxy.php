@@ -28,7 +28,8 @@ final class HttpClientInterfaceProxy implements ClientInterface
         } finally {
             $endTime = microtime(true);
             $this->collector->collectTotalTime($response, $endTime, $uniqueId);
-            return $response;
         }
+
+        return $response;
     }
 }
