@@ -15,6 +15,7 @@ final class DumperTest extends TestCase
      * @dataProvider asJsonObjectMapDataProvider
      *
      * @param string $expectedResult
+     *
      * @group JOM
      */
     public function testAsJsonObjectsMap(mixed $var, $expectedResult): void
