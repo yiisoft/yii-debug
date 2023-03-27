@@ -56,7 +56,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Yiisoft\\Yii\\Debug\\": "src"
+            "Yiisoft\\Yii\\Debug\\": "src",
+            "Yiisoft\\Yii\\Debug\\Tests\\Shared\\": "tests/Shared"
         }
     },
     "autoload-dev": {
