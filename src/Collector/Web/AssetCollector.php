@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Yiisoft\Assets\AssetBundle;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
