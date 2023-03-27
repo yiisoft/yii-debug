@@ -83,12 +83,12 @@ final class DumperTest extends TestCase
         $staticShortFunctionObjectId = spl_object_id($staticShortFunctionObject);
 
         // @formatter:off
-        $functionObject = fn() => 1;
+        $functionObject = fn () => 1;
         // @formatter:on
         $functionObjectId = spl_object_id($functionObject);
 
         // @formatter:off
-        $staticFunctionObject = static fn() => 1;
+        $staticFunctionObject = static fn () => 1;
         // @formatter:on
         $staticFunctionObjectId = spl_object_id($staticFunctionObject);
 
