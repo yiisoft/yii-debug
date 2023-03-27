@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollectorInterface
+final class ConsoleAppInfoCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

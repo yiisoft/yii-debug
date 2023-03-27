@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Throwable;
 use Yiisoft\ErrorHandler\Event\ApplicationError;
 
-final class ExceptionCollector implements CollectorInterface, IndexCollectorInterface
+final class ExceptionCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class ServiceCollector implements CollectorInterface, IndexCollectorInterface
+final class ServiceCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

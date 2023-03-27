@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 
 use function count;
 
-final class HttpClientCollector implements CollectorInterface, IndexCollectorInterface
+final class HttpClientCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

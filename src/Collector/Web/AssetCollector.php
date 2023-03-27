@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-final class AssetCollector implements CollectorInterface, IndexCollectorInterface
+final class AssetCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

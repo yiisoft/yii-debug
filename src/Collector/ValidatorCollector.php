@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Traversable;
 use Yiisoft\Validator\Result;
 
-final class ValidatorCollector implements CollectorInterface, IndexCollectorInterface
+final class ValidatorCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

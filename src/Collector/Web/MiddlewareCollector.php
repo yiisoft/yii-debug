@@ -11,7 +11,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-final class MiddlewareCollector implements CollectorInterface, IndexCollectorInterface
+final class MiddlewareCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

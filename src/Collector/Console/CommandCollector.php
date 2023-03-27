@@ -19,7 +19,7 @@ use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
 use function is_object;
 
-final class CommandCollector implements CollectorInterface, IndexCollectorInterface
+final class CommandCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

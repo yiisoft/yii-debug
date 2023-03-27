@@ -8,7 +8,7 @@ use ReflectionClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
 use Yiisoft\Yii\Http\Event\ApplicationStartup as HttpApplicationStartup;
 
-class EventCollector implements CollectorInterface, IndexCollectorInterface
+class EventCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

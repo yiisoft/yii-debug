@@ -8,7 +8,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-final class FilesystemStreamCollector implements CollectorInterface, IndexCollectorInterface
+final class FilesystemStreamCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

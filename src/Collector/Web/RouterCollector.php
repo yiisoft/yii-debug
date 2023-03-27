@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
-class RouterCollector implements CollectorInterface, IndexCollectorInterface
+class RouterCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

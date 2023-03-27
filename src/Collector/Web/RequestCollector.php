@@ -16,7 +16,7 @@ use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
 
 use function is_object;
 
-final class RequestCollector implements CollectorInterface, IndexCollectorInterface
+final class RequestCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 

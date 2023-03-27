@@ -12,7 +12,7 @@ use Yiisoft\Yii\Queue\Message\MessageInterface;
 use Yiisoft\Yii\Queue\Middleware\Push\MiddlewarePushInterface;
 use Yiisoft\Yii\Queue\QueueInterface;
 
-final class QueueCollector implements CollectorInterface, IndexCollectorInterface
+final class QueueCollector implements IndexCollectorInterface
 {
     use CollectorTrait;
 
