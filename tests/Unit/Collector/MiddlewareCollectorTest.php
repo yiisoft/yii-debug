@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Collector;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
@@ -14,7 +14,8 @@ use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Middleware\Dispatcher\MiddlewareFactory;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
-use Yiisoft\Yii\Debug\Tests\Support\DummyMiddleware;
+use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
+use Yiisoft\Yii\Debug\Tests\Unit\Support\DummyMiddleware;
 
 final class MiddlewareCollectorTest extends AbstractCollectorTestCase
 {

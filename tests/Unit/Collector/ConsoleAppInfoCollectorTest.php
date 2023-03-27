@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Collector;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
+
+use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 use function sleep;
 use function usleep;

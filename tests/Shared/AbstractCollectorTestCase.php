@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Collector;
+namespace Yiisoft\Yii\Debug\Tests\Shared;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;

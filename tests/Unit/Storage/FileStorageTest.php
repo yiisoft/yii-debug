@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Storage;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Files\FileHelper;

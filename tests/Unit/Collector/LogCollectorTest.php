@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Collector;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
 use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class LogCollectorTest extends AbstractCollectorTestCase
 {

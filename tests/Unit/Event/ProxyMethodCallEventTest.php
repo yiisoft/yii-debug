@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Event;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Event;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;

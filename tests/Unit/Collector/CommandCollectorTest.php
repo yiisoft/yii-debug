@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Collector;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
+use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class CommandCollectorTest extends AbstractCollectorTestCase
 {

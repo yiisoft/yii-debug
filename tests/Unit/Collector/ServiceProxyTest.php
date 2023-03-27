@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\Tests\Collector;
+namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
