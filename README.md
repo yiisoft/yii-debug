@@ -27,68 +27,225 @@ Installation
 The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
 ```
-composer require --prefer-dist yiisoft/yii-debug
+composer require yiisoft/yii-debug --dev
 ```
+
+> The debug extension also can be installed without the `--dev` flag if you want to collect data in production.
+> Just specify needed collectors to reduce functions overriding.
 
 Usage
 -----
 
-Once the extension is installed, simply modify your application configuration as follows:
+Once the extension is installed, simply modify your application `params` as follows:
 
+`config/common/params.php`:
 ```php
 return [
-    'bootstrap' => ['debug'],
-    'modules' => [
-        'debug' => [
-            'class' => Yiisoft\Yii\Debug\Module::class,
-            // uncomment and adjust the following to add your IP if you are not connecting from localhost.
-            //'allowedIPs' => ['127.0.0.1', '::1'],
-        ],
-        // ...
+    'yiisoft/yii-debug' => [
+        'enabled' => true,
     ],
     ...
 ];
 ```
 
-You will see a debugger toolbar showing at the bottom of every page of your application.
-You can click on the toolbar to see more detailed debug information.
+All included collectors start listen and collect payloads from each HTTP request or console running.
 
+Install both [`yiisoft/yii-debug-api`](https://github.com/yiisoft/yii-debug-api) and [`yiisoft/yii-dev-panel`](https://github.com/yiisoft/yii-dev-panel)
+to be able to interact with collected data through UI.
 
-Open Files in IDE
------
+## Collectors
 
-You can create a link to open files in your favorite IDE with this configuration:
+Yii Debug uses a concept named "collectors". 
+Each collector decides what payload it needs to collect and exports the collected payload in order to save it into storage.
+
+A collector may work both with HTTP request and console running, or individually.
+A collector may be as just a event listener as a decorator to any service from application dependency injection container configuration.
+
+Take a look at the [`Yiisoft\Yii\Debug\Collector\CollectorInterface`](./src/Collector/CollectorInterface.php):
+
+```php
+namespace Yiisoft\Yii\Debug\Collector;
+
+interface CollectorInterface
+{
+    /**
+     * @return string Collector's name.
+     */
+    public function getName(): string;
+
+    /**
+     * Called once at application startup.
+     * Any initialization could be done here.
+     */
+    public function startup(): void;
+
+    /**
+     * Called once at application shutdown.
+     * Cleanup could be done here.
+     */
+    public function shutdown(): void;
+
+    /**
+     * @return array Data collected.
+     */
+    public function getCollected(): array;
+}
+```
+
+We suggest to use the trait to reduce the duplication of code and any possible bugs: [`\Yiisoft\Yii\Debug\Collector\CollectorTrait`](./src/Collector/CollectorTrait.php)
+
+All you need to create a collector is to implement the interface and register it in the configuration.
+
+### Example
+
+```php
+class MyCollector implements \Yiisoft\Yii\Debug\Collector\CollectorInterface
+{
+    use \Yiisoft\Yii\Debug\Collector\CollectorTrait;
+    
+    /**
+     * Payload collected during a run. 
+     */
+    private array $data = [];
+
+    public function getCollected() : array
+    {
+        return $this->data;
+    }
+}
+```
+
+Good way to implement collecting payload is also implement a resetting the data. With `CollectorTrait` it is simple and you just need to add `reset` method:
+```php
+    private function reset(): void
+    {
+        $this->data = [];
+    }
+```
+
+You can enable collector in application configuration as follows:
 
 ```php
 return [
-    'bootstrap' => ['debug'],
-    'modules' => [
-        'debug' => [
-            'class' => Yiisoft\Yii\Debug\Module::class,
-            'traceLine' => '<a href="phpstorm://open?url={file}&line={line}">{file}:{line}</a>',
-            // uncomment and adjust the following to add your IP if you are not connecting from localhost.
-            //'allowedIPs' => ['127.0.0.1', '::1'],
+    'yiisoft/yii-debug' => [
+        // if you want to register collector both for web session and console run
+        'collectors' => [
+            \App\Debug\AwesomeCollector::class,
         ],
-        // ...
+        // if you want to register collector only for web session
+        'collectors.web' => [
+            \App\Debug\AwesomeWebCollector::class,
+        ],
+        // if you want to register collector only for console run
+        'collectors.console' => [
+            \App\Debug\AwesomeConsoleCollector::class,
+        ],
     ],
-    ...
 ];
 ```
 
-You must make some changes to your OS. See these examples: 
- - PHPStorm: https://github.com/aik099/PhpStormProtocol
- - Sublime Text 3 on Windows or Linux: https://packagecontrol.io/packages/subl%20protocol
- - Sublime Text 3 on Mac: https://github.com/inopinatus/sublime_url
+Under `yiisoft/yii-debug` configuration you may use:
+1. `collectors` key for both web and console runs
+2. `collectors.web` key only for web session
+3. `collectors.console` key only for console run
 
-#### Virtualized or dockerized
+> Do not register a collector for a session where the collector will not collect any payload.
 
-If your application is run under a virtualized or dockerized environment, it is often the case that the application's base path is different inside of the virtual machine or container than on your host machine. For the links work in those situations, you can configure `traceLine` like this (change the path to your app):
+
+The lines above connect collectors with a debug extension run. 
+Under the hood it just calls `getCollected()` method from the collectors at the end of application cycle run.
+
+### Event listener collector
+
+Subscribe to any events you want with adding a listener into the configuration:
+
+With [`yiisoft/event-dispatcher`](https://github.com/yiisoft/event-dispatcher) configuration it may look like the following:
 
 ```php
-'traceLine' => function($options, $panel) {
-    $filePath = str_replace($this->app->basePath, '~/path/to/your/app', $options['file']);
-    return strtr('<a href="ide://open?url=file://{file}&line={line}">{text}</a>', ['{file}' => $filePath]);
-},
+return [
+    \Yiisoft\Yii\Http\Event\BeforeRequest::class => [
+        [\App\Debug\AwesomeCollector::class, 'collect'],
+    ],
+];
+```
+
+Each `Yiisoft\Yii\Http\Event\BeforeRequest` triggered event will call `App\Debug\AwesomeCollector::collect($event)` method, 
+so you can collect any data from the event or call any other services to enrich the event data with additional payload.
+
+### Proxy collector
+
+Proxy collectors are used in case you want to decorate a service from DIC and sniff methods' calls with its values.
+
+First you need to create a class that will work as a decorator. See https://en.wikipedia.org/wiki/Decorator_pattern if you are new with it.
+
+Decorators may inject any services through `__construct` method, but you should specify services you like to wrap.
+Into section `trackedServices` of `yiisoft/yii-debug` configuration you should specify:
+1. A service you want to decorate
+2. A decorator that will decorate the service
+3. A collector that will be injected into the decorator
+
+Syntax of configuration is: `Decorating service => [Decorator, Collector]`. 
+
+Despite adding the tracking service configuration you still need to register the collector if you did not do it before.
+Whole configuration of added proxy collector looks like the following:
+
+```php
+return [
+    'yiisoft/yii-debug' => [
+        'collectors' => [
+            \App\Debug\AwesomeCollector::class,
+        ],
+        'trackedServices' => [
+            // Decorating service => [Decorator, Collector],
+            \Psr\Log\LoggerInterface::class => [\App\Debug\LoggerInterfaceProxy::class, \App\Debug\AwesomeCollector::class],
+        ],
+    ],
+];
+```
+
+#### Index collector
+
+Index collector is a collector that provides additional "summary" payload. 
+The summary payload is used to reduce time to read usual payload and summarise some metrics to get better UX.
+
+Index collector is usual collector with the additional method `getIndexData()`. 
+Take a look at the [`\Yiisoft\Yii\Debug\Collector\IndexCollectorInterface`](./src/Collector/IndexCollectorInterface.php):
+
+```php
+namespace Yiisoft\Yii\Debug\Collector;
+
+/**
+ * Index data collector responsibility is to collect index data during application lifecycle.
+ * Index is used to display a list of previous requests and select one to display full info.
+ * Its data set is specific to the list and is reduced compared to full data collected
+ * in {@see \Yiisoft\Yii\Debug\Collector\CollectorInterface}.
+ */
+interface IndexCollectorInterface extends CollectorInterface
+{
+    /**
+     * @return array data indexed
+     */
+    public function getIndexData(): array;
+}
+```
+
+We suggest you to give a short name to your index payload to be able to grab it later.
+```php
+    // with getCollected you can inspect all collected payload
+    public function getCollected(): array
+    {
+        return $this->requests;
+    }
+
+    // getIndexData gives you short description of the collected data just to decide inspect it deeper or not
+    public function getIndexData(): array
+    {
+        return [
+            'app' => [
+                'totalRequests' => count($this->requests),
+            ],
+        ];
+    }
 ```
 
 ### Unit testing
