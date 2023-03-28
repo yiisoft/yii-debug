@@ -11,11 +11,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
 use function is_object;
 
-final class RequestCollector implements IndexCollectorInterface
+final class RequestCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -100,7 +100,7 @@ final class RequestCollector implements IndexCollectorInterface
         }
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'request' => [

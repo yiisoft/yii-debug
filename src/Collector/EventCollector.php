@@ -8,7 +8,7 @@ use ReflectionClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
 use Yiisoft\Yii\Http\Event\ApplicationStartup as HttpApplicationStartup;
 
-class EventCollector implements IndexCollectorInterface
+class EventCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -43,7 +43,7 @@ class EventCollector implements IndexCollectorInterface
         ];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'event' => [

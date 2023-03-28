@@ -96,9 +96,9 @@ final class QueueCollectorTest extends AbstractCollectorTestCase
         );
     }
 
-    protected function checkIndexData(array $data): void
+    protected function checkSummaryData(array $data): void
     {
-        parent::checkIndexData($data);
+        parent::checkSummaryData($data);
         [
             'countPushes' => $countPushes,
             'countStatuses' => $countStatuses,

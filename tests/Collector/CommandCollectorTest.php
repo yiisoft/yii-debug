@@ -67,7 +67,7 @@ final class CommandCollectorTest extends AbstractCollectorTestCase
         $this->assertEmpty($data[ConsoleCommandEvent::class]['output']);
     }
 
-    protected function checkIndexData(array $data): void
+    protected function checkSummaryData(array $data): void
     {
         $this->assertArrayHasKey('command', $data);
         $this->assertArrayHasKey('input', $data['command']);

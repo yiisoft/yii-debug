@@ -203,33 +203,34 @@ return [
 ];
 ```
 
-#### Index collector
+#### Summary collector
 
-Index collector is a collector that provides additional "summary" payload. 
+Summary collector is a collector that provides additional "summary" payload. 
 The summary payload is used to reduce time to read usual payload and summarise some metrics to get better UX.
 
-Index collector is usual collector with the additional method `getIndexData()`. 
-Take a look at the [`\Yiisoft\Yii\Debug\Collector\IndexCollectorInterface`](./src/Collector/IndexCollectorInterface.php):
+Summary collector is usual collector with the additional method `getSummary()`. 
+Take a look at the [`\Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface`](./src/Collector/SummaryCollectorInterface.php):
 
 ```php
 namespace Yiisoft\Yii\Debug\Collector;
 
 /**
- * Index data collector responsibility is to collect index data during application lifecycle.
- * Index is used to display a list of previous requests and select one to display full info.
+ * Summary data collector responsibility is to collect summary data for a collector.
+ * Summary is used to display a list of previous requests and select one to display full info.
  * Its data set is specific to the list and is reduced compared to full data collected
- * in {@see \Yiisoft\Yii\Debug\Collector\CollectorInterface}.
+ * in {@see CollectorInterface}.
  */
-interface IndexCollectorInterface extends CollectorInterface
+interface SummaryCollectorInterface extends CollectorInterface
 {
     /**
-     * @return array data indexed
+     * @return array Summary payload. Keys may cross with any other summary collectors.
      */
-    public function getIndexData(): array;
+    public function getSummary(): array;
 }
 ```
 
-We suggest you to give a short name to your index payload to be able to grab it later.
+We suggest you to give short names to your summary payload to be able to read the keys and decide to use them or not.
+
 ```php
     // with getCollected you can inspect all collected payload
     public function getCollected(): array
@@ -237,11 +238,11 @@ We suggest you to give a short name to your index payload to be able to grab it 
         return $this->requests;
     }
 
-    // getIndexData gives you short description of the collected data just to decide inspect it deeper or not
-    public function getIndexData(): array
+    // getSummary gives you short description of the collected data just to decide inspect it deeper or not
+    public function getSummary(): array
     {
         return [
-            'app' => [
+            'web' => [
                 'totalRequests' => count($this->requests),
             ],
         ];
