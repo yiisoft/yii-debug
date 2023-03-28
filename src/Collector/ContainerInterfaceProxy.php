@@ -19,10 +19,9 @@ class ContainerInterfaceProxy implements ContainerInterface
     use ProxyLogTrait;
     use ProxyTrait;
 
+    public const LOG_NOTHING = 0;
     public const LOG_ARGUMENTS = 1;
-
     public const LOG_RESULT = 2;
-
     public const LOG_ERROR = 4;
 
     private ProxyManager $proxyManager;
