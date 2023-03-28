@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 
 use function count;
 
-final class HttpClientCollector implements IndexCollectorInterface
+final class HttpClientCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -34,7 +34,7 @@ final class HttpClientCollector implements IndexCollectorInterface
         return array_merge(...array_values($this->requests));
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'http' => [

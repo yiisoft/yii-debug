@@ -63,9 +63,9 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         ], $collected['mkdir']);
     }
 
-    protected function checkIndexData(array $data): void
+    protected function checkSummaryData(array $data): void
     {
-        parent::checkIndexData($data);
+        parent::checkSummaryData($data);
         $this->assertArrayHasKey('fs_stream', $data);
         $this->assertEquals(
             ['read' => 2, 'mkdir' => 1],

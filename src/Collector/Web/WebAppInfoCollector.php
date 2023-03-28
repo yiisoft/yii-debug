@@ -9,11 +9,11 @@ use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
 use function is_object;
 
-final class WebAppInfoCollector implements IndexCollectorInterface
+final class WebAppInfoCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -51,7 +51,7 @@ final class WebAppInfoCollector implements IndexCollectorInterface
         }
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'web' => [

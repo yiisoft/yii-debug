@@ -31,14 +31,13 @@ composer require yiisoft/yii-debug --dev
 ```
 
 > The debug extension also can be installed without the `--dev` flag if you want to collect data in production.
-> Just specify needed collectors to reduce functions overriding.
+> Specify needed collectors only to reduce functions overriding and improve performance.
 
 Usage
 -----
 
-Once the extension is installed, simply modify your application `params` as follows:
+Once the extension is installed, modify your `config/common/params.php` as follows:
 
-`config/common/params.php`:
 ```php
 return [
     'yiisoft/yii-debug' => [
@@ -48,7 +47,7 @@ return [
 ];
 ```
 
-All included collectors start listen and collect payloads from each HTTP request or console running.
+All included collectors start listen and collect payloads from each HTTP request or console run.
 
 Install both [`yiisoft/yii-debug-api`](https://github.com/yiisoft/yii-debug-api) and [`yiisoft/yii-dev-panel`](https://github.com/yiisoft/yii-dev-panel)
 to be able to interact with collected data through UI.
@@ -110,8 +109,8 @@ return [
 Yii Debug uses a concept named "collectors". 
 Each collector decides what payload it needs to collect and exports the collected payload in order to save it into storage.
 
-A collector may work both with HTTP request and console running, or individually.
-A collector may be as just a event listener as a decorator to any service from application dependency injection container configuration.
+A collector may work either both with HTTP requests and console runs, or individually.
+A collector may be either an event listener or a decorator to any service defined in the application DI container configuration.
 
 Take a look at the [`Yiisoft\Yii\Debug\Collector\CollectorInterface`](./src/Collector/CollectorInterface.php):
 
@@ -144,7 +143,7 @@ interface CollectorInterface
 }
 ```
 
-We suggest to use the trait to reduce the duplication of code and any possible bugs: [`\Yiisoft\Yii\Debug\Collector\CollectorTrait`](./src/Collector/CollectorTrait.php)
+Use the trait to reduce the duplication of code and any possible bugs: [`\Yiisoft\Yii\Debug\Collector\CollectorTrait`](./src/Collector/CollectorTrait.php)
 
 All you need to create a collector is to implement the interface and register it in the configuration.
 
@@ -167,7 +166,7 @@ class MyCollector implements \Yiisoft\Yii\Debug\Collector\CollectorInterface
 }
 ```
 
-Good way to implement collecting payload is also implement a resetting the data. With `CollectorTrait` it is simple and you just need to add `reset` method:
+When you implement collecting payload, it is also a good idea to implement data reset. With `CollectorTrait` it is as simple as adding `reset` method:
 ```php
     private function reset(): void
     {
@@ -180,15 +179,15 @@ You can enable collector in application configuration as follows:
 ```php
 return [
     'yiisoft/yii-debug' => [
-        // if you want to register collector both for web session and console run
+        // if you want to register collector both for web requests and console runs
         'collectors' => [
             \App\Debug\AwesomeCollector::class,
         ],
-        // if you want to register collector only for web session
+        // if you want to register collector only for web requests
         'collectors.web' => [
             \App\Debug\AwesomeWebCollector::class,
         ],
-        // if you want to register collector only for console run
+        // if you want to register collector only for console runs
         'collectors.console' => [
             \App\Debug\AwesomeConsoleCollector::class,
         ],
@@ -198,14 +197,14 @@ return [
 
 Under `yiisoft/yii-debug` configuration you may use:
 1. `collectors` key for both web and console runs
-2. `collectors.web` key only for web session
-3. `collectors.console` key only for console run
+2. `collectors.web` key only for web requests
+3. `collectors.console` key only for console runs
 
 > Do not register a collector for a session where the collector will not collect any payload.
 
 
 The lines above connect collectors with a debug extension run. 
-Under the hood it just calls `getCollected()` method from the collectors at the end of application cycle run.
+Under the hood it calls `getCollected()` method from the collectors at the end of application cycle run.
 
 ### Event listener collector
 
@@ -226,12 +225,13 @@ so you can collect any data from the event or call any other services to enrich 
 
 ### Proxy collector
 
-Proxy collectors are used in case you want to decorate a service from DIC and sniff methods' calls with its values.
+Proxy collectors are used in case you want to decorate a service from DI container and sniff methods' calls with its values.
 
 First you need to create a class that will work as a decorator. See https://en.wikipedia.org/wiki/Decorator_pattern if you are new with it.
 
 Decorators may inject any services through `__construct` method, but you should specify services you like to wrap.
-Into section `trackedServices` of `yiisoft/yii-debug` configuration you should specify:
+In the section `trackedServices` of `yiisoft/yii-debug` configuration you should specify:
+
 1. A service you want to decorate
 2. A decorator that will decorate the service
 3. A collector that will be injected into the decorator
@@ -255,33 +255,34 @@ return [
 ];
 ```
 
-## Index collector
+## Summary collector
 
-Index collector is a collector that provides additional "summary" payload. 
+Summary collector is a collector that provides additional "summary" payload. 
 The summary payload is used to reduce time to read usual payload and summarise some metrics to get better UX.
 
-Index collector is usual collector with the additional method `getIndexData()`. 
-Take a look at the [`\Yiisoft\Yii\Debug\Collector\IndexCollectorInterface`](./src/Collector/IndexCollectorInterface.php):
+Summary collector is usual collector with the additional method `getSummary()`. 
+Take a look at the [`\Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface`](./src/Collector/SummaryCollectorInterface.php):
 
 ```php
 namespace Yiisoft\Yii\Debug\Collector;
 
 /**
- * Index data collector responsibility is to collect index data during application lifecycle.
- * Index is used to display a list of previous requests and select one to display full info.
+ * Summary data collector responsibility is to collect summary data for a collector.
+ * Summary is used to display a list of previous requests and select one to display full info.
  * Its data set is specific to the list and is reduced compared to full data collected
- * in {@see \Yiisoft\Yii\Debug\Collector\CollectorInterface}.
+ * in {@see CollectorInterface}.
  */
-interface IndexCollectorInterface extends CollectorInterface
+interface SummaryCollectorInterface extends CollectorInterface
 {
     /**
-     * @return array data indexed
+     * @return array Summary payload. Keys may cross with any other summary collectors.
      */
-    public function getIndexData(): array;
+    public function getSummary(): array;
 }
 ```
 
-We suggest you to give a short name to your index payload to be able to grab it later.
+We suggest you to give short names to your summary payload to be able to read the keys and decide to use them or not.
+
 ```php
     // with getCollected you can inspect all collected payload
     public function getCollected(): array
@@ -289,11 +290,11 @@ We suggest you to give a short name to your index payload to be able to grab it 
         return $this->requests;
     }
 
-    // getIndexData gives you short description of the collected data just to decide inspect it deeper or not
-    public function getIndexData(): array
+    // getSummary gives you short description of the collected data just to decide inspect it deeper or not
+    public function getSummary(): array
     {
         return [
-            'app' => [
+            'web' => [
                 'totalRequests' => count($this->requests),
             ],
         ];

@@ -68,9 +68,9 @@ final class RequestCollectorTest extends AbstractCollectorTestCase
         $this->assertInstanceOf(ResponseInterface::class, $data['response']);
     }
 
-    protected function checkIndexData(array $data): void
+    protected function checkSummaryData(array $data): void
     {
-        parent::checkIndexData($data);
+        parent::checkSummaryData($data);
         $this->assertEquals('http://test.site/url', $data['request']['url']);
         $this->assertEquals('GET', $data['request']['method']);
         $this->assertEquals(200, $data['response']['statusCode']);

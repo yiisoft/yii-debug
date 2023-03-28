@@ -10,9 +10,9 @@ use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\Route;
 use Yiisoft\Router\RouteCollectionInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-class RouterCollector implements IndexCollectorInterface
+class RouterCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -63,7 +63,7 @@ class RouterCollector implements IndexCollectorInterface
         return $result;
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         $currentRoute = $this->getCurrentRoute();
         $route = $this->getRouteByCurrentRoute($currentRoute);

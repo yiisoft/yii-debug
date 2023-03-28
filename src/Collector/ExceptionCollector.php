@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Throwable;
 use Yiisoft\ErrorHandler\Event\ApplicationError;
 
-final class ExceptionCollector implements IndexCollectorInterface
+final class ExceptionCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -38,7 +38,7 @@ final class ExceptionCollector implements IndexCollectorInterface
         $this->exception = $error->getThrowable();
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'exception' => $this->exception === null ? [] : [

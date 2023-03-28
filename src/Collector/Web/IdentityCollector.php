@@ -6,9 +6,9 @@ namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Yiisoft\Auth\IdentityInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class IdentityCollector implements IndexCollectorInterface
+final class IdentityCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -40,7 +40,7 @@ final class IdentityCollector implements IndexCollectorInterface
         $this->identities = [];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         $lastIdentity = end($this->identities);
         return [
