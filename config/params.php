@@ -74,7 +74,8 @@ return [
         'logLevel' => ContainerInterfaceProxy::LOG_ARGUMENTS | ContainerInterfaceProxy::LOG_RESULT | ContainerInterfaceProxy::LOG_ERROR,
         'path' => '@runtime/debug',
         'ignoredRequests' => [
-            '/assets/*',
+            // Paths to ignore the debugger, e.g.:
+            //'/assets/*',
         ],
         'ignoredCommands' => [
             'completion',
