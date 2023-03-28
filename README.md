@@ -58,7 +58,7 @@ Yii Debug uses a concept named "collectors".
 Each collector decides what payload it needs to collect and exports the collected payload in order to save it into storage.
 
 A collector may work either both with HTTP requests and console runs, or individually.
-A collector may be as just a event listener as a decorator to any service from application dependency injection container configuration.
+A collector may be either an event listener or a decorator to any service defined in the application DI container configuration.
 
 Take a look at the [`Yiisoft\Yii\Debug\Collector\CollectorInterface`](./src/Collector/CollectorInterface.php):
 
