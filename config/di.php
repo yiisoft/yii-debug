@@ -8,6 +8,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\VarDumper\ClosureExporter;
 use Yiisoft\VarDumper\UseStatementParser;
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
@@ -45,7 +46,7 @@ return array_merge([
         $debuggerEnabled = (bool) ($params['enabled'] ?? false);
         $trackedServices = (array) ($params['trackedServices'] ?? []);
         $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
-        $logLevel = $params['logLevel'] ?? 0;
+        $logLevel = $params['logLevel'] ?? ContainerInterfaceProxy::LOG_NOTHING;
         return new ContainerProxyConfig(
             $debuggerEnabled,
             $trackedServices,
