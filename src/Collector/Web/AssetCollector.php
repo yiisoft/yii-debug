@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Yiisoft\Assets\AssetBundle;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class AssetCollector implements CollectorInterface, IndexCollectorInterface
+final class AssetCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -29,7 +28,7 @@ final class AssetCollector implements CollectorInterface, IndexCollectorInterfac
         $this->assetBundles[] = $assetBundle;
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'asset' => [

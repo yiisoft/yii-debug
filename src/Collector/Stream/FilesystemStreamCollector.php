@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class FilesystemStreamCollector implements CollectorInterface, IndexCollectorInterface
+final class FilesystemStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -66,7 +65,7 @@ final class FilesystemStreamCollector implements CollectorInterface, IndexCollec
         ];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'fs_stream' => array_merge(

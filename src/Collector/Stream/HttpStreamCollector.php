@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class HttpStreamCollector implements CollectorInterface, IndexCollectorInterface
+final class HttpStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -58,7 +57,7 @@ final class HttpStreamCollector implements CollectorInterface, IndexCollectorInt
         ];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'http_stream' => array_merge(

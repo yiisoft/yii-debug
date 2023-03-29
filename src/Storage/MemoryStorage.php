@@ -23,9 +23,9 @@ final class MemoryStorage implements StorageInterface
         $this->collectors[$collector->getName()] = $collector;
     }
 
-    public function read($type = self::TYPE_INDEX): array
+    public function read($type = self::TYPE_SUMMARY): array
     {
-        if ($type === self::TYPE_INDEX) {
+        if ($type === self::TYPE_SUMMARY) {
             return [
                 $this->idGenerator->getId() => [
                     'id' => $this->idGenerator->getId(),

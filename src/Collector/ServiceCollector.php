@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-final class ServiceCollector implements CollectorInterface, IndexCollectorInterface
+final class ServiceCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -43,7 +43,7 @@ final class ServiceCollector implements CollectorInterface, IndexCollectorInterf
         ];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'service' => [

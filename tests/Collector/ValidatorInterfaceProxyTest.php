@@ -55,9 +55,9 @@ final class ValidatorInterfaceProxyTest extends AbstractCollectorTestCase
         );
     }
 
-    protected function checkIndexData(array $data): void
+    protected function checkSummaryData(array $data): void
     {
-        parent::checkIndexData($data);
+        parent::checkSummaryData($data);
 
         $this->assertEquals(
             ['total' => 2, 'valid' => 1, 'invalid' => 1],
