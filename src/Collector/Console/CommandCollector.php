@@ -13,13 +13,12 @@ use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
 use function is_object;
 
-final class CommandCollector implements CollectorInterface, IndexCollectorInterface
+final class CommandCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -78,7 +77,7 @@ final class CommandCollector implements CollectorInterface, IndexCollectorInterf
         }
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         $eventTypes = [
             ConsoleErrorEvent::class,

@@ -45,9 +45,9 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
         ], $collected['read']);
     }
 
-    protected function checkIndexData(array $data): void
+    protected function checkSummaryData(array $data): void
     {
-        parent::checkIndexData($data);
+        parent::checkSummaryData($data);
         $this->assertArrayHasKey('http_stream', $data);
         $this->assertEquals(['read' => 2], $data['http_stream']);
     }

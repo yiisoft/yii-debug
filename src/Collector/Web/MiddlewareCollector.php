@@ -7,11 +7,10 @@ namespace Yiisoft\Yii\Debug\Collector\Web;
 use ReflectionClass;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class MiddlewareCollector implements CollectorInterface, IndexCollectorInterface
+final class MiddlewareCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -79,7 +78,7 @@ final class MiddlewareCollector implements CollectorInterface, IndexCollectorInt
         $this->afterStack = [];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'middleware' => [

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector;
 
-class LogCollector implements CollectorInterface, IndexCollectorInterface
+class LogCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -35,7 +35,7 @@ class LogCollector implements CollectorInterface, IndexCollectorInterface
         $this->messages = [];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'logger' => [

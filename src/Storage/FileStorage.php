@@ -8,7 +8,7 @@ use Yiisoft\Aliases\Aliases;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Json\Json;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Dumper;
 
@@ -50,7 +50,7 @@ final class FileStorage implements StorageInterface
         $this->historySize = $historySize;
     }
 
-    public function read($type = self::TYPE_INDEX): array
+    public function read($type = self::TYPE_SUMMARY): array
     {
         clearstatcache();
         $data = [];
@@ -80,8 +80,8 @@ final class FileStorage implements StorageInterface
             $jsonObjects = $this->reindexObjects($jsonObjects);
             file_put_contents($basePath . self::TYPE_OBJECTS . '.json', Dumper::create($jsonObjects)->asJson());
 
-            $indexData = Dumper::create($this->collectIndexData())->asJson();
-            file_put_contents($basePath . self::TYPE_INDEX . '.json', $indexData);
+            $summaryData = Dumper::create($this->collectSummaryData())->asJson();
+            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $summaryData);
 
             $this->gc();
         } finally {
@@ -107,9 +107,9 @@ final class FileStorage implements StorageInterface
     /**
      * Collects summary data of current request.
      */
-    private function collectIndexData(): array
+    private function collectSummaryData(): array
     {
-        $indexData = [
+        $summaryData = [
             [
                 'id' => $this->idGenerator->getId(),
                 'collectors' => array_keys($this->collectors),
@@ -117,12 +117,12 @@ final class FileStorage implements StorageInterface
         ];
 
         foreach ($this->collectors as $collector) {
-            if ($collector instanceof IndexCollectorInterface) {
-                $indexData[] = $collector->getIndexData();
+            if ($collector instanceof SummaryCollectorInterface) {
+                $summaryData[] = $collector->getSummary();
             }
         }
 
-        return array_merge(...$indexData);
+        return array_merge(...$summaryData);
     }
 
     /**
@@ -130,10 +130,10 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $indexFiles = glob($this->path . '/**/**/index.json', GLOB_NOSORT);
-        if ((is_countable($indexFiles) ? count($indexFiles) : 0) >= $this->historySize + 1) {
-            uasort($indexFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
-            $excessFiles = array_slice($indexFiles, $this->historySize);
+        $summaryFiles = glob($this->path . '/**/**/sumamry.json', GLOB_NOSORT);
+        if ((is_countable($summaryFiles) ? count($summaryFiles) : 0) >= $this->historySize + 1) {
+            uasort($summaryFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
+            $excessFiles = array_slice($summaryFiles, $this->historySize);
             foreach ($excessFiles as $file) {
                 $path1 = dirname($file);
                 $path2 = dirname($file, 2);

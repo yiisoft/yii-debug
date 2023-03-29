@@ -9,11 +9,10 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollectorInterface
+final class ConsoleAppInfoCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -58,7 +57,7 @@ final class ConsoleAppInfoCollector implements CollectorInterface, IndexCollecto
         }
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         return [
             'console' => [
