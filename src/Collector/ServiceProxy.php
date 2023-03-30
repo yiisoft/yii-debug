@@ -13,7 +13,7 @@ class ServiceProxy extends ObjectProxy
     public function __construct(
         private string $service,
         object $instance,
-        ContainerProxyConfig $config
+        ContainerProxyConfig $config,
     ) {
         $this->config = $config;
         parent::__construct($instance);

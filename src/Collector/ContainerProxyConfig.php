@@ -11,8 +11,14 @@ use function is_callable;
 
 final class ContainerProxyConfig
 {
-    public function __construct(private bool $active = false, private array $decoratedServices = [], private ?EventDispatcherInterface $dispatcher = null, private ?ServiceCollector $collector = null, private ?string $proxyCachePath = null, private int $logLevel = 0)
-    {
+    public function __construct(
+        private bool $active = false,
+        private array $decoratedServices = [],
+        private ?EventDispatcherInterface $dispatcher = null,
+        private ?ServiceCollector $collector = null,
+        private ?string $proxyCachePath = null,
+        private int $logLevel = ContainerInterfaceProxy::LOG_NOTHING,
+    ) {
     }
 
     public function activate(): self
