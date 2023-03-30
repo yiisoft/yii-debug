@@ -54,7 +54,7 @@ to be able to interact with collected data through UI.
 
 ## Logging
 
-Specify the filesystem path where collected data will be stored if you use `FileStorage` by adding the lines into the configuration:
+If you use `FileStorage`, specify the filesystem path where collected data will be stored by adding the following lines into the configuration:
 
 ```php
 return [
@@ -69,7 +69,7 @@ return [
 
 ## Filtering
 
-Disabling debugging may help you to debug in production or not to flood to the debug storage with payload which never be used for debug purpose.
+Disabling debugging for certain requests or console runs may help you to debug in production or not to flood the debug storage with unuseful payloads.
 
 You can specify which routes should not trigger the Debug extension by adding the ones into the configuration:
 
@@ -84,9 +84,9 @@ return [
 ];
 ```
 
-It uses regular expressions under the hood, but looks simpler for users. See (`\Yiisoft\Strings\WildcardPattern`)[https://github.com/yiisoft/strings#wildcardpattern-usage] for more details.
+See (`\Yiisoft\Strings\WildcardPattern`)[https://github.com/yiisoft/strings#wildcardpattern-usage] for more details about the pattern syntax.
 
-In order to disable debugging console commands you can also specify them into another directive `ignoredCommands`.
+In order to disable debugging certain console commands you can also specify them via `ignoredCommands`.
 Here is default ignored command list:
 
 ```php
@@ -303,16 +303,16 @@ We suggest you to give short names to your summary payload to be able to read th
 
 ## ServiceCollector
 
-ServiceCollector is a collector that listen all tracked services and collect its arguments, results and errors.
+ServiceCollector is a collector that listens all tracked services and collects its arguments, results and errors.
 
 By default, the debug extension has enabled [`\Yiisoft\Yii\Debug\Collector\ServiceCollector`](./src/Collector/ServiceCollector.php) with the following settings:
 1. Log arguments
 2. Log results
 3. Log errors
 
-It may worse the application performance in development what why we recommend to disable this mechanism in production.
+It may degrade the application performance so it may be a good idea to disable it in production.
 
-You may control the things are being logged by specifying the settings in the configuration:
+You may control what is logged by specifying the settings in the configuration:
 
 ```php
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
@@ -329,7 +329,7 @@ return [
 
 ### `debug/reset`
 
-The command clean all collected data. It's similar to `rm -rf runtime/debug` if you use file storage, but may be also useful if you use another storage driver.
+The `debug/reset` command cleans all collected data. It's similar to `rm -rf runtime/debug` if you use file storage, but may be also useful if you use another storage driver.
 
 ### Unit testing
 
