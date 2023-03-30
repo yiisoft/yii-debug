@@ -43,7 +43,7 @@ return [
     'yiisoft/yii-debug' => [
         'enabled' => true,
     ],
-    ...
+    // ...
 ];
 ```
 
@@ -51,6 +51,58 @@ All included collectors start listen and collect payloads from each HTTP request
 
 Install both [`yiisoft/yii-debug-api`](https://github.com/yiisoft/yii-debug-api) and [`yiisoft/yii-dev-panel`](https://github.com/yiisoft/yii-dev-panel)
 to be able to interact with collected data through UI.
+
+## Logging
+
+If you use `FileStorage`, specify the filesystem path where collected data will be stored by adding the following lines into the configuration:
+
+```php
+return [
+    'yiisoft/yii-debug' => [
+        // It's default path to store collected payload
+        // @runtime = @root/runtime
+        'path' => '@runtime/debug',
+    ],
+    // ...
+];
+```
+
+## Filtering
+
+Disabling debugging for certain requests or console runs may help you to debug in production or not to flood the debug storage with unuseful payloads.
+
+You can specify which routes should not trigger the Debug extension by adding the ones into the configuration:
+
+```php
+return [
+    'yiisoft/yii-debug' => [
+        'ignoredRequests' => [
+            '/assets/**',
+        ],
+    ],
+    // ...
+];
+```
+
+See (`\Yiisoft\Strings\WildcardPattern`)[https://github.com/yiisoft/strings#wildcardpattern-usage] for more details about the pattern syntax.
+
+In order to disable debugging certain console commands you can also specify them via `ignoredCommands`.
+Here is default ignored command list:
+
+```php
+return [
+    'yiisoft/yii-debug' => [
+        'ignoredCommands' => [
+            'completion',
+            'help',
+            'list',
+            'serve',
+            'debug/reset',
+        ],
+    ],
+    // ...
+];
+```
 
 ## Collectors
 
@@ -203,7 +255,7 @@ return [
 ];
 ```
 
-#### Summary collector
+## Summary collector
 
 Summary collector is a collector that provides additional "summary" payload. 
 The summary payload is used to reduce time to read usual payload and summarise some metrics to get better UX.
@@ -248,6 +300,36 @@ We suggest you to give short names to your summary payload to be able to read th
         ];
     }
 ```
+
+## ServiceCollector
+
+ServiceCollector is a collector that listens all tracked services and collects its arguments, results and errors.
+
+By default, the debug extension has enabled [`\Yiisoft\Yii\Debug\Collector\ServiceCollector`](./src/Collector/ServiceCollector.php) with the following settings:
+1. Log arguments
+2. Log results
+3. Log errors
+
+It may degrade the application performance so it may be a good idea to disable it in production.
+
+You may control what is logged by specifying the settings in the configuration:
+
+```php
+use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
+
+return [
+    'yiisoft/yii-debug' => [
+        // use 0 or ContainerInterfaceProxy::LOG_NOTHING to disable logging
+        'logLevel' => ContainerInterfaceProxy::LOG_ARGUMENTS | ContainerInterfaceProxy::LOG_RESULT | ContainerInterfaceProxy::LOG_ERROR,
+    ],
+];
+```
+
+## Console commands
+
+### `debug/reset`
+
+The `debug/reset` command cleans all collected data. It's similar to `rm -rf runtime/debug` if you use file storage, but may be also useful if you use another storage driver.
 
 ### Unit testing
 
