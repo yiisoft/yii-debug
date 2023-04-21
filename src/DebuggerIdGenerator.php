@@ -15,7 +15,7 @@ final class DebuggerIdGenerator
 
     private function generateId(): void
     {
-        $this->id = uniqid('', true);
+        $this->id = str_replace('.', '', uniqid('', true));
     }
 
     public function getId(): string
