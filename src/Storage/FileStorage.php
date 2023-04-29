@@ -50,11 +50,16 @@ final class FileStorage implements StorageInterface
         $this->historySize = $historySize;
     }
 
-    public function read($type = self::TYPE_SUMMARY): array
+    public function read(string $type, ?string $id= null): array
     {
         clearstatcache();
         $data = [];
-        $dataFiles = glob($this->path . '/**/**/' . $type . '.json', GLOB_NOSORT);
+        $pattern = sprintf('%s/**/%s/%s.json',
+            $this->path ,
+             $id ?? '**' ,
+             $type,
+        );
+        $dataFiles = glob($pattern, GLOB_NOSORT);
         uasort($dataFiles, static fn ($a, $b) => filemtime($a) <=> filemtime($b));
 
         foreach ($dataFiles as $file) {
