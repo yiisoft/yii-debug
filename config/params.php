@@ -6,18 +6,11 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Yiisoft\Assets\AssetLoaderInterface;
-use Yiisoft\Auth\AuthenticationMethodInterface;
 use Yiisoft\Cache\CacheInterface;
-use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Injector\Injector;
-use Yiisoft\Router\UrlMatcherInterface;
-use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Database\ConnectionInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Database\DatabaseCollector;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ExceptionCollector;
@@ -25,27 +18,13 @@ use Yiisoft\Yii\Debug\Collector\HttpClientCollector;
 use Yiisoft\Yii\Debug\Collector\HttpClientInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Queue\QueueCollector;
-use Yiisoft\Yii\Debug\Collector\Queue\QueueFactoryInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Queue\QueueWorkerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
-use Yiisoft\Yii\Debug\Collector\ValidatorCollector;
-use Yiisoft\Yii\Debug\Collector\ValidatorInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Web\AssetCollector;
-use Yiisoft\Yii\Debug\Collector\Web\AssetLoaderInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Web\AuthenticationMethodInterfaceProxy;
-use Yiisoft\Yii\Debug\Collector\Web\IdentityCollector;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
-use Yiisoft\Yii\Debug\Collector\Web\RouterCollector;
-use Yiisoft\Yii\Debug\Collector\Web\UrlMatcherInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
-use Yiisoft\Yii\Debug\Collector\Web\WebViewCollector;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
-use Yiisoft\Yii\Queue\QueueFactoryInterface;
-use Yiisoft\Yii\Queue\Worker\WorkerInterface;
 
 /**
  * @var $params array
@@ -57,10 +36,7 @@ return [
         'collectors' => [
             LogCollector::class,
             EventCollector::class,
-            DatabaseCollector::class,
             ServiceCollector::class,
-            ValidatorCollector::class,
-            QueueCollector::class,
             HttpClientCollector::class,
             FilesystemStreamCollector::class,
             HttpStreamCollector::class,
@@ -69,11 +45,7 @@ return [
         'collectors.web' => [
             WebAppInfoCollector::class,
             RequestCollector::class,
-            RouterCollector::class,
             MiddlewareCollector::class,
-            AssetCollector::class,
-            WebViewCollector::class,
-            IdentityCollector::class,
         ],
         'collectors.console' => [
             ConsoleAppInfoCollector::class,
@@ -83,14 +55,7 @@ return [
             Injector::class => fn (ContainerInterface $container) => new Injector($container),
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
-            ConnectionInterface::class => [ConnectionInterfaceProxy::class, DatabaseCollector::class],
-            QueueFactoryInterface::class => [QueueFactoryInterfaceProxy::class, QueueCollector::class],
-            WorkerInterface::class => [QueueWorkerInterfaceProxy::class, QueueCollector::class],
-            UrlMatcherInterface::class => [UrlMatcherInterfaceProxy::class, RouterCollector::class],
-            ValidatorInterface::class => [ValidatorInterfaceProxy::class, ValidatorCollector::class],
-            AssetLoaderInterface::class => [AssetLoaderInterfaceProxy::class, AssetCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
-            AuthenticationMethodInterface::class => [AuthenticationMethodInterfaceProxy::class, IdentityCollector::class],
             CacheInterface::class,
         ],
         'dumper.excludedClasses' => [
@@ -109,7 +74,8 @@ return [
         'logLevel' => ContainerInterfaceProxy::LOG_ARGUMENTS | ContainerInterfaceProxy::LOG_RESULT | ContainerInterfaceProxy::LOG_ERROR,
         'path' => '@runtime/debug',
         'ignoredRequests' => [
-            '/assets/*',
+            // Paths to ignore the debugger, e.g.:
+            //'/assets/*',
         ],
         'ignoredCommands' => [
             'completion',
