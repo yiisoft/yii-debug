@@ -39,7 +39,7 @@ interface StorageInterface
      *
      * @return array data from storage
      */
-    public function read(string $type = self::TYPE_SUMMARY): array;
+    public function read(string $type, ?string $id): array;
 
     /**
      * Flush data from collectors into storage

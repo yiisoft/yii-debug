@@ -37,9 +37,11 @@ abstract class AbstractStorageTest extends TestCase
 
         $storage->addCollector($collector);
         $expectedData = $storage->getData();
-        !($storage instanceof MemoryStorage) && $storage->flush();
-        $this->assertIsArray($storage->read());
-        $this->assertEquals([$idGenerator->getId() => $expectedData], $storage->read(StorageInterface::TYPE_DATA));
+        if (!$storage instanceof MemoryStorage) {
+            $storage->flush();
+        }
+        $data = $storage->read(StorageInterface::TYPE_DATA);
+        $this->assertEquals([$idGenerator->getId() => $expectedData], $data);
     }
 
     /**
