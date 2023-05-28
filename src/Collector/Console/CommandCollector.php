@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Console;
 
-use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
@@ -15,8 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
-
-use function is_object;
 
 final class CommandCollector implements SummaryCollectorInterface
 {
