@@ -12,6 +12,9 @@ class LogCollector implements SummaryCollectorInterface
 
     public function getCollected(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return $this->messages;
     }
 
@@ -37,6 +40,9 @@ class LogCollector implements SummaryCollectorInterface
 
     public function getSummary(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return [
             'logger' => [
                 'total' => count($this->messages),

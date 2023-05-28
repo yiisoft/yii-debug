@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Shared;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
 abstract class AbstractCollectorTestCase extends TestCase
@@ -27,6 +28,16 @@ abstract class AbstractCollectorTestCase extends TestCase
         $this->checkCollectedData($data);
         if ($collector instanceof SummaryCollectorInterface) {
             $this->checkSummaryData($summaryData);
+        }
+    }
+
+    public function testEmptyCollector()
+    {
+        $collector = $this->getCollector();
+
+        $this->assertEquals([], $collector->getCollected());
+        if ($collector instanceof SummaryCollectorInterface) {
+            $this->assertEquals([], $collector->getSummary());
         }
     }
 

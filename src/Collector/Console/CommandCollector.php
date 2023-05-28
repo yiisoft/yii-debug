@@ -35,7 +35,7 @@ final class CommandCollector implements SummaryCollectorInterface
 
     public function collect(ConsoleEvent|ConsoleErrorEvent|ConsoleTerminateEvent $event): void
     {
-        if (!is_object($event) || !$this->isActive()) {
+        if (!$this->isActive()) {
             return;
         }
 
@@ -65,6 +65,7 @@ final class CommandCollector implements SummaryCollectorInterface
             return;
         }
 
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if ($event instanceof ConsoleEvent) {
             $this->commands[$event::class] = [
                 'name' => $command->getName(),
@@ -79,11 +80,11 @@ final class CommandCollector implements SummaryCollectorInterface
 
     public function getSummary(): array
     {
-        $eventTypes = [
-            ConsoleErrorEvent::class,
-            ConsoleTerminateEvent::class,
-            ConsoleCommandEvent::class,
-        ];
+        if (empty($this->commands)) {
+            return [];
+        }
+
+        $eventTypes = $this->getSupportedEvents();
 
         $commandEvent = null;
         foreach ($eventTypes as $eventType) {
@@ -96,14 +97,7 @@ final class CommandCollector implements SummaryCollectorInterface
         }
 
         if ($commandEvent === null) {
-            $types = array_keys($this->commands);
-            throw new RuntimeException(
-                sprintf(
-                    'Unsupported event type encountered among "%s". Supported only "%s"',
-                    implode('", "', $types),
-                    implode('", "', $eventTypes),
-                )
-            );
+            return [];
         }
 
         return [
@@ -129,5 +123,14 @@ final class CommandCollector implements SummaryCollectorInterface
     private function castInputToString(InputInterface $input): ?string
     {
         return method_exists($input, '__toString') ? $input->__toString() : null;
+    }
+
+    private function getSupportedEvents(): array
+    {
+        return [
+            ConsoleErrorEvent::class,
+            ConsoleTerminateEvent::class,
+            ConsoleEvent::class,
+        ];
     }
 }

@@ -24,6 +24,9 @@ final class WebAppInfoCollector implements SummaryCollectorInterface
 
     public function getCollected(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return [
             'applicationProcessingTime' => $this->applicationProcessingTimeStopped - $this->applicationProcessingTimeStarted,
             'requestProcessingTime' => $this->requestProcessingTimeStopped - $this->requestProcessingTimeStarted,
@@ -53,6 +56,9 @@ final class WebAppInfoCollector implements SummaryCollectorInterface
 
     public function getSummary(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return [
             'web' => [
                 'php' => [

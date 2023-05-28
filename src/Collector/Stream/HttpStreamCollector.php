@@ -19,6 +19,9 @@ final class HttpStreamCollector implements SummaryCollectorInterface
 
     public function getCollected(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return $this->requests;
     }
 
@@ -59,6 +62,9 @@ final class HttpStreamCollector implements SummaryCollectorInterface
 
     public function getSummary(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return [
             'http_stream' => array_merge(
                 ...array_map(

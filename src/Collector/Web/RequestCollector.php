@@ -31,6 +31,9 @@ final class RequestCollector implements SummaryCollectorInterface
 
     public function getCollected(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         $content = null;
         if ($this->response !== null) {
             $stream = $this->response->getBody();
@@ -102,6 +105,9 @@ final class RequestCollector implements SummaryCollectorInterface
 
     public function getSummary(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return [
             'request' => [
                 'url' => $this->requestUrl,
