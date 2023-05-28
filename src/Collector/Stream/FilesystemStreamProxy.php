@@ -82,7 +82,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
     /**
      * TODO: optimise the check. Maybe a hashmap?
      */
-    private function setIgnored(): void
+    private function isIgnored(): bool
     {
         $backtrace = debug_backtrace();
         /**
@@ -92,12 +92,11 @@ class FilesystemStreamProxy implements StreamWrapperInterface
          * 3 – Whatever / Composer\ClassLoader
          */
         if (isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], self::$ignoredClasses, true)) {
-            $this->ignored = true;
-            return;
+            return true;
         }
 
         if (!isset($backtrace[2])) {
-            return;
+            return false;
         }
         $path = $backtrace[2]['file'];
 
@@ -108,12 +107,12 @@ class FilesystemStreamProxy implements StreamWrapperInterface
                 break;
             }
         }
-        $this->ignored = $result;
+        return $result;
     }
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
     {
-        $this->setIgnored();
+        $this->ignored = $this->isIgnored();
         return $this->__call(__FUNCTION__, func_get_args());
     }
 
@@ -186,8 +185,8 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function mkdir(string $path, int $mode, int $options): bool
     {
-        if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+        if (!$this->isIgnored()) {
+            $this->operations['mkdir'] = [
                 'path' => $path,
                 'args' => [
                     'mode' => $mode,
@@ -201,7 +200,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
     public function rename(string $path_from, string $path_to): bool
     {
         if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+            $this->operations['rename'] = [
                 'path' => $path_from,
                 'args' => [
                     'path_to' => $path_to,
@@ -214,7 +213,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
     public function rmdir(string $path, int $options): bool
     {
         if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+            $this->operations['rmdir'] = [
                 'path' => $path,
                 'args' => [
                     'options' => $options,
@@ -264,7 +263,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
     public function unlink(string $path): bool
     {
         if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+            $this->operations['unlink'] = [
                 'path' => $path,
                 'args' => [],
             ];

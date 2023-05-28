@@ -10,8 +10,9 @@ use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 {
+
     /**
-     * @param CollectorInterface|FilesystemStreamCollector $collector
+     * @param FilesystemStreamCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -32,13 +33,80 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         );
     }
 
-    public function testCollectWithInactiveCollector(): void
-    {
-        $collector = $this->getCollector();
-        $this->collectTestData($collector);
+    /**
+     * @dataProvider dataSkipCollectOnMatchIgnoreReferences
+     */
+    public function testSkipCollectOnMatchIgnoreReferences(
+        string $path,
+        callable $before,
+        array $ignoredPathPatterns,
+        array $ignoredClasses,
+        callable $operation,
+        callable $after,
+        array $result,
+    ): void {
+        $before($path);
 
-        $collected = $collector->getCollected();
-        $this->assertEmpty($collected);
+        try {
+            $collector = new FilesystemStreamCollector(
+                ignoredPathPatterns: $ignoredPathPatterns,
+                ignoredClasses: $ignoredClasses,
+            );
+            $collector->startup();
+
+            $operation($path);
+
+            $collected = $collector->getCollected();
+            $collector->shutdown();
+        } finally {
+            $after($path);
+        }
+        $this->assertEquals($result, $collected);
+    }
+
+    public function dataSkipCollectOnMatchIgnoreReferences(): iterable
+    {
+        $mkdirBefore = function (string $path) {
+            if (is_dir($path)) {
+                @rmdir($path);
+            }
+        };
+        $mkdirOperation = function (string $path) {
+            mkdir($path, 0777, true);
+        };
+        $mkdirAfter = $mkdirBefore;
+
+        yield 'mkdir matched' => [
+            $path = __DIR__ . '/stub/internal/',
+            $mkdirBefore,
+            [],
+            [],
+            $mkdirOperation,
+            $mkdirAfter,
+            [
+                'mkdir' => [
+                    ['path' => $path, 'args' => ['mode' => 0777, 'options' => 9]], // 9 for some reasons
+                ],
+            ],
+        ];
+        yield 'mkdir ignored by path' => [
+            __DIR__ . '/stub/internal/',
+            $mkdirBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $mkdirOperation,
+            $mkdirAfter,
+            [],
+        ];
+        yield 'mkdir ignored by class' => [
+            __DIR__ . '/stub/internal/',
+            $mkdirBefore,
+            [],
+            [self::class],
+            $mkdirOperation,
+            $mkdirAfter,
+            [],
+        ];
     }
 
     protected function getCollector(): CollectorInterface
