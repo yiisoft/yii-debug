@@ -201,6 +201,53 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $rmdirAfter,
             [],
         ];
+
+        $unlinkBefore = function (string $path) {
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+            if (!is_file($path)) {
+                touch($path);
+            }
+        };
+        $unlinkOperation = function (string $path) {
+            unlink($path);
+        };
+        $unlinkAfter = function (string $path) {
+            FileHelper::removeDirectory(dirname($path));
+        };
+
+        yield 'unlink matched' => [
+            $path = __DIR__ . '/stub/file-to-unlink.txt',
+            $unlinkBefore,
+            [],
+            [],
+            $unlinkOperation,
+            $unlinkAfter,
+            [
+                'unlink' => [
+                    ['path' => $path, 'args' => []],
+                ],
+            ],
+        ];
+        yield 'unlink ignored by path' => [
+            $path,
+            $unlinkBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $unlinkOperation,
+            $unlinkAfter,
+            [],
+        ];
+        yield 'unlink ignored by class' => [
+            $path,
+            $unlinkBefore,
+            [],
+            [self::class],
+            $unlinkOperation,
+            $unlinkAfter,
+            [],
+        ];
     }
 
     protected function getCollector(): CollectorInterface
