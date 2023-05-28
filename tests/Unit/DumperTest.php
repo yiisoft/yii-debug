@@ -60,27 +60,41 @@ final class DumperTest extends TestCase
         $this->assertEqualsWithoutLE($result, $output);
     }
 
-    public function jsonDataProvider(): array
+    public static function jsonDataProvider(): iterable
     {
-        $objectWithClosureInProperty = new stdClass();
-        // @formatter:off
-        $objectWithClosureInProperty->a = fn () => 1;
-        // @formatter:on
-        $objectWithClosureInPropertyId = spl_object_id($objectWithClosureInProperty);
-        $objectWithClosureInPropertyClosureId = spl_object_id($objectWithClosureInProperty->a);
-
         $emptyObject = new stdClass();
         $emptyObjectId = spl_object_id($emptyObject);
+
+        yield 'empty object' => [
+            $emptyObject,
+            <<<S
+                {"stdClass#{$emptyObjectId}":"{stateless object}"}
+                S,
+        ];
 
         // @formatter:off
         $shortFunctionObject = fn () => 1;
         // @formatter:on
         $shortFunctionObjectId = spl_object_id($shortFunctionObject);
 
+        yield 'short function' => [
+            $shortFunctionObject,
+            <<<S
+                {"Closure#{$shortFunctionObjectId}":"fn () => 1"}
+                S,
+        ];
+
         // @formatter:off
         $staticShortFunctionObject = static fn () => 1;
         // @formatter:on
         $staticShortFunctionObjectId = spl_object_id($staticShortFunctionObject);
+
+        yield 'short static function' => [
+            $staticShortFunctionObject,
+            <<<S
+                {"Closure#{$staticShortFunctionObjectId}":"static fn () => 1"}
+                S,
+        ];
 
         // @formatter:off
         $functionObject = function () {
@@ -89,6 +103,13 @@ final class DumperTest extends TestCase
         // @formatter:on
         $functionObjectId = spl_object_id($functionObject);
 
+        yield 'function' => [
+            $functionObject,
+            <<<S
+                {"Closure#{$functionObjectId}":"function () {\\n            return 1;\\n        }"}
+                S,
+        ];
+
         // @formatter:off
         $staticFunctionObject = static function () {
             return 1;
@@ -96,207 +117,199 @@ final class DumperTest extends TestCase
         // @formatter:on
         $staticFunctionObjectId = spl_object_id($staticFunctionObject);
 
-        // @formatter:off
-        $closureWithNullCollisionOperatorObject = fn () => $_ENV['var'] ?? null;
-        // @formatter:on
-        $closureWithNullCollisionOperatorObjectId = spl_object_id($closureWithNullCollisionOperatorObject);
-
-        // @formatter:off
-        $closureWithUsualClassNameObject = fn (Dumper $date) => new \DateTimeZone('');
-        // @formatter:on
-        $closureWithUsualClassNameObjectId = spl_object_id($closureWithUsualClassNameObject);
-
-        // @formatter:off
-        $closureWithAliasedClassNameObject = fn (Dumper $date) => new \DateTimeZone('');
-        // @formatter:on
-        $closureWithAliasedClassNameObjectId = spl_object_id($closureWithAliasedClassNameObject);
-
-        // @formatter:off
-        $closureWithAliasedNamespaceObject = fn (D\Dumper $date) => new \DateTimeZone('');
-        // @formatter:on
-        $closureWithAliasedNamespaceObjectId = spl_object_id($closureWithAliasedNamespaceObject);
+        yield 'static function' => [
+            $staticFunctionObject,
+            <<<S
+                {"Closure#{$staticFunctionObjectId}":"static function () {\\n            return 1;\\n        }"}
+                S,
+        ];
+        yield 'string' => [
+            'Hello, Yii!',
+            '"Hello, Yii!"',
+        ];
+        yield 'empty string' => [
+            '',
+            '""',
+        ];
+        yield 'null' => [
+            null,
+            'null',
+        ];
+        yield 'integer' => [
+            1,
+            '1',
+        ];
+        yield 'integer with separator' => [
+            1_23_456,
+            '123456',
+        ];
+        yield 'boolean' => [
+            true,
+            'true',
+        ];
+        yield 'fileResource' => [
+            fopen('php://input', 'rb'),
+            '{"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"Input","mode":"rb","unread_bytes":0,"seekable":true,"uri":"php:\/\/input"}',
+        ];
+        yield 'empty array' => [
+            [],
+            '[]',
+        ];
+        yield 'array of 3 elements, automatic keys' => [
+            [
+                'one',
+                'two',
+                'three',
+            ],
+            '["one","two","three"]',
+        ];
+        yield 'array of 3 elements, custom keys' => [
+            [
+                2 => 'one',
+                'two' => 'two',
+                0 => 'three',
+            ],
+            '{"2":"one","two":"two","0":"three"}',
+        ];
 
         // @formatter:off
         $closureInArrayObject = fn () => new \DateTimeZone('');
         // @formatter:on
         $closureInArrayObjectId = spl_object_id($closureInArrayObject);
 
+        yield 'closure in array' => [
+            // @formatter:off
+                [$closureInArrayObject],
+                // @formatter:on
+            <<<S
+                [{"Closure#{$closureInArrayObjectId}":"fn () => new \\\DateTimeZone('')"}]
+                S,
+        ];
+
+        // @formatter:off
+        $closureWithUsualClassNameObject = fn (Dumper $date) => new \DateTimeZone('');
+        // @formatter:on
+        $closureWithUsualClassNameObjectId = spl_object_id($closureWithUsualClassNameObject);
+
+        yield 'original class name' => [
+            $closureWithUsualClassNameObject,
+            <<<S
+                {"Closure#{$closureWithUsualClassNameObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
+                S,
+        ];
+
+        // @formatter:off
+        $closureWithAliasedClassNameObject = fn (Dumper $date) => new \DateTimeZone('');
+        // @formatter:on
+        $closureWithAliasedClassNameObjectId = spl_object_id($closureWithAliasedClassNameObject);
+
+        yield 'class alias' => [
+            $closureWithAliasedClassNameObject,
+            <<<S
+                {"Closure#{$closureWithAliasedClassNameObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
+                S,
+        ];
+
+        // @formatter:off
+        $closureWithAliasedNamespaceObject = fn (D\Dumper $date) => new \DateTimeZone('');
+        // @formatter:on
+        $closureWithAliasedNamespaceObjectId = spl_object_id($closureWithAliasedNamespaceObject);
+
+        yield 'namespace alias' => [
+            $closureWithAliasedNamespaceObject,
+            <<<S
+                {"Closure#{$closureWithAliasedNamespaceObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
+                S,
+        ];
+        // @formatter:off
+        $closureWithNullCollisionOperatorObject = fn () => $_ENV['var'] ?? null;
+        // @formatter:on
+        $closureWithNullCollisionOperatorObjectId = spl_object_id($closureWithNullCollisionOperatorObject);
+
+        yield 'closure with null-collision operator' => [
+            $closureWithNullCollisionOperatorObject,
+            <<<S
+                {"Closure#{$closureWithNullCollisionOperatorObjectId}":"fn () => \$_ENV['var'] ?? null"}
+                S,
+        ];
+        yield 'utf8 supported' => [
+            '🤣',
+            '"🤣"',
+        ];
+
+
+        $objectWithClosureInProperty = new stdClass();
+        // @formatter:off
+        $objectWithClosureInProperty->a = fn () => 1;
+        // @formatter:on
+        $objectWithClosureInPropertyId = spl_object_id($objectWithClosureInProperty);
+        $objectWithClosureInPropertyClosureId = spl_object_id($objectWithClosureInProperty->a);
+
+        yield 'closure in property supported' => [
+            $objectWithClosureInProperty,
+            <<<S
+                {"stdClass#{$objectWithClosureInPropertyId}":{"public \$a":{"Closure#{$objectWithClosureInPropertyClosureId}":"fn () => 1"}}}
+                S,
+        ];
+        yield 'binary string' => [
+            pack('H*', md5('binary string')),
+            '"ɍ��^��\u00191\u0017�]�-f�"',
+        ];
+
+
         $fileResource = tmpfile();
         $fileResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
+
+        yield 'file resource' => [
+            $fileResource,
+            <<<S
+                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"plainfile","stream_type":"STDIO","mode":"r+b","unread_bytes":0,"seekable":true,"uri":"{$fileResourceUri}"}
+                S,
+        ];
 
         $closedFileResource = tmpfile();
         fclose($closedFileResource);
 
+        yield 'closed file resource' => [
+            $closedFileResource,
+            '"{closed resource}"',
+        ];
+
         $opendirResource = opendir('/tmp');
 
-        $curlResource = curl_init('https://example.com');
-        $curlResourceObjectId = spl_object_id($curlResource);
-
-        return [
-            'empty object' => [
-                $emptyObject,
-                <<<S
-                {"stdClass#{$emptyObjectId}":"{stateless object}"}
-                S,
-            ],
-            'short function' => [
-                $shortFunctionObject,
-                <<<S
-                {"Closure#{$shortFunctionObjectId}":"fn () => 1"}
-                S,
-            ],
-            'short static function' => [
-                $staticShortFunctionObject,
-                <<<S
-                {"Closure#{$staticShortFunctionObjectId}":"static fn () => 1"}
-                S,
-            ],
-            'function' => [
-                $functionObject,
-                <<<S
-                {"Closure#{$functionObjectId}":"function () {\\n            return 1;\\n        }"}
-                S,
-            ],
-            'static function' => [
-                $staticFunctionObject,
-                <<<S
-                {"Closure#{$staticFunctionObjectId}":"static function () {\\n            return 1;\\n        }"}
-                S,
-            ],
-            'string' => [
-                'Hello, Yii!',
-                '"Hello, Yii!"',
-            ],
-            'empty string' => [
-                '',
-                '""',
-            ],
-            'null' => [
-                null,
-                'null',
-            ],
-            'integer' => [
-                1,
-                '1',
-            ],
-            'integer with separator' => [
-                1_23_456,
-                '123456',
-            ],
-            'boolean' => [
-                true,
-                'true',
-            ],
-            'fileResource' => [
-                fopen('php://input', 'rb'),
-                '{"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"Input","mode":"rb","unread_bytes":0,"seekable":true,"uri":"php:\/\/input"}',
-            ],
-            'empty array' => [
-                [],
-                '[]',
-            ],
-            'array of 3 elements, automatic keys' => [
-                [
-                    'one',
-                    'two',
-                    'three',
-                ],
-                '["one","two","three"]',
-            ],
-            'array of 3 elements, custom keys' => [
-                [
-                    2 => 'one',
-                    'two' => 'two',
-                    0 => 'three',
-                ],
-                '{"2":"one","two":"two","0":"three"}',
-            ],
-            'closure in array' => [
-                // @formatter:off
-                [$closureInArrayObject],
-                // @formatter:on
-                <<<S
-                [{"Closure#{$closureInArrayObjectId}":"fn () => new \\\DateTimeZone('')"}]
-                S,
-            ],
-            'original class name' => [
-                $closureWithUsualClassNameObject,
-                <<<S
-                {"Closure#{$closureWithUsualClassNameObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
-                S,
-            ],
-            'class alias' => [
-                $closureWithAliasedClassNameObject,
-                <<<S
-                {"Closure#{$closureWithAliasedClassNameObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
-                S,
-            ],
-            'namespace alias' => [
-                $closureWithAliasedNamespaceObject,
-                <<<S
-                {"Closure#{$closureWithAliasedNamespaceObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
-                S,
-            ],
-            'closure with null-collision operator' => [
-                $closureWithNullCollisionOperatorObject,
-                <<<S
-                {"Closure#{$closureWithNullCollisionOperatorObjectId}":"fn () => \$_ENV['var'] ?? null"}
-                S,
-            ],
-            'utf8 supported' => [
-                '🤣',
-                '"🤣"',
-            ],
-            'closure in property supported' => [
-                $objectWithClosureInProperty,
-                <<<S
-                {"stdClass#{$objectWithClosureInPropertyId}":{"public \$a":{"Closure#{$objectWithClosureInPropertyClosureId}":"fn () => 1"}}}
-                S,
-            ],
-            'binary string' => [
-                pack('H*', md5('binary string')),
-                '"ɍ��^��\u00191\u0017�]�-f�"',
-            ],
-            'file resource' => [
-                $fileResource,
-                <<<S
-                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"plainfile","stream_type":"STDIO","mode":"r+b","unread_bytes":0,"seekable":true,"uri":"{$fileResourceUri}"}
-                S,
-            ],
-            'closed file resource' => [
-                $closedFileResource,
-                '"{closed resource}"',
-            ],
-            'opendir resource' => [
-                $opendirResource,
-                <<<S
+        yield 'opendir resource' => [
+            $opendirResource,
+            <<<S
                 {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"plainfile","stream_type":"dir","mode":"r","unread_bytes":0,"seekable":true}
                 S,
-            ],
-            'curl resource' => [
-                $curlResource,
-                <<<S
+        ];
+
+        $curlResource = curl_init('https://example.com');
+        $curlResourceObjectId = spl_object_id($curlResource);;
+
+        yield 'curl resource' => [
+            $curlResource,
+            <<<S
                 {"CurlHandle#{$curlResourceObjectId}":"{stateless object}"}
                 S,
-            ],
-            'stdout' => [
-                STDOUT,
-                <<<S
+        ];
+        yield 'stdout' => [
+            STDOUT,
+            <<<S
                 {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"STDIO","mode":"wb","unread_bytes":0,"seekable":false,"uri":"php:\/\/stdout"}
                 S,
-            ],
-            'stderr' => [
-                STDERR,
-                <<<S
+        ];
+        yield 'stderr' => [
+            STDERR,
+            <<<S
                 {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"STDIO","mode":"wb","unread_bytes":0,"seekable":false,"uri":"php:\/\/stderr"}
                 S,
-            ],
-            'stdin' => [
-                STDIN,
-                <<<S
+        ];
+        yield 'stdin' => [
+            STDIN,
+            <<<S
                 {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"STDIO","mode":"rb","unread_bytes":0,"seekable":false,"uri":"php:\/\/stdin"}
                 S,
-            ],
         ];
     }
 
