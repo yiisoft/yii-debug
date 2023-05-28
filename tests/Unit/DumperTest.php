@@ -276,7 +276,7 @@ final class DumperTest extends TestCase
             '"{closed resource}"',
         ];
 
-        $opendirResource = opendir('/tmp');
+        $opendirResource = opendir(sys_get_temp_dir());
 
         yield 'opendir resource' => [
             $opendirResource,
