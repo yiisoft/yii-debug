@@ -11,7 +11,6 @@ use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 {
-
     /**
      * @param FilesystemStreamCollector $collector
      */
@@ -118,7 +117,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             }
         };
         $renameOperation = function (string $path) {
-            rename($path, $path. '.renamed');
+            rename($path, $path . '.renamed');
         };
         $renameAfter = function (string $path) {
             FileHelper::removeDirectory(dirname($path));

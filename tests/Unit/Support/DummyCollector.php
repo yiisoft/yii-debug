@@ -10,6 +10,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 final class DummyCollector implements CollectorInterface
 {
     private bool $isActive = false;
+
     public function getName(): string
     {
         return self::class;
