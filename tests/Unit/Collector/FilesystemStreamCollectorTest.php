@@ -155,6 +155,52 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $renameAfter,
             [],
         ];
+
+        $rmdirBefore = function (string $path) {
+            if (!is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
+        };
+        $rmdirOperation = function (string $path) {
+            rmdir($path);
+        };
+        $rmdirAfter = function (string $path) {
+            if (is_dir($path)) {
+                rmdir($path);
+            }
+        };
+
+        yield 'rmdir matched' => [
+            $path = __DIR__ . '/stub/dir-to-remove',
+            $rmdirBefore,
+            [],
+            [],
+            $rmdirOperation,
+            $rmdirAfter,
+            [
+                'rmdir' => [
+                    ['path' => $path, 'args' => ['options' => 8]], // 8 for some reasons
+                ],
+            ],
+        ];
+        yield 'rmdir ignored by path' => [
+            $path,
+            $rmdirBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $rmdirOperation,
+            $rmdirAfter,
+            [],
+        ];
+        yield 'rmdir ignored by class' => [
+            $path,
+            $rmdirBefore,
+            [],
+            [self::class],
+            $rmdirOperation,
+            $rmdirAfter,
+            [],
+        ];
     }
 
     protected function getCollector(): CollectorInterface

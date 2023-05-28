@@ -212,7 +212,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function rmdir(string $path, int $options): bool
     {
-        if (!$this->ignored) {
+        if (!$this->isIgnored()) {
             $this->operations['rmdir'] = [
                 'path' => $path,
                 'args' => [
@@ -262,7 +262,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function unlink(string $path): bool
     {
-        if (!$this->ignored) {
+        if (!$this->isIgnored()) {
             $this->operations['unlink'] = [
                 'path' => $path,
                 'args' => [],
