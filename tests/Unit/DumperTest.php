@@ -179,8 +179,8 @@ final class DumperTest extends TestCase
 
         yield 'closure in array' => [
             // @formatter:off
-                [$closureInArrayObject],
-                // @formatter:on
+            [$closureInArrayObject],
+            // @formatter:on
             <<<S
                 [{"Closure#{$closureInArrayObjectId}":"fn () => new \\\DateTimeZone('')"}]
                 S,
@@ -288,7 +288,7 @@ final class DumperTest extends TestCase
         ];
 
         $curlResource = curl_init('https://example.com');
-        $curlResourceObjectId = spl_object_id($curlResource);;
+        $curlResourceObjectId = spl_object_id($curlResource);
 
         yield 'curl resource' => [
             $curlResource,
