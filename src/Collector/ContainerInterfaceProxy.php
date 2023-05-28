@@ -192,6 +192,6 @@ class ContainerInterfaceProxy implements ContainerInterface
             $this->logProxy(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
         }
 
-        return $result;
+        return (bool)$result;
     }
 }
