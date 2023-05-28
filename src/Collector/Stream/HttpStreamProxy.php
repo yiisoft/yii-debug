@@ -12,6 +12,9 @@ use const SEEK_SET;
 class HttpStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
+    public static array $ignoredPathPatterns = [];
+    public static array $ignoredClasses = [];
+    public static array $ignoredUrls = [];
     /**
      * @var resource|null
      */
@@ -82,6 +85,7 @@ class HttpStreamProxy implements StreamWrapperInterface
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
     {
+        $this->ignored = $this->isIgnored($path);
         return $this->__call(__FUNCTION__, func_get_args());
     }
 
@@ -257,5 +261,45 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function url_stat(string $path, int $flags): array|false
     {
         return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    private function isIgnored(string $url): bool
+    {
+        $result = false;
+        foreach (self::$ignoredUrls as $ignoredUrlPattern) {
+            if (preg_match($ignoredUrlPattern, $url) > 0) {
+                $result = true;
+                break;
+            }
+        }
+        if ($result) {
+            return true;
+        }
+
+        // TODO move to helper
+        $backtrace = debug_backtrace();
+        /**
+         * 0 – Called method
+         * 1 – Proxy
+         * 2 – Real using place / Composer\ClassLoader include function
+         * 3 – Whatever / Composer\ClassLoader
+         */
+        if (isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], self::$ignoredClasses, true)) {
+            return true;
+        }
+
+        if (!isset($backtrace[2])) {
+            return false;
+        }
+        $path = $backtrace[2]['file'];
+
+        $result = false;
+        foreach (self::$ignoredPathPatterns as $ignoredPathPattern) {
+            if (preg_match($ignoredPathPattern, $path) > 0) {
+                $result = true;
+                break;
+            }
+        }
+        return $result;
     }
 }

@@ -11,8 +11,11 @@ final class HttpStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
-    public function __construct(private array $ignoredPathPatterns = [], private array $ignoredClasses = [])
-    {
+    public function __construct(
+        private array $ignoredPathPatterns = [],
+        private array $ignoredClasses = [],
+        private array $ignoredUrls = []
+    ) {
     }
 
     private array $requests = [];
@@ -29,6 +32,11 @@ final class HttpStreamCollector implements SummaryCollectorInterface
     {
         $this->isActive = true;
         HttpStreamProxy::register();
+        HttpStreamProxy::$ignoredPathPatterns = $this->ignoredPathPatterns;
+        HttpStreamProxy::$ignoredClasses = $this->ignoredClasses;
+        HttpStreamProxy::$ignoredUrls = $this->ignoredUrls;
+        HttpStreamProxy::$collector = $this;
+
         // TODO: add cURL support, maybe through proxy?
         // https://github.com/php/php-src/issues/10509
         //stream_context_set_default([
@@ -36,7 +44,6 @@ final class HttpStreamCollector implements SummaryCollectorInterface
         //        'proxy' => 'yii-debug-http://127.0.0.1',
         //    ],
         //]);
-        HttpStreamProxy::$collector = $this;
     }
 
     public function shutdown(): void

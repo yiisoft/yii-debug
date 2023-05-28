@@ -273,7 +273,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             FileHelper::removeDirectory(dirname($path));
         };
 
-        yield 'fileStream matched' => [
+        yield 'file stream matched' => [
             $path = __DIR__ . '/stub/file-to-fileStream.txt',
             $fileStreamBefore,
             [],
@@ -289,7 +289,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
                 ],
             ],
         ];
-        yield 'fileStream ignored by path' => [
+        yield 'file stream ignored by path' => [
             $path,
             $fileStreamBefore,
             ['/' . basename(__FILE__, '.php') . '/'],
@@ -298,7 +298,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $fileStreamAfter,
             [],
         ];
-        yield 'fileStream ignored by class' => [
+        yield 'file stream ignored by class' => [
             $path,
             $fileStreamBefore,
             [],
