@@ -86,7 +86,8 @@ final class ContainerCommand extends Command
                     );
 
                     continue;
-                } elseif ($normalizedDefinition instanceof CallableDefinition || $normalizedDefinition instanceof ValueDefinition) {
+                }
+                if ($normalizedDefinition instanceof CallableDefinition || $normalizedDefinition instanceof ValueDefinition) {
                     $io->text(
                         $this->export($definition)
                     );

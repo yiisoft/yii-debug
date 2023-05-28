@@ -28,7 +28,7 @@ final class BacktraceIgnoreMatcher
         return (bool) (isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], $classes, true))
 
 
-         ;
+        ;
     }
 
     public static function doesStringMatchPattern(string $string, array $patterns): bool
