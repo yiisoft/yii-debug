@@ -258,10 +258,8 @@ final class DumperTest extends TestCase
 
 
         $fileResource = tmpfile();
-        $fileResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $fileResourceUri = preg_quote($fileResourceUri, '.');
-        }
+        $fileResourceUri = stream_get_meta_data($fileResource)['uri'];
+        $fileResourceUri = addcslashes($fileResourceUri, '/\\');
 
         yield 'file resource' => [
             $fileResource,
