@@ -248,6 +248,65 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $unlinkAfter,
             [],
         ];
+
+        $fileStreamBefore = function (string $path) {
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+            if (!is_file($path)) {
+                touch($path);
+            }
+        };
+        $fileStreamOperation = function (string $path) {
+            $stream = fopen($path, 'a+');
+            fwrite($stream, 'test');
+            fread($stream, 4);
+            fseek($stream, 0);
+            ftell($stream);
+            feof($stream);
+            ftruncate($stream, 0);
+            fstat($stream);
+            flock($stream, LOCK_EX);
+            fclose($stream);
+        };
+        $fileStreamAfter = function (string $path) {
+            FileHelper::removeDirectory(dirname($path));
+        };
+
+        yield 'fileStream matched' => [
+            $path = __DIR__ . '/stub/file-to-fileStream.txt',
+            $fileStreamBefore,
+            [],
+            [],
+            $fileStreamOperation,
+            $fileStreamAfter,
+            [
+                'write' => [
+                    ['path' => $path, 'args' => []],
+                ],
+                'read' => [
+                    ['path' => $path, 'args' => []],
+                ],
+            ],
+        ];
+        yield 'fileStream ignored by path' => [
+            $path,
+            $fileStreamBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $fileStreamOperation,
+            $fileStreamAfter,
+            [],
+        ];
+        yield 'fileStream ignored by class' => [
+            $path,
+            $fileStreamBefore,
+            [],
+            [self::class],
+            $fileStreamOperation,
+            $fileStreamAfter,
+            [],
+        ];
     }
 
     protected function getCollector(): CollectorInterface
