@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
+use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
@@ -79,35 +80,11 @@ class FilesystemStreamProxy implements StreamWrapperInterface
         self::$registered = false;
     }
 
-    /**
-     * TODO: optimise the check. Maybe a hashmap?
-     */
     private function isIgnored(): bool
     {
         $backtrace = debug_backtrace();
-        /**
-         * 0 – Called method
-         * 1 – Proxy
-         * 2 – Real using place / Composer\ClassLoader include function
-         * 3 – Whatever / Composer\ClassLoader
-         */
-        if (isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], self::$ignoredClasses, true)) {
-            return true;
-        }
-
-        if (!isset($backtrace[2])) {
-            return false;
-        }
-        $path = $backtrace[2]['file'];
-
-        $result = false;
-        foreach (self::$ignoredPathPatterns as $ignoredPathPattern) {
-            if (preg_match($ignoredPathPattern, $path) > 0) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
+        return BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, self::$ignoredClasses)
+            || BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, self::$ignoredPathPatterns);
     }
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
