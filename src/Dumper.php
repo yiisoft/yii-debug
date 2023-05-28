@@ -169,7 +169,6 @@ final class Dumper
         return $output;
     }
 
-    #[Pure]
     private function getObjectDescription(object $object): string
     {
         return $object::class . '#' . spl_object_id($object);
