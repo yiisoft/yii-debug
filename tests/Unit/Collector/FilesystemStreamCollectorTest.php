@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
+use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
@@ -90,7 +91,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             ],
         ];
         yield 'mkdir ignored by path' => [
-            __DIR__ . '/stub/internal/',
+            $path,
             $mkdirBefore,
             ['/' . basename(__FILE__, '.php') . '/'],
             [],
@@ -99,12 +100,59 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             [],
         ];
         yield 'mkdir ignored by class' => [
-            __DIR__ . '/stub/internal/',
+            $path,
             $mkdirBefore,
             [],
             [self::class],
             $mkdirOperation,
             $mkdirAfter,
+            [],
+        ];
+
+        $renameBefore = function (string $path) {
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+            if (!is_file($path)) {
+                touch($path);
+            }
+        };
+        $renameOperation = function (string $path) {
+            rename($path, $path. '.renamed');
+        };
+        $renameAfter = function (string $path) {
+            FileHelper::removeDirectory(dirname($path));
+        };
+
+        yield 'rename matched' => [
+            $path = __DIR__ . '/stub/file-to-rename.txt',
+            $renameBefore,
+            [],
+            [],
+            $renameOperation,
+            $renameAfter,
+            [
+                'rename' => [
+                    ['path' => $path, 'args' => ['path_to' => $path . '.renamed']],
+                ],
+            ],
+        ];
+        yield 'rename ignored by path' => [
+            $path,
+            $renameBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $renameOperation,
+            $renameAfter,
+            [],
+        ];
+        yield 'rename ignored by class' => [
+            $path,
+            $renameBefore,
+            [],
+            [self::class],
+            $renameOperation,
+            $renameAfter,
             [],
         ];
     }

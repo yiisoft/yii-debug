@@ -199,7 +199,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function rename(string $path_from, string $path_to): bool
     {
-        if (!$this->ignored) {
+        if (!$this->isIgnored()) {
             $this->operations['rename'] = [
                 'path' => $path_from,
                 'args' => [
