@@ -6,7 +6,6 @@ namespace Yiisoft\Yii\Debug\Tests\Shared;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
 abstract class AbstractCollectorTestCase extends TestCase
