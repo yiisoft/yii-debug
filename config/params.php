@@ -24,6 +24,8 @@ use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
+use Yiisoft\Yii\Debug\Command\ContainerCommand;
+use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\ResetCommand;
 
 /**
@@ -87,7 +89,9 @@ return [
     ],
     'yiisoft/yii-console' => [
         'commands' => [
-            'debug/reset' => ResetCommand::class,
+            ResetCommand::COMMAND_NAME => ResetCommand::class,
+            ContainerCommand::COMMAND_NAME => ContainerCommand::class,
+            DebugEventsCommand::COMMAND_NAME => DebugEventsCommand::class,
         ],
     ],
 ];

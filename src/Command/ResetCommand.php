@@ -12,7 +12,8 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class ResetCommand extends Command
 {
-    protected static $defaultName = 'debug/reset';
+    public const COMMAND_NAME = 'debug:reset';
+    protected static $defaultName = self::COMMAND_NAME;
 
     public function __construct(private StorageInterface $storage)
     {

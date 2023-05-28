@@ -29,6 +29,7 @@
         "psr/http-message": "^1.0",
         "psr/log": "^2.0|^3.0",
         "symfony/console": "^5.4|^6.0",
+        "symfony/var-dumper": "^6.2",
         "yiisoft/aliases": "^3.0",
         "yiisoft/arrays": "^2.0|^3.0",
         "yiisoft/di": "^1.0",
@@ -41,9 +42,6 @@
     },
     "require-dev": {
         "ext-curl": "*",
-        "yiisoft/middleware-dispatcher": "^3.0|^4.0|^5.0",
-        "yiisoft/yii-console": "^2.0",
-        "yiisoft/yii-http": "^1.0",
         "maglnet/composer-require-checker": "^4.2",
         "nyholm/psr7": "^1.3",
         "phpunit/phpunit": "^9.4",
@@ -51,9 +49,13 @@
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.30|^5.7",
+        "yiisoft/config": "^1.3",
         "yiisoft/error-handler": "^3.0",
         "yiisoft/event-dispatcher": "^1.0",
-        "yiisoft/log": "^2.0"
+        "yiisoft/log": "^2.0",
+        "yiisoft/middleware-dispatcher": "^3.0|^4.0|^5.0",
+        "yiisoft/yii-console": "^2.0",
+        "yiisoft/yii-http": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -93,7 +95,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "infection/extension-installer": true,
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "yiisoft/config": false
         }
     },
     "scripts": {
