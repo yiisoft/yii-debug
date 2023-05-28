@@ -126,10 +126,8 @@ final class DumperTest extends TestCase
 
         $closedFileResource = tmpfile();
         fclose($closedFileResource);
-        $closedFileResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
 
         $opendirResource = opendir('/tmp');
-        //$opendirResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
 
         $curlResource = curl_init('https://example.com');
         $curlResourceObjectId = spl_object_id($curlResource);
