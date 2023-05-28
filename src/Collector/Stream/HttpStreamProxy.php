@@ -66,6 +66,7 @@ class HttpStreamProxy implements StreamWrapperInterface
         /**
          * It's important to trigger autoloader before unregistering the file stream handler
          */
+        class_exists(BacktraceIgnoreMatcher::class);
         class_exists(StreamWrapper::class);
         stream_wrapper_unregister('http');
         stream_wrapper_register('http', self::class, STREAM_IS_URL);

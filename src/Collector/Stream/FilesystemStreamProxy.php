@@ -65,6 +65,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
         /**
          * It's important to trigger autoloader before unregistering the file stream handler
          */
+        class_exists(BacktraceIgnoreMatcher::class);
         class_exists(StreamWrapper::class);
         stream_wrapper_unregister('file');
         stream_wrapper_register('file', self::class, STREAM_IS_URL);
