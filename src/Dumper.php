@@ -191,14 +191,19 @@ final class Dumper
 
     private function getResourceDescription($resource): array|string
     {
-        $type = get_resource_type($resource);
-        if ($type === 'stream') {
-            $desc = stream_get_meta_data($resource);
-        } else {
-            $desc = '{resource}';
+        if (!is_resource($resource)) {
+            return '{closed resource}';
         }
 
-        return $desc;
+        $type = get_resource_type($resource);
+        if ($type === 'stream') {
+            return stream_get_meta_data($resource);
+        }
+        if (!empty($type)) {
+            return sprintf('{%s resource}', $type);
+        }
+
+        return '{resource}';
     }
 
     /**

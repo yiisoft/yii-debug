@@ -121,6 +121,19 @@ final class DumperTest extends TestCase
         // @formatter:on
         $closureInArrayObjectId = spl_object_id($closureInArrayObject);
 
+        $fileResource = tmpfile();
+        $fileResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
+
+        $closedFileResource = tmpfile();
+        fclose($closedFileResource);
+        $closedFileResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
+
+        $opendirResource = opendir('/tmp');
+        //$opendirResourceUri = preg_quote(stream_get_meta_data($fileResource)['uri'], '/');
+
+        $curlResource = curl_init('https://example.com');
+        $curlResourceObjectId = spl_object_id($curlResource);
+
         return [
             'empty object' => [
                 $emptyObject,
@@ -176,7 +189,7 @@ final class DumperTest extends TestCase
                 true,
                 'true',
             ],
-            'resource' => [
+            'fileResource' => [
                 fopen('php://input', 'rb'),
                 '{"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"Input","mode":"rb","unread_bytes":0,"seekable":true,"uri":"php:\/\/input"}',
             ],
@@ -245,6 +258,46 @@ final class DumperTest extends TestCase
             'binary string' => [
                 pack('H*', md5('binary string')),
                 '"ɍ��^��\u00191\u0017�]�-f�"',
+            ],
+            'file resource' => [
+                $fileResource,
+                <<<S
+                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"plainfile","stream_type":"STDIO","mode":"r+b","unread_bytes":0,"seekable":true,"uri":"{$fileResourceUri}"}
+                S,
+            ],
+            'closed file resource' => [
+                $closedFileResource,
+                '"{closed resource}"',
+            ],
+            'opendir resource' => [
+                $opendirResource,
+                <<<S
+                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"plainfile","stream_type":"dir","mode":"r","unread_bytes":0,"seekable":true}
+                S,
+            ],
+            'curl resource' => [
+                $curlResource,
+                <<<S
+                {"CurlHandle#{$curlResourceObjectId}":"{stateless object}"}
+                S,
+            ],
+            'stdout' => [
+                STDOUT,
+                <<<S
+                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"STDIO","mode":"wb","unread_bytes":0,"seekable":false,"uri":"php:\/\/stdout"}
+                S,
+            ],
+            'stderr' => [
+                STDERR,
+                <<<S
+                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"STDIO","mode":"wb","unread_bytes":0,"seekable":false,"uri":"php:\/\/stderr"}
+                S,
+            ],
+            'stdin' => [
+                STDIN,
+                <<<S
+                {"timed_out":false,"blocked":true,"eof":false,"wrapper_type":"PHP","stream_type":"STDIO","mode":"rb","unread_bytes":0,"seekable":false,"uri":"php:\/\/stdin"}
+                S,
             ],
         ];
     }
