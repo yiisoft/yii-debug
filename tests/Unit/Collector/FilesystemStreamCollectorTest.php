@@ -77,7 +77,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         $mkdirAfter = $mkdirBefore;
 
         yield 'mkdir matched' => [
-            $path = __DIR__ . '/stub/internal/',
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'internal',
             $mkdirBefore,
             [],
             [],
@@ -124,7 +124,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         };
 
         yield 'rename matched' => [
-            $path = __DIR__ . '/stub/file-to-rename.txt',
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'file-to-rename.txt',
             $renameBefore,
             [],
             [],
@@ -170,7 +170,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         };
 
         yield 'rmdir matched' => [
-            $path = __DIR__ . '/stub/dir-to-remove',
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'dir-to-remove',
             $rmdirBefore,
             [],
             [],
@@ -217,7 +217,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         };
 
         yield 'unlink matched' => [
-            $path = __DIR__ . '/stub/file-to-unlink.txt',
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'file-to-unlink.txt',
             $unlinkBefore,
             [],
             [],
@@ -273,7 +273,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         };
 
         yield 'file stream matched' => [
-            $path = __DIR__ . '/stub/file-to-fileStream.txt',
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'file-to-stream.txt',
             $fileStreamBefore,
             [],
             [],
