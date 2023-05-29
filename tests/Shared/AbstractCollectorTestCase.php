@@ -30,7 +30,7 @@ abstract class AbstractCollectorTestCase extends TestCase
         }
     }
 
-    public function testEmptyCollector()
+    public function testEmptyCollector(): void
     {
         $collector = $this->getCollector();
 

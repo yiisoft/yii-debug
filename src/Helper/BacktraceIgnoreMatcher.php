@@ -25,21 +25,16 @@ final class BacktraceIgnoreMatcher
 
     public static function isIgnoredByClass(array $backtrace, array $classes): bool
     {
-        return (bool) (isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], $classes, true))
-
-
-        ;
+        return isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], $classes, true);
     }
 
     public static function doesStringMatchPattern(string $string, array $patterns): bool
     {
-        $result = false;
         foreach ($patterns as $ignoredPathPattern) {
             if (preg_match($ignoredPathPattern, $string) > 0) {
-                $result = true;
-                break;
+                return true;
             }
         }
-        return $result;
+        return false;
     }
 }
