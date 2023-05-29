@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
+use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
@@ -11,7 +12,7 @@ use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 {
     /**
-     * @param CollectorInterface|FilesystemStreamCollector $collector
+     * @param FilesystemStreamCollector $collector
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
@@ -32,13 +33,279 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         );
     }
 
-    public function testCollectWithInactiveCollector(): void
-    {
-        $collector = $this->getCollector();
-        $this->collectTestData($collector);
+    /**
+     * @dataProvider dataSkipCollectOnMatchIgnoreReferences
+     */
+    public function testSkipCollectOnMatchIgnoreReferences(
+        string $path,
+        callable $before,
+        array $ignoredPathPatterns,
+        array $ignoredClasses,
+        callable $operation,
+        callable $after,
+        array $result,
+    ): void {
+        $before($path);
 
-        $collected = $collector->getCollected();
-        $this->assertEmpty($collected);
+        try {
+            $collector = new FilesystemStreamCollector(
+                ignoredPathPatterns: $ignoredPathPatterns,
+                ignoredClasses: $ignoredClasses,
+            );
+            $collector->startup();
+
+            $operation($path);
+
+            $collected = $collector->getCollected();
+            $collector->shutdown();
+        } finally {
+            $after($path);
+        }
+        $this->assertEquals($result, $collected);
+    }
+
+    public function dataSkipCollectOnMatchIgnoreReferences(): iterable
+    {
+        $mkdirBefore = function (string $path) {
+            if (is_dir($path)) {
+                @rmdir($path);
+            }
+        };
+        $mkdirOperation = function (string $path) {
+            mkdir($path, 0777, true);
+        };
+        $mkdirAfter = $mkdirBefore;
+
+        yield 'mkdir matched' => [
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'internal',
+            $mkdirBefore,
+            [],
+            [],
+            $mkdirOperation,
+            $mkdirAfter,
+            [
+                'mkdir' => [
+                    ['path' => $path, 'args' => ['mode' => 0777, 'options' => 9]], // 9 for some reasons
+                ],
+            ],
+        ];
+        yield 'mkdir ignored by path' => [
+            $path,
+            $mkdirBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $mkdirOperation,
+            $mkdirAfter,
+            [],
+        ];
+        yield 'mkdir ignored by class' => [
+            $path,
+            $mkdirBefore,
+            [],
+            [self::class],
+            $mkdirOperation,
+            $mkdirAfter,
+            [],
+        ];
+
+        $renameBefore = function (string $path) {
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+            if (!is_file($path)) {
+                touch($path);
+            }
+        };
+        $renameOperation = function (string $path) {
+            rename($path, $path . '.renamed');
+        };
+        $renameAfter = function (string $path) {
+            FileHelper::removeDirectory(dirname($path));
+        };
+
+        yield 'rename matched' => [
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'file-to-rename.txt',
+            $renameBefore,
+            [],
+            [],
+            $renameOperation,
+            $renameAfter,
+            [
+                'rename' => [
+                    ['path' => $path, 'args' => ['path_to' => $path . '.renamed']],
+                ],
+            ],
+        ];
+        yield 'rename ignored by path' => [
+            $path,
+            $renameBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $renameOperation,
+            $renameAfter,
+            [],
+        ];
+        yield 'rename ignored by class' => [
+            $path,
+            $renameBefore,
+            [],
+            [self::class],
+            $renameOperation,
+            $renameAfter,
+            [],
+        ];
+
+        $rmdirBefore = function (string $path) {
+            if (!is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
+        };
+        $rmdirOperation = function (string $path) {
+            rmdir($path);
+        };
+        $rmdirAfter = function (string $path) {
+            if (is_dir($path)) {
+                rmdir($path);
+            }
+        };
+
+        yield 'rmdir matched' => [
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'dir-to-remove',
+            $rmdirBefore,
+            [],
+            [],
+            $rmdirOperation,
+            $rmdirAfter,
+            [
+                'rmdir' => [
+                    ['path' => $path, 'args' => ['options' => 8]], // 8 for some reasons
+                ],
+            ],
+        ];
+        yield 'rmdir ignored by path' => [
+            $path,
+            $rmdirBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $rmdirOperation,
+            $rmdirAfter,
+            [],
+        ];
+        yield 'rmdir ignored by class' => [
+            $path,
+            $rmdirBefore,
+            [],
+            [self::class],
+            $rmdirOperation,
+            $rmdirAfter,
+            [],
+        ];
+
+        $unlinkBefore = function (string $path) {
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+            if (!is_file($path)) {
+                touch($path);
+            }
+        };
+        $unlinkOperation = function (string $path) {
+            unlink($path);
+        };
+        $unlinkAfter = function (string $path) {
+            FileHelper::removeDirectory(dirname($path));
+        };
+
+        yield 'unlink matched' => [
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'file-to-unlink.txt',
+            $unlinkBefore,
+            [],
+            [],
+            $unlinkOperation,
+            $unlinkAfter,
+            [
+                'unlink' => [
+                    ['path' => $path, 'args' => []],
+                ],
+            ],
+        ];
+        yield 'unlink ignored by path' => [
+            $path,
+            $unlinkBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $unlinkOperation,
+            $unlinkAfter,
+            [],
+        ];
+        yield 'unlink ignored by class' => [
+            $path,
+            $unlinkBefore,
+            [],
+            [self::class],
+            $unlinkOperation,
+            $unlinkAfter,
+            [],
+        ];
+
+        $fileStreamBefore = function (string $path) {
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0777, true);
+            }
+            if (!is_file($path)) {
+                touch($path);
+            }
+        };
+        $fileStreamOperation = function (string $path) {
+            $stream = fopen($path, 'a+');
+            fwrite($stream, 'test');
+            fread($stream, 4);
+            fseek($stream, 0);
+            ftell($stream);
+            feof($stream);
+            ftruncate($stream, 0);
+            fstat($stream);
+            flock($stream, LOCK_EX);
+            fclose($stream);
+        };
+        $fileStreamAfter = function (string $path) {
+            FileHelper::removeDirectory(dirname($path));
+        };
+
+        yield 'file stream matched' => [
+            $path = __DIR__ . DIRECTORY_SEPARATOR . 'stub' . DIRECTORY_SEPARATOR . 'file-to-stream.txt',
+            $fileStreamBefore,
+            [],
+            [],
+            $fileStreamOperation,
+            $fileStreamAfter,
+            [
+                'write' => [
+                    ['path' => $path, 'args' => []],
+                ],
+                'read' => [
+                    ['path' => $path, 'args' => []],
+                ],
+            ],
+        ];
+        yield 'file stream ignored by path' => [
+            $path,
+            $fileStreamBefore,
+            ['/' . basename(__FILE__, '.php') . '/'],
+            [],
+            $fileStreamOperation,
+            $fileStreamAfter,
+            [],
+        ];
+        yield 'file stream ignored by class' => [
+            $path,
+            $fileStreamBefore,
+            [],
+            [self::class],
+            $fileStreamOperation,
+            $fileStreamAfter,
+            [],
+        ];
     }
 
     protected function getCollector(): CollectorInterface

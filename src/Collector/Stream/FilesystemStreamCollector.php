@@ -30,6 +30,9 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
 
     public function getCollected(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return array_map('array_values', $this->operations);
     }
 
@@ -67,6 +70,9 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
 
     public function getSummary(): array
     {
+        if (!$this->isActive()) {
+            return [];
+        }
         return [
             'fs_stream' => array_merge(
                 ...array_map(

@@ -37,6 +37,7 @@ final class Debugger
     public function startup(object $event): void
     {
         $this->active = true;
+        $this->skipCollect = false;
 
         if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
             $this->skipCollect = true;
@@ -52,6 +53,40 @@ final class Debugger
         foreach ($this->collectors as $collector) {
             $this->target->addCollector($collector);
             $collector->startup();
+        }
+    }
+
+    public function shutdown(): void
+    {
+        if (!$this->active) {
+            return;
+        }
+
+        try {
+            if (!$this->skipCollect) {
+                $this->target->flush();
+            }
+        } finally {
+            foreach ($this->collectors as $collector) {
+                $collector->shutdown();
+            }
+            $this->active = false;
+        }
+    }
+
+    public function stop(): void
+    {
+        if (!$this->active) {
+            return;
+        }
+
+        try {
+            $this->target->clear();
+        } finally {
+            foreach ($this->collectors as $collector) {
+                $collector->shutdown();
+            }
+            $this->active = false;
         }
     }
 
@@ -77,25 +112,6 @@ final class Debugger
             }
         }
         return false;
-    }
-
-    public function shutdown(): void
-    {
-        if (!$this->active) {
-            return;
-        }
-
-        try {
-            if (!$this->skipCollect) {
-                $this->target->flush();
-            }
-        } finally {
-            foreach ($this->collectors as $collector) {
-                $collector->shutdown();
-            }
-            $this->skipCollect = false;
-            $this->active = false;
-        }
     }
 
     /**

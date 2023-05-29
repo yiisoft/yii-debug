@@ -32,6 +32,7 @@
         "yiisoft/aliases": "^3.0",
         "yiisoft/arrays": "^2.0|^3.0",
         "yiisoft/di": "^1.0",
+        "yiisoft/files": "^2.0",
         "yiisoft/json": "^1.0",
         "yiisoft/profiler": "^3.0",
         "yiisoft/proxy": "^1.0.1",
@@ -39,7 +40,7 @@
         "yiisoft/var-dumper": "^1.0"
     },
     "require-dev": {
-        "yiisoft/files": "^2.0",
+        "ext-curl": "*",
         "yiisoft/middleware-dispatcher": "^3.0|^4.0|^5.0",
         "yiisoft/yii-console": "^2.0",
         "yiisoft/yii-http": "^1.0",

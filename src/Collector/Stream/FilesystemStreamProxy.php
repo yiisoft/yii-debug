@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
+use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
@@ -64,6 +65,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
         /**
          * It's important to trigger autoloader before unregistering the file stream handler
          */
+        class_exists(BacktraceIgnoreMatcher::class);
         class_exists(StreamWrapper::class);
         stream_wrapper_unregister('file');
         stream_wrapper_register('file', self::class, STREAM_IS_URL);
@@ -79,41 +81,16 @@ class FilesystemStreamProxy implements StreamWrapperInterface
         self::$registered = false;
     }
 
-    /**
-     * TODO: optimise the check. Maybe a hashmap?
-     */
-    private function setIgnored(): void
+    private function isIgnored(): bool
     {
         $backtrace = debug_backtrace();
-        /**
-         * 0 – Called method
-         * 1 – Proxy
-         * 2 – Real using place / Composer\ClassLoader include function
-         * 3 – Whatever / Composer\ClassLoader
-         */
-        if (isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], self::$ignoredClasses, true)) {
-            $this->ignored = true;
-            return;
-        }
-
-        if (!isset($backtrace[2])) {
-            return;
-        }
-        $path = $backtrace[2]['file'];
-
-        $result = false;
-        foreach (self::$ignoredPathPatterns as $ignoredPathPattern) {
-            if (preg_match($ignoredPathPattern, $path) > 0) {
-                $result = true;
-                break;
-            }
-        }
-        $this->ignored = $result;
+        return BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, self::$ignoredClasses)
+            || BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, self::$ignoredPathPatterns);
     }
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
     {
-        $this->setIgnored();
+        $this->ignored = $this->isIgnored();
         return $this->__call(__FUNCTION__, func_get_args());
     }
 
@@ -186,8 +163,8 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function mkdir(string $path, int $mode, int $options): bool
     {
-        if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+        if (!$this->isIgnored()) {
+            $this->operations['mkdir'] = [
                 'path' => $path,
                 'args' => [
                     'mode' => $mode,
@@ -200,8 +177,8 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function rename(string $path_from, string $path_to): bool
     {
-        if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+        if (!$this->isIgnored()) {
+            $this->operations['rename'] = [
                 'path' => $path_from,
                 'args' => [
                     'path_to' => $path_to,
@@ -213,8 +190,8 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function rmdir(string $path, int $options): bool
     {
-        if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+        if (!$this->isIgnored()) {
+            $this->operations['rmdir'] = [
                 'path' => $path,
                 'args' => [
                     'options' => $options,
@@ -263,8 +240,8 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function unlink(string $path): bool
     {
-        if (!$this->ignored) {
-            $this->operations[__FUNCTION__] = [
+        if (!$this->isIgnored()) {
+            $this->operations['unlink'] = [
                 'path' => $path,
                 'args' => [],
             ];

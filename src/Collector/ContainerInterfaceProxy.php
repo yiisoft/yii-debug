@@ -182,8 +182,9 @@ class ContainerInterfaceProxy implements ContainerInterface
     {
         $this->resetCurrentError();
         $timeStart = microtime(true);
+        $result = null;
+
         try {
-            $result = null;
             $result = $this->container->has($id);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
@@ -191,6 +192,6 @@ class ContainerInterfaceProxy implements ContainerInterface
             $this->logProxy(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
         }
 
-        return $result;
+        return (bool)$result;
     }
 }

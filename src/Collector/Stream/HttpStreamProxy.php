@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
+use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
@@ -12,6 +13,9 @@ use const SEEK_SET;
 class HttpStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
+    public static array $ignoredPathPatterns = [];
+    public static array $ignoredClasses = [];
+    public static array $ignoredUrls = [];
     /**
      * @var resource|null
      */
@@ -62,6 +66,7 @@ class HttpStreamProxy implements StreamWrapperInterface
         /**
          * It's important to trigger autoloader before unregistering the file stream handler
          */
+        class_exists(BacktraceIgnoreMatcher::class);
         class_exists(StreamWrapper::class);
         stream_wrapper_unregister('http');
         stream_wrapper_register('http', self::class, STREAM_IS_URL);
@@ -82,6 +87,7 @@ class HttpStreamProxy implements StreamWrapperInterface
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
     {
+        $this->ignored = $this->isIgnored($path);
         return $this->__call(__FUNCTION__, func_get_args());
     }
 
@@ -257,5 +263,16 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function url_stat(string $path, int $flags): array|false
     {
         return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    private function isIgnored(string $url): bool
+    {
+        if (BacktraceIgnoreMatcher::doesStringMatchPattern($url, self::$ignoredUrls)) {
+            return true;
+        }
+
+        $backtrace = debug_backtrace();
+        return BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, self::$ignoredClasses)
+            || BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, self::$ignoredPathPatterns);
     }
 }
