@@ -92,7 +92,6 @@ final class DebuggerTest extends TestCase
         $debugger = new Debugger($idGenerator, $storage, [$collector], []);
         $debugger->startup(new ApplicationStartup(''));
         $debugger->shutdown();
-
     }
 
     public function testShutdown(): void
