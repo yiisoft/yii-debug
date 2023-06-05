@@ -16,6 +16,7 @@ use Symfony\Component\VarDumper\VarDumper as SymfonyVarDumper;
 use Yiisoft\Config\ConfigInterface;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Console\ExitCode;
+use Yiisoft\Yii\Debug\Debugger;
 
 final class DebugEventsCommand extends Command
 {
@@ -24,6 +25,7 @@ final class DebugEventsCommand extends Command
 
     public function __construct(
         private ContainerInterface $container,
+        private Debugger $debugger,
     ) {
         parent::__construct();
     }
@@ -39,6 +41,7 @@ final class DebugEventsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->debugger->stop();
         $config = $this->container->get(ConfigInterface::class);
 
         $io = new SymfonyStyle($input, $output);
@@ -58,12 +61,6 @@ final class DebugEventsCommand extends Command
             $table = new Table($output);
 
             foreach ($data as $event => $listeners) {
-                $rows = [];
-                $rows[] = [
-                    $event,
-                    $this->export($listeners),
-                ];
-
                 $io->title($event);
                 foreach ($listeners as $listener) {
                     if (is_callable($listener) && !is_array($listener)) {

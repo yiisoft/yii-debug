@@ -19,6 +19,7 @@ use Yiisoft\Definitions\ValueDefinition;
 use Yiisoft\Di\Helpers\DefinitionNormalizer;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Console\ExitCode;
+use Yiisoft\Yii\Debug\Debugger;
 
 final class ContainerCommand extends Command
 {
@@ -27,6 +28,7 @@ final class ContainerCommand extends Command
 
     public function __construct(
         private ContainerInterface $container,
+        private Debugger $debugger,
     ) {
         parent::__construct();
     }
@@ -42,6 +44,7 @@ final class ContainerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->debugger->stop();
         $config = $this->container->get(ConfigInterface::class);
 
         $io = new SymfonyStyle($input, $output);
@@ -69,21 +72,29 @@ final class ContainerCommand extends Command
 
                 $normalizedDefinition = DefinitionNormalizer::normalize($definition, $id);
                 if ($normalizedDefinition instanceof ArrayDefinition) {
-                    $io->definitionList(
-                        ...array_filter([
-                            ['ID' => $id],
-                            class_exists($normalizedDefinition->getClass())
-                                ? ['Class' => $normalizedDefinition->getClass()]
-                                : [],
-                            !empty($normalizedDefinition->getConstructorArguments())
-                                ? ['Constructor' => $this->export($normalizedDefinition->getConstructorArguments())]
-                                : [],
-                            !empty($normalizedDefinition->getMethodsAndProperties())
-                                ? ['Methods' => $this->export($normalizedDefinition->getMethodsAndProperties())]
-                                : [],
-                            isset($definition['tags']) ? ['Tags' => $this->export($definition['tags'])] : [],
-                        ])
-                    );
+                    $definitionList = ['ID' => $id];
+                    if (class_exists($normalizedDefinition->getClass())) {
+                        $definitionList[] = ['Class' => $normalizedDefinition->getClass()];
+                    }
+                    if (!empty($normalizedDefinition->getConstructorArguments())) {
+                        $definitionList[] = [
+                            'Constructor' => $this->export(
+                                $normalizedDefinition->getConstructorArguments()
+                            ),
+                        ];
+                    }
+                    if (!empty($normalizedDefinition->getMethodsAndProperties())) {
+                        $definitionList[] = [
+                            'Methods' => $this->export(
+                                $normalizedDefinition->getMethodsAndProperties()
+                            ),
+                        ];
+                    }
+                    if (isset($definition['tags'])) {
+                        $definitionList[] = ['Tags' => $this->export($definition['tags'])];
+                    }
+
+                    $io->definitionList(...$definitionList);
 
                     continue;
                 }
@@ -117,7 +128,6 @@ final class ContainerCommand extends Command
             ksort($data);
 
             $rows = $this->getGroupServices($data);
-
 
             $table = new Table($output);
             $table
