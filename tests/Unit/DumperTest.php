@@ -106,7 +106,7 @@ final class DumperTest extends TestCase
         yield 'function' => [
             $functionObject,
             <<<S
-                {"Closure#{$functionObjectId}":"function () {\\n    return 1;\\n}"}
+                {"Closure#{$functionObjectId}":"function () {\\n            return 1;\\n        }"}
                 S,
         ];
 
@@ -120,7 +120,7 @@ final class DumperTest extends TestCase
         yield 'static function' => [
             $staticFunctionObject,
             <<<S
-                {"Closure#{$staticFunctionObjectId}":"static function () {\\n    return 1;\\n}"}
+                {"Closure#{$staticFunctionObjectId}":"static function () {\\n            return 1;\\n        }"}
                 S,
         ];
         yield 'string' => [
