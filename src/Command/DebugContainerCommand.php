@@ -21,7 +21,7 @@ use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\Debugger;
 
-final class ContainerCommand extends Command
+final class DebugContainerCommand extends Command
 {
     public const COMMAND_NAME = 'debug:container';
     protected static $defaultName = self::COMMAND_NAME;

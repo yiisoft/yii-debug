@@ -11,7 +11,7 @@ use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-final class ResetCommand extends Command
+final class DebugResetCommand extends Command
 {
     public const COMMAND_NAME = 'debug:reset';
     protected static $defaultName = self::COMMAND_NAME;
