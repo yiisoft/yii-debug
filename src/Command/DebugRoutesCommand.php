@@ -92,9 +92,9 @@ final class DebugRoutesCommand extends Command
             }
             $rows[] = [
                 'methods' => $this->export($data['methods']),
-                'name' => ($data['name']),
+                'name' => $data['name'],
                 'hosts' => $this->export($data['hosts']),
-                'pattern' => ($data['pattern']),
+                'pattern' => $data['pattern'],
                 'defaults' => $this->export($data['defaults']),
                 'action' => $this->export($action),
             ];
