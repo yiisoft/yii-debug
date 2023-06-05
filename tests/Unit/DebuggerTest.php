@@ -58,6 +58,19 @@ final class DebuggerTest extends TestCase
         $this->assertNotSame($debugger1, $debugger2);
     }
 
+    public function testIgnoreByHeader(): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
+        $collector->expects($this->once())->method('shutdown');
+        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
+        $storage->expects($this->never())->method('flush');
+
+        $debugger = new Debugger($idGenerator, $storage, [$collector], []);
+        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test', ['X-Debug-Ignore' => 'true'])));
+        $debugger->shutdown();
+    }
+
     public function testWithIgnoredCommands(): void
     {
         $idGenerator = new DebuggerIdGenerator();
@@ -65,6 +78,21 @@ final class DebuggerTest extends TestCase
         $debugger2 = $debugger1->withIgnoredCommands(['command/test']);
 
         $this->assertNotSame($debugger1, $debugger2);
+    }
+
+    public function testIgnoreByEnv(): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
+        $collector->expects($this->once())->method('shutdown');
+        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
+        $storage->expects($this->never())->method('flush');
+
+        $_ENV['YII_DEBUG_IGNORE'] = 'true';
+        $debugger = new Debugger($idGenerator, $storage, [$collector], []);
+        $debugger->startup(new ApplicationStartup(''));
+        $debugger->shutdown();
+
     }
 
     public function testShutdown(): void

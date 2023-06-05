@@ -111,6 +111,9 @@ final class Debugger
                 return true;
             }
         }
+        if (getenv('YII_DEBUG_IGNORE') === 'true') {
+            return true;
+        }
         return false;
     }
 
