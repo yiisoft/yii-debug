@@ -80,14 +80,10 @@ final class Debugger
             return;
         }
 
-        try {
-            $this->target->clear();
-        } finally {
-            foreach ($this->collectors as $collector) {
-                $collector->shutdown();
-            }
-            $this->active = false;
+        foreach ($this->collectors as $collector) {
+            $collector->shutdown();
         }
+        $this->active = false;
     }
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
