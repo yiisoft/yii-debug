@@ -114,10 +114,7 @@ final class Debugger
                 return true;
             }
         }
-        return (bool) (getenv('YII_DEBUG_IGNORE') === 'true')
-
-
-        ;
+        return getenv('YII_DEBUG_IGNORE') === 'true';
     }
 
     /**
