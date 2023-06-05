@@ -98,6 +98,9 @@ final class Debugger
                 return true;
             }
         }
+        if ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true') {
+            return true;
+        }
         return false;
     }
 
