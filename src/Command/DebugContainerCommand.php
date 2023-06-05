@@ -174,7 +174,7 @@ final class DebugContainerCommand extends Command
                 $class = $definition['class'] ?? $id;
             }
             if (is_object($definition)) {
-                $class = get_class($definition);
+                $class = $definition::class;
             }
 
             $rows[] = [

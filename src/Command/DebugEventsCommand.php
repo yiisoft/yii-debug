@@ -89,7 +89,7 @@ final class DebugEventsCommand extends Command
         foreach ($data as $event => $listeners) {
             $rows[] = [
                 $event,
-                count($listeners),
+                is_countable($listeners) ? count($listeners) : 0,
                 implode(
                     "\n",
                     array_map(function ($listener) {

@@ -44,9 +44,9 @@ final class DebugContainerCommandTest extends TestCase
                 ConfigInterface::class => [
                     'class' => Config::class,
                     '__construct()' => [
-                        new ConfigPaths(dirname(__DIR__, 2).'/Support/Application/config'),
+                        new ConfigPaths(dirname(__DIR__, 2) . '/Support/Application/config'),
                     ],
-                ]
+                ],
             ]);
         return new Container($config);
     }
