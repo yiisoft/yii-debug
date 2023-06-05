@@ -159,6 +159,7 @@ final class DebugContainerCommand extends Command
     {
         $reflection = new \ReflectionClass($config);
         $buildReflection = $reflection->getProperty('build');
+        $buildReflection->setAccessible(true);
         return $buildReflection->getValue($config);
     }
 
