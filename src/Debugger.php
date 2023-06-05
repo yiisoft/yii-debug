@@ -98,10 +98,10 @@ final class Debugger
                 return true;
             }
         }
-        if ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true') {
-            return true;
-        }
-        return false;
+        return (bool) ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true')
+
+
+         ;
     }
 
     private function isCommandIgnored(?string $command): bool
@@ -117,7 +117,7 @@ final class Debugger
         return (bool) (getenv('YII_DEBUG_IGNORE') === 'true')
 
 
-         ;
+        ;
     }
 
     /**
