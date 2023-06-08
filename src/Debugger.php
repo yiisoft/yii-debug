@@ -97,7 +97,7 @@ final class Debugger
                 return true;
             }
         }
-        return (bool) ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true');
+        return false;
     }
 
     private function isCommandIgnored(?string $command): bool
@@ -113,7 +113,7 @@ final class Debugger
                 return true;
             }
         }
-        return (bool) (getenv('YII_DEBUG_IGNORE') === 'true');
+        return false;
     }
 
     /**
