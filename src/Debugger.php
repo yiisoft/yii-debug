@@ -92,16 +92,16 @@ final class Debugger
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
     {
+        if ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true') {
+            return true;
+        }
         $path = $request->getUri()->getPath();
         foreach ($this->ignoredRequests as $pattern) {
             if ((new WildcardPattern($pattern))->match($path)) {
                 return true;
             }
         }
-        return (bool) ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true')
-
-
-         ;
+        return false;
     }
 
     private function isCommandIgnored(?string $command): bool
@@ -109,15 +109,15 @@ final class Debugger
         if ($command === null || $command === '') {
             return true;
         }
+        if (getenv('YII_DEBUG_IGNORE') === 'true') {
+            return true;
+        }
         foreach ($this->ignoredCommands as $pattern) {
             if ((new WildcardPattern($pattern))->match($command)) {
                 return true;
             }
         }
-        return (bool) (getenv('YII_DEBUG_IGNORE') === 'true')
-
-
-        ;
+        return false;
     }
 
     /**
