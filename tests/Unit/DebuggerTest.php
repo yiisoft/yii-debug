@@ -196,7 +196,7 @@ final class DebuggerTest extends TestCase
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->once())->method('clear');
+        $storage->expects($this->never())->method('clear');
         $storage->expects($this->never())->method('flush');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector]);

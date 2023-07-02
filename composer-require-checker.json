@@ -1,5 +1,8 @@
 {
     "symbol-whitelist": [
+        "Yiisoft\\Definitions\\ArrayDefinition",
+        "Yiisoft\\Definitions\\CallableDefinition",
+        "Yiisoft\\Definitions\\ValueDefinition",
         "Yiisoft\\Middleware\\Dispatcher\\Event\\BeforeMiddleware",
         "Yiisoft\\Yii\\Console\\Event\\ApplicationShutdown",
         "Yiisoft\\Yii\\Console\\Event\\ApplicationStartup",
