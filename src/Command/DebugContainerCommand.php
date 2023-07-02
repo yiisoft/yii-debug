@@ -54,7 +54,6 @@ final class DebugContainerCommand extends Command
             foreach ($ids as $id) {
                 $definition = null;
                 foreach ($build as $definitions) {
-                    //var_dump(array_keys($definitions));
                     if (array_key_exists($id, $definitions)) {
                         $definition = $definitions[$id];
                     }
@@ -62,7 +61,7 @@ final class DebugContainerCommand extends Command
                 if ($definition === null) {
                     $io->error(
                         sprintf(
-                            'Service "%s" not found',
+                            'Service "%s" not found.',
                             $id,
                         )
                     );

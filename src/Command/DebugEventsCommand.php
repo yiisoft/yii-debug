@@ -82,9 +82,6 @@ final class DebugEventsCommand extends Command
         if ($config->has('events-console')) {
             $data = array_merge($data, $config->get('events-console'));
         }
-        //if ($config->has('events-web')) {
-        //    $data = array_merge($data, $config->get('events-web'));
-        //}
         $rows = [];
         foreach ($data as $event => $listeners) {
             $rows[] = [
