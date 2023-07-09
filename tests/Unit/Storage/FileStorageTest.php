@@ -32,7 +32,7 @@ final class FileStorageTest extends AbstractStorageTest
 
         $storage->addCollector($collector);
         $storage->flush();
-        $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY)));
+        $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY, null)));
     }
 
     /**
