@@ -50,7 +50,7 @@ final class FileStorage implements StorageInterface
         $this->historySize = $historySize;
     }
 
-    public function read(string $type, ?string $id = null): array
+    public function read(string $type, ?string $id): array
     {
         clearstatcache();
         $data = [];
