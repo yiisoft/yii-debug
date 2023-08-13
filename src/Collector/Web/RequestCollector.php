@@ -13,8 +13,6 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-use function is_object;
-
 final class RequestCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;

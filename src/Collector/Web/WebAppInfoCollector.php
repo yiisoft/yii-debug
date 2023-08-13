@@ -11,8 +11,6 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-use function is_object;
-
 final class WebAppInfoCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;

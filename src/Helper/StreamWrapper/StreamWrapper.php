@@ -25,7 +25,7 @@ final class StreamWrapper implements StreamWrapperInterface
     public ?string $filename = null;
 
     /**
-     * @var resource|false
+     * @var false|resource
      */
     public $stream = false;
 
