@@ -20,7 +20,7 @@ class HttpStreamProxy implements StreamWrapperInterface
      * @var resource|null
      */
     public $context;
-    public StreamWrapperInterface $decorated;
+    public StreamWrapper $decorated;
     public bool $ignored = false;
 
     public static ?HttpStreamCollector $collector = null;

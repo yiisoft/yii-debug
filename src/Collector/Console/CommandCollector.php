@@ -61,17 +61,15 @@ final class CommandCollector implements SummaryCollectorInterface
             return;
         }
 
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
-        if ($event instanceof ConsoleEvent) {
-            $this->commands[$event::class] = [
-                'name' => $command->getName(),
-                'command' => $command,
-                'input' => $this->castInputToString($event->getInput()),
-                'output' => $this->fetchOutput($event->getOutput()),
-                'arguments' => $command->getDefinition()->getArguments(),
-                'options' => $command->getDefinition()->getOptions(),
-            ];
-        }
+        // $event instance of ConsoleEvent
+        $this->commands[$event::class] = [
+            'name' => $command->getName(),
+            'command' => $command,
+            'input' => $this->castInputToString($event->getInput()),
+            'output' => $this->fetchOutput($event->getOutput()),
+            'arguments' => $command->getDefinition()->getArguments(),
+            'options' => $command->getDefinition()->getOptions(),
+        ];
     }
 
     public function getSummary(): array
