@@ -25,9 +25,9 @@ final class StreamWrapper implements StreamWrapperInterface
     public ?string $filename = null;
 
     /**
-     * @var resource|null
+     * @var resource|false
      */
-    public $stream = null;
+    public $stream = false;
 
     public function dir_closedir(): bool
     {
@@ -49,12 +49,7 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function dir_rewinddir(): bool
     {
-        if (!is_resource($this->stream)) {
-            return false;
-        }
-
         rewinddir($this->stream);
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
         return is_resource($this->stream);
     }
 
@@ -76,7 +71,9 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_cast(int $castAs)
     {
-        //????
+        // ????
+
+        return false;
     }
 
     public function stream_eof(): bool
@@ -183,7 +180,7 @@ final class StreamWrapper implements StreamWrapperInterface
          * @psalm-suppress InvalidPropertyAssignmentValue
          */
         fclose($this->stream);
-        $this->stream = null;
+        $this->stream = false;
     }
 
     public function stream_lock(int $operation): bool
