@@ -21,6 +21,7 @@ use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
+use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
@@ -43,6 +44,7 @@ return [
             FilesystemStreamCollector::class,
             HttpStreamCollector::class,
             ExceptionCollector::class,
+            VarDumperCollector::class,
         ],
         'collectors.web' => [
             WebAppInfoCollector::class,
