@@ -77,6 +77,7 @@
         },
         "config-plugin": {
             "params": "params.php",
+            "bootstrap": "bootstrap.php",
             "di": "di.php",
             "di-console": "di-console.php",
             "di-web": "di-web.php",
