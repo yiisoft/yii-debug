@@ -78,7 +78,7 @@ final class MiddlewareCollector implements SummaryCollectorInterface
                 'response' => $event->getResponse(),
             ];
         }
-        $this->timelineCollector->collect(spl_object_id($event), $this);
+        $this->timelineCollector->collect($this, spl_object_id($event));
     }
 
     private function reset(): void

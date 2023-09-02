@@ -106,7 +106,7 @@ final class RequestCollector implements SummaryCollectorInterface
             $this->response = $response;
             $this->responseStatusCode = $response !== null ? $response->getStatusCode() : 500;
         }
-        $this->timelineCollector->collect(spl_object_id($event), $this);
+        $this->timelineCollector->collect($this, spl_object_id($event));
     }
 
     public function getSummary(): array

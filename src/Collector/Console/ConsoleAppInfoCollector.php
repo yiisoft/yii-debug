@@ -64,7 +64,7 @@ final class ConsoleAppInfoCollector implements SummaryCollectorInterface
             $this->applicationProcessingTimeStopped = microtime(true);
         }
 
-        $this->timelineCollector->collect(spl_object_id($event), $this);
+        $this->timelineCollector->collect($this, spl_object_id($event));
     }
 
     public function getSummary(): array

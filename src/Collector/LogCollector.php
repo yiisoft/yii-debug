@@ -35,7 +35,7 @@ class LogCollector implements SummaryCollectorInterface
             'context' => $context,
             'line' => $line,
         ];
-        $this->timelineCollector->collect(count($this->messages), $this);
+        $this->timelineCollector->collect($this, count($this->messages));
     }
 
     private function reset(): void

@@ -40,7 +40,7 @@ final class CommandCollector implements SummaryCollectorInterface
             return;
         }
 
-        $this->timelineCollector->collect(spl_object_id($event), $this);
+        $this->timelineCollector->collect($this, spl_object_id($event));
 
         $command = $event->getCommand();
 

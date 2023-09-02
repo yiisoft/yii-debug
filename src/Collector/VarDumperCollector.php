@@ -20,7 +20,7 @@ final class VarDumperCollector implements SummaryCollectorInterface
             'variable' => $variable,
             'line' => $line,
         ];
-        $this->timelineCollector->collect(count($this->vars), $this);
+        $this->timelineCollector->collect($this, count($this->vars));
     }
 
     public function getCollected(): array

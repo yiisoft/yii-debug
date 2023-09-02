@@ -18,17 +18,13 @@ final class TimelineCollector implements CollectorInterface
         return $this->events;
     }
 
-    public function collect(string|int $reference, CollectorInterface $collector): void
+    public function collect(CollectorInterface $collector, string|int $reference, ...$data): void
     {
         if (!$this->isActive()) {
             return;
         }
 
-        $this->events[] = [
-            'reference' => $reference,
-            'collector' => $collector::class,
-            'time' => time()
-        ];
+        $this->events[] = [time(), $reference, $collector::class, ...$data];
     }
 
     private function reset(): void

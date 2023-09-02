@@ -48,7 +48,7 @@ final class ServiceCollector implements SummaryCollectorInterface
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
         ];
-        $this->timelineCollector->collect(count($this->items), $this);
+        $this->timelineCollector->collect($this, count($this->items));
     }
 
     public function getSummary(): array

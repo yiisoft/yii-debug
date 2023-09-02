@@ -43,7 +43,7 @@ final class EventCollector implements SummaryCollectorInterface
             'line' => $line,
             'time' => microtime(true),
         ];
-        $this->timelineCollector->collect(count($this->events), $this);
+        $this->timelineCollector->collect($this, spl_object_id($event), $event::class);
     }
 
     public function getSummary(): array
