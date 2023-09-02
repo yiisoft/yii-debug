@@ -9,6 +9,7 @@ use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
 final class MiddlewareCollector implements SummaryCollectorInterface
 {
@@ -16,6 +17,10 @@ final class MiddlewareCollector implements SummaryCollectorInterface
 
     private array $beforeStack = [];
     private array $afterStack = [];
+
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
 
     public function getCollected(): array
     {
@@ -73,6 +78,7 @@ final class MiddlewareCollector implements SummaryCollectorInterface
                 'response' => $event->getResponse(),
             ];
         }
+        $this->timelineCollector->collect(spl_object_id($event), $this);
     }
 
     private function reset(): void

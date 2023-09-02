@@ -13,6 +13,10 @@ final class ExceptionCollector implements SummaryCollectorInterface
 
     private ?Throwable $exception = null;
 
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
+
     public function getCollected(): array
     {
         if ($this->exception === null) {
@@ -36,6 +40,7 @@ final class ExceptionCollector implements SummaryCollectorInterface
         }
 
         $this->exception = $error->getThrowable();
+        $this->timelineCollector->collect($error::class, $this);
     }
 
     public function getSummary(): array

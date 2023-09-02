@@ -11,6 +11,7 @@ use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
 final class ConsoleAppInfoCollector implements SummaryCollectorInterface
 {
@@ -20,6 +21,10 @@ final class ConsoleAppInfoCollector implements SummaryCollectorInterface
     private float $applicationProcessingTimeStopped = 0;
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
+
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
 
     public function getCollected(): array
     {
@@ -58,6 +63,8 @@ final class ConsoleAppInfoCollector implements SummaryCollectorInterface
         } elseif ($event instanceof ApplicationShutdown) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
+
+        $this->timelineCollector->collect(spl_object_id($event), $this);
     }
 
     public function getSummary(): array

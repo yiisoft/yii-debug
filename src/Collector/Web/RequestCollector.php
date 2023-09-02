@@ -8,10 +8,11 @@ use GuzzleHttp\Psr7\Message;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Yiisoft\Yii\Http\Event\AfterRequest;
-use Yiisoft\Yii\Http\Event\BeforeRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
+use Yiisoft\Yii\Http\Event\AfterRequest;
+use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function is_object;
 
@@ -28,6 +29,10 @@ final class RequestCollector implements SummaryCollectorInterface
     private int $responseStatusCode = 200;
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
+
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
 
     public function getCollected(): array
     {
@@ -101,6 +106,7 @@ final class RequestCollector implements SummaryCollectorInterface
             $this->response = $response;
             $this->responseStatusCode = $response !== null ? $response->getStatusCode() : 500;
         }
+        $this->timelineCollector->collect(spl_object_id($event), $this);
     }
 
     public function getSummary(): array

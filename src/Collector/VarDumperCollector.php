@@ -10,12 +10,17 @@ final class VarDumperCollector implements SummaryCollectorInterface
 
     private array $vars = [];
 
-    public function collectVar(mixed $variable, string $line): void
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
+
+    public function collect(mixed $variable, string $line): void
     {
         $this->vars[] = [
             'variable' => $variable,
             'line' => $line,
         ];
+        $this->timelineCollector->collect(count($this->vars), $this);
     }
 
     public function getCollected(): array

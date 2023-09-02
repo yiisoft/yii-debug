@@ -10,6 +10,10 @@ final class ServiceCollector implements SummaryCollectorInterface
 
     private array $items = [];
 
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
+
     public function getCollected(): array
     {
         if (!$this->isActive()) {
@@ -44,6 +48,7 @@ final class ServiceCollector implements SummaryCollectorInterface
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
         ];
+        $this->timelineCollector->collect(count($this->items), $this);
     }
 
     public function getSummary(): array

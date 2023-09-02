@@ -8,11 +8,15 @@ use ReflectionClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup as ConsoleApplicationStartup;
 use Yiisoft\Yii\Http\Event\ApplicationStartup as HttpApplicationStartup;
 
-class EventCollector implements SummaryCollectorInterface
+final class EventCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
     private array $events = [];
+
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
 
     public function getCollected(): array
     {
@@ -32,11 +36,6 @@ class EventCollector implements SummaryCollectorInterface
             return;
         }
 
-        $this->collectEvent($event, $line);
-    }
-
-    private function collectEvent(object $event, $line): void
-    {
         $this->events[] = [
             'name' => $event::class,
             'event' => $event,
@@ -44,6 +43,7 @@ class EventCollector implements SummaryCollectorInterface
             'line' => $line,
             'time' => microtime(true),
         ];
+        $this->timelineCollector->collect(count($this->events), $this);
     }
 
     public function getSummary(): array
