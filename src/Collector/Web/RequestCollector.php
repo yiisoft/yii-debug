@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use GuzzleHttp\Psr7\Message;
-use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
@@ -39,21 +38,6 @@ final class RequestCollector implements SummaryCollectorInterface
         if (!$this->isActive()) {
             return [];
         }
-        $content = null;
-        if ($this->response !== null) {
-            $stream = $this->response->getBody();
-            if ($stream->isReadable() && $stream->isSeekable()) {
-                $position = $stream->tell();
-                $stream->rewind();
-                $content = $stream->getContents();
-                try {
-                    $content = json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                    // pass
-                }
-                $stream->seek($position);
-            }
-        }
 
         $requestRaw = null;
         if ($this->request instanceof ServerRequestInterface) {
@@ -79,7 +63,6 @@ final class RequestCollector implements SummaryCollectorInterface
             'requestRaw' => $requestRaw,
             'response' => $this->response,
             'responseRaw' => $responseRaw,
-            'content' => $content,
         ];
     }
 
