@@ -24,7 +24,7 @@ final class TimelineCollector implements CollectorInterface
             return;
         }
 
-        $this->events[] = [microtime(true), $reference, $collector::class, ...$data];
+        $this->events[] = [microtime(true), $reference, $collector::class, array_values($data)];
     }
 
     private function reset(): void

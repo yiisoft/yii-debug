@@ -70,7 +70,7 @@ final class HttpClientCollector implements SummaryCollectorInterface
             'headers' => $request->getHeaders(),
             'line' => $line,
         ];
-        $this->timelineCollector->collect($uniqueId, $this);
+        $this->timelineCollector->collect($this, $uniqueId);
     }
 
     public function collectTotalTime(?ResponseInterface $response, float|string $startTime, ?string $uniqueId): void

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class CommandCollectorTest extends AbstractCollectorTestCase
@@ -57,7 +58,7 @@ final class CommandCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new CommandCollector();
+        return new CommandCollector(new TimelineCollector());
     }
 
     protected function checkCollectedData(array $data): void

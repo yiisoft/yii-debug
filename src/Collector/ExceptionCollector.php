@@ -40,7 +40,7 @@ final class ExceptionCollector implements SummaryCollectorInterface
         }
 
         $this->exception = $error->getThrowable();
-        $this->timelineCollector->collect($error::class, $this);
+        $this->timelineCollector->collect($this, $error::class);
     }
 
     public function getSummary(): array

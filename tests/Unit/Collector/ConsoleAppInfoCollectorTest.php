@@ -8,8 +8,8 @@ use Yiisoft\Yii\Console\Event\ApplicationShutdown;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
-
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 use function sleep;
@@ -31,7 +31,7 @@ final class ConsoleAppInfoCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new ConsoleAppInfoCollector();
+        return new ConsoleAppInfoCollector(new TimelineCollector());
     }
 
     protected function checkCollectedData(array $data): void

@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -33,7 +34,7 @@ final class WebAppInfoCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new WebAppInfoCollector();
+        return new WebAppInfoCollector(new TimelineCollector());
     }
 
     protected function checkCollectedData(array $data): void
