@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
+<?php
+
+/** @noinspection PhpComposerExtensionStubsInspection */
 
 declare(strict_types=1);
 declare(ticks=1);
@@ -23,7 +25,7 @@ final class DevServerCommand extends Command
 
     public function __construct(
         private SignalRegistry $signalRegistry,
-        private string $address = "0.0.0.0",
+        private string $address = '0.0.0.0',
         private int $port = 8890,
     ) {
         parent::__construct();
@@ -104,7 +106,7 @@ final class DevServerCommand extends Command
         if (\function_exists('pcntl_signal')) {
             $io->success('Quit the server with CTRL-C or COMMAND-C.');
 
-            \pcntl_signal(\SIGINT, static function () use($socket) : void {
+            \pcntl_signal(\SIGINT, static function () use ($socket): void {
                 $socket->close();
                 exit(1);
             });

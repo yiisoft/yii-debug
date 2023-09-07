@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpComposerExtensionStubsInspection */
 
 declare(strict_types=1);
@@ -17,8 +18,7 @@ final class Connection
 
     public function __construct(
         private Socket $socket,
-    )
-    {
+    ) {
     }
 
     public static function create(): self
