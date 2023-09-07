@@ -17,6 +17,6 @@ final class VarDumperHandler implements HandlerInterface
 
     public function handle(mixed $variable, int $depth, bool $highlight = false): void
     {
-        $this->connection->broadcast(json_encode($variable));
+        $this->connection->broadcast(json_encode($variable, JSON_THROW_ON_ERROR));
     }
 }
