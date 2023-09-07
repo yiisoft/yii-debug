@@ -29,6 +29,8 @@ use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Command\DebugContainerCommand;
 use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
+use Yiisoft\Yii\Debug\Command\DevServerBroadcastCommand;
+use Yiisoft\Yii\Debug\Command\DevServerCommand;
 
 /**
  * @var $params array
@@ -96,6 +98,8 @@ return [
             DebugResetCommand::COMMAND_NAME => DebugResetCommand::class,
             DebugContainerCommand::COMMAND_NAME => DebugContainerCommand::class,
             DebugEventsCommand::COMMAND_NAME => DebugEventsCommand::class,
+            DevServerCommand::COMMAND_NAME => DevServerCommand::class,
+            DevServerBroadcastCommand::COMMAND_NAME => DevServerBroadcastCommand::class,
         ],
     ],
 ];
