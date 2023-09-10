@@ -112,10 +112,15 @@ final class DevServerCommand extends Command
             });
         }
 
-        $messages = $socket->read(fn (string $buffer) => $buffer);
-        foreach ($messages as $message) {
-            $io->writeln($message);
-            $io->newLine();
+        foreach ($socket->read() as $message) {
+            switch ($message[0]) {
+                case Connection::TYPE_ERROR:
+                    $io->writeln('Connection closed with error: ' . $message[1]);
+                    break 2;
+                default:
+                    $io->writeln($message[1]);
+                    $io->newLine();
+            }
         }
         return ExitCode::OK;
     }
