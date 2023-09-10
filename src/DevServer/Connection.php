@@ -19,11 +19,11 @@ final class Connection
     public const DEFAULT_TIMEOUT = 10 * 1000; // 10 milliseconds
     public const DEFAULT_BUFFER_SIZE = 1 * 1024; // 1 kilobyte
 
-    public const TYPE_RESULT = 0x001b;
-    public const TYPE_ERROR = 0x002b;
+    public const TYPE_RESULT = 0x001B;
+    public const TYPE_ERROR = 0x002B;
 
-    public const MESSAGE_TYPE_VAR_DUMPER = 0x001b;
-    public const MESSAGE_TYPE_LOGGER = 0x002b;
+    public const MESSAGE_TYPE_VAR_DUMPER = 0x001B;
+    public const MESSAGE_TYPE_LOGGER = 0x002B;
 
     private string $uri;
 
@@ -72,7 +72,7 @@ final class Connection
     }
 
     /**
-     * @return Generator<int, array{0: self::TYPE_RESULT|self::TYPE_ERROR, 1: string, 2: string|int, 3?: int}>
+     * @return Generator<int, array{0: self::TYPE_ERROR|self::TYPE_RESULT, 1: string, 2: int|string, 3?: int}>
      */
     public function read(): Generator
     {
@@ -111,7 +111,7 @@ final class Connection
             try {
                 if (!@fwrite($socket, $payload, $payloadLength)) {
                     $err = socket_last_error($socket);
-                    $uniqueErrors[$err] =  socket_strerror($err);
+                    $uniqueErrors[$err] = socket_strerror($err);
                     /**
                      * Connection is closed.
                      */
