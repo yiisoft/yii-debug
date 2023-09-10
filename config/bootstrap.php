@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Psr\Container\ContainerInterface;
 use Yiisoft\VarDumper\Handler\CompositeHandler;
-use Yiisoft\VarDumper\Handler\EchoHandler;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
 use Yiisoft\Yii\Debug\Collector\VarDumperHandlerInterfaceProxy;
@@ -14,7 +14,7 @@ use Yiisoft\Yii\Debug\DevServer\VarDumperHandler;
  */
 
 return [
-    static function ($container) use ($params) {
+    static function (ContainerInterface $container) use ($params) {
         if (!($params['yiisoft/yii-debug']['enabled'] ?? false)) {
             return;
         }
@@ -28,7 +28,6 @@ return [
                 new CompositeHandler([
                     VarDumper::getDefaultHandler(),
                     new VarDumperHandler(),
-                    new EchoHandler(),
                 ]),
                 $container->get(VarDumperCollector::class),
             ),
