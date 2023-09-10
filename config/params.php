@@ -31,6 +31,7 @@ use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
 use Yiisoft\Yii\Debug\Command\DevServerBroadcastCommand;
 use Yiisoft\Yii\Debug\Command\DevServerCommand;
+use Yiisoft\Yii\Debug\DevServer\LoggerDecorator;
 
 /**
  * @var $params array
@@ -61,7 +62,10 @@ return [
         ],
         'trackedServices' => [
             Injector::class => fn (ContainerInterface $container) => new Injector($container),
-            LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
+            LoggerInterface::class => function (ContainerInterface $container, LoggerInterface $logger) {
+                return new LoggerInterfaceProxy(new LoggerDecorator($logger), $container->get(LogCollector::class));
+            },
+            //LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
             CacheInterface::class,
