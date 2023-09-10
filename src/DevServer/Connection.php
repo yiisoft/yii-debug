@@ -96,7 +96,7 @@ final class Connection
         $files = glob(sys_get_temp_dir() . '/yii-dev-server-*.sock', GLOB_NOSORT);
         //echo 'Files: ' . implode(', ', $files) . "\n";
         $uniqueErrors = [];
-        $payload = json_encode([$type, $data]);
+        $payload = json_encode([$type, $data], JSON_THROW_ON_ERROR);
         $payloadLength = strlen($payload);
         foreach ($files as $file) {
             $socket = @fsockopen('udg://' . $file, -1, $errno, $errstr);
