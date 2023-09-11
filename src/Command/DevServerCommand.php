@@ -117,7 +117,7 @@ final class DevServerCommand extends Command
                     $io->writeln('Connection closed with error: ' . $message[1]);
                     break 2;
                 default:
-                    $data = \json_decode($message[1]);
+                    $data = \json_decode($message[1], null, 512, JSON_THROW_ON_ERROR);
                     if ($data[0] === Connection::MESSAGE_TYPE_VAR_DUMPER) {
                         $io->title('VarDumper');
                     } elseif ($data[0] === Connection::MESSAGE_TYPE_LOGGER) {
