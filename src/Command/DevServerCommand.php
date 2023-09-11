@@ -120,14 +120,15 @@ final class DevServerCommand extends Command
                     $data = \json_decode($message[1]);
                     if ($data[0] === Connection::MESSAGE_TYPE_VAR_DUMPER) {
                         $io->title('VarDumper');
-                    } elseif($data[0] === Connection::MESSAGE_TYPE_LOGGER) {
+                    } elseif ($data[0] === Connection::MESSAGE_TYPE_LOGGER) {
                         $io->write('Logger');
                     }
                     $io->writeln(
                         sprintf(
                             "\033[1;37m\033[47m%s\033[0m",
                             $data[1]
-                        ));
+                        )
+                    );
                     $io->newLine();
             }
         }
