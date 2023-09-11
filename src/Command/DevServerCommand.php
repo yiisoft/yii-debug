@@ -97,9 +97,8 @@ final class DevServerCommand extends Command
 
         $io->success(
             sprintf(
-                'Listening on "%s:%d".',
-                $this->address,
-                $this->port,
+                'Listening on "%s".',
+                $socket->getUri(),
             )
         );
 
@@ -118,7 +117,17 @@ final class DevServerCommand extends Command
                     $io->writeln('Connection closed with error: ' . $message[1]);
                     break 2;
                 default:
-                    $io->writeln($message[1]);
+                    $data = \json_decode($message[1]);
+                    if ($data[0] === Connection::MESSAGE_TYPE_VAR_DUMPER) {
+                        $io->title('VarDumper');
+                    } elseif($data[0] === Connection::MESSAGE_TYPE_LOGGER) {
+                        $io->write('Logger');
+                    }
+                    $io->writeln(
+                        sprintf(
+                            "\033[1;37m\033[47m%s\033[0m",
+                            $data[1]
+                        ));
                     $io->newLine();
             }
         }
