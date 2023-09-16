@@ -77,7 +77,7 @@ final class Connection
     public function read(): Generator
     {
         while (true) {
-            if (!socket_recvfrom($this->socket, $buffer, self::DEFAULT_BUFFER_SIZE, MSG_DONTWAIT, $ip, $port)) {
+            if (!socket_recvfrom($this->socket, $header, self::DEFAULT_BUFFER_SIZE, MSG_DONTWAIT, $ip, $port)) {
                 $socket_last_error = socket_last_error($this->socket);
                 if ($socket_last_error === 35) {
                     usleep(self::DEFAULT_TIMEOUT);
@@ -87,16 +87,35 @@ final class Connection
                 yield [self::TYPE_ERROR, $socket_last_error, socket_strerror($socket_last_error)];
                 continue;
             }
-            yield [self::TYPE_RESULT, $buffer, $ip, $port];
+
+            $length = unpack('N', $header);
+            $localBuffer = '';
+            $bytesToRead = $length[1];
+            $bytesRead = 0;
+            while ($bytesRead < $bytesToRead) {
+                if (!$bufferLength = socket_recvfrom($this->socket, $buffer, self::DEFAULT_BUFFER_SIZE, MSG_DONTWAIT, $ip, $port)) {
+                    $socket_last_error = socket_last_error($this->socket);
+                    if ($socket_last_error === 35) {
+                        usleep(self::DEFAULT_TIMEOUT);
+                        continue;
+                    }
+                    $this->close();
+                    break;
+                }
+
+                $localBuffer .= $buffer;
+                $bytesRead += $bufferLength;
+            }
+            yield [self::TYPE_RESULT, base64_decode($localBuffer), $ip, $port];
         }
     }
 
-    public function broadcast(int $type, string $data): void
+    public function broadcast(int $type, string $data): array
     {
         $files = glob(sys_get_temp_dir() . '/yii-dev-server-*.sock', GLOB_NOSORT);
         //echo 'Files: ' . implode(', ', $files) . "\n";
         $uniqueErrors = [];
-        $payload = json_encode([$type, $data], JSON_THROW_ON_ERROR);
+        $payload = base64_encode(json_encode([$type, $data], JSON_THROW_ON_ERROR));
         $payloadLength = strlen($payload);
         foreach ($files as $file) {
             $socket = @fsockopen('udg://' . $file, -1, $errno, $errstr);
@@ -109,9 +128,8 @@ final class Connection
                 continue;
             }
             try {
-                if (!@fwrite($socket, $payload, $payloadLength)) {
-                    $err = socket_last_error($socket);
-                    $uniqueErrors[$err] = socket_strerror($err);
+                if (!$this->fwriteStream($socket, $payload)) {
+                    $uniqueErrors[] = error_get_last();
                     /**
                      * Connection is closed.
                      */
@@ -121,10 +139,11 @@ final class Connection
                 //@unlink($file);
                 throw $e;
             } finally {
-                fflush($socket);
+                //fflush($socket);
                 fclose($socket);
             }
         }
+        return $uniqueErrors;
     }
 
     public function getUri(): string
@@ -137,5 +156,23 @@ final class Connection
         @socket_getsockname($this->socket, $path);
         @socket_close($this->socket);
         @unlink($path);
+    }
+
+    /**
+     * @param resource $fp
+     */
+    private function fwriteStream($fp, string $data): int|false
+    {
+        $strlen = strlen($data);
+        fwrite($fp, pack('N', $strlen));
+        for ($written = 0; $written < $strlen; $written += $fwrite) {
+            $fwrite = fwrite($fp, substr($data, $written), self::DEFAULT_BUFFER_SIZE);
+            //\fflush($fp);
+            usleep(self::DEFAULT_TIMEOUT / 2);
+            if ($fwrite === false) {
+                return $written;
+            }
+        }
+        return $written;
     }
 }
