@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Yiisoft\Yii\Console\ExitCode;
-use Yiisoft\Yii\Debug\DevServer\Connection;
+use Yiisoft\Yii\Debug\DebugServer\Connection;
 
-final class DevServerBroadcastCommand extends Command
+final class DebugServerBroadcastCommand extends Command
 {
     public const COMMAND_NAME = 'dev:broadcast';
     protected static $defaultName = self::COMMAND_NAME;

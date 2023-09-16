@@ -7,7 +7,7 @@ use Yiisoft\VarDumper\Handler\CompositeHandler;
 use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
 use Yiisoft\Yii\Debug\Collector\VarDumperHandlerInterfaceProxy;
-use Yiisoft\Yii\Debug\DevServer\VarDumperHandler;
+use Yiisoft\Yii\Debug\DebugServer\VarDumperHandler;
 
 /**
  * @var $params array

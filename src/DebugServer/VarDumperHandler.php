@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\DevServer;
+namespace Yiisoft\Yii\Debug\DebugServer;
 
 use Yiisoft\VarDumper\HandlerInterface;
 use Yiisoft\VarDumper\VarDumper;

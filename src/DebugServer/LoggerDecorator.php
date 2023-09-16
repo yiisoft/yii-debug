@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\DevServer;
+namespace Yiisoft\Yii\Debug\DebugServer;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
