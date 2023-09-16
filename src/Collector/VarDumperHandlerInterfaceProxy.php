@@ -33,7 +33,7 @@ final class VarDumperHandlerInterfaceProxy implements HandlerInterface
             break;
         }
 
-        $this->collector->collectVar(
+        $this->collector->collect(
             $variable,
             $callStack === null ? '' : $callStack['file'] . ':' . $callStack['line']
         );

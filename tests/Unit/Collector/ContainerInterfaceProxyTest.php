@@ -18,13 +18,14 @@ use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\EventCollector;
-use Yiisoft\Yii\Debug\Collector\LogCollector;
-use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\EventCollector;
 use Yiisoft\Yii\Debug\Collector\EventDispatcherInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
+use Yiisoft\Yii\Debug\Collector\ServiceCollector;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
 class ContainerInterfaceProxyTest extends TestCase
 {
@@ -72,7 +73,7 @@ class ContainerInterfaceProxyTest extends TestCase
                 ],
             ],
             $dispatcherMock,
-            new ServiceCollector(),
+            $this->createServiceCollector(),
             $this->path,
             1
         );
@@ -89,7 +90,7 @@ class ContainerInterfaceProxyTest extends TestCase
     public function testGetWithArrayConfigWithStringKeys(): void
     {
         $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
-        $serviceCollector = new ServiceCollector();
+        $serviceCollector = $this->createServiceCollector();
         $serviceCollector->startup(); // activate collector
 
         $config = new ContainerProxyConfig(
@@ -127,7 +128,7 @@ class ContainerInterfaceProxyTest extends TestCase
                 EventDispatcherInterface::class,
             ],
             $dispatcherMock,
-            new ServiceCollector(),
+            $this->createServiceCollector(),
             $this->path,
             1
         );
@@ -183,7 +184,7 @@ class ContainerInterfaceProxyTest extends TestCase
                 ],
             ],
             $dispatcherMock,
-            new ServiceCollector(),
+            $this->createServiceCollector(),
             $this->path,
             1
         );
@@ -200,5 +201,10 @@ class ContainerInterfaceProxyTest extends TestCase
                 EventCollector::class => EventCollector::class,
             ]);
         return new Container($config);
+    }
+
+    protected function createServiceCollector(): ServiceCollector
+    {
+        return new ServiceCollector(new TimelineCollector());
     }
 }

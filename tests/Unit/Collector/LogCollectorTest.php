@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 use Psr\Log\LogLevel;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class LogCollectorTest extends AbstractCollectorTestCase
@@ -21,6 +22,6 @@ final class LogCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new LogCollector();
+        return new LogCollector(new TimelineCollector());
     }
 }

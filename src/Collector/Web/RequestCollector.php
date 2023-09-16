@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use GuzzleHttp\Psr7\Message;
-use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Yiisoft\Yii\Http\Event\AfterRequest;
-use Yiisoft\Yii\Http\Event\BeforeRequest;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
+use Yiisoft\Yii\Http\Event\AfterRequest;
+use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 use function is_object;
 
@@ -29,25 +29,14 @@ final class RequestCollector implements SummaryCollectorInterface
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
 
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
+
     public function getCollected(): array
     {
         if (!$this->isActive()) {
             return [];
-        }
-        $content = null;
-        if ($this->response !== null) {
-            $stream = $this->response->getBody();
-            if ($stream->isReadable() && $stream->isSeekable()) {
-                $position = $stream->tell();
-                $stream->rewind();
-                $content = $stream->getContents();
-                try {
-                    $content = json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
-                } catch (JsonException) {
-                    // pass
-                }
-                $stream->seek($position);
-            }
         }
 
         $requestRaw = null;
@@ -74,7 +63,6 @@ final class RequestCollector implements SummaryCollectorInterface
             'requestRaw' => $requestRaw,
             'response' => $this->response,
             'responseRaw' => $responseRaw,
-            'content' => $content,
         ];
     }
 
@@ -101,6 +89,7 @@ final class RequestCollector implements SummaryCollectorInterface
             $this->response = $response;
             $this->responseStatusCode = $response !== null ? $response->getStatusCode() : 500;
         }
+        $this->timelineCollector->collect($this, spl_object_id($event));
     }
 
     public function getSummary(): array
