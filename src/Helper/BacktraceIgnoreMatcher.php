@@ -32,6 +32,9 @@ final class BacktraceIgnoreMatcher
 
     public static function doesStringMatchPattern(string $string, array $patterns): bool
     {
+        if (empty($patterns)) {
+            return false;
+        }
         return (new CombinedRegexp($patterns))->matches($string);
     }
 }
