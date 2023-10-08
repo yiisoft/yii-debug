@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class ServiceCollectorTest extends AbstractCollectorTestCase
@@ -22,6 +23,6 @@ final class ServiceCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new ServiceCollector();
+        return new ServiceCollector(new TimelineCollector());
     }
 }

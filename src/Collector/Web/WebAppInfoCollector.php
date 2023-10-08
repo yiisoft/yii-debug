@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Web;
 
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
+use Yiisoft\Yii\Debug\Collector\CollectorTrait;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
-use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
 use function is_object;
 
@@ -21,6 +22,10 @@ final class WebAppInfoCollector implements SummaryCollectorInterface
     private float $applicationProcessingTimeStopped = 0;
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
+
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
 
     public function getCollected(): array
     {
@@ -52,6 +57,7 @@ final class WebAppInfoCollector implements SummaryCollectorInterface
         } elseif ($event instanceof AfterEmit) {
             $this->applicationProcessingTimeStopped = microtime(true);
         }
+        $this->timelineCollector->collect($this, spl_object_id($event));
     }
 
     public function getSummary(): array

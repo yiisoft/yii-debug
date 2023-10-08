@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Yii\Console\Output\ConsoleBufferedOutput;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
 final class CommandCollector implements SummaryCollectorInterface
 {
@@ -24,6 +25,10 @@ final class CommandCollector implements SummaryCollectorInterface
     private const UNDEFINED_EXIT_CODE = -1;
     private array $commands = [];
 
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
+
     public function getCollected(): array
     {
         return $this->commands;
@@ -34,6 +39,8 @@ final class CommandCollector implements SummaryCollectorInterface
         if (!$this->isActive()) {
             return;
         }
+
+        $this->timelineCollector->collect($this, spl_object_id($event));
 
         $command = $event->getCommand();
 
