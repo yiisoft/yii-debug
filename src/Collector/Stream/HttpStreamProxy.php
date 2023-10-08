@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
+use Yiisoft\Strings\CombinedRegexp;
 use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
@@ -68,6 +69,7 @@ class HttpStreamProxy implements StreamWrapperInterface
          */
         class_exists(BacktraceIgnoreMatcher::class);
         class_exists(StreamWrapper::class);
+        class_exists(CombinedRegexp::class);
         stream_wrapper_unregister('http');
         stream_wrapper_register('http', self::class, STREAM_IS_URL);
         stream_wrapper_unregister('https');

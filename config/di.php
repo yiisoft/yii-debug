@@ -58,7 +58,13 @@ return array_merge([
     },
     FilesystemStreamCollector::class => [
         '__construct()' => [
-            'ignoredPathPatterns' => [],
+            'ignoredPathPatterns' => [
+                /**
+                 * Examples:
+                 * - templates/
+                 * - src/Directory/To/Ignore
+                 */
+            ],
             'ignoredClasses' => [
                 ClosureExporter::class,
                 UseStatementParser::class,
