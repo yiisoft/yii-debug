@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\EventCollector;
+use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 use Yiisoft\Yii\Debug\Tests\Unit\Support\DummyEvent;
 
@@ -21,7 +22,7 @@ final class EventCollectorTest extends AbstractCollectorTestCase
 
     protected function getCollector(): CollectorInterface
     {
-        return new EventCollector();
+        return new EventCollector(new TimelineCollector());
     }
 
     protected function checkCollectedData(array $data): void

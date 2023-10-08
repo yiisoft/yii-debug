@@ -29,6 +29,10 @@ final class HttpClientCollector implements SummaryCollectorInterface
      */
     private array $requests = [];
 
+    public function __construct(private TimelineCollector $timelineCollector)
+    {
+    }
+
     public function getCollected(): array
     {
         return array_merge(...array_values($this->requests));
@@ -66,6 +70,7 @@ final class HttpClientCollector implements SummaryCollectorInterface
             'headers' => $request->getHeaders(),
             'line' => $line,
         ];
+        $this->timelineCollector->collect($this, $uniqueId);
     }
 
     public function collectTotalTime(?ResponseInterface $response, float|string $startTime, ?string $uniqueId): void
