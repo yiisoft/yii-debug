@@ -143,6 +143,10 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetAndHasWithWrongId(): void
     {
+        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
+
+        $this->assertFalse($containerProxy->has(CollectorInterface::class));
+
         $this->expectException(ContainerExceptionInterface::class);
         $this->expectExceptionMessage(
             sprintf(
@@ -151,11 +155,18 @@ class ContainerInterfaceProxyTest extends TestCase
                 CollectorInterface::class
             )
         );
+        $containerProxy->get(CollectorInterface::class);
+    }
 
+    public function testGetContainerItself(): void
+    {
         $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
 
-        $containerProxy->has(CollectorInterface::class);
-        $containerProxy->get(CollectorInterface::class);
+        $this->assertTrue($containerProxy->has(ContainerInterface::class));
+
+        $container = $containerProxy->get(ContainerInterface::class);
+        $this->assertNotNull($container);
+        $this->assertInstanceOf(ContainerInterface::class, $container);
     }
 
     public function testGetAndHasWithNotService(): void
