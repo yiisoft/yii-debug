@@ -40,14 +40,14 @@ abstract class AbstractStorageTest extends TestCase
         $storage->addCollector($this->createFakeCollector($data));
         $storage->addCollector($this->createFakeSummaryCollector($data));
         $expectedData = $storage->getData();
-        $encodedExpectedData = \json_decode(Dumper::create($expectedData)->asJson(), true);
+        $encodedExpectedData = \json_decode(Dumper::create($expectedData)->asJson(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!$storage instanceof MemoryStorage) {
             $storage->flush();
         }
 
         $result = $storage->read(StorageInterface::TYPE_DATA);
-        $encodedResult = \json_decode(Dumper::create($result)->asJson(), true);
+        $encodedResult = \json_decode(Dumper::create($result)->asJson(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals([$idGenerator->getId() => $encodedExpectedData], $encodedResult);
     }
 
