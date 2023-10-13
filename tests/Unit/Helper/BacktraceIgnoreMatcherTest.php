@@ -38,7 +38,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
         $this->assertTrue(
             BacktraceIgnoreMatcher::isIgnoredByFile(
                 $backtrace,
-                [preg_quote(dirname($file)) . DIRECTORY_SEPARATOR . '*']
+                [preg_quote(dirname($file) . DIRECTORY_SEPARATOR) . '*']
             )
         );
         $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote(__FILE__)]));
