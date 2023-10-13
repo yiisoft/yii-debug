@@ -10,7 +10,7 @@ use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 
 final class BacktraceIgnoreMatcherTest extends TestCase
 {
-    public function testClassIgnorance()
+    public function testClassIgnorance(): void
     {
         $backtrace = debug_backtrace();
 
@@ -23,7 +23,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
         $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, [stdClass::class]));
     }
 
-    public function testFileIgnorance()
+    public function testFileIgnorance(): void
     {
         $backtrace = debug_backtrace();
         $reflection = new \ReflectionClass(TestCase::class);
@@ -41,7 +41,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
         $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [__FILE__]));
     }
 
-    public function testStringMatches()
+    public function testStringMatches(): void
     {
         $this->assertTrue(
             BacktraceIgnoreMatcher::doesStringMatchPattern(
@@ -67,5 +67,12 @@ final class BacktraceIgnoreMatcherTest extends TestCase
                 ['dev*/456', 'dev/123/*']
             )
         );
+    }
+
+    public function testEmptyBacktrace(): void
+    {
+        $this->assertFalse(BacktraceIgnoreMatcher::doesStringMatchPattern('dev/123/456', []));
+        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile([], ['dev/123/456']));
+        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByClass([], ['dev/123/456']));
     }
 }
