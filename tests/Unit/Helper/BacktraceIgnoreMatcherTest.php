@@ -40,6 +40,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
         );
         $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [__FILE__]));
     }
+
     public function testStringMatches()
     {
         $this->assertTrue(
