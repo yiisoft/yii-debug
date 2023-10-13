@@ -34,7 +34,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
 
         $backtrace[2] = $backtrace[0];
 
-        $this->assertTrue(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [$file]));
+        $this->assertTrue(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote($file)]));
         $this->assertTrue(
             BacktraceIgnoreMatcher::isIgnoredByFile(
                 $backtrace,
