@@ -29,7 +29,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
         $reflection = new \ReflectionClass(TestCase::class);
         $file = $reflection->getFileName();
 
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [$file]));
+        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote($file)]));
         $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [__FILE__]));
 
         $backtrace[2] = $backtrace[0];
