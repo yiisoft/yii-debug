@@ -12,8 +12,6 @@ use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-use function is_object;
-
 final class WebAppInfoCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
@@ -44,7 +42,7 @@ final class WebAppInfoCollector implements SummaryCollectorInterface
 
     public function collect(object $event): void
     {
-        if (!is_object($event) || !$this->isActive()) {
+        if (!$this->isActive()) {
             return;
         }
 
