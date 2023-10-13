@@ -59,7 +59,7 @@ final class FileStorageTest extends AbstractStorageTest
         $idGenerator->reset();
 
         $read = $storage->read(StorageInterface::TYPE_SUMMARY, null);
-        $this->assertEquals(2, count($read));
+        $this->assertCount(2, $read);
     }
 
     /**
