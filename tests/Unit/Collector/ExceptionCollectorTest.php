@@ -18,7 +18,7 @@ final class ExceptionCollectorTest extends AbstractCollectorTestCase
      */
     protected function collectTestData(CollectorInterface $collector): void
     {
-        $exception = new Exception('test', 777);
+        $exception = new Exception('test', 777, new Exception('previous', 666));
         $collector->collect(new ApplicationError($exception));
     }
 
@@ -30,20 +30,26 @@ final class ExceptionCollectorTest extends AbstractCollectorTestCase
     protected function checkCollectedData(array $data): void
     {
         parent::checkCollectedData($data);
-        $this->assertCount(1, $data);
+        $this->assertCount(2, $data);
+        foreach ($data as $exception) {
+            $this->assertArrayHasKey('class', $exception);
+            $this->assertArrayHasKey('message', $exception);
+            $this->assertArrayHasKey('file', $exception);
+            $this->assertArrayHasKey('line', $exception);
+            $this->assertArrayHasKey('code', $exception);
+            $this->assertArrayHasKey('trace', $exception);
+            $this->assertArrayHasKey('traceAsString', $exception);
+        }
+
         $exception = $data[0];
-
-        $this->assertArrayHasKey('class', $exception);
-        $this->assertArrayHasKey('message', $exception);
-        $this->assertArrayHasKey('file', $exception);
-        $this->assertArrayHasKey('line', $exception);
-        $this->assertArrayHasKey('code', $exception);
-        $this->assertArrayHasKey('trace', $exception);
-        $this->assertArrayHasKey('traceAsString', $exception);
-
         $this->assertEquals(Exception::class, $exception['class']);
         $this->assertEquals('test', $exception['message']);
         $this->assertEquals(777, $exception['code']);
+
+        $exception = $data[1];
+        $this->assertEquals(Exception::class, $exception['class']);
+        $this->assertEquals('previous', $exception['message']);
+        $this->assertEquals(666, $exception['code']);
     }
 
     protected function checkSummaryData(array $data): void
