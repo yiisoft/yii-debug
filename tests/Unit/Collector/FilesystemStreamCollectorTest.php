@@ -92,7 +92,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         yield 'mkdir ignored by path' => [
             $path,
             $mkdirBefore,
-            ['/' . basename(__FILE__, '.php') . '/'],
+            [basename(__FILE__, '.php')],
             [],
             $mkdirOperation,
             $mkdirAfter,
@@ -139,7 +139,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         yield 'rename ignored by path' => [
             $path,
             $renameBefore,
-            ['/' . basename(__FILE__, '.php') . '/'],
+            [ basename(__FILE__, '.php') ],
             [],
             $renameOperation,
             $renameAfter,
@@ -185,7 +185,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         yield 'rmdir ignored by path' => [
             $path,
             $rmdirBefore,
-            ['/' . basename(__FILE__, '.php') . '/'],
+            [basename(__FILE__, '.php')],
             [],
             $rmdirOperation,
             $rmdirAfter,
@@ -232,7 +232,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         yield 'unlink ignored by path' => [
             $path,
             $unlinkBefore,
-            ['/' . basename(__FILE__, '.php') . '/'],
+            [basename(__FILE__, '.php')],
             [],
             $unlinkOperation,
             $unlinkAfter,
@@ -291,7 +291,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         yield 'file stream ignored by path' => [
             $path,
             $fileStreamBefore,
-            ['/' . basename(__FILE__, '.php') . '/'],
+            [basename(__FILE__, '.php')],
             [],
             $fileStreamOperation,
             $fileStreamAfter,

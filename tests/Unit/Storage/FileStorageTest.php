@@ -32,7 +32,34 @@ final class FileStorageTest extends AbstractStorageTest
 
         $storage->addCollector($collector);
         $storage->flush();
-        $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY)));
+        $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY, null)));
+    }
+
+    /**
+     * @dataProvider dataProvider()
+     */
+    public function testHistorySize(array $data): void
+    {
+        $idGenerator = new DebuggerIdGenerator();
+        $idGenerator->reset();
+        $storage = $this->getStorage($idGenerator);
+        $storage->setHistorySize(2);
+        $collector = $this->createFakeCollector($data);
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $idGenerator->reset();
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $idGenerator->reset();
+
+        $storage->addCollector($collector);
+        $storage->flush();
+        $idGenerator->reset();
+
+        $read = $storage->read(StorageInterface::TYPE_SUMMARY, null);
+        $this->assertCount(2, $read);
     }
 
     /**
@@ -50,7 +77,7 @@ final class FileStorageTest extends AbstractStorageTest
         $this->assertDirectoryDoesNotExist($this->path);
     }
 
-    public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface
+    public function getStorage(DebuggerIdGenerator $idGenerator): FileStorage
     {
         return new FileStorage(
             $this->path,

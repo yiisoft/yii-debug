@@ -88,9 +88,10 @@ final class DebuggerTest extends TestCase
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('flush');
 
-        $_ENV['YII_DEBUG_IGNORE'] = 'true';
+        putenv('YII_DEBUG_IGNORE=true');
         $debugger = new Debugger($idGenerator, $storage, [$collector], []);
-        $debugger->startup(new ApplicationStartup(''));
+        $debugger->startup(new ApplicationStartup('command'));
+        putenv('YII_DEBUG_IGNORE=false');
         $debugger->shutdown();
     }
 
@@ -196,7 +197,7 @@ final class DebuggerTest extends TestCase
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->once())->method('clear');
+        $storage->expects($this->never())->method('clear');
         $storage->expects($this->never())->method('flush');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector]);

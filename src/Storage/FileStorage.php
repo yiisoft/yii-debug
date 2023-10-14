@@ -136,24 +136,25 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $summaryFiles = glob($this->path . '/**/**/sumamry.json', GLOB_NOSORT);
-        if ((is_countable($summaryFiles) ? count($summaryFiles) : 0) >= $this->historySize + 1) {
-            uasort($summaryFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
-            $excessFiles = array_slice($summaryFiles, $this->historySize);
-            foreach ($excessFiles as $file) {
-                $path1 = dirname($file);
-                $path2 = dirname($file, 2);
-                $path3 = dirname($file, 3);
-                $resource = substr($path1, strlen($path3));
+        $summaryFiles = glob($this->path . '/**/**/summary.json', GLOB_NOSORT);
+        if (empty($summaryFiles) || count($summaryFiles) <= $this->historySize) {
+            return;
+        }
 
+        uasort($summaryFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
+        $excessFiles = array_slice($summaryFiles, $this->historySize);
+        foreach ($excessFiles as $file) {
+            $path1 = dirname($file);
+            $path2 = dirname($file, 2);
+            $path3 = dirname($file, 3);
+            $resource = substr($path1, strlen($path3));
 
-                FileHelper::removeDirectory($this->path . $resource);
+            FileHelper::removeDirectory($this->path . $resource);
 
-                // Clean empty group directories
-                $group = substr($path2, strlen($path3));
-                if (FileHelper::isEmptyDirectory($this->path . $group)) {
-                    FileHelper::removeDirectory($this->path . $group);
-                }
+            // Clean empty group directories
+            $group = substr($path2, strlen($path3));
+            if (FileHelper::isEmptyDirectory($this->path . $group)) {
+                FileHelper::removeDirectory($this->path . $group);
             }
         }
     }

@@ -108,7 +108,7 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
         yield 'file stream ignored by path' => [
             $url,
             $httpStreamBefore,
-            ['/' . basename(__FILE__, '.php') . '/'],
+            [basename(__FILE__, '.php')],
             [],
             [],
             $httpStreamOperation,
@@ -130,7 +130,7 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
             $httpStreamBefore,
             [],
             [],
-            ['/example/'],
+            ['example'],
             $httpStreamOperation,
             $httpStreamAfter,
             [],

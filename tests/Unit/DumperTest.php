@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug as D;
 use Yiisoft\Yii\Debug\Dumper;
+use Yiisoft\Yii\Debug\Tests\Support\Stub\ThreeProperties;
 
 final class DumperTest extends TestCase
 {
@@ -60,6 +61,57 @@ final class DumperTest extends TestCase
         $this->assertEqualsWithoutLE($result, $output);
     }
 
+    public function testDeepNestedArray(): void
+    {
+        $variable = [[[[[['test']]]]]];
+        $output = Dumper::create($variable)->asJson(2);
+        $result = '[["array [...]"]]';
+        $this->assertEqualsWithoutLE($result, $output);
+    }
+
+    public function testDeepNestedObject(): void
+    {
+        $object = new ThreeProperties();
+        $object->first = $object;
+        $variable = [[$object]];
+
+        $output = Dumper::create($variable)->asJson(2);
+        $result = sprintf(
+            '[["%s#%d (...)"]]',
+            str_replace('\\', '\\\\', ThreeProperties::class),
+            spl_object_id($object),
+        );
+        $this->assertEqualsWithoutLE($result, $output);
+    }
+
+    public function testObjectVisibilityProperties(): void
+    {
+        $variable = new ThreeProperties();
+
+        $output = Dumper::create($variable)->asJson(2);
+        $result = sprintf(
+            '{"%s#%d":{"public $first":"first","protected $second":"second","private $third":"third"}}',
+            str_replace('\\', '\\\\', ThreeProperties::class),
+            spl_object_id($variable),
+        );
+        $this->assertEqualsWithoutLE($result, $output);
+    }
+
+    public function testFormatJson(): void
+    {
+        $variable = [['test']];
+
+        $output = Dumper::create($variable)->asJson(2, true);
+        $result = <<<S
+        [
+            [
+                "test"
+            ]
+        ]
+        S;
+        $this->assertEqualsWithoutLE($result, $output);
+    }
+
     public static function jsonDataProvider(): iterable
     {
         $emptyObject = new stdClass();
@@ -106,7 +158,7 @@ final class DumperTest extends TestCase
         yield 'function' => [
             $functionObject,
             <<<S
-                {"Closure#{$functionObjectId}":"function () {\\n            return 1;\\n        }"}
+                {"Closure#{$functionObjectId}":"function () {\\n    return 1;\\n}"}
                 S,
         ];
 
@@ -120,7 +172,7 @@ final class DumperTest extends TestCase
         yield 'static function' => [
             $staticFunctionObject,
             <<<S
-                {"Closure#{$staticFunctionObjectId}":"static function () {\\n            return 1;\\n        }"}
+                {"Closure#{$staticFunctionObjectId}":"static function () {\\n    return 1;\\n}"}
                 S,
         ];
         yield 'string' => [
@@ -274,6 +326,15 @@ final class DumperTest extends TestCase
         yield 'closed file resource' => [
             $closedFileResource,
             '"{closed resource}"',
+        ];
+
+        $socketResource = \socket_create(\AF_INET, \SOCK_STREAM, \SOL_TCP);
+        $socketResourceId = spl_object_id($socketResource);
+        yield 'socket resource' => [
+            $socketResource,
+            <<<S
+            {"Socket#{$socketResourceId}":"{stateless object}"}
+            S,
         ];
 
         $opendirResource = opendir(sys_get_temp_dir());
