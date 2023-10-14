@@ -69,4 +69,13 @@ final class ExceptionCollectorTest extends AbstractCollectorTestCase
         $this->assertEquals('test', $exception['message']);
         $this->assertEquals(777, $exception['code']);
     }
+
+    public function testNoExceptionCollected()
+    {
+        $collector = new ExceptionCollector(new TimelineCollector());
+
+        $collector->startup();
+
+        $this->assertEquals([], $collector->getCollected());
+    }
 }
