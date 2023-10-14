@@ -44,16 +44,15 @@ final class LoggerProxyTest extends TestCase
         $proxy->log($level, $message, $context);
     }
 
-    public function logMethodsProvider(): array
+    public static function logMethodsProvider(): iterable
     {
-        return [
-            ['alert', LogLevel::ALERT, 'message', []],
-            ['critical', LogLevel::CRITICAL, 'message', []],
-            ['debug', LogLevel::DEBUG, 'message', []],
-            ['emergency', LogLevel::EMERGENCY, 'message', []],
-            ['error', LogLevel::ERROR, 'message', ['context']],
-            ['info', LogLevel::INFO, 'message', ['context']],
-            ['warning', LogLevel::WARNING, 'message', ['context']],
-        ];
+        yield 'alert' => ['alert', LogLevel::ALERT, 'message', []];
+        yield 'critical' => ['critical', LogLevel::CRITICAL, 'message', []];
+        yield 'debug' => ['debug', LogLevel::DEBUG, 'message', []];
+        yield 'emergency' => ['emergency', LogLevel::EMERGENCY, 'message', []];
+        yield 'notice' => ['notice', LogLevel::NOTICE, 'message', []];
+        yield 'error' => ['error', LogLevel::ERROR, 'message', ['context']];
+        yield 'info' => ['info', LogLevel::INFO, 'message', ['context']];
+        yield 'warning' => ['warning', LogLevel::WARNING, 'message', ['context']];
     }
 }

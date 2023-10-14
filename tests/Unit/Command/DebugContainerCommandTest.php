@@ -29,11 +29,16 @@ final class DebugContainerCommandTest extends TestCase
         $storage->expects($this->never())->method('clear');
         $debugger = new Debugger($idGenerator, $storage, []);
 
-        $command = new DebugContainerCommand($container, $debugger);
+        $config = $container->get(ConfigInterface::class);
+        // trigger config build
+        $config->get('params');
 
+        $command = new DebugContainerCommand($container, $debugger);
         $commandTester = new CommandTester($command);
 
         $commandTester->execute([]);
+
+        $this->assertEquals(0, $commandTester->getStatusCode());
     }
 
     private function createContainer(): ContainerInterface

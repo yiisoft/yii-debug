@@ -40,6 +40,18 @@ abstract class AbstractCollectorTestCase extends TestCase
         }
     }
 
+    public function testInactiveCollector(): void
+    {
+        $collector = $this->getCollector();
+
+        $this->collectTestData($collector);
+
+        $this->assertEquals([], $collector->getCollected());
+        if ($collector instanceof SummaryCollectorInterface) {
+            $this->assertEquals([], $collector->getSummary());
+        }
+    }
+
     abstract protected function getCollector(): CollectorInterface;
 
     abstract protected function collectTestData(CollectorInterface $collector): void;
