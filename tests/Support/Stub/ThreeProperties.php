@@ -8,5 +8,5 @@ class ThreeProperties
 {
     public $first = 'first';
     protected $second = 'second';
-    private $third = 'third';
+    private string $third = 'third';
 }
