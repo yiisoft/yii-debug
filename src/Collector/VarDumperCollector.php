@@ -29,9 +29,7 @@ final class VarDumperCollector implements SummaryCollectorInterface
             return [];
         }
 
-        return [
-            'var-dumper' => $this->vars,
-        ];
+        return $this->vars;
     }
 
     public function getSummary(): array

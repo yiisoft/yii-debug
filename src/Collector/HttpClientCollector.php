@@ -33,29 +33,7 @@ final class HttpClientCollector implements SummaryCollectorInterface
     {
     }
 
-    public function getCollected(): array
-    {
-        return array_merge(...array_values($this->requests));
-    }
-
-    public function getSummary(): array
-    {
-        return [
-            'http' => [
-                'count' => array_sum(array_map(static fn (array $requests) => count($requests), $this->requests)),
-                'totalTime' => array_sum(
-                    array_merge(
-                        ...array_map(
-                            static fn (array $entry) => array_column($entry, 'totalTime'),
-                            array_values($this->requests)
-                        )
-                    )
-                ),
-            ],
-        ];
-    }
-
-    public function collect(RequestInterface $request, float|string $startTime, string $line, ?string $uniqueId): void
+    public function collect(RequestInterface $request, float $startTime, string $line, ?string $uniqueId): void
     {
         if (!$this->isActive()) {
             return;
@@ -73,7 +51,7 @@ final class HttpClientCollector implements SummaryCollectorInterface
         $this->timelineCollector->collect($this, $uniqueId);
     }
 
-    public function collectTotalTime(?ResponseInterface $response, float|string $startTime, ?string $uniqueId): void
+    public function collectTotalTime(?ResponseInterface $response, float $endTime, ?string $uniqueId): void
     {
         if (!$this->isActive()) {
             return;
@@ -88,7 +66,35 @@ final class HttpClientCollector implements SummaryCollectorInterface
             $entry['responseStatus'] = $response->getStatusCode();
             Message::rewindBody($response);
         }
-        $entry['endTime'] = $startTime;
+        $entry['endTime'] = $endTime;
         $entry['totalTime'] = $entry['endTime'] - $entry['startTime'];
+    }
+
+    public function getCollected(): array
+    {
+        if (!$this->isActive()) {
+            return [];
+        }
+        return array_merge(...array_values($this->requests));
+    }
+
+    public function getSummary(): array
+    {
+        if (!$this->isActive()) {
+            return [];
+        }
+        return [
+            'http' => [
+                'count' => array_sum(array_map(static fn (array $requests) => count($requests), $this->requests)),
+                'totalTime' => array_sum(
+                    array_merge(
+                        ...array_map(
+                            static fn (array $entry) => array_column($entry, 'totalTime'),
+                            array_values($this->requests)
+                        )
+                    )
+                ),
+            ],
+        ];
     }
 }

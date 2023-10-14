@@ -97,7 +97,7 @@ final class Dumper
         return $this->dumpNestedInternal($variable, $depth, 0, $objectCollapseLevel);
     }
 
-    private function getObjectProperties($var): array
+    private function getObjectProperties(object $var): array
     {
         if (\__PHP_Incomplete_Class::class !== $var::class && method_exists($var, '__debugInfo')) {
             $var = $var->__debugInfo();
@@ -158,7 +158,6 @@ final class Dumper
                         $objectCollapseLevel
                     );
                 }
-
                 break;
             case 'resource':
             case 'resource (closed)':
