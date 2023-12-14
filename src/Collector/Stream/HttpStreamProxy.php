@@ -10,6 +10,7 @@ use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
 use function stream_get_wrappers;
+
 use const SEEK_SET;
 
 class HttpStreamProxy implements StreamWrapperInterface
