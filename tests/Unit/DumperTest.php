@@ -14,10 +14,6 @@ final class DumperTest extends TestCase
 {
     /**
      * @dataProvider asJsonObjectMapDataProvider
-     *
-     * @param string $expectedResult
-     *
-     * @group JOM
      */
     public function testAsJsonObjectsMap(mixed $var, $expectedResult): void
     {
@@ -40,13 +36,13 @@ final class DumperTest extends TestCase
             [
                 $user,
                 <<<S
-                [{"stdClass#{$objectId}":{"public \$id":1}}]
+                {"stdClass#{$objectId}":{"public \$id":1}}
                 S,
             ],
             [
                 $decoratedUser,
                 <<<S
-                [{"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"}},{"stdClass#{$objectId}":{"public \$id":1}}]
+                {"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"},"stdClass#{$objectId}":{"public \$id":1}}
                 S,
             ],
         ];
