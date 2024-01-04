@@ -44,6 +44,7 @@
     },
     "require-dev": {
         "ext-curl": "*",
+        "ext-sockets": "*",
         "maglnet/composer-require-checker": "^4.2",
         "nyholm/psr7": "^1.3",
         "phpunit/phpunit": "^9.4",

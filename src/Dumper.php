@@ -13,12 +13,14 @@ final class Dumper
     private array $objects = [];
 
     private static ?ClosureExporter $closureExporter = null;
+    private array $excludedClasses = [];
 
     /**
      * @param mixed $variable Variable to dump.
      */
-    private function __construct(private mixed $variable, private array $excludedClasses = [])
+    private function __construct(private mixed $variable, array $excludedClasses = [])
     {
+        $this->excludedClasses = array_flip($excludedClasses);
     }
 
     /**
@@ -42,7 +44,7 @@ final class Dumper
      */
     public function asJson(int $depth = 50, bool $format = false): string|bool
     {
-        return $this->asJsonInternal($this->variable, $format, $depth, 0);
+        return $this->asJsonInternal($this->variable, $format, $depth, 0, false, true);
     }
 
     /**
@@ -57,7 +59,7 @@ final class Dumper
     {
         $this->buildObjectsCache($this->variable, $depth);
 
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1);
+        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true, false);
     }
 
     private function buildObjectsCache($variable, int $depth, int $level = 0): void
@@ -66,11 +68,12 @@ final class Dumper
             return;
         }
         if (is_object($variable)) {
-            if (in_array($variable, $this->objects, true)
-                || in_array($variable::class, $this->excludedClasses, true)) {
+            if (array_key_exists($variable::class, $this->excludedClasses) ||
+                array_key_exists($objectDescription = $this->getObjectDescription($variable), $this->objects)
+            ) {
                 return;
             }
-            $this->objects[] = $variable;
+            $this->objects[$objectDescription] = $variable;
             $variable = $this->getObjectProperties($variable);
         }
         if (is_array($variable)) {
@@ -80,21 +83,27 @@ final class Dumper
         }
     }
 
-    private function asJsonInternal($variable, bool $format, int $depth, int $objectCollapseLevel): string|bool
-    {
+    private function asJsonInternal(
+        $variable,
+        bool $format,
+        int $depth,
+        int $objectCollapseLevel,
+        bool $inlineObject,
+        bool $buildCache,
+    ): string|bool {
         $options = JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE;
 
         if ($format) {
             $options |= JSON_PRETTY_PRINT;
         }
+        if ($buildCache) {
+            $this->buildObjectsCache($variable, $depth);
+        }
 
-        return json_encode($this->dumpNested($variable, $depth, $objectCollapseLevel), $options);
-    }
-
-    private function dumpNested($variable, int $depth, int $objectCollapseLevel): mixed
-    {
-        $this->buildObjectsCache($variable, $depth);
-        return $this->dumpNestedInternal($variable, $depth, 0, $objectCollapseLevel);
+        return json_encode(
+            $this->dumpNestedInternal($variable, $depth, 0, $objectCollapseLevel, $inlineObject),
+            $options,
+        );
     }
 
     private function getObjectProperties(object $var): array
@@ -106,7 +115,7 @@ final class Dumper
         return (array)$var;
     }
 
-    private function dumpNestedInternal($var, int $depth, int $level, int $objectCollapseLevel = 0): mixed
+    private function dumpNestedInternal($var, int $depth, int $level, int $objectCollapseLevel, bool $inlineObject): mixed
     {
         $output = $var;
 
@@ -119,13 +128,13 @@ final class Dumper
                 $output = [];
                 foreach ($var as $key => $value) {
                     $keyDisplay = str_replace("\0", '::', trim((string)$key));
-                    $output[$keyDisplay] = $this->dumpNestedInternal($value, $depth, $level + 1, $objectCollapseLevel);
+                    $output[$keyDisplay] = $this->dumpNestedInternal($value, $depth, $level + 1, $objectCollapseLevel, $inlineObject);
                 }
 
                 break;
             case 'object':
                 $objectDescription = $this->getObjectDescription($var);
-                if ($depth <= $level || in_array($var::class, $this->excludedClasses, true)) {
+                if ($depth <= $level || array_key_exists($var::class, $this->excludedClasses)) {
                     $output = $objectDescription . ' (...)';
                     break;
                 }
@@ -135,7 +144,7 @@ final class Dumper
                     break;
                 }
 
-                if ($objectCollapseLevel < $level && in_array($var, $this->objects, true)) {
+                if ($objectCollapseLevel < $level && array_key_exists($objectDescription, $this->objects)) {
                     $output = 'object@' . $objectDescription;
                     break;
                 }
@@ -155,8 +164,12 @@ final class Dumper
                         $value,
                         $depth,
                         $level + 1,
-                        $objectCollapseLevel
+                        $objectCollapseLevel,
+                        $inlineObject,
                     );
+                }
+                if ($inlineObject) {
+                    $output = $output[$objectDescription];
                 }
                 break;
             case 'resource':
