@@ -118,8 +118,6 @@ final class Dumper
 
     private function dumpNestedInternal($var, int $depth, int $level, int $objectCollapseLevel, bool $inlineObject): mixed
     {
-        $output = $var;
-
         switch (gettype($var)) {
             case 'array':
                 if ($depth <= $level) {
@@ -129,8 +127,14 @@ final class Dumper
 
                 $output = [];
                 foreach ($var as $key => $value) {
-                    $keyDisplay = str_replace("\0", '::', trim((string)$key));
-                    $output[$keyDisplay] = $this->dumpNestedInternal($value, $depth, $level + 1, $objectCollapseLevel, $inlineObject);
+                    $keyDisplay = str_replace("\0", '::', trim((string) $key));
+                    $output[$keyDisplay] = $this->dumpNestedInternal(
+                        $value,
+                        $depth,
+                        $level + 1,
+                        $objectCollapseLevel,
+                        $inlineObject
+                    );
                 }
 
                 break;
@@ -160,7 +164,7 @@ final class Dumper
                     break;
                 }
                 foreach ($properties as $key => $value) {
-                    $keyDisplay = $this->normalizeProperty((string)$key);
+                    $keyDisplay = $this->normalizeProperty((string) $key);
                     /**
                      * @psalm-suppress InvalidArrayOffset
                      */
@@ -180,6 +184,8 @@ final class Dumper
             case 'resource (closed)':
                 $output = $this->getResourceDescription($var);
                 break;
+            default:
+                $output = $var;
         }
 
         return $output;
@@ -231,10 +237,6 @@ final class Dumper
      */
     private function exportClosure(Closure $closure): string
     {
-        if (self::$closureExporter === null) {
-            self::$closureExporter = new ClosureExporter();
-        }
-
-        return self::$closureExporter->export($closure);
+        return (self::$closureExporter ??= new ClosureExporter())->export($closure);
     }
 }
