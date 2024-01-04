@@ -42,7 +42,8 @@ final class Dumper
      */
     public function asJson(int $depth = 50, bool $format = false): string|bool
     {
-        return $this->asJsonInternal($this->variable, $format, $depth, 0, false, true);
+        $this->buildObjectsCache($this->variable, $depth);
+        return $this->asJsonInternal($this->variable, $format, $depth, 0, false);
     }
 
     /**
@@ -56,8 +57,7 @@ final class Dumper
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string|bool
     {
         $this->buildObjectsCache($this->variable, $depth);
-
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true, false);
+        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true);
     }
 
     private function buildObjectsCache($variable, int $depth, int $level = 0): void
@@ -94,15 +94,11 @@ final class Dumper
         int $depth,
         int $objectCollapseLevel,
         bool $inlineObject,
-        bool $buildCache,
     ): string|bool {
         $options = JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE;
 
         if ($format) {
             $options |= JSON_PRETTY_PRINT;
-        }
-        if ($buildCache) {
-            $this->buildObjectsCache($variable, $depth);
         }
 
         return json_encode(
