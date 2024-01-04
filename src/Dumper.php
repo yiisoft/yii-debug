@@ -20,7 +20,7 @@ final class Dumper
      */
     private function __construct(private mixed $variable, array $excludedClasses = [])
     {
-        $this->excludedClasses = array_reverse($excludedClasses);
+        $this->excludedClasses = array_flip($excludedClasses);
     }
 
     /**
