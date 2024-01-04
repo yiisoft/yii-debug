@@ -31,8 +31,8 @@ final class DumperTest extends TestCase
         yield 'flat std class' => [
             $user,
             <<<S
-                {"stdClass#{$objectId}":{"public \$id":1}}
-                S,
+            {"stdClass#{$objectId}":{"public \$id":1}}
+            S,
         ];
 
         $decoratedUser = clone $user;
@@ -43,8 +43,8 @@ final class DumperTest extends TestCase
         yield 'nested std class' => [
             $decoratedUser,
             <<<S
-                {"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"},"stdClass#{$objectId}":{"public \$id":1}}
-                S,
+            {"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"},"stdClass#{$objectId}":{"public \$id":1}}
+            S,
         ];
 
         $closureInsideObject = new stdClass();
@@ -68,6 +68,57 @@ final class DumperTest extends TestCase
     {
         $output = Dumper::create($variable)->asJson();
         $this->assertEqualsWithoutLE($result, $output);
+    }
+
+    public function testCacheDoesNotCoversObjectOutOfDumpDepth(): void
+    {
+        $object1 = new stdClass();
+        $object1Id = spl_object_id($object1);
+        $object2 = new stdClass();
+
+        $variable = [$object1, [[$object2]]];
+        $expectedResult = sprintf('["object@stdClass#%d",["array (1 item) [...]"]]', $object1Id);
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(2);
+        $this->assertEqualsWithoutLE(
+            <<<S
+            {"stdClass#{$object1Id}":"{stateless object}"}
+            S,
+            $map,
+        );
+    }
+
+    public function testStatelessObjectInlined(): void
+    {
+        $statelessObject = new stdClass();
+        $statelessObjectId = spl_object_id($statelessObject);
+
+        $statefulObject = new stdClass();
+        $statefulObject->id = 1;
+        $statefulObjectId = spl_object_id($statefulObject);
+
+        $variable = [$statelessObject, [$statefulObject]];
+        $expectedResult = sprintf(
+            '["object@stdClass#%d",["stdClass#%d (...)"]]',
+            $statelessObjectId,
+            $statefulObjectId
+        );
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(3);
+        $this->assertEqualsWithoutLE(
+            <<<S
+            {"stdClass#{$statelessObjectId}":"{stateless object}","stdClass#{$statefulObjectId}":{"public \$id":1}}
+            S,
+            $map,
+        );
     }
 
     /**

@@ -157,12 +157,16 @@ final class Dumper
                     break;
                 }
 
-                $output = [];
                 $properties = $this->getObjectProperties($var);
                 if (empty($properties)) {
-                    $output[$objectDescription] = '{stateless object}';
+                    if ($inlineObject) {
+                        $output = '{stateless object}';
+                        break;
+                    }
+                    $output = [$objectDescription => '{stateless object}'];
                     break;
                 }
+                $output = [];
                 foreach ($properties as $key => $value) {
                     $keyDisplay = $this->normalizeProperty((string) $key);
                     /**
