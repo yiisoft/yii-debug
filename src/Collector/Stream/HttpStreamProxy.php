@@ -9,6 +9,8 @@ use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
+use function stream_get_wrappers;
+
 use const SEEK_SET;
 
 class HttpStreamProxy implements StreamWrapperInterface
@@ -72,8 +74,12 @@ class HttpStreamProxy implements StreamWrapperInterface
         class_exists(CombinedRegexp::class);
         stream_wrapper_unregister('http');
         stream_wrapper_register('http', self::class, STREAM_IS_URL);
-        stream_wrapper_unregister('https');
-        stream_wrapper_register('https', self::class, STREAM_IS_URL);
+
+        if (in_array('https', stream_get_wrappers(), true)) {
+            stream_wrapper_unregister('https');
+            stream_wrapper_register('https', self::class, STREAM_IS_URL);
+        }
+
         self::$registered = true;
     }
 

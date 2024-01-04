@@ -47,7 +47,8 @@ abstract class AbstractStorageTest extends TestCase
         }
 
         $result = $storage->read(StorageInterface::TYPE_DATA);
-        $encodedResult = \json_decode(Dumper::create($result)->asJson(), true, 512, JSON_THROW_ON_ERROR);
+        $dumper = Dumper::create($result);
+        $encodedResult = \json_decode($dumper->asJson(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals([$idGenerator->getId() => $encodedExpectedData], $encodedResult);
     }
 
@@ -69,14 +70,13 @@ abstract class AbstractStorageTest extends TestCase
 
     public static function dataProvider(): iterable
     {
-        yield [[1, 2, 3]];
-        yield [['string']];
-        yield [[[['', 0, false]]]];
-        yield [['test']];
-        yield [[false]];
-        yield [[null]];
-        yield [[0]];
-        yield [[new stdClass()]];
+        yield 'integers' => [[1, 2, 3]];
+        yield 'string' => [['string']];
+        yield 'empty values' => [[[['', 0, false]]]];
+        yield 'false' => [[false]];
+        yield 'null' => [[null]];
+        yield 'zero' => [[0]];
+        yield 'stdClass' => [[new stdClass()]];
     }
 
     protected function createFakeCollector(array $data)
