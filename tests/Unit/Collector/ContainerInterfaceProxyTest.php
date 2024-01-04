@@ -27,6 +27,11 @@ use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\TimelineCollector;
+use Yiisoft\Yii\Debug\Tests\Support\Stub\BrokenProxyImplementation;
+use Yiisoft\Yii\Debug\Tests\Support\Stub\Implementation1;
+use Yiisoft\Yii\Debug\Tests\Support\Stub\Implementation2;
+use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface1;
+use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface2;
 
 class ContainerInterfaceProxyTest extends TestCase
 {
@@ -266,6 +271,61 @@ class ContainerInterfaceProxyTest extends TestCase
         $this->assertNotNull($data[0]['error']);
     }
 
+    public function testProxyIsNotNeeded(): void
+    {
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
+        $config=$config->withDecoratedServices([
+            Implementation1::class => Implementation1::class,
+        ]);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $container = $this->createContainer([
+            Implementation1::class => Implementation1::class,
+        ]);
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $implementation = $containerProxy->get(Implementation1::class);
+        $this->assertNotNull($implementation);
+        $this->assertInstanceOf(Implementation1::class, $implementation);
+    }
+
+    public function testBrokenProxyConstructor(): void
+    {
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
+        $config=$config->withDecoratedServices([
+            Interface1::class => [BrokenProxyImplementation::class, stdClass::class],
+        ]);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $container = $this->createContainer([
+            Interface1::class => Implementation1::class,
+        ]);
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $implementation = $containerProxy->get(Interface1::class);
+        $this->assertNotNull($implementation);
+        $this->assertInstanceOf(Implementation1::class, $implementation);
+    }
+
+    public function test1(): void
+    {
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
+        $config=$config->withDecoratedServices([
+            Interface2::class => ['getName' => fn()=>'from tests'],
+        ]);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $container = $this->createContainer([
+            Interface2::class => Implementation2::class,
+        ]);
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $implementation = $containerProxy->get(Interface2::class);
+        $this->assertNotNull($implementation);
+        $this->assertInstanceOf(Interface2::class, $implementation);
+        $this->assertEquals('from tests', $implementation->getName());
+    }
+
     private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig
     {
         return new ContainerProxyConfig(
@@ -284,7 +344,7 @@ class ContainerInterfaceProxyTest extends TestCase
         );
     }
 
-    private function createContainer(): Container
+    private function createContainer(array $definitions = []): Container
     {
         $config = ContainerConfig::create()
             ->withDefinitions([
@@ -293,6 +353,7 @@ class ContainerInterfaceProxyTest extends TestCase
                 LoggerInterface::class => NullLogger::class,
                 LogCollector::class => LogCollector::class,
                 EventCollector::class => EventCollector::class,
+                ...$definitions,
             ]);
         return new Container($config);
     }

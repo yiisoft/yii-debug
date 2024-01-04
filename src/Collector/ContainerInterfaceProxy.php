@@ -127,12 +127,10 @@ class ContainerInterfaceProxy implements ContainerInterface
     private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
     {
         $methods = [];
-        while ($callback = current($callbacks)) {
-            $method = key($callbacks);
+        foreach ($callbacks as $method => $callback) {
             if (is_string($method) && is_callable($callback)) {
                 $methods[$method] = $callback;
             }
-            next($callbacks);
         }
 
         return $this->proxyManager->createObjectProxy(
