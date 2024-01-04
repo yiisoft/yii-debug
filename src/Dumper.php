@@ -72,11 +72,18 @@ final class Dumper
                 return;
             }
             $this->objects[$objectDescription] = $variable;
+            if ($depth <= $level + 1) {
+                return;
+            }
             $variable = $this->getObjectProperties($variable);
         }
         if (is_array($variable)) {
+            $nextLevel = $level + 1;
+            if ($depth <= $nextLevel) {
+                return;
+            }
             foreach ($variable as $value) {
-                $this->buildObjectsCache($value, $depth, $level + 1);
+                $this->buildObjectsCache($value, $depth, $nextLevel);
             }
         }
     }
@@ -138,7 +145,9 @@ final class Dumper
                 }
 
                 if ($var instanceof Closure) {
-                    $output = [$objectDescription => $this->exportClosure($var)];
+                    $output = $inlineObject
+                        ? $this->exportClosure($var)
+                        : [$objectDescription => $this->exportClosure($var)];
                     break;
                 }
 

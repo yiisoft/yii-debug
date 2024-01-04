@@ -22,30 +22,42 @@ final class DumperTest extends TestCase
         $this->assertEquals($expectedResult, $exportResult);
     }
 
-    public function asJsonObjectMapDataProvider(): array
+    public static function asJsonObjectMapDataProvider(): iterable
     {
         $user = new stdClass();
         $user->id = 1;
         $objectId = spl_object_id($user);
+
+        yield 'flat std class' => [
+            $user,
+            <<<S
+                {"stdClass#{$objectId}":{"public \$id":1}}
+                S,
+        ];
 
         $decoratedUser = clone $user;
         $decoratedUser->name = 'Name';
         $decoratedUser->originalUser = $user;
         $decoratedObjectId = spl_object_id($decoratedUser);
 
-        return [
-            [
-                $user,
-                <<<S
-                {"stdClass#{$objectId}":{"public \$id":1}}
-                S,
-            ],
-            [
-                $decoratedUser,
-                <<<S
+        yield 'nested std class' => [
+            $decoratedUser,
+            <<<S
                 {"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"},"stdClass#{$objectId}":{"public \$id":1}}
                 S,
-            ],
+        ];
+
+        $closureInsideObject = new stdClass();
+        $closureObject = fn () => true;
+        $closureObjectId = spl_object_id($closureObject);
+        $closureInsideObject->closure = $closureObject;
+        $closureInsideObjectId = spl_object_id($closureInsideObject);
+
+        yield 'closure inside std class' => [
+            $closureInsideObject,
+            <<<S
+            {"stdClass#{$closureInsideObjectId}":{"public \$closure":"fn () => true"},"Closure#{$closureObjectId}":"fn () => true"}
+            S,
         ];
     }
 
