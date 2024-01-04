@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit;
 
+use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug as D;
@@ -106,6 +107,27 @@ final class DumperTest extends TestCase
         ]
         S;
         $this->assertEqualsWithoutLE($result, $output);
+    }
+
+    public function testExcludedClasses(): void
+    {
+        $object1 = new stdClass();
+        $object1Id = spl_object_id($object1);
+        $object1Class = $object1::class;
+
+        $object2 = new DateTimeZone('UTC');
+        $object2Id = spl_object_id($object2);
+        $object2Class = $object2::class;
+
+        $actualResult = Dumper::create([$object1, $object2], [$object1Class])->asJson(2, true);
+        $expectedResult = <<<S
+        [
+            "{$object1Class}#{$object1Id} (...)",
+            "object@{$object2Class}#{$object2Id}"
+        ]
+        S;
+
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
     }
 
     public static function jsonDataProvider(): iterable

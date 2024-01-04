@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug;
 
 use Closure;
-use JetBrains\PhpStorm\Pure;
 use Yiisoft\VarDumper\ClosureExporter;
 
 final class Dumper
@@ -13,12 +12,12 @@ final class Dumper
     private array $objects = [];
 
     private static ?ClosureExporter $closureExporter = null;
-    private array $excludedClasses = [];
+    private array $excludedClasses;
 
     /**
      * @param mixed $variable Variable to dump.
      */
-    private function __construct(private mixed $variable, array $excludedClasses = [])
+    private function __construct(private mixed $variable, array $excludedClasses)
     {
         $this->excludedClasses = array_flip($excludedClasses);
     }
@@ -28,7 +27,6 @@ final class Dumper
      *
      * @return self An instance containing variable to dump.
      */
-    #[Pure]
     public static function create(mixed $variable, array $excludedClasses = []): self
     {
         return new self($variable, $excludedClasses);
