@@ -33,11 +33,9 @@ final class FileStorage implements StorageInterface
 
     public function __construct(
         private string $path,
-        private DebuggerIdGenerator $idGenerator,
-        private Aliases $aliases,
-        private array $excludedClasses = []
+        private readonly DebuggerIdGenerator $idGenerator,
+        private readonly array $excludedClasses = []
     ) {
-        $this->path = $this->aliases->get($this->path);
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -78,27 +76,22 @@ final class FileStorage implements StorageInterface
 
         try {
             FileHelper::ensureDirectory($basePath);
+
             $dumper = Dumper::create($this->getData(), $this->excludedClasses);
             file_put_contents($basePath . self::TYPE_DATA . '.json', $dumper->asJson(30));
             file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $dumper->asJsonObjectsMap(30));
 
             $summaryData = Dumper::create($this->collectSummaryData())->asJson();
             file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $summaryData);
-
-            $this->gc();
         } finally {
             $this->collectors = [];
+            $this->gc();
         }
     }
 
     public function getData(): array
     {
-        $data = [];
-        foreach ($this->collectors as $name => $collector) {
-            $data[$name] = $collector->getCollected();
-        }
-
-        return $data;
+        return array_map(fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
     }
 
     public function clear(): void
@@ -112,19 +105,17 @@ final class FileStorage implements StorageInterface
     private function collectSummaryData(): array
     {
         $summaryData = [
-            [
-                'id' => $this->idGenerator->getId(),
-                'collectors' => array_keys($this->collectors),
-            ],
+            'id' => $this->idGenerator->getId(),
+            'collectors' => array_keys($this->collectors),
         ];
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof SummaryCollectorInterface) {
-                $summaryData[] = $collector->getSummary();
+                $summaryData = [...$summaryData, ...$collector->getCollected()];
             }
         }
 
-        return array_merge(...$summaryData);
+        return $summaryData;
     }
 
     /**

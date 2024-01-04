@@ -17,16 +17,16 @@ use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 /**
- * @var $params array
+ * @var array $params
  */
 
 $common = [
-    StorageInterface::class => static function (ContainerInterface $container) use ($params) {
+    StorageInterface::class => static function (ContainerInterface $container, Aliases $aliases) use ($params) {
         $params = $params['yiisoft/yii-debug'];
         $debuggerIdGenerator = $container->get(DebuggerIdGenerator::class);
-        $aliases = $container->get(Aliases::class);
         $excludedClasses = $params['dumper.excludedClasses'];
-        $fileStorage = new FileStorage($params['path'], $debuggerIdGenerator, $aliases, $excludedClasses);
+        $fileStorage = new FileStorage($aliases->get($params['path']), $debuggerIdGenerator, $excludedClasses);
+
         if (isset($params['historySize'])) {
             $fileStorage->setHistorySize((int) $params['historySize']);
         }
