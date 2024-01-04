@@ -190,16 +190,16 @@ class ContainerInterfaceProxyTest extends TestCase
     public function testHasThrowsExceptionButErrorInCollectorIsAbsent(): void
     {
         $container = new CompositeContainer();
-        $container->attach(new class implements ContainerInterface {
+        $container->attach(new class () implements ContainerInterface {
             public function get($id)
             {
-                throw new class extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends \Exception implements ContainerExceptionInterface {
                 };
             }
 
             public function has($id): bool
             {
-                throw new class extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends \Exception implements ContainerExceptionInterface {
                 };
             }
         });
@@ -213,7 +213,7 @@ class ContainerInterfaceProxyTest extends TestCase
         $thrown = null;
         try {
             $containerProxy->has('123');
-        }catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $thrown = $e;
         }
 
@@ -232,16 +232,16 @@ class ContainerInterfaceProxyTest extends TestCase
     public function testHasThrowsExceptionAndErrorInCollectorIsNotEmpty(): void
     {
         $container = new CompositeContainer();
-        $container->attach(new class implements ContainerInterface {
+        $container->attach(new class () implements ContainerInterface {
             public function get($id)
             {
-                throw new class extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends \Exception implements ContainerExceptionInterface {
                 };
             }
 
             public function has($id): bool
             {
-                throw new class extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends \Exception implements ContainerExceptionInterface {
                 };
             }
         });
@@ -255,7 +255,7 @@ class ContainerInterfaceProxyTest extends TestCase
         $thrown = null;
         try {
             $containerProxy->has('123');
-        }catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $thrown = $e;
         }
 
@@ -274,7 +274,7 @@ class ContainerInterfaceProxyTest extends TestCase
     public function testProxyIsNotNeeded(): void
     {
         $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
-        $config=$config->withDecoratedServices([
+        $config = $config->withDecoratedServices([
             Implementation1::class => Implementation1::class,
         ]);
         $serviceCollector = $config->getCollector();
@@ -292,7 +292,7 @@ class ContainerInterfaceProxyTest extends TestCase
     public function testBrokenProxyConstructor(): void
     {
         $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
-        $config=$config->withDecoratedServices([
+        $config = $config->withDecoratedServices([
             Interface1::class => [BrokenProxyImplementation::class, stdClass::class],
         ]);
         $serviceCollector = $config->getCollector();
@@ -310,8 +310,8 @@ class ContainerInterfaceProxyTest extends TestCase
     public function test1(): void
     {
         $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
-        $config=$config->withDecoratedServices([
-            Interface2::class => ['getName' => fn()=>'from tests'],
+        $config = $config->withDecoratedServices([
+            Interface2::class => ['getName' => fn() => 'from tests'],
         ]);
         $serviceCollector = $config->getCollector();
         $serviceCollector->startup();

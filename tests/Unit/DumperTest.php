@@ -109,7 +109,7 @@ final class DumperTest extends TestCase
 
     public function testObjectProvidesDebugInfoMethod(): void
     {
-        $variable = new class() {
+        $variable = new class () {
             public function __debugInfo(): array
             {
                 return ['test' => 'ok'];
