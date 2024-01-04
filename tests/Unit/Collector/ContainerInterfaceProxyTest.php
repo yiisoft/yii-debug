@@ -12,6 +12,7 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use stdClass;
+use Yiisoft\Di\CompositeContainer;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
@@ -53,7 +54,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetAndHas(): void
     {
-        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
+        $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $this->createConfig());
 
         $this->assertTrue($containerProxy->isActive());
         $this->assertTrue($containerProxy->has(LoggerInterface::class));
@@ -62,7 +63,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetAndHasWithCallableServices(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $config = new ContainerProxyConfig(
             true,
             [
@@ -75,9 +76,9 @@ class ContainerInterfaceProxyTest extends TestCase
             $dispatcherMock,
             $this->createServiceCollector(),
             $this->path,
-            1
+            ContainerInterfaceProxy::LOG_ARGUMENTS
         );
-        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $config);
+        $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $config);
 
         $this->assertTrue($containerProxy->isActive());
         $this->assertTrue($containerProxy->has(LoggerInterface::class));
@@ -89,7 +90,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetWithArrayConfigWithStringKeys(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $serviceCollector = $this->createServiceCollector();
         $serviceCollector->startup(); // activate collector
 
@@ -105,9 +106,9 @@ class ContainerInterfaceProxyTest extends TestCase
             $dispatcherMock,
             $serviceCollector,
             $this->path,
-            1
+            ContainerInterfaceProxy::LOG_ARGUMENTS
         );
-        $container = $this->getContainer();
+        $container = $this->createContainer();
         $containerProxy = new ContainerInterfaceProxy($container, $config);
 
         $this->assertTrue($containerProxy->isActive());
@@ -120,7 +121,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetWithoutConfig(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $dispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $config = new ContainerProxyConfig(
             true,
             [
@@ -130,9 +131,9 @@ class ContainerInterfaceProxyTest extends TestCase
             $dispatcherMock,
             $this->createServiceCollector(),
             $this->path,
-            1
+            ContainerInterfaceProxy::LOG_ARGUMENTS
         );
-        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $config);
+        $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $config);
 
         $this->assertInstanceOf(EventDispatcherInterface::class, $containerProxy->get(EventDispatcherInterface::class));
         $this->assertInstanceOf(
@@ -143,7 +144,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetAndHasWithWrongId(): void
     {
-        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
+        $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $this->createConfig());
 
         $this->assertFalse($containerProxy->has(CollectorInterface::class));
 
@@ -160,7 +161,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetContainerItself(): void
     {
-        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
+        $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $this->createConfig());
 
         $this->assertTrue($containerProxy->has(ContainerInterface::class));
 
@@ -171,7 +172,7 @@ class ContainerInterfaceProxyTest extends TestCase
 
     public function testGetAndHasWithNotService(): void
     {
-        $containerProxy = new ContainerInterfaceProxy($this->getContainer(), $this->getConfig());
+        $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $this->createConfig());
 
         $this->assertTrue($containerProxy->has(ListenerProviderInterface::class));
         $this->assertNotNull($containerProxy->get(ListenerProviderInterface::class));
@@ -181,10 +182,92 @@ class ContainerInterfaceProxyTest extends TestCase
         );
     }
 
-    private function getConfig(): ContainerProxyConfig
+    public function testHasThrowsExceptionButErrorInCollectorIsAbsent(): void
     {
-        $dispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        $container = new CompositeContainer();
+        $container->attach(new class implements ContainerInterface {
+            public function get($id)
+            {
+                throw new class extends \Exception implements ContainerExceptionInterface {
+                };
+            }
 
+            public function has($id): bool
+            {
+                throw new class extends \Exception implements ContainerExceptionInterface {
+                };
+            }
+        });
+        $container->attach($container);
+
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_NOTHING);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $thrown = null;
+        try {
+            $containerProxy->has('123');
+        }catch (\Throwable $e) {
+            $thrown = $e;
+        }
+
+        $this->assertNotNull($thrown);
+        $this->assertNotNull($containerProxy->getCurrentError());
+
+        $data = $serviceCollector->getCollected();
+        $this->assertCount(1, $data);
+        $this->assertSame(ContainerInterface::class, $data[0]['service']);
+        $this->assertSame(CompositeContainer::class, $data[0]['class']);
+        $this->assertSame('has', $data[0]['method']);
+        $this->assertSame('failed', $data[0]['status']);
+        $this->assertNull($data[0]['error']);
+    }
+
+    public function testHasThrowsExceptionAndErrorInCollectorIsNotEmpty(): void
+    {
+        $container = new CompositeContainer();
+        $container->attach(new class implements ContainerInterface {
+            public function get($id)
+            {
+                throw new class extends \Exception implements ContainerExceptionInterface {
+                };
+            }
+
+            public function has($id): bool
+            {
+                throw new class extends \Exception implements ContainerExceptionInterface {
+                };
+            }
+        });
+        $container->attach($container);
+
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $thrown = null;
+        try {
+            $containerProxy->has('123');
+        }catch (\Throwable $e) {
+            $thrown = $e;
+        }
+
+        $this->assertNotNull($thrown);
+        $this->assertNotNull($containerProxy->getCurrentError());
+
+        $data = $serviceCollector->getCollected();
+        $this->assertCount(1, $data);
+        $this->assertSame(ContainerInterface::class, $data[0]['service']);
+        $this->assertSame(CompositeContainer::class, $data[0]['class']);
+        $this->assertSame('has', $data[0]['method']);
+        $this->assertSame('failed', $data[0]['status']);
+        $this->assertNotNull($data[0]['error']);
+    }
+
+    private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig
+    {
         return new ContainerProxyConfig(
             true,
             [
@@ -194,14 +277,14 @@ class ContainerInterfaceProxyTest extends TestCase
                     EventCollector::class,
                 ],
             ],
-            $dispatcherMock,
+            $this->createMock(EventDispatcherInterface::class),
             $this->createServiceCollector(),
             $this->path,
-            1
+            $logLevel
         );
     }
 
-    private function getContainer(): Container
+    private function createContainer(): Container
     {
         $config = ContainerConfig::create()
             ->withDefinitions([
