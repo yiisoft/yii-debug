@@ -69,7 +69,7 @@ final class Dumper
         }
         if (is_object($variable)) {
             if (array_key_exists($variable::class, $this->excludedClasses) ||
-                array_key_exists(($objectDescription = $this->getObjectDescription($variable)), $this->objects)
+                array_key_exists($objectDescription = $this->getObjectDescription($variable), $this->objects)
             ) {
                 return;
             }
@@ -90,8 +90,7 @@ final class Dumper
         int $objectCollapseLevel,
         bool $inlineObject,
         bool $buildCache,
-    ): string|bool
-    {
+    ): string|bool {
         $options = JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE;
 
         if ($format) {
