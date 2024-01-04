@@ -127,7 +127,8 @@ final class Dumper
         switch (gettype($var)) {
             case 'array':
                 if ($depth <= $level) {
-                    return 'array [...]';
+                    $valuesCount = count($var);
+                    return sprintf('array (%d %s) [...]', $valuesCount, $valuesCount === 1 ? 'item' : 'items');
                 }
 
                 $output = [];

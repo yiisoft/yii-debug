@@ -70,12 +70,26 @@ final class DumperTest extends TestCase
         $this->assertEqualsWithoutLE($result, $output);
     }
 
-    public function testDeepNestedArray(): void
+    /**
+     * @dataProvider dataDeepNestedArray
+     */
+    public function testDeepNestedArray(array $variable, string $expectedResult): void
     {
-        $variable = [[[[[['test']]]]]];
-        $output = Dumper::create($variable)->asJson(2);
-        $result = '[["array [...]"]]';
-        $this->assertEqualsWithoutLE($result, $output);
+        $actualResult = Dumper::create($variable)->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+    }
+
+    public static function dataDeepNestedArray(): iterable
+    {
+        yield 'singular' => [
+            [[['test']]],
+            '[["array (1 item) [...]"]]',
+        ];
+
+        yield 'plural' => [
+            [[['test', 'test'], ['test']]],
+            '[["array (2 items) [...]","array (1 item) [...]"]]',
+        ];
     }
 
     public function testDeepNestedObject(): void
