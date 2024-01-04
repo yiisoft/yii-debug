@@ -92,6 +92,42 @@ final class DumperTest extends TestCase
         );
     }
 
+    public function testDepthLimitInObjectMap(): void
+    {
+        $variable = [1, []];
+        $expectedResult = sprintf(
+            '"array (2 items) [...]"',
+        );
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(0);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(0);
+        $this->assertEqualsWithoutLE('[]', $map);
+    }
+
+    public function testObjectProvidesDebugInfoMethod(): void
+    {
+        $variable = new class() {
+            public function __debugInfo(): array
+            {
+                return ['test' => 'ok'];
+            }
+        };
+        $expectedResult = sprintf(
+            '{"class@anonymous#%d":{"public $test":"ok"}}',
+            spl_object_id($variable),
+        );
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(2);
+        $this->assertEqualsWithoutLE($expectedResult, $map);
+    }
+
     public function testStatelessObjectInlined(): void
     {
         $statelessObject = new stdClass();

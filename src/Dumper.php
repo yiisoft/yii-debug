@@ -113,15 +113,23 @@ final class Dumper
             $var = $var->__debugInfo();
         }
 
-        return (array)$var;
+        return (array) $var;
     }
 
-    private function dumpNestedInternal($var, int $depth, int $level, int $objectCollapseLevel, bool $inlineObject): mixed
-    {
+    private function dumpNestedInternal(
+        $var,
+        int $depth,
+        int $level,
+        int $objectCollapseLevel,
+        bool $inlineObject
+    ): mixed {
         switch (gettype($var)) {
             case 'array':
                 if ($depth <= $level) {
                     $valuesCount = count($var);
+                    if ($valuesCount === 0) {
+                        return [];
+                    }
                     return sprintf('array (%d %s) [...]', $valuesCount, $valuesCount === 1 ? 'item' : 'items');
                 }
 
@@ -197,6 +205,9 @@ final class Dumper
 
     private function getObjectDescription(object $object): string
     {
+        if (str_contains($object::class, '@anonymous')) {
+            return 'class@anonymous#' . spl_object_id($object);
+        }
         return $object::class . '#' . spl_object_id($object);
     }
 
