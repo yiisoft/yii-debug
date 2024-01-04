@@ -79,12 +79,8 @@ final class FileStorage implements StorageInterface
         try {
             FileHelper::ensureDirectory($basePath);
             $dumper = Dumper::create($this->getData(), $this->excludedClasses);
-            $jsonData = $dumper->asJson();
-            file_put_contents($basePath . self::TYPE_DATA . '.json', $jsonData);
-
-            $jsonObjects = Json::decode($dumper->asJsonObjectsMap());
-            $jsonObjects = $this->reindexObjects($jsonObjects);
-            file_put_contents($basePath . self::TYPE_OBJECTS . '.json', Dumper::create($jsonObjects)->asJson());
+            file_put_contents($basePath . self::TYPE_DATA . '.json', $dumper->asJson(30));
+            file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $dumper->asJsonObjectsMap(30));
 
             $summaryData = Dumper::create($this->collectSummaryData())->asJson();
             file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $summaryData);
