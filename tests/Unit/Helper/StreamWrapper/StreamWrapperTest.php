@@ -9,6 +9,11 @@ use Yiisoft\Yii\Debug\Tests\Support\Stub\PhpStreamProxy;
 
 final class StreamWrapperTest extends TestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        PhpStreamProxy::unregister();
+    }
+
     public function testSeekStream(): void
     {
         $handle = fopen('php://memory', 'rw');

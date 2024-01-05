@@ -9,6 +9,11 @@ use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamProxy;
 
 final class FilesystemStreamProxyTest extends TestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        FilesystemStreamProxy::unregister();
+    }
+
     public function testRegisteredTwice()
     {
         FilesystemStreamProxy::unregister();

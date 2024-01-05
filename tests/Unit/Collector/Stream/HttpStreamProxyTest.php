@@ -9,6 +9,11 @@ use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamProxy;
 
 final class HttpStreamProxyTest extends TestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        HttpStreamProxy::unregister();
+    }
+
     public function testRegisteredTwice()
     {
         HttpStreamProxy::unregister();
