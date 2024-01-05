@@ -80,9 +80,8 @@ final class FileStorageTest extends AbstractStorageTest
     public function getStorage(DebuggerIdGenerator $idGenerator): FileStorage
     {
         return new FileStorage(
-            $this->path,
+            (new Aliases())->get($this->path),
             $idGenerator,
-            new Aliases()
         );
     }
 }

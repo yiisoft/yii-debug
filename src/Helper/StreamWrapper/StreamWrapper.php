@@ -88,7 +88,9 @@ final class StreamWrapper implements StreamWrapperInterface
     {
         $this->filename = realpath($path) ?: $path;
 
-        if ((self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE && function_exists('opcache_invalidate')) {
+        if ((self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE && function_exists(
+            'opcache_invalidate'
+        )) {
             opcache_invalidate($path, false);
         }
         $this->stream = fopen(
@@ -182,7 +184,9 @@ final class StreamWrapper implements StreamWrapperInterface
         /**
          * @psalm-suppress InvalidPropertyAssignmentValue
          */
-        fclose($this->stream);
+        if ($this->stream !== null) {
+            fclose($this->stream);
+        }
         $this->stream = null;
     }
 

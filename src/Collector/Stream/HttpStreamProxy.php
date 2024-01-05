@@ -47,6 +47,9 @@ class HttpStreamProxy implements StreamWrapperInterface
 
     public function __destruct()
     {
+        if (self::$collector === null) {
+            return;
+        }
         foreach ($this->operations as $name => $operation) {
             self::$collector->collect(
                 operation: $name,
@@ -54,6 +57,7 @@ class HttpStreamProxy implements StreamWrapperInterface
                 args: $operation['args'],
             );
         }
+        self::unregister();
     }
 
     public function __get(string $name)

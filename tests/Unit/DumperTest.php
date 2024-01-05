@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit;
 
+use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug as D;
@@ -21,30 +22,42 @@ final class DumperTest extends TestCase
         $this->assertEquals($expectedResult, $exportResult);
     }
 
-    public function asJsonObjectMapDataProvider(): array
+    public static function asJsonObjectMapDataProvider(): iterable
     {
         $user = new stdClass();
         $user->id = 1;
         $objectId = spl_object_id($user);
+
+        yield 'flat std class' => [
+            $user,
+            <<<S
+            {"stdClass#{$objectId}":{"public \$id":1}}
+            S,
+        ];
 
         $decoratedUser = clone $user;
         $decoratedUser->name = 'Name';
         $decoratedUser->originalUser = $user;
         $decoratedObjectId = spl_object_id($decoratedUser);
 
-        return [
-            [
-                $user,
-                <<<S
-                {"stdClass#{$objectId}":{"public \$id":1}}
-                S,
-            ],
-            [
-                $decoratedUser,
-                <<<S
-                {"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"},"stdClass#{$objectId}":{"public \$id":1}}
-                S,
-            ],
+        yield 'nested std class' => [
+            $decoratedUser,
+            <<<S
+            {"stdClass#{$decoratedObjectId}":{"public \$id":1,"public \$name":"Name","public \$originalUser":"object@stdClass#{$objectId}"},"stdClass#{$objectId}":{"public \$id":1}}
+            S,
+        ];
+
+        $closureInsideObject = new stdClass();
+        $closureObject = fn () => true;
+        $closureObjectId = spl_object_id($closureObject);
+        $closureInsideObject->closure = $closureObject;
+        $closureInsideObjectId = spl_object_id($closureInsideObject);
+
+        yield 'closure inside std class' => [
+            $closureInsideObject,
+            <<<S
+            {"stdClass#{$closureInsideObjectId}":{"public \$closure":"fn () => true"},"Closure#{$closureObjectId}":"fn () => true"}
+            S,
         ];
     }
 
@@ -57,12 +70,113 @@ final class DumperTest extends TestCase
         $this->assertEqualsWithoutLE($result, $output);
     }
 
-    public function testDeepNestedArray(): void
+    public function testCacheDoesNotCoversObjectOutOfDumpDepth(): void
     {
-        $variable = [[[[[['test']]]]]];
-        $output = Dumper::create($variable)->asJson(2);
-        $result = '[["array [...]"]]';
-        $this->assertEqualsWithoutLE($result, $output);
+        $object1 = new stdClass();
+        $object1Id = spl_object_id($object1);
+        $object2 = new stdClass();
+
+        $variable = [$object1, [[$object2]]];
+        $expectedResult = sprintf('["object@stdClass#%d",["array (1 item) [...]"]]', $object1Id);
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(2);
+        $this->assertEqualsWithoutLE(
+            <<<S
+            {"stdClass#{$object1Id}":"{stateless object}"}
+            S,
+            $map,
+        );
+    }
+
+    public function testDepthLimitInObjectMap(): void
+    {
+        $variable = [1, []];
+        $expectedResult = sprintf(
+            '"array (2 items) [...]"',
+        );
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(0);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(0);
+        $this->assertEqualsWithoutLE('[]', $map);
+    }
+
+    public function testObjectProvidesDebugInfoMethod(): void
+    {
+        $variable = new class () {
+            public function __debugInfo(): array
+            {
+                return ['test' => 'ok'];
+            }
+        };
+        $expectedResult = sprintf(
+            '{"class@anonymous#%d":{"public $test":"ok"}}',
+            spl_object_id($variable),
+        );
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(2);
+        $this->assertEqualsWithoutLE($expectedResult, $map);
+    }
+
+    public function testStatelessObjectInlined(): void
+    {
+        $statelessObject = new stdClass();
+        $statelessObjectId = spl_object_id($statelessObject);
+
+        $statefulObject = new stdClass();
+        $statefulObject->id = 1;
+        $statefulObjectId = spl_object_id($statefulObject);
+
+        $variable = [$statelessObject, [$statefulObject]];
+        $expectedResult = sprintf(
+            '["object@stdClass#%d",["stdClass#%d (...)"]]',
+            $statelessObjectId,
+            $statefulObjectId
+        );
+
+        $dumper = Dumper::create($variable);
+        $actualResult = $dumper->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+
+        $map = $dumper->asJsonObjectsMap(3);
+        $this->assertEqualsWithoutLE(
+            <<<S
+            {"stdClass#{$statelessObjectId}":"{stateless object}","stdClass#{$statefulObjectId}":{"public \$id":1}}
+            S,
+            $map,
+        );
+    }
+
+    /**
+     * @dataProvider dataDeepNestedArray
+     */
+    public function testDeepNestedArray(array $variable, string $expectedResult): void
+    {
+        $actualResult = Dumper::create($variable)->asJson(2);
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
+    }
+
+    public static function dataDeepNestedArray(): iterable
+    {
+        yield 'singular' => [
+            [[['test']]],
+            '[["array (1 item) [...]"]]',
+        ];
+
+        yield 'plural' => [
+            [[['test', 'test'], ['test']]],
+            '[["array (2 items) [...]","array (1 item) [...]"]]',
+        ];
     }
 
     public function testDeepNestedObject(): void
@@ -106,6 +220,27 @@ final class DumperTest extends TestCase
         ]
         S;
         $this->assertEqualsWithoutLE($result, $output);
+    }
+
+    public function testExcludedClasses(): void
+    {
+        $object1 = new stdClass();
+        $object1Id = spl_object_id($object1);
+        $object1Class = $object1::class;
+
+        $object2 = new DateTimeZone('UTC');
+        $object2Id = spl_object_id($object2);
+        $object2Class = $object2::class;
+
+        $actualResult = Dumper::create([$object1, $object2], [$object1Class])->asJson(2, true);
+        $expectedResult = <<<S
+        [
+            "{$object1Class}#{$object1Id} (...)",
+            "object@{$object2Class}#{$object2Id}"
+        ]
+        S;
+
+        $this->assertEqualsWithoutLE($expectedResult, $actualResult);
     }
 
     public static function jsonDataProvider(): iterable
