@@ -25,6 +25,11 @@ final class PhpStreamProxy implements StreamWrapperInterface
         $this->decorated->context = $this->context;
     }
 
+    public function __destruct()
+    {
+        self::unregister();
+    }
+
     public function __call(string $name, array $arguments)
     {
         try {

@@ -54,6 +54,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
                 args: $operation['args'],
             );
         }
+        self::unregister();
     }
 
     public function __get(string $name)

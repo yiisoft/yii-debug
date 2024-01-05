@@ -192,6 +192,9 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_lock(int $operation): bool
     {
+        if ($operation === 0) {
+            $operation = LOCK_EX;
+        }
         return flock($this->stream, $operation);
     }
 
