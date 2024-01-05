@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Tests\Support\Stub\PhpStreamProxy;
 
 final class StreamWrapperTest extends TestCase
 {
-    public static function tearDownAfterClass(): void
+    protected function tearDown(): void
     {
         PhpStreamProxy::unregister();
     }

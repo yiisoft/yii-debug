@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamProxy;
 
 final class HttpStreamProxyTest extends TestCase
 {
-    public static function tearDownAfterClass(): void
+    protected function tearDown(): void
     {
         HttpStreamProxy::unregister();
     }
