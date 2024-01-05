@@ -184,15 +184,14 @@ final class StreamWrapper implements StreamWrapperInterface
         /**
          * @psalm-suppress InvalidPropertyAssignmentValue
          */
-        fclose($this->stream);
+        if ($this->stream !== null) {
+            fclose($this->stream);
+        }
         $this->stream = null;
     }
 
     public function stream_lock(int $operation): bool
     {
-        if ($operation === 0) {
-            $operation = LOCK_EX;
-        }
         return flock($this->stream, $operation);
     }
 
