@@ -178,5 +178,4 @@ final class PhpStreamProxy implements StreamWrapperInterface
     {
         return $this->__call(__FUNCTION__, func_get_args());
     }
-
 }
