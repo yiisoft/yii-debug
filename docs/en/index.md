@@ -11,6 +11,7 @@
 - [Service Collector](./collector/service.md)
 - [VarDumper Collector](./collector/var-dumper.md)
 - [Log Collector](./collector/logger.md)
+- [Event Collector](./collector/event-dispatcher.md)
 
 ## Console commands
 - [`debug:reset`](./command-reset.md)
