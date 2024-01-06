@@ -54,7 +54,7 @@ to be able to interact with collected data through UI.
 
 ### Documentation
 
-[English](docs/en/index.md)
+[English](docs/en/README.md)
 
 ### Unit testing
 
