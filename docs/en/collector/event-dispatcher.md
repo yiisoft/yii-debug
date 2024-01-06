@@ -1,6 +1,4 @@
-# Collectors
-
-## [EventDispatcher collector](./../../../src/Collector/EventCollector.php)
+# [EventDispatcher collector](./../../../src/Collector/EventCollector.php)
 
 `EventCollector` collects all events dispatched by [`\Psr\EventDispatcher\EventDispatcherInterface`](https://github.com/php-fig/event-dispatcher/blob/master/src/EventDispatcherInterface.php).
 
