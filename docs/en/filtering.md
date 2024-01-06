@@ -1,6 +1,6 @@
 # Filtering
 
-Disabling debugging for certain requests or console commands may help you to debug in production or not to flood the debug storage with useful payloads.
+Disabling debugging for certain requests or console commands may help you to debug in production or not to flood the debug storage with useless payloads.
 
 You can specify which routes should not trigger the Debug extension by adding the ones into the configuration:
 

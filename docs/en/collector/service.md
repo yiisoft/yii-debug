@@ -1,6 +1,4 @@
-# Collectors
-
-## Service collector
+# Service collector
 
 `ServiceCollector` is a collector that listens all tracked services and collects its arguments, results and errors.
 

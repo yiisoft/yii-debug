@@ -1,6 +1,4 @@
-# Console commands
-
-## `debug:container`
+# `debug:container`
 
 The `debug/container` command displays all registered services and config groups.
 

@@ -1,11 +1,9 @@
-# Collector
-
-## Collectors
+# Collectors
 
 Yii Debug uses a concept named "collectors".
-Each collector decides what payload it needs to collect and exports the collected payload in order to save it into storage.
+Each collector decides what payload it needs to collect and exports the collected payload that is later will be saved into a storage.
 
-A collector may work either both with HTTP requests and console runs, or individually.
+A collector may work either with both HTTP requests and console runs, or individually.
 A collector may be either an event listener or a decorator to any service defined in the application DI container configuration.
 
 Take a look at the [`Yiisoft\Yii\Debug\Collector\CollectorInterface`](./src/Collector/CollectorInterface.php):
@@ -39,7 +37,7 @@ interface CollectorInterface
 }
 ```
 
-Use the trait to reduce the duplication of code and any possible bugs: [`\Yiisoft\Yii\Debug\Collector\CollectorTrait`](./src/Collector/CollectorTrait.php)
+Use the trait to reduce the duplication of code and avoid possible bugs: [`\Yiisoft\Yii\Debug\Collector\CollectorTrait`](./src/Collector/CollectorTrait.php)
 
 All you need to create a collector is to implement the interface and register it in the configuration.
 
@@ -62,7 +60,7 @@ class MyCollector implements \Yiisoft\Yii\Debug\Collector\CollectorInterface
 }
 ```
 
-When you implement collecting payload, it is also a good idea to implement data reset. With `CollectorTrait` it is as simple as adding `reset` method:
+If you implement data collection, it's also a good idea to implement data reset. With `CollectorTrait` it's as simple as adding `reset()` method:
 ```php
     private function reset(): void
     {
@@ -99,7 +97,7 @@ Under `yiisoft/yii-debug` configuration you may use:
 > Do not register a collector for a session where the collector will not collect any payload.
 
 
-The lines above connect collectors with a debug extension run.
+The lines above connect collectors with the debugger.
 Under the hood it calls `getCollected()` method from the collectors at the end of application cycle run.
 
 ### Event listener collector
