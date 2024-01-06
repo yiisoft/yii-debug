@@ -1,6 +1,4 @@
-# Console commands
-
-## `debug:events`
+# `debug:events`
 
 The `debug/events` command displays all registered events and their listeners.
 

@@ -1,8 +1,4 @@
-# Collectors
-
-Read more about collectors in the [Collector](../collector.md) section.
-
-## Summary collector
+# Summary collector
 
 Summary collector is a collector that provides additional "summary" payload.
 The summary payload is used to reduce time to read usual payload and summarise some metrics to get better UX.
