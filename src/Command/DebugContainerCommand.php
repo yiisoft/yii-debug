@@ -118,7 +118,7 @@ final class DebugContainerCommand extends Command
             $groups = array_keys($build);
             ksort($groups);
 
-            $io->table(['Group'], array_map(fn ($group) => [$group], $groups));
+            $io->table(['Groups'], array_map(fn ($group) => [$group], $groups));
 
             return ExitCode::OK;
         }
