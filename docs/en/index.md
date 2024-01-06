@@ -9,6 +9,7 @@
 - [Main concept](./collector.md)
 - [Summary collectors](./collector/summary.md)
 - [Service Collector](./collector/service.md)
+- [VarDumper Collector](./collector/var-dumper.md)
 
 ## Console commands
 - [`debug:reset`](./command-reset.md)
