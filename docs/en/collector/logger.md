@@ -1,6 +1,4 @@
-# Collectors
-
-## [Log collector](./../../../src/Collector/LogCollector.php)
+# [Log collector](./../../../src/Collector/LogCollector.php)
 
 `LogCollector` collects all data logged by [`\Psr\Log\LoggerInterface`](https://github.com/php-fig/log/blob/master/src/LoggerInterface.php).
 
