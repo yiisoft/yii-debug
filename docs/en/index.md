@@ -1,5 +1,10 @@
 # Documentation
 
+## Configuration
+
+- [Filtering requests and console commands](./filtering.md)
+- [Logging storage](./logging.md)
+
 ## Collectors
 - [Main concept](./collector.md)
 - [Summary collectors](./collector/summary.md)
