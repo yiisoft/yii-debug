@@ -1,6 +1,4 @@
-# Collectors
-
-## [HttpClient collector](./../../../src/Collector/HttpClientCollector.php)
+# [HttpClient collector](./../../../src/Collector/HttpClientCollector.php)
 
 `HttpClientCollector` collects all requests sent by [`Psr\Http\Client\ClientInterface`](https://github.com/php-fig/http-client/blob/master/src/ClientInterface.php).
 
