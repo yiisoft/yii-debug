@@ -25,7 +25,7 @@ phpunit.phar
 # local PhpUnit config
 /phpunit.xml
 # PhpUnit cache
-/.phpunit.result.cache
+/.phpunit.cache
 
 # local tests configuration
 /tests/data/config.local.php
