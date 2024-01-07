@@ -57,6 +57,8 @@ Output:
 
 ```json
 {
-    "total": 2
+    "logger": {
+        "total": 2
+    }
 }
 ```

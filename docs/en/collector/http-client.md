@@ -52,7 +52,9 @@ Output:
 
 ```json
 {
-    "count": 1,
-    "totalTime": 0.14657306671142578
+    "http": {
+        "count": 1,
+        "totalTime": 0.14657306671142578
+    }
 }
 ```

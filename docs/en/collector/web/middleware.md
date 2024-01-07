@@ -243,6 +243,8 @@ Output:
 
 ```json
 {
-    "total": 12
+    "middleware": {
+        "total": 12
+    }
 }
 ```

@@ -45,6 +45,8 @@ Output:
 
 ```json
 {
-    "total": 1
+    "event": {
+        "total": 1
+    }
 }
 ```
