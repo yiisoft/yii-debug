@@ -11,14 +11,14 @@ use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
 use const SEEK_SET;
 
-class FilesystemStreamProxy implements StreamWrapperInterface
+final class FilesystemStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
     /**
      * @var resource|null
      */
     public $context;
-    public StreamWrapperInterface $decorated;
+    public StreamWrapper $decorated;
     public bool $ignored = false;
 
     public static ?FilesystemStreamCollector $collector = null;

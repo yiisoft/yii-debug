@@ -32,6 +32,10 @@ final class StreamWrapper implements StreamWrapperInterface
     public function dir_closedir(): bool
     {
         closedir($this->stream);
+
+        /**
+         * @psalm-suppress RedundantCondition
+         */
         return is_resource($this->stream);
     }
 
@@ -54,7 +58,11 @@ final class StreamWrapper implements StreamWrapperInterface
         }
 
         rewinddir($this->stream);
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
+
+        /**
+         * @noinspection PhpConditionAlreadyCheckedInspection
+         * @psalm-suppress RedundantCondition
+         */
         return is_resource($this->stream);
     }
 

@@ -68,7 +68,7 @@ final class RequestCollector implements SummaryCollectorInterface
 
     public function collect(object $event): void
     {
-        if (!is_object($event) || !$this->isActive()) {
+        if (!$this->isActive()) {
             return;
         }
 
