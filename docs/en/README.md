@@ -21,6 +21,7 @@
 
 ### Console collectors
 - [Command Collector](collector/console/command.md)
+- [ConsoleAppInfo Collector](collector/console/console-app-info.md)
 
 ## Console commands
 - [`debug:reset`](./command-reset.md)
