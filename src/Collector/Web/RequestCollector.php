@@ -13,8 +13,6 @@ use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-use function is_object;
-
 final class RequestCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
