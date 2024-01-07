@@ -59,11 +59,11 @@ final class ContainerInterfaceProxy implements ContainerInterface
         if (
             is_object($instance)
             && (
-                ($proxy = $this->getServiceProxyCache($instance::class)) ||
-                ($proxy = $this->getServiceProxy($instance::class, $instance))
+                ($proxy = $this->getServiceProxyCache($id)) ||
+                ($proxy = $this->getServiceProxy($id, $instance))
             )
         ) {
-            $this->setServiceProxyCache($instance::class, $proxy);
+            $this->setServiceProxyCache($id, $proxy);
             return $proxy;
         }
 
@@ -97,9 +97,6 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $this->serviceProxy[$service] ?? null;
     }
 
-    /**
-     * @psalm-param class-string $service
-     */
     private function getServiceProxy(string $service, object $instance): ?object
     {
         if (!$this->isDecorated($service)) {
@@ -130,9 +127,6 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $callback($this);
     }
 
-    /**
-     * @psalm-param class-string $service
-     */
     private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
     {
         $methods = [];
@@ -140,6 +134,10 @@ final class ContainerInterfaceProxy implements ContainerInterface
             if (is_string($method) && is_callable($callback)) {
                 $methods[$method] = $callback;
             }
+        }
+
+        if (!class_exists($service) && !interface_exists($service)) {
+            return null;
         }
 
         return $this->proxyManager->createObjectProxy(

@@ -33,7 +33,7 @@ use Yiisoft\Yii\Debug\Tests\Support\Stub\Implementation2;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface1;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface2;
 
-class ContainerInterfaceProxyTest extends TestCase
+final class ContainerInterfaceProxyTest extends TestCase
 {
     private string $path = 'tests/container-proxy';
 
@@ -323,7 +323,7 @@ class ContainerInterfaceProxyTest extends TestCase
         $implementation = $containerProxy->get(Interface2::class);
         $this->assertNotNull($implementation);
         $this->assertInstanceOf(Interface2::class, $implementation);
-        $this->assertEquals('from tests', $implementation->getName());
+        $this->assertSame('from tests', $implementation->getName());
     }
 
     private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig
