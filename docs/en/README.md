@@ -14,6 +14,9 @@
 - [Event Collector](./collector/event-dispatcher.md)
 - [HttpClient Collector](./collector/http-client.md)
 
+### Web collectors
+- [Middleware Collector](collector/web/middleware.md)
+
 ## Console commands
 - [`debug:reset`](./command-reset.md)
 - [`debug:container`](./command-container.md)
