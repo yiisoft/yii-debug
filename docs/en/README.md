@@ -13,6 +13,7 @@
 - [Log Collector](./collector/logger.md)
 - [Event Collector](./collector/event-dispatcher.md)
 - [HttpClient Collector](./collector/http-client.md)
+- [Exception Collector](./collector/exception.md)
 
 ### Web collectors
 - [Middleware Collector](collector/web/middleware.md)
