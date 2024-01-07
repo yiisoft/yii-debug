@@ -17,6 +17,7 @@
 ### Web collectors
 - [Middleware Collector](collector/web/middleware.md)
 - [Request Collector](collector/web/request.md)
+- [WebAppInfo Collector](collector/web/web-app-info.md)
 
 ## Console commands
 - [`debug:reset`](./command-reset.md)
