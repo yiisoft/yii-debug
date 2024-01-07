@@ -19,6 +19,9 @@
 - [Request Collector](collector/web/request.md)
 - [WebAppInfo Collector](collector/web/web-app-info.md)
 
+### Console collectors
+- [Command Collector](collector/console/command.md)
+
 ## Console commands
 - [`debug:reset`](./command-reset.md)
 - [`debug:container`](./command-container.md)
