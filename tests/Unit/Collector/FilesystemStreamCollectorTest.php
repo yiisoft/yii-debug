@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
@@ -33,9 +34,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         );
     }
 
-    /**
-     * @dataProvider dataSkipCollectOnMatchIgnoreReferences
-     */
+    #[DataProvider('dataSkipCollectOnMatchIgnoreReferences')]
     public function testSkipCollectOnMatchIgnoreReferences(
         string $path,
         callable $before,
@@ -64,7 +63,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
         $this->assertEquals($result, $collected);
     }
 
-    public function dataSkipCollectOnMatchIgnoreReferences(): iterable
+    public static function dataSkipCollectOnMatchIgnoreReferences(): iterable
     {
         $mkdirBefore = function (string $path) {
             if (is_dir($path)) {

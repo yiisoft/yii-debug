@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
@@ -27,9 +29,7 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
         );
     }
 
-    /**
-     * @dataProvider dataSkipCollectOnMatchIgnoreReferences
-     */
+    #[DataProvider('dataSkipCollectOnMatchIgnoreReferences')]
     public function testSkipCollectOnMatchIgnoreReferences(
         string $url,
         callable $before,
@@ -60,11 +60,11 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
         if (is_array($assertResult)) {
             $this->assertSame($assertResult, $collected);
         } else {
-            $assertResult($url, $collected);
+            $assertResult($this, $url, $collected);
         }
     }
 
-    public function dataSkipCollectOnMatchIgnoreReferences(): iterable
+    public static function dataSkipCollectOnMatchIgnoreReferences(): iterable
     {
         $httpStreamBefore = function (string $url) {
         };
@@ -86,23 +86,23 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
             [],
             $httpStreamOperation,
             $httpStreamAfter,
-            function (string $url, array $collected) {
-                $this->assertArrayHasKey('read', $collected);
-                $this->assertIsArray($collected['read']);
-                $this->assertCount(1, $collected['read']);
+            function (TestCase $testCase, string $url, array $collected) {
+                $testCase->assertArrayHasKey('read', $collected);
+                $testCase->assertIsArray($collected['read']);
+                $testCase->assertCount(1, $collected['read']);
 
                 $readItem = $collected['read'][0];
-                $this->assertSame($url, $readItem['uri']);
-                $this->assertArrayHasKey('args', $readItem);
+                $testCase->assertSame($url, $readItem['uri']);
+                $testCase->assertArrayHasKey('args', $readItem);
 
                 $readItemArgs = $readItem['args'];
-                $this->assertCount(3, $readItemArgs);
+                $testCase->assertCount(3, $readItemArgs);
 
-                $this->assertSame('GET', $readItemArgs['method']);
-                $this->assertIsArray($readItemArgs['response_headers']);
-                $this->assertNotEmpty($readItemArgs['response_headers']);
-                $this->assertIsArray($readItemArgs['request_headers']);
-                $this->assertEmpty($readItemArgs['request_headers']);
+                $testCase->assertSame('GET', $readItemArgs['method']);
+                $testCase->assertIsArray($readItemArgs['response_headers']);
+                $testCase->assertNotEmpty($readItemArgs['response_headers']);
+                $testCase->assertIsArray($readItemArgs['request_headers']);
+                $testCase->assertEmpty($readItemArgs['request_headers']);
             },
         ];
         yield 'file stream ignored by path' => [
