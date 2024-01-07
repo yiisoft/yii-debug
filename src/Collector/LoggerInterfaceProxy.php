@@ -16,7 +16,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function emergency(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(
             LogLevel::EMERGENCY,
@@ -29,7 +29,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function alert(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(LogLevel::ALERT, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->alert($message, $context);
@@ -37,7 +37,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function critical(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(
             LogLevel::CRITICAL,
@@ -50,7 +50,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function error(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(LogLevel::ERROR, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->error($message, $context);
@@ -58,7 +58,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function warning(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(LogLevel::WARNING, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->warning($message, $context);
@@ -66,7 +66,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function notice(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(LogLevel::NOTICE, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->notice($message, $context);
@@ -74,7 +74,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function info(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(LogLevel::INFO, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->info($message, $context);
@@ -82,7 +82,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function debug(string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect(LogLevel::DEBUG, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->debug($message, $context);
@@ -90,9 +90,18 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function log(mixed $level, string|Stringable $message, array $context = []): void
     {
-        [$callStack] = debug_backtrace();
+        $callStack = $this->getCallStack();
 
         $this->collector->collect($level, $message, $context, $callStack['file'] . ':' . $callStack['line']);
         $this->logger->log($level, $message, $context);
+    }
+
+    /**
+     * @psalm-return array{file: string, line: int}
+     */
+    private function getCallStack(): array
+    {
+        /** @psalm-var array{file: string, line: int} */
+        return debug_backtrace()[0];
     }
 }
