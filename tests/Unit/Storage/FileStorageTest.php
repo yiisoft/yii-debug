@@ -10,7 +10,7 @@ use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-final class FileStorageTest extends AbstractStorageTest
+final class FileStorageTest extends AbstractStorageTestCase
 {
     private string $path = __DIR__ . '/runtime';
 
