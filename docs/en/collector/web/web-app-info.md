@@ -1,6 +1,6 @@
 # [WebAppInfo collector](./../../../../src/Collector/Web/WebAppInfoCollector.php)
 
-`WebAppInfoCollector` collects all middleware calls on the route to the action.
+`WebAppInfoCollector` collects information about the application.
 
 It uses the following events to collect data: 
 - [`\Yiisoft\Yii\Http\Event\ApplicationStartup`](https://github.com/yiisoft/yii-http/blob/master/src/Event/ApplicationStartup.php)

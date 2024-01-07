@@ -1,6 +1,6 @@
 # [Request collector](./../../../../src/Collector/Web/RequestCollector.php)
 
-`RequestCollector` collects all middleware calls on the route to the action.
+`RequestCollector` collects information about the request and response.
 
 It uses [`\Yiisoft\Yii\Http\Event\BeforeRequest`](https://github.com/yiisoft/yii-http/blob/master/src/Event/BeforeRequest.php) and [`\Yiisoft\Yii\Http\Event\AfterRequest`](https://github.com/yiisoft/yii-http/blob/master/src/Event/AfterRequest.php) events to collect data.
 
