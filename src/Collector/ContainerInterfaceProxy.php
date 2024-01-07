@@ -14,7 +14,7 @@ use function is_callable;
 use function is_object;
 use function is_string;
 
-class ContainerInterfaceProxy implements ContainerInterface
+final class ContainerInterfaceProxy implements ContainerInterface
 {
     use ProxyLogTrait;
     use ProxyTrait;
@@ -43,15 +43,12 @@ class ContainerInterfaceProxy implements ContainerInterface
         return $new;
     }
 
-    /**
-     * @psalm-suppress InvalidCatch
-     */
-    public function get($id)
+    public function get($id): mixed
     {
         $this->resetCurrentError();
         $timeStart = microtime(true);
+        $instance = null;
         try {
-            $instance = null;
             $instance = $this->getInstance($id);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
@@ -61,16 +58,22 @@ class ContainerInterfaceProxy implements ContainerInterface
 
         if (
             is_object($instance)
-            && (($proxy = $this->getServiceProxyCache($id)) || ($proxy = $this->getServiceProxy($id, $instance)))
+            && (
+                ($proxy = $this->getServiceProxyCache($instance::class)) ||
+                ($proxy = $this->getServiceProxy($instance::class, $instance))
+            )
         ) {
-            $this->setServiceProxyCache($id, $proxy);
+            $this->setServiceProxyCache($instance::class, $proxy);
             return $proxy;
         }
 
         return $instance;
     }
 
-    private function getInstance(string $id)
+    /**
+     * @throws ContainerExceptionInterface
+     */
+    private function getInstance(string $id): mixed
     {
         if ($id === ContainerInterface::class) {
             return $this;
@@ -94,6 +97,9 @@ class ContainerInterfaceProxy implements ContainerInterface
         return $this->serviceProxy[$service] ?? null;
     }
 
+    /**
+     * @psalm-param class-string $service
+     */
     private function getServiceProxy(string $service, object $instance): ?object
     {
         if (!$this->isDecorated($service)) {
@@ -124,6 +130,9 @@ class ContainerInterfaceProxy implements ContainerInterface
         return $callback($this);
     }
 
+    /**
+     * @psalm-param class-string $service
+     */
     private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
     {
         $methods = [];
@@ -159,6 +168,9 @@ class ContainerInterfaceProxy implements ContainerInterface
         }
     }
 
+    /**
+     * @psalm-param class-string $service
+     */
     private function getCommonServiceProxy(string $service, object $instance): object
     {
         return $this->proxyManager->createObjectProxy(
