@@ -16,8 +16,8 @@ final class HttpClientCollector implements SummaryCollectorInterface
 
     /**
      * @psalm-var array<string, non-empty-list<array{
-     *     startTime: float|string,
-     *     endTime: float|string,
+     *     startTime: float,
+     *     endTime: float,
      *     totalTime: float,
      *     method: string,
      *     uri: string,
@@ -33,7 +33,7 @@ final class HttpClientCollector implements SummaryCollectorInterface
     {
     }
 
-    public function collect(RequestInterface $request, float $startTime, string $line, ?string $uniqueId): void
+    public function collect(RequestInterface $request, float $startTime, string $line, string $uniqueId): void
     {
         if (!$this->isActive()) {
             return;
