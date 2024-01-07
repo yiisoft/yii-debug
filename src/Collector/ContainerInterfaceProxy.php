@@ -108,7 +108,11 @@ final class ContainerInterfaceProxy implements ContainerInterface
         }
 
         if ($this->config->hasDecoratedServiceArrayConfigWithStringKeys($service)) {
-            return $this->getCommonMethodProxy($service, $instance, $this->config->getDecoratedServiceConfig($service));
+            return $this->getCommonMethodProxy(
+                interface_exists($service) || class_exists($service) ? $service : $instance::class,
+                $instance,
+                $this->config->getDecoratedServiceConfig($service)
+            );
         }
 
         if ($this->config->hasDecoratedServiceArrayConfig($service)) {
@@ -127,6 +131,9 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $callback($this);
     }
 
+    /**
+     * @psalm-param class-string $service
+     */
     private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
     {
         $methods = [];
@@ -134,10 +141,6 @@ final class ContainerInterfaceProxy implements ContainerInterface
             if (is_string($method) && is_callable($callback)) {
                 $methods[$method] = $callback;
             }
-        }
-
-        if (!class_exists($service) && !interface_exists($service)) {
-            return null;
         }
 
         return $this->proxyManager->createObjectProxy(

@@ -326,6 +326,25 @@ final class ContainerInterfaceProxyTest extends TestCase
         $this->assertSame('from tests', $implementation->getName());
     }
 
+    public function test2(): void
+    {
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
+        $config = $config->withDecoratedServices([
+            'test-interface' => ['getName' => fn() => 'from tests'],
+        ]);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $container = $this->createContainer([
+            'test-interface' => Implementation2::class,
+        ]);
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $implementation = $containerProxy->get('test-interface');
+        $this->assertNotNull($implementation);
+        $this->assertInstanceOf(Interface2::class, $implementation);
+        $this->assertSame('from tests', $implementation->getName());
+    }
+
     private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig
     {
         return new ContainerProxyConfig(
