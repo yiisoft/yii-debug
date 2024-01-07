@@ -13,7 +13,7 @@ use function stream_get_wrappers;
 
 use const SEEK_SET;
 
-class HttpStreamProxy implements StreamWrapperInterface
+final class HttpStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
     public static array $ignoredPathPatterns = [];
@@ -23,7 +23,7 @@ class HttpStreamProxy implements StreamWrapperInterface
      * @var resource|null
      */
     public $context;
-    public StreamWrapperInterface $decorated;
+    public StreamWrapper $decorated;
     public bool $ignored = false;
 
     public static ?HttpStreamCollector $collector = null;

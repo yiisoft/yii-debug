@@ -13,8 +13,6 @@ use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Http\Event\AfterRequest;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-use function is_object;
-
 final class RequestCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
@@ -68,7 +66,7 @@ final class RequestCollector implements SummaryCollectorInterface
 
     public function collect(object $event): void
     {
-        if (!is_object($event) || !$this->isActive()) {
+        if (!$this->isActive()) {
             return;
         }
 
