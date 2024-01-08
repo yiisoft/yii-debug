@@ -53,6 +53,8 @@ Output:
 
 ```json
 {
-    "total": 3
+    "var-dumper": {
+        "total": 3
+    }
 }
 ```

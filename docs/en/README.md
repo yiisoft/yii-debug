@@ -13,6 +13,16 @@
 - [Log Collector](./collector/logger.md)
 - [Event Collector](./collector/event-dispatcher.md)
 - [HttpClient Collector](./collector/http-client.md)
+- [Exception Collector](./collector/exception.md)
+
+### Web collectors
+- [Middleware Collector](collector/web/middleware.md)
+- [Request Collector](collector/web/request.md)
+- [WebAppInfo Collector](collector/web/web-app-info.md)
+
+### Console collectors
+- [Command Collector](collector/console/command.md)
+- [ConsoleAppInfo Collector](collector/console/console-app-info.md)
 
 ## Console commands
 - [`debug:reset`](./command-reset.md)
