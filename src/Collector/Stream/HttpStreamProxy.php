@@ -106,6 +106,9 @@ final class HttpStreamProxy implements StreamWrapperInterface
     public function stream_read(int $count): string|false
     {
         if (!$this->ignored) {
+            /**
+             * @psalm-suppress PossiblyNullArgument
+             */
             $metadata = stream_get_meta_data($this->decorated->stream);
             $context = $this->decorated->context === null
                 ? null

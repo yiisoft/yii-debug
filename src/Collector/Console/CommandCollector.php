@@ -59,7 +59,7 @@ final class CommandCollector implements SummaryCollectorInterface
 
         if ($event instanceof ConsoleTerminateEvent) {
             $this->commands[$event::class] = [
-                'name' => $command->getName(),
+                'name' => $command?->getName() ?? $event->getInput()->getFirstArgument() ?? '',
                 'command' => $command,
                 'input' => $this->castInputToString($event->getInput()),
                 'output' => $this->fetchOutput($event->getOutput()),
@@ -68,13 +68,14 @@ final class CommandCollector implements SummaryCollectorInterface
             return;
         }
 
+        $definition = $command?->getDefinition();
         $this->commands[$event::class] = [
-            'name' => $command->getName(),
+            'name' => $command?->getName() ?? $event->getInput()->getFirstArgument() ?? '',
             'command' => $command,
             'input' => $this->castInputToString($event->getInput()),
             'output' => $this->fetchOutput($event->getOutput()),
-            'arguments' => $command->getDefinition()->getArguments(),
-            'options' => $command->getDefinition()->getOptions(),
+            'arguments' => $definition?->getArguments() ?? [],
+            'options' => $definition?->getOptions() ?? [],
         ];
     }
 

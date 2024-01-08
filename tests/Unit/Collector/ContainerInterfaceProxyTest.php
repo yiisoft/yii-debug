@@ -33,7 +33,7 @@ use Yiisoft\Yii\Debug\Tests\Support\Stub\Implementation2;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface1;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface2;
 
-class ContainerInterfaceProxyTest extends TestCase
+final class ContainerInterfaceProxyTest extends TestCase
 {
     private string $path = 'tests/container-proxy';
 
@@ -323,7 +323,26 @@ class ContainerInterfaceProxyTest extends TestCase
         $implementation = $containerProxy->get(Interface2::class);
         $this->assertNotNull($implementation);
         $this->assertInstanceOf(Interface2::class, $implementation);
-        $this->assertEquals('from tests', $implementation->getName());
+        $this->assertSame('from tests', $implementation->getName());
+    }
+
+    public function test2(): void
+    {
+        $config = $this->createConfig(ContainerInterfaceProxy::LOG_ERROR);
+        $config = $config->withDecoratedServices([
+            'test-interface' => ['getName' => fn() => 'from tests'],
+        ]);
+        $serviceCollector = $config->getCollector();
+        $serviceCollector->startup();
+        $container = $this->createContainer([
+            'test-interface' => Implementation2::class,
+        ]);
+        $containerProxy = new ContainerInterfaceProxy($container, $config);
+
+        $implementation = $containerProxy->get('test-interface');
+        $this->assertNotNull($implementation);
+        $this->assertInstanceOf(Interface2::class, $implementation);
+        $this->assertSame('from tests', $implementation->getName());
     }
 
     private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig

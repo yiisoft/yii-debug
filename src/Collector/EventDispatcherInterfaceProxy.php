@@ -16,7 +16,8 @@ final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 
     public function dispatch(object $event): object
     {
-        [$callStack] = debug_backtrace();
+        /** @psalm-var array{file: string, line: int} $callStack */
+        $callStack = debug_backtrace()[0];
 
         $this->collector->collect($event, $callStack['file'] . ':' . $callStack['line']);
 
