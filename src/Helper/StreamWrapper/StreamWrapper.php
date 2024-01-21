@@ -102,6 +102,9 @@ final class StreamWrapper implements StreamWrapperInterface
         return rmdir($path, $this->context);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType Unfortunately, I don't know what to return here.
+     */
     public function stream_cast(int $castAs)
     {
         // ???
