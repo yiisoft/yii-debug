@@ -27,7 +27,7 @@ final class ServiceCollector implements SummaryCollectorInterface
         string $class,
         string $method,
         ?array $arguments,
-        $result,
+        mixed $result,
         string $status,
         ?object $error,
         float $timeStart,

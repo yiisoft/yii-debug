@@ -10,7 +10,7 @@ class LogCollector implements SummaryCollectorInterface
 
     private array $messages = [];
 
-    public function __construct(private TimelineCollector $timelineCollector, )
+    public function __construct(private TimelineCollector $timelineCollector)
     {
     }
 
@@ -22,7 +22,7 @@ class LogCollector implements SummaryCollectorInterface
         return $this->messages;
     }
 
-    public function collect(string $level, $message, array $context, string $line): void
+    public function collect(string $level, mixed $message, array $context, string $line): void
     {
         if (!$this->isActive()) {
             return;

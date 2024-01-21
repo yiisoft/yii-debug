@@ -99,7 +99,7 @@ final class ContainerProxyConfig
         return $this->proxyCachePath;
     }
 
-    public function getDecoratedServiceConfig($service)
+    public function getDecoratedServiceConfig(string $service)
     {
         return $this->decoratedServices[$service];
     }
