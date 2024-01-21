@@ -30,6 +30,9 @@ trait ProxyLogTrait
         }
     }
 
+    /**
+     * @psalm-param-out array|null $arguments
+     */
     private function processLogData(array &$arguments, mixed &$result, ?object &$error): void
     {
         if (!($this->config->getLogLevel() & ContainerInterfaceProxy::LOG_ARGUMENTS)) {
