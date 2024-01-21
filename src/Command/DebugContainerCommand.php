@@ -116,7 +116,6 @@ final class DebugContainerCommand extends Command
         if ($input->hasOption('groups') && $input->getOption('groups')) {
             $build = $this->getConfigBuild($config);
             $groups = array_keys($build);
-            ksort($groups);
 
             $io->table(['Groups'], array_map(fn ($group) => [$group], $groups));
 

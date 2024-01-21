@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Command;
 
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,7 +50,6 @@ final class DebugEventsCommand extends Command
         if ($input->hasOption('groups') && $input->getOption('groups')) {
             $build = $this->getConfigBuild($config);
             $groups = array_keys($build);
-            ksort($groups);
 
             $io->table(['Groups'], array_map(fn ($group) => [$group], $groups));
 
@@ -89,7 +89,7 @@ final class DebugEventsCommand extends Command
                 is_countable($listeners) ? count($listeners) : 0,
                 implode(
                     "\n",
-                    array_map(function ($listener) {
+                    array_map(function (mixed $listener) {
                         if (is_array($listener)) {
                             return sprintf(
                                 '%s::%s',
@@ -113,7 +113,7 @@ final class DebugEventsCommand extends Command
 
     private function getConfigBuild(mixed $config): array
     {
-        $reflection = new \ReflectionClass($config);
+        $reflection = new ReflectionClass($config);
         $buildReflection = $reflection->getProperty('build');
         $buildReflection->setAccessible(true);
         return $buildReflection->getValue($config);
