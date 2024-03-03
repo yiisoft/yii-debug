@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-abstract class AbstractStorageTest extends TestCase
+abstract class AbstractStorageTestCase extends TestCase
 {
     /**
      * @dataProvider dataProvider()

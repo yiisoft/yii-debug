@@ -13,7 +13,7 @@ use function stream_get_wrappers;
 
 use const SEEK_SET;
 
-class HttpStreamProxy implements StreamWrapperInterface
+final class HttpStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
     public static array $ignoredPathPatterns = [];
@@ -23,7 +23,7 @@ class HttpStreamProxy implements StreamWrapperInterface
      * @var resource|null
      */
     public $context;
-    public StreamWrapperInterface $decorated;
+    public StreamWrapper $decorated;
     public bool $ignored = false;
 
     public static ?HttpStreamCollector $collector = null;
@@ -47,6 +47,9 @@ class HttpStreamProxy implements StreamWrapperInterface
 
     public function __destruct()
     {
+        if (self::$collector === null) {
+            return;
+        }
         foreach ($this->operations as $name => $operation) {
             self::$collector->collect(
                 operation: $name,
@@ -54,6 +57,7 @@ class HttpStreamProxy implements StreamWrapperInterface
                 args: $operation['args'],
             );
         }
+        self::unregister();
     }
 
     public function __get(string $name)
@@ -102,6 +106,9 @@ class HttpStreamProxy implements StreamWrapperInterface
     public function stream_read(int $count): string|false
     {
         if (!$this->ignored) {
+            /**
+             * @psalm-suppress PossiblyNullArgument
+             */
             $metadata = stream_get_meta_data($this->decorated->stream);
             $context = $this->decorated->context === null
                 ? null

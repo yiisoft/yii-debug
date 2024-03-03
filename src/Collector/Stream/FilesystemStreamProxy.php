@@ -11,14 +11,14 @@ use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
 use const SEEK_SET;
 
-class FilesystemStreamProxy implements StreamWrapperInterface
+final class FilesystemStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
     /**
      * @var resource|null
      */
     public $context;
-    public StreamWrapperInterface $decorated;
+    public StreamWrapper $decorated;
     public bool $ignored = false;
 
     public static ?FilesystemStreamCollector $collector = null;
@@ -44,6 +44,9 @@ class FilesystemStreamProxy implements StreamWrapperInterface
 
     public function __destruct()
     {
+        if (self::$collector === null) {
+            return;
+        }
         foreach ($this->operations as $name => $operation) {
             self::$collector->collect(
                 operation: $name,
@@ -51,6 +54,7 @@ class FilesystemStreamProxy implements StreamWrapperInterface
                 args: $operation['args'],
             );
         }
+        self::unregister();
     }
 
     public function __get(string $name)

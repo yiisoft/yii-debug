@@ -32,6 +32,7 @@ final class VarDumperHandlerInterfaceProxy implements HandlerInterface
             $callStack = $value;
             break;
         }
+        /** @psalm-var array{file: string, line: int} $callStack */
 
         $this->collector->collect(
             $variable,

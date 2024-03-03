@@ -20,13 +20,13 @@ composer.phar
 # Mac DS_Store Files
 .DS_Store
 
-# phpunit itself is not needed
+# PhpUnit itself is not needed
 phpunit.phar
-# local phpunit config
+# local PhpUnit config
 /phpunit.xml
+# PhpUnit cache
+/.phpunit.cache
 
 # local tests configuration
 /tests/data/config.local.php
 /tests/Storage/runtime
-
-.phpunit.result.cache

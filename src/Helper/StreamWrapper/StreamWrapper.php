@@ -31,19 +31,33 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function dir_closedir(): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         closedir($this->stream);
+
+        /**
+         * @psalm-suppress RedundantCondition
+         */
         return is_resource($this->stream);
     }
 
     public function dir_opendir(string $path, int $options): bool
     {
         $this->filename = $path;
+
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         $this->stream = opendir($path, $this->context);
         return is_resource($this->stream);
     }
 
     public function dir_readdir(): false|string
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return readdir($this->stream);
     }
 
@@ -54,33 +68,50 @@ final class StreamWrapper implements StreamWrapperInterface
         }
 
         rewinddir($this->stream);
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
+
+        /**
+         * @noinspection PhpConditionAlreadyCheckedInspection
+         * @psalm-suppress RedundantCondition
+         */
         return is_resource($this->stream);
     }
 
     public function mkdir(string $path, int $mode, int $options): bool
     {
         $this->filename = $path;
+
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return mkdir($path, $mode, ($options & STREAM_MKDIR_RECURSIVE) === STREAM_MKDIR_RECURSIVE, $this->context);
     }
 
     public function rename(string $path_from, string $path_to): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return rename($path_from, $path_to, $this->context);
     }
 
     public function rmdir(string $path, int $options): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return rmdir($path, $this->context);
     }
 
     public function stream_cast(int $castAs)
     {
-        //????
+        // ???
     }
 
     public function stream_eof(): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return feof($this->stream);
     }
 
@@ -88,7 +119,9 @@ final class StreamWrapper implements StreamWrapperInterface
     {
         $this->filename = realpath($path) ?: $path;
 
-        if ((self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE && function_exists('opcache_invalidate')) {
+        if ((self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE && function_exists(
+            'opcache_invalidate'
+        )) {
             opcache_invalidate($path, false);
         }
         $this->stream = fopen(
@@ -111,16 +144,25 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_read(int $count): string|false
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return fread($this->stream, $count);
     }
 
     public function stream_seek(int $offset, int $whence = SEEK_SET): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return fseek($this->stream, $offset, $whence) !== -1;
     }
 
     public function stream_set_option(int $option, int $arg1, int $arg2): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return match ($option) {
             STREAM_OPTION_BLOCKING => stream_set_blocking($this->stream, $arg1 === STREAM_OPTION_BLOCKING),
             STREAM_OPTION_READ_TIMEOUT => stream_set_timeout($this->stream, $arg1, $arg2),
@@ -131,16 +173,25 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_stat(): array|false
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return fstat($this->stream);
     }
 
     public function stream_tell(): int
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return ftell($this->stream);
     }
 
     public function stream_write(string $data): int
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return fwrite($this->stream, $data);
     }
 
@@ -174,6 +225,9 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_flush(): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return fflush($this->stream);
     }
 
@@ -182,7 +236,9 @@ final class StreamWrapper implements StreamWrapperInterface
         /**
          * @psalm-suppress InvalidPropertyAssignmentValue
          */
-        fclose($this->stream);
+        if ($this->stream !== null) {
+            fclose($this->stream);
+        }
         $this->stream = null;
     }
 
@@ -191,16 +247,26 @@ final class StreamWrapper implements StreamWrapperInterface
         if ($operation === 0) {
             $operation = LOCK_EX;
         }
+
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return flock($this->stream, $operation);
     }
 
     public function stream_truncate(int $new_size): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return ftruncate($this->stream, $new_size);
     }
 
     public function unlink(string $path): bool
     {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
         return unlink($path, $this->context);
     }
 }

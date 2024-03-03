@@ -9,7 +9,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
@@ -20,12 +19,6 @@ use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 
 final class DebugServiceProviderTest extends TestCase
 {
-    /**
-     * @throws InvalidConfigException
-     *
-     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getDefinitions()
-     * @covers \Yiisoft\Yii\Debug\DebugServiceProvider::getExtensions()
-     */
     public function testRegister(): void
     {
         $config = ContainerConfig::create()

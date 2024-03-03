@@ -8,7 +8,7 @@ use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-final class MemoryStorageTest extends AbstractStorageTest
+final class MemoryStorageTest extends AbstractStorageTestCase
 {
     public function getStorage(DebuggerIdGenerator $idGenerator): StorageInterface
     {
