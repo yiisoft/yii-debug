@@ -110,7 +110,7 @@ final class FileStorage implements StorageInterface
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof SummaryCollectorInterface) {
-                $summaryData = [...$summaryData, ...$collector->getCollected()];
+                $summaryData = [...$summaryData, ...$collector->getSummary()];
             }
         }
 
