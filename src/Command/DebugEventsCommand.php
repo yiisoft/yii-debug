@@ -50,6 +50,7 @@ final class DebugEventsCommand extends Command
         if ($input->hasOption('groups') && $input->getOption('groups')) {
             $build = $this->getConfigBuild($config);
             $groups = array_keys($build);
+            sort($groups);
 
             $io->table(['Groups'], array_map(fn ($group) => [$group], $groups));
 
