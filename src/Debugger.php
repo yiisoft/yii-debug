@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Yiisoft\Mutex\Synchronizer;
 use Yiisoft\Strings\WildcardPattern;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
@@ -13,12 +14,15 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class Debugger
 {
+    public const SAVING_MUTEX_NAME = self::class;
+
     private bool $skipCollect = false;
     private bool $active = false;
 
     public function __construct(
         private DebuggerIdGenerator $idGenerator,
         private StorageInterface $target,
+        private Synchronizer $synchronizer,
         /**
          * @var CollectorInterface[]
          */
@@ -64,7 +68,9 @@ final class Debugger
 
         try {
             if (!$this->skipCollect) {
-                $this->target->flush();
+                $this->synchronizer->execute(self::SAVING_MUTEX_NAME . $this->idGenerator->getId(), function () {
+                    $this->target->flush();
+                });
             }
         } finally {
             foreach ($this->collectors as $collector) {
