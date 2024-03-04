@@ -28,6 +28,9 @@ use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Command\DebugContainerCommand;
 use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
+use Yiisoft\Yii\Debug\Command\DebugServerBroadcastCommand;
+use Yiisoft\Yii\Debug\Command\DebugServerCommand;
+use Yiisoft\Yii\Debug\DebugServer\LoggerDecorator;
 
 /**
  * @var $params array
@@ -58,7 +61,10 @@ return [
         ],
         'trackedServices' => [
             Injector::class => fn (ContainerInterface $container) => new Injector($container),
-            LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
+            LoggerInterface::class => function (ContainerInterface $container, LoggerInterface $logger) {
+                return new LoggerInterfaceProxy(new LoggerDecorator($logger), $container->get(LogCollector::class));
+            },
+            //LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
         ],
@@ -94,6 +100,8 @@ return [
             DebugResetCommand::COMMAND_NAME => DebugResetCommand::class,
             DebugContainerCommand::COMMAND_NAME => DebugContainerCommand::class,
             DebugEventsCommand::COMMAND_NAME => DebugEventsCommand::class,
+            DebugServerCommand::COMMAND_NAME => DebugServerCommand::class,
+            DebugServerBroadcastCommand::COMMAND_NAME => DebugServerBroadcastCommand::class,
         ],
     ],
 ];
