@@ -18,7 +18,7 @@ final class TimelineCollector implements CollectorInterface
         return $this->events;
     }
 
-    public function collect(CollectorInterface $collector, string|int $reference, ...$data): void
+    public function collect(CollectorInterface $collector, string|int $reference, mixed ...$data): void
     {
         if (!$this->isActive()) {
             return;

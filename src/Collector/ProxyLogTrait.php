@@ -15,7 +15,7 @@ trait ProxyLogTrait
         object $instance,
         string $method,
         array $arguments,
-        $result,
+        mixed $result,
         float $timeStart
     ): void {
         $error = $this->getCurrentError();
@@ -30,7 +30,10 @@ trait ProxyLogTrait
         }
     }
 
-    private function processLogData(array &$arguments, &$result, ?object &$error): void
+    /**
+     * @psalm-param-out array|null $arguments
+     */
+    private function processLogData(array &$arguments, mixed &$result, ?object &$error): void
     {
         if (!($this->config->getLogLevel() & ContainerInterfaceProxy::LOG_ARGUMENTS)) {
             $arguments = null;
@@ -50,7 +53,7 @@ trait ProxyLogTrait
         object $instance,
         string $method,
         ?array $arguments,
-        $result,
+        mixed $result,
         ?object $error,
         float $timeStart
     ): void {
@@ -72,7 +75,7 @@ trait ProxyLogTrait
         object $instance,
         string $method,
         ?array $arguments,
-        $result,
+        mixed $result,
         ?object $error,
         float $timeStart
     ): void {

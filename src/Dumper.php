@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug;
 
+use __PHP_Incomplete_Class;
 use Closure;
 use Yiisoft\VarDumper\ClosureExporter;
 
@@ -60,7 +61,7 @@ final class Dumper
         return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true);
     }
 
-    private function buildObjectsCache($variable, int $depth, int $level = 0): void
+    private function buildObjectsCache(mixed $variable, int $depth, int $level = 0): void
     {
         if ($depth <= $level) {
             return;
@@ -89,7 +90,7 @@ final class Dumper
     }
 
     private function asJsonInternal(
-        $variable,
+        mixed $variable,
         bool $format,
         int $depth,
         int $objectCollapseLevel,
@@ -109,7 +110,7 @@ final class Dumper
 
     private function getObjectProperties(object $var): array
     {
-        if (\__PHP_Incomplete_Class::class !== $var::class && method_exists($var, '__debugInfo')) {
+        if (__PHP_Incomplete_Class::class !== $var::class && method_exists($var, '__debugInfo')) {
             $var = $var->__debugInfo();
         }
 
@@ -117,16 +118,16 @@ final class Dumper
     }
 
     private function dumpNestedInternal(
-        $var,
+        mixed $variable,
         int $depth,
         int $level,
         int $objectCollapseLevel,
         bool $inlineObject
     ): mixed {
-        switch (gettype($var)) {
+        switch (gettype($variable)) {
             case 'array':
                 if ($depth <= $level) {
-                    $valuesCount = count($var);
+                    $valuesCount = count($variable);
                     if ($valuesCount === 0) {
                         return [];
                     }
@@ -134,7 +135,7 @@ final class Dumper
                 }
 
                 $output = [];
-                foreach ($var as $key => $value) {
+                foreach ($variable as $key => $value) {
                     $keyDisplay = str_replace("\0", '::', trim((string) $key));
                     $output[$keyDisplay] = $this->dumpNestedInternal(
                         $value,
@@ -147,16 +148,16 @@ final class Dumper
 
                 break;
             case 'object':
-                $objectDescription = $this->getObjectDescription($var);
-                if ($depth <= $level || array_key_exists($var::class, $this->excludedClasses)) {
+                $objectDescription = $this->getObjectDescription($variable);
+                if ($depth <= $level || array_key_exists($variable::class, $this->excludedClasses)) {
                     $output = $objectDescription . ' (...)';
                     break;
                 }
 
-                if ($var instanceof Closure) {
+                if ($variable instanceof Closure) {
                     $output = $inlineObject
-                        ? $this->exportClosure($var)
-                        : [$objectDescription => $this->exportClosure($var)];
+                        ? $this->exportClosure($variable)
+                        : [$objectDescription => $this->exportClosure($variable)];
                     break;
                 }
 
@@ -165,7 +166,7 @@ final class Dumper
                     break;
                 }
 
-                $properties = $this->getObjectProperties($var);
+                $properties = $this->getObjectProperties($variable);
                 if (empty($properties)) {
                     if ($inlineObject) {
                         $output = '{stateless object}';
@@ -194,10 +195,10 @@ final class Dumper
                 break;
             case 'resource':
             case 'resource (closed)':
-                $output = $this->getResourceDescription($var);
+                $output = $this->getResourceDescription($variable);
                 break;
             default:
-                $output = $var;
+                $output = $variable;
         }
 
         return $output;
@@ -226,7 +227,7 @@ final class Dumper
         return 'public $' . $property;
     }
 
-    private function getResourceDescription($resource): array|string
+    private function getResourceDescription(mixed $resource): array|string
     {
         if (!is_resource($resource)) {
             return '{closed resource}';
