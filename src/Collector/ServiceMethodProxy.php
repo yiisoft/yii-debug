@@ -33,6 +33,9 @@ class ServiceMethodProxy extends ServiceProxy
 
     protected function getNewStaticInstance(object $instance): ObjectProxy
     {
+        /**
+         * @psalm-suppress UnsafeInstantiation Constructor should be consistent to `getNewStaticInstance()`.
+         */
         return new static($this->getService(), $instance, $this->methods, $this->getConfig());
     }
 }
