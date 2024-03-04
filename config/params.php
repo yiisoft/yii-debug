@@ -6,7 +6,6 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Injector\Injector;
 use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
@@ -68,7 +67,6 @@ return [
             //LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
-            CacheInterface::class,
         ],
         'dumper.excludedClasses' => [
             'PhpParser\\Parser\\Php7',

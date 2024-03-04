@@ -11,6 +11,9 @@ use function is_callable;
 
 final class ContainerProxyConfig
 {
+    /**
+     * @psalm-param array<string, mixed> $decoratedServices
+     */
     public function __construct(
         private bool $active = false,
         private array $decoratedServices = [],
@@ -99,7 +102,7 @@ final class ContainerProxyConfig
         return $this->proxyCachePath;
     }
 
-    public function getDecoratedServiceConfig($service)
+    public function getDecoratedServiceConfig(string $service): mixed
     {
         return $this->decoratedServices[$service];
     }

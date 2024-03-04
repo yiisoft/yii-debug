@@ -10,22 +10,25 @@ use Psr\Http\Message\ResponseInterface;
 
 use function count;
 
+/**
+ * @psalm-type RequestEntry = array{
+ *     startTime: float,
+ *     endTime: float,
+ *     totalTime: float,
+ *     method: string,
+ *     uri: string,
+ *     headers: string[][],
+ *     line: string,
+ *     responseRaw?: string,
+ *     responseStatus?: int,
+ * }
+ */
 final class HttpClientCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
     /**
-     * @psalm-var array<string, non-empty-list<array{
-     *     startTime: float,
-     *     endTime: float,
-     *     totalTime: float,
-     *     method: string,
-     *     uri: string,
-     *     headers: string[][],
-     *     line: string,
-     *     responseRaw?: string,
-     *     responseStatus?: int,
-     * }>>
+     * @psalm-var array<string, non-empty-list<RequestEntry>>
      */
     private array $requests = [];
 
@@ -57,9 +60,10 @@ final class HttpClientCollector implements SummaryCollectorInterface
             return;
         }
 
-        if (!isset($this->requests[$uniqueId]) || !is_array($this->requests[$uniqueId])) {
+        if (!isset($this->requests[$uniqueId])) {
             return;
         }
+        /** @psalm-suppress UnsupportedReferenceUsage */
         $entry = &$this->requests[$uniqueId][count($this->requests[$uniqueId]) - 1];
         if ($response instanceof ResponseInterface) {
             $entry['responseRaw'] = Message::toString($response);
