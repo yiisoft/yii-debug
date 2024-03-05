@@ -34,6 +34,12 @@ final class MemoryStorage implements StorageInterface
             ];
         }
 
+        if ($type === self::TYPE_OBJECTS) {
+            return [
+                $this->idGenerator->getId() => array_merge(...array_values($this->getData())),
+            ];
+        }
+
         return [$this->idGenerator->getId() => $this->getData()];
     }
 
