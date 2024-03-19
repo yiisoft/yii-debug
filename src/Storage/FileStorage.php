@@ -11,7 +11,6 @@ use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Dumper;
 
-use function array_merge;
 use function array_slice;
 use function count;
 use function dirname;
@@ -50,16 +49,17 @@ final class FileStorage implements StorageInterface
     public function read(string $type, ?string $id = null): array
     {
         clearstatcache();
-        $data = [];
-        $pattern = sprintf(
-            '%s/**/%s/%s.json',
-            $this->path,
-            $id ?? '**',
-            $type,
-        );
-        $dataFiles = glob($pattern, GLOB_NOSORT);
-        uasort($dataFiles, static fn ($a, $b) => filemtime($a) <=> filemtime($b));
 
+        $dataFiles = $this->findFilesOrderByModifiedTime(
+            sprintf(
+                '%s/**/%s/%s.json',
+                $this->path,
+                $id ?? '**',
+                $type,
+            )
+        );
+
+        $data = [];
         foreach ($dataFiles as $file) {
             $dir = dirname($file);
             $id = substr($dir, strlen(dirname($file, 2)) + 1);
@@ -122,12 +122,11 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $summaryFiles = glob($this->path . '/**/**/summary.json', GLOB_NOSORT);
+        $summaryFiles = $this->findFilesOrderByModifiedTime($this->path . '/**/**/summary.json');
         if (empty($summaryFiles) || count($summaryFiles) <= $this->historySize) {
             return;
         }
 
-        uasort($summaryFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
         $excessFiles = array_slice($summaryFiles, $this->historySize);
         foreach ($excessFiles as $file) {
             $path1 = dirname($file);
@@ -145,13 +144,20 @@ final class FileStorage implements StorageInterface
         }
     }
 
-    private function reindexObjects(array $objectsAsArraysCollection): array
+    /**
+     * @return string[]
+     */
+    private function findFilesOrderByModifiedTime(string $pattern): array
     {
-        $toMerge = [];
-        foreach ($objectsAsArraysCollection as $objectAsArray) {
-            $toMerge[] = $objectAsArray;
+        $files = glob($pattern, GLOB_NOSORT);
+        if ($files === false) {
+            return [];
         }
 
-        return array_merge(...$toMerge);
+        uasort(
+            $files,
+            static fn (string $a, string $b) => filemtime($b) <=> filemtime($a)
+        );
+        return $files;
     }
 }
