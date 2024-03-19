@@ -12,12 +12,15 @@ use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
 final class ProxyServiceProvider implements ServiceProviderInterface
 {
     /**
-     * @psalm-suppress InaccessibleMethod
+     * @psalm-suppress MixedArgument
      */
     public function getDefinitions(): array
     {
         return [
-            ContainerInterface::class => static fn (ContainerInterface $container) => new ContainerInterfaceProxy($container, $container->get(ContainerProxyConfig::class)),
+            ContainerInterface::class => static fn (ContainerInterface $container) => new ContainerInterfaceProxy(
+                $container,
+                $container->get(ContainerProxyConfig::class)
+            ),
         ];
     }
 
