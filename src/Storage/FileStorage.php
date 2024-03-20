@@ -18,7 +18,6 @@ use function filemtime;
 use function glob;
 use function strlen;
 use function substr;
-use function uasort;
 
 final class FileStorage implements StorageInterface
 {
