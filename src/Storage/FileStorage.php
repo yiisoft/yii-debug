@@ -154,7 +154,7 @@ final class FileStorage implements StorageInterface
             return [];
         }
 
-        uasort(
+        usort(
             $files,
             static fn (string $a, string $b) => filemtime($b) <=> filemtime($a)
         );
