@@ -19,12 +19,14 @@ final class Debugger
     private bool $skipCollect = false;
     private bool $active = false;
 
+    /**
+     * @param CollectorInterface[] $collectors
+     * @param string[] $ignoredRequests
+     * @param string[] $ignoredCommands
+     */
     public function __construct(
         private DebuggerIdGenerator $idGenerator,
         private StorageInterface $target,
-        /**
-         * @var CollectorInterface[]
-         */
         private array $collectors,
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
@@ -120,7 +122,7 @@ final class Debugger
     }
 
     /**
-     * @param array $ignoredRequests Patterns for ignored request URLs.
+     * @param string[] $ignoredRequests Patterns for ignored request URLs.
      *
      * @see WildcardPattern
      */
@@ -132,7 +134,7 @@ final class Debugger
     }
 
     /**
-     * @param array $ignoredCommands Patterns for ignored commands names.
+     * @param string[] $ignoredCommands Patterns for ignored commands names.
      *
      * @see WildcardPattern
      */
