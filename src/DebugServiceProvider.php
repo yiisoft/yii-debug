@@ -20,6 +20,9 @@ final class DebugServiceProvider implements ServiceProviderInterface
         return [];
     }
 
+    /**
+     * @psalm-suppress MixedArgument
+     */
     public function getExtensions(): array
     {
         return [
