@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Helper;
 
 use Yiisoft\Strings\CombinedRegexp;
+use Yiisoft\Yii\Debug\Debugger;
 
 /**
  * All backtrace parameters should contain at least 4 elements in the following order:
@@ -12,12 +13,14 @@ use Yiisoft\Strings\CombinedRegexp;
  * 1 – Proxy
  * 2 – Real using place / Composer\ClassLoader include function
  * 3 – Whatever / Composer\ClassLoader
+ *
+ * @psalm-import-type debug_backtrace_type from Debugger
  */
 final class BacktraceIgnoreMatcher
 {
     /**
      * @param string[] $patterns
-     * @psalm-param list<array{file?: string}> $backtrace
+     * @psalm-param debug_backtrace_type $backtrace
      */
     public static function isIgnoredByFile(array $backtrace, array $patterns): bool
     {
@@ -29,6 +32,9 @@ final class BacktraceIgnoreMatcher
         return self::doesStringMatchPattern($path, $patterns);
     }
 
+    /**
+     * @psalm-param debug_backtrace_type $backtrace
+     */
     public static function isIgnoredByClass(array $backtrace, array $classes): bool
     {
         return isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], $classes, true);

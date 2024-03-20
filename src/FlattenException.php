@@ -14,6 +14,8 @@ use Throwable;
  * Implements the Throwable interface
  * Basically, this class removes all objects from the trace.
  * Ported from Symfony components @link https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Debug/Exception/FlattenException.php
+ *
+ * @psalm-import-type debug_backtrace_type from Debugger
  */
 final class FlattenException implements \Stringable
 {
@@ -162,6 +164,8 @@ final class FlattenException implements \Stringable
 
     /**
      * @param array $trace the Exception stack trace as an array.
+     *
+     * @psalm-param debug_backtrace_type $trace
      */
     private function setTrace(array $trace): void
     {
@@ -292,12 +296,13 @@ final class FlattenException implements \Stringable
     }
 
     /**
-     * @return string the real class name of an incomplete class
+     * @return string The real class name of an incomplete class
      */
     private function getClassNameFromIncomplete(__PHP_Incomplete_Class $value): string
     {
         $array = new ArrayObject($value);
 
+        /** @var string */
         return $array['__PHP_Incomplete_Class_Name'];
     }
 }

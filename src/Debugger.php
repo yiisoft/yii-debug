@@ -11,6 +11,9 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
+/**
+ * @psalm-type debug_backtrace_type = list<array{file?:string,line?:int,function:string,class?:class-string,object?:object,type?:string,args?:list}>
+ */
 final class Debugger
 {
     private bool $skipCollect = false;
