@@ -14,13 +14,13 @@ use Yiisoft\Yii\Debug\Debugger;
  * 2 – Real using place / Composer\ClassLoader include function
  * 3 – Whatever / Composer\ClassLoader
  *
- * @psalm-import-type debug_backtrace_type from Debugger
+ * @psalm-import-type BacktraceType from Debugger
  */
 final class BacktraceIgnoreMatcher
 {
     /**
      * @param string[] $patterns
-     * @psalm-param debug_backtrace_type $backtrace
+     * @psalm-param BacktraceType $backtrace
      */
     public static function isIgnoredByFile(array $backtrace, array $patterns): bool
     {
@@ -33,7 +33,7 @@ final class BacktraceIgnoreMatcher
     }
 
     /**
-     * @psalm-param debug_backtrace_type $backtrace
+     * @psalm-param BacktraceType $backtrace
      */
     public static function isIgnoredByClass(array $backtrace, array $classes): bool
     {
