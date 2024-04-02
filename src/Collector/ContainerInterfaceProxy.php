@@ -26,8 +26,6 @@ final class ContainerInterfaceProxy implements ContainerInterface
 
     private ProxyManager $proxyManager;
 
-    private array $decoratedServices = [];
-
     private array $serviceProxy = [];
 
     public function __construct(protected ContainerInterface $container, ContainerProxyConfig $config)
@@ -92,19 +90,18 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
     }
 
-    private function getServiceProxyCache(string $service): ?object
-    {
-        return $this->serviceProxy[$service] ?? null;
-    }
-
     private function getServiceProxy(string $service, object $instance): ?object
     {
+        if (isset($this->serviceProxy[$service])) {
+            return $this->serviceProxy[$service];
+        }
+
         if (!$this->isDecorated($service)) {
             return null;
         }
 
         if ($this->config->hasDecoratedServiceCallableConfig($service)) {
-            return $this->getServiceProxyFromCallable($this->config->getDecoratedServiceConfig($service));
+            return $this->getServiceProxyFromCallable($this->config->getDecoratedServiceConfig($service), $instance);
         }
 
         if ($this->config->hasDecoratedServiceArrayConfigWithStringKeys($service)) {
@@ -126,9 +123,9 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return null;
     }
 
-    private function getServiceProxyFromCallable(callable $callback): ?object
+    private function getServiceProxyFromCallable(callable $callback, object $instance): ?object
     {
-        return $callback($this);
+        return $callback($this, $instance);
     }
 
     /**
