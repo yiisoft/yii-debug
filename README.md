@@ -6,10 +6,6 @@
     <br>
 </p>
 
-This extension provides a debugger for [Yii framework](https://www.yiiframework.com) applications. When this extension is used,
-a debugger toolbar will appear at the bottom of every page. The extension also provides
-a set of standalone pages to display more detailed debug information.
-
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/yii-debug/v/stable.png)](https://packagist.org/packages/yiisoft/yii-debug)
 [![Total Downloads](https://poser.pugx.org/yiisoft/yii-debug/downloads.png)](https://packagist.org/packages/yiisoft/yii-debug)
 [![Build status](https://github.com/yiisoft/yii-debug/workflows/build/badge.svg)](https://github.com/yiisoft/yii-debug/actions?query=workflow%3Abuild)
@@ -19,9 +15,17 @@ a set of standalone pages to display more detailed debug information.
 [![static analysis](https://github.com/yiisoft/yii-debug/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/yii-debug/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/yii-debug/coverage.svg)](https://shepherd.dev/github/yiisoft/yii-debug)
 
+This extension provides a debugger for [Yii framework](https://www.yiiframework.com) applications. When this extension is used,
+a debugger toolbar will appear at the bottom of every page. The extension also provides
+a set of standalone pages to display more detailed debug information.
+
+## Requirements
+
+- PHP 8.1 or higher.
+
 ## Installation
 
-The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
+The package could be installed with [Composer](https://getcomposer.org):
 
 ```shell
 composer require yiisoft/yii-debug --dev
@@ -30,7 +34,7 @@ composer require yiisoft/yii-debug --dev
 > The debug extension also can be installed without the `--dev` flag if you want to collect data in production.
 > Specify needed collectors only to reduce functions overriding and improve performance.
 
-## Usage
+## General usage
 
 Once the extension is installed, modify your `config/common/params.php` as follows:
 
@@ -50,7 +54,7 @@ to be able to interact with collected data through UI.
 
 ## Documentation
 
-- [Guide](docs/guide/en/README.md)
+- Guide: [English](docs/guide/en/README.md), [Português - Brasil](docs/guide/pt-BR/README.md)
 - [Internals](docs/internals.md)
 
 If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
