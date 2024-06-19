@@ -10,7 +10,10 @@ use Stringable;
 
 final class LoggerInterfaceProxy implements LoggerInterface
 {
-    public function __construct(private LoggerInterface $logger, private LogCollector $collector)
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly LogCollector $collector
+    )
     {
     }
 

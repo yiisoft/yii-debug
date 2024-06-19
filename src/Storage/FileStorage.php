@@ -31,7 +31,7 @@ final class FileStorage implements StorageInterface
     private int $historySize = 50;
 
     public function __construct(
-        private string $path,
+        private readonly string $path,
         private readonly DebuggerIdGenerator $idGenerator,
         private readonly array $excludedClasses = []
     ) {
@@ -90,7 +90,7 @@ final class FileStorage implements StorageInterface
 
     public function getData(): array
     {
-        return array_map(fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
+        return array_map(static fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
     }
 
     public function clear(): void
@@ -143,15 +143,5 @@ final class FileStorage implements StorageInterface
                 FileHelper::removeDirectory($this->path . $group);
             }
         }
-    }
-
-    private function reindexObjects(array $objectsAsArraysCollection): array
-    {
-        $toMerge = [];
-        foreach ($objectsAsArraysCollection as $objectAsArray) {
-            $toMerge[] = $objectAsArray;
-        }
-
-        return array_merge(...$toMerge);
     }
 }

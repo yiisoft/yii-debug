@@ -11,11 +11,14 @@ final class HttpStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
+    private array $ignoredPathPatterns;
+
     public function __construct(
-        private array $ignoredPathPatterns = [],
-        private array $ignoredClasses = [],
-        private array $ignoredUrls = []
+        array $ignoredPathPatterns = [],
+        private readonly array $ignoredClasses = [],
+        private readonly array $ignoredUrls = []
     ) {
+        $this->ignoredPathPatterns = $ignoredPathPatterns;
     }
 
     private array $requests = [];

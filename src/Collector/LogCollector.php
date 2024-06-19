@@ -10,7 +10,9 @@ class LogCollector implements SummaryCollectorInterface
 
     private array $messages = [];
 
-    public function __construct(private TimelineCollector $timelineCollector)
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    )
     {
     }
 

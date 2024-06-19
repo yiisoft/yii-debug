@@ -9,8 +9,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 {
     public function __construct(
-        private EventDispatcherInterface $dispatcher,
-        private EventCollector $collector
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly EventCollector $collector
     ) {
     }
 

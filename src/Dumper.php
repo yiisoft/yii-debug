@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug;
 
 use __PHP_Incomplete_Class;
 use Closure;
+use ReflectionException;
 use Yiisoft\VarDumper\ClosureExporter;
 
 final class Dumper
@@ -18,7 +19,10 @@ final class Dumper
     /**
      * @param mixed $variable Variable to dump.
      */
-    private function __construct(private mixed $variable, array $excludedClasses)
+    private function __construct(
+        private readonly mixed $variable,
+        array $excludedClasses
+    )
     {
         $this->excludedClasses = array_flip($excludedClasses);
     }
@@ -245,11 +249,11 @@ final class Dumper
     }
 
     /**
-     * Exports a {@see \Closure} instance.
+     * Exports a {@see Closure} instance.
      *
      * @param Closure $closure Closure instance.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function exportClosure(Closure $closure): string
     {

@@ -15,7 +15,7 @@ final class MemoryStorageTest extends AbstractStorageTestCase
         return new MemoryStorage($idGenerator);
     }
 
-    public function testSummaryCount()
+    public function testSummaryCount(): void
     {
         $idGenerator = new DebuggerIdGenerator();
         $storage = $this->getStorage($idGenerator);

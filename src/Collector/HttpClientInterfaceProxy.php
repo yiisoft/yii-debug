@@ -10,7 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 
 final class HttpClientInterfaceProxy implements ClientInterface
 {
-    public function __construct(private ClientInterface $decorated, private HttpClientCollector $collector)
+    public function __construct(
+        private readonly ClientInterface $decorated,
+        private readonly HttpClientCollector $collector
+    )
     {
     }
 

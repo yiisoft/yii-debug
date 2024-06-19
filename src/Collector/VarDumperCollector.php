@@ -10,7 +10,9 @@ final class VarDumperCollector implements SummaryCollectorInterface
 
     private array $vars = [];
 
-    public function __construct(private TimelineCollector $timelineCollector)
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    )
     {
     }
 

@@ -27,7 +27,9 @@ final class RequestCollector implements SummaryCollectorInterface
     private ?ServerRequestInterface $request = null;
     private ?ResponseInterface $response = null;
 
-    public function __construct(private TimelineCollector $timelineCollector)
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    )
     {
     }
 

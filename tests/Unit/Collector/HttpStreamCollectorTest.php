@@ -68,7 +68,7 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
     {
         $httpStreamBefore = function (string $url) {
         };
-        $httpStreamOperation = function (string $url) {
+        $httpStreamOperation = static function (string $url) {
             $stream = fopen($url, 'r');
             fread($stream, 4);
             ftell($stream);

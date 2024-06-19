@@ -14,7 +14,9 @@ final class EventCollector implements SummaryCollectorInterface
 
     private array $events = [];
 
-    public function __construct(private TimelineCollector $timelineCollector)
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    )
     {
     }
 

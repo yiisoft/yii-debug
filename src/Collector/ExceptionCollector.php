@@ -13,7 +13,9 @@ final class ExceptionCollector implements SummaryCollectorInterface
 
     private ?Throwable $exception = null;
 
-    public function __construct(private TimelineCollector $timelineCollector)
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    )
     {
     }
 

@@ -17,12 +17,12 @@ final class Debugger
     private bool $active = false;
 
     public function __construct(
-        private DebuggerIdGenerator $idGenerator,
-        private StorageInterface $target,
+        private readonly DebuggerIdGenerator $idGenerator,
+        private readonly StorageInterface $target,
         /**
          * @var CollectorInterface[]
          */
-        private array $collectors,
+        private readonly array $collectors,
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
     ) {

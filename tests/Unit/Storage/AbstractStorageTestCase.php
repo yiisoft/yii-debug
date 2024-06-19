@@ -13,6 +13,8 @@ use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
+use function json_decode;
+
 abstract class AbstractStorageTestCase extends TestCase
 {
     /**
@@ -40,7 +42,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $storage->addCollector($this->createFakeCollector($data));
         $storage->addCollector($this->createFakeSummaryCollector($data));
         $expectedData = $storage->getData();
-        $encodedExpectedData = \json_decode(Dumper::create($expectedData)->asJson(), true, 512, JSON_THROW_ON_ERROR);
+        $encodedExpectedData = json_decode(Dumper::create($expectedData)->asJson(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!$storage instanceof MemoryStorage) {
             $storage->flush();
@@ -48,7 +50,7 @@ abstract class AbstractStorageTestCase extends TestCase
 
         $result = $storage->read(StorageInterface::TYPE_DATA);
         $dumper = Dumper::create($result);
-        $encodedResult = \json_decode($dumper->asJson(), true, 512, JSON_THROW_ON_ERROR);
+        $encodedResult = json_decode($dumper->asJson(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertEquals([$idGenerator->getId() => $encodedExpectedData], $encodedResult);
     }
 

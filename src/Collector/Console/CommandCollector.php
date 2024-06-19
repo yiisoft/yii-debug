@@ -25,7 +25,9 @@ final class CommandCollector implements SummaryCollectorInterface
     private const UNDEFINED_EXIT_CODE = -1;
     private array $commands = [];
 
-    public function __construct(private TimelineCollector $timelineCollector)
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    )
     {
     }
 

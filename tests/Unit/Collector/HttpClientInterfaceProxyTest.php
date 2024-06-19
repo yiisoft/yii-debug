@@ -14,7 +14,7 @@ use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
 final class HttpClientInterfaceProxyTest extends TestCase
 {
-    public function testSendRequest()
+    public function testSendRequest(): void
     {
         $request = new Request('GET', 'http://example.com');
         $response = new Response(200, [], 'test');

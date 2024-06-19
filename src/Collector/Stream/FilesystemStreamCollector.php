@@ -18,8 +18,8 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
          * - '/' . preg_quote('yii-debug/src/Dumper', '/') . '/'
          * - '/ClosureExporter/'
          */
-        private array $ignoredPathPatterns = [],
-        private array $ignoredClasses = [],
+        private readonly array $ignoredPathPatterns = [],
+        private readonly array $ignoredClasses = [],
     ) {
     }
 

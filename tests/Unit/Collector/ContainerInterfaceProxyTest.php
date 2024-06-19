@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -12,6 +13,7 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use stdClass;
+use Throwable;
 use Yiisoft\Di\CompositeContainer;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
@@ -190,16 +192,17 @@ final class ContainerInterfaceProxyTest extends TestCase
     public function testHasThrowsExceptionButErrorInCollectorIsAbsent(): void
     {
         $container = new CompositeContainer();
-        $container->attach(new class () implements ContainerInterface {
+        $container->attach(
+            container: new class () implements ContainerInterface {
             public function get($id)
             {
-                throw new class () extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends Exception implements ContainerExceptionInterface {
                 };
             }
 
             public function has($id): bool
             {
-                throw new class () extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends Exception implements ContainerExceptionInterface {
                 };
             }
         });
@@ -213,7 +216,7 @@ final class ContainerInterfaceProxyTest extends TestCase
         $thrown = null;
         try {
             $containerProxy->has('123');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $thrown = $e;
         }
 
@@ -235,13 +238,13 @@ final class ContainerInterfaceProxyTest extends TestCase
         $container->attach(new class () implements ContainerInterface {
             public function get($id)
             {
-                throw new class () extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends Exception implements ContainerExceptionInterface {
                 };
             }
 
             public function has($id): bool
             {
-                throw new class () extends \Exception implements ContainerExceptionInterface {
+                throw new class () extends Exception implements ContainerExceptionInterface {
                 };
             }
         });
@@ -255,7 +258,7 @@ final class ContainerInterfaceProxyTest extends TestCase
         $thrown = null;
         try {
             $containerProxy->has('123');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $thrown = $e;
         }
 
