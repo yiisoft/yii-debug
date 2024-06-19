@@ -16,8 +16,7 @@ final class MemoryStorage implements StorageInterface
 
     public function __construct(
         private readonly DebuggerIdGenerator $idGenerator
-    )
-    {
+    ) {
     }
 
     public function addCollector(CollectorInterface $collector): void

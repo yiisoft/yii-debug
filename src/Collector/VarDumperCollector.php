@@ -12,8 +12,7 @@ final class VarDumperCollector implements SummaryCollectorInterface
 
     public function __construct(
         private readonly TimelineCollector $timelineCollector
-    )
-    {
+    ) {
     }
 
     public function collect(mixed $variable, string $line): void

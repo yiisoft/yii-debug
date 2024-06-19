@@ -34,8 +34,7 @@ final class HttpClientCollector implements SummaryCollectorInterface
 
     public function __construct(
         private readonly TimelineCollector $timelineCollector
-    )
-    {
+    ) {
     }
 
     public function collect(RequestInterface $request, float $startTime, string $line, string $uniqueId): void

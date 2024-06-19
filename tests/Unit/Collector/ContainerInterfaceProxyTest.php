@@ -194,18 +194,19 @@ final class ContainerInterfaceProxyTest extends TestCase
         $container = new CompositeContainer();
         $container->attach(
             container: new class () implements ContainerInterface {
-            public function get($id)
-            {
-                throw new class () extends Exception implements ContainerExceptionInterface {
-                };
-            }
+                public function get($id)
+                {
+                    throw new class () extends Exception implements ContainerExceptionInterface {
+                    };
+                }
 
-            public function has($id): bool
-            {
-                throw new class () extends Exception implements ContainerExceptionInterface {
-                };
+                public function has($id): bool
+                {
+                    throw new class () extends Exception implements ContainerExceptionInterface {
+                    };
+                }
             }
-        });
+        );
         $container->attach($container);
 
         $config = $this->createConfig(ContainerInterfaceProxy::LOG_NOTHING);

@@ -22,8 +22,7 @@ final class Dumper
     private function __construct(
         private readonly mixed $variable,
         array $excludedClasses
-    )
-    {
+    ) {
         $this->excludedClasses = array_flip($excludedClasses);
     }
 

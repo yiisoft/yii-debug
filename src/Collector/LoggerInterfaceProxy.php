@@ -13,8 +13,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly LogCollector $collector
-    )
-    {
+    ) {
     }
 
     public function emergency(string|Stringable $message, array $context = []): void
