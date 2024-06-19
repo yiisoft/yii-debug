@@ -16,9 +16,6 @@ final class Dumper
     private static ?ClosureExporter $closureExporter = null;
     private array $excludedClasses;
 
-    /**
-     * @param mixed $variable Variable to dump.
-     */
     private function __construct(
         private readonly mixed $variable,
         array $excludedClasses
@@ -27,8 +24,6 @@ final class Dumper
     }
 
     /**
-     * @param mixed $variable Variable to dump.
-     *
      * @return self An instance containing variable to dump.
      */
     public static function create(mixed $variable, array $excludedClasses = []): self
