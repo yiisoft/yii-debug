@@ -10,8 +10,9 @@ final class ServiceCollector implements SummaryCollectorInterface
 
     private array $items = [];
 
-    public function __construct(private TimelineCollector $timelineCollector)
-    {
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    ) {
     }
 
     public function getCollected(): array

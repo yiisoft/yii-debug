@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Collector;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
@@ -33,7 +34,7 @@ final class ConsoleAppInfoCollectorTest extends AbstractCollectorTestCase
         $input = new ArrayInput([]);
         $output = new NullOutput();
         $collector->collect(new ConsoleCommandEvent(null, $input, $output));
-        $collector->collect(new ConsoleErrorEvent($input, $output, new \Exception()));
+        $collector->collect(new ConsoleErrorEvent($input, $output, new Exception()));
         $collector->collect(new ConsoleTerminateEvent($command, $input, $output, 2));
 
         DIRECTORY_SEPARATOR === '\\' ? sleep(1) : usleep(123_000);

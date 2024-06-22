@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Command;
 
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,14 +23,15 @@ use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\Debugger;
 
+#[AsCommand(
+    name: 'debug:container',
+    description: 'Show information about container',
+)]
 final class DebugContainerCommand extends Command
 {
-    public const COMMAND_NAME = 'debug:container';
-    protected static $defaultName = self::COMMAND_NAME;
-
     public function __construct(
-        private ContainerInterface $container,
-        private Debugger $debugger,
+        private readonly ContainerInterface $container,
+        private readonly Debugger $debugger,
     ) {
         parent::__construct();
     }
@@ -36,7 +39,6 @@ final class DebugContainerCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Show information about container')
             ->addArgument('id', InputArgument::IS_ARRAY, 'Service ID')
             ->addOption('groups', null, InputOption::VALUE_NONE, 'Show groups')
             ->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'Show group');
@@ -118,7 +120,7 @@ final class DebugContainerCommand extends Command
             $groups = array_keys($build);
             sort($groups);
 
-            $io->table(['Groups'], array_map(fn ($group) => [$group], $groups));
+            $io->table(['Groups'], array_map(static fn ($group) => [$group], $groups));
 
             return ExitCode::OK;
         }
@@ -156,7 +158,7 @@ final class DebugContainerCommand extends Command
 
     private function getConfigBuild(mixed $config): array
     {
-        $reflection = new \ReflectionClass($config);
+        $reflection = new ReflectionClass($config);
         $buildReflection = $reflection->getProperty('build');
         $buildReflection->setAccessible(true);
         return $buildReflection->getValue($config);

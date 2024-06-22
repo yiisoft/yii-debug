@@ -4,38 +4,41 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit;
 
+use Closure;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Yiisoft\Yii\Debug\FlattenException;
 
 final class FlattenExceptionTest extends TestCase
 {
     public function testMessage(): void
     {
-        $flattened = new FlattenException(new \Exception('test'));
+        $flattened = new FlattenException(new Exception('test'));
         $this->assertEquals('test', $flattened->getMessage());
     }
 
     public function testCode(): void
     {
-        $flattened = new FlattenException(new \Exception('test', 100));
+        $flattened = new FlattenException(new Exception('test', 100));
         $this->assertEquals(100, $flattened->getCode());
     }
 
     public function testFile(): void
     {
-        $flattened = new FlattenException(new \Exception('test', 100));
+        $flattened = new FlattenException(new Exception('test', 100));
         $this->assertEquals(__FILE__, $flattened->getFile());
     }
 
     public function testLine(): void
     {
-        $flattened = new FlattenException(new \Exception('test', 100));
+        $flattened = new FlattenException(new Exception('test', 100));
         $this->assertEquals(__LINE__ - 1, $flattened->getLine());
     }
 
     public function testTrace(): void
     {
-        $i = (new \Exception('test'));
+        $i = (new Exception('test'));
         $flattened = new FlattenException($i);
 
         $trace = $flattened->getTrace();
@@ -47,8 +50,8 @@ final class FlattenExceptionTest extends TestCase
 
     public function testPrevious(): void
     {
-        $exception2 = new \Exception();
-        $exception = new \Exception('test', 0, $exception2);
+        $exception2 = new Exception();
+        $exception = new Exception('test', 0, $exception2);
 
         $flattened = new FlattenException($exception);
         $flattened2 = new FlattenException($exception2);
@@ -64,15 +67,15 @@ final class FlattenExceptionTest extends TestCase
 
     public function testToString(): void
     {
-        $exception = new \Exception();
+        $exception = new Exception();
         $this->assertEquals($exception->__toString(), (new FlattenException($exception))->__toString(), 'empty');
-        $exception = new \Exception('test');
+        $exception = new Exception('test');
         $this->assertEquals($exception->__toString(), (new FlattenException($exception))->__toString());
     }
 
     public function testClass(): void
     {
-        $this->assertEquals('Exception', (new FlattenException(new \Exception()))->getClass());
+        $this->assertEquals('Exception', (new FlattenException(new Exception()))->getClass());
     }
 
     public function testArguments(): void
@@ -86,7 +89,7 @@ final class FlattenExceptionTest extends TestCase
 
         $exception = $this->createException([
             (object)['foo' => 1],
-            new \RuntimeException('test'),
+            new RuntimeException('test'),
             $incomplete,
             $dh,
             $fh,
@@ -115,14 +118,14 @@ final class FlattenExceptionTest extends TestCase
 
         $i = 0;
         $this->assertSame(['object', 'stdClass'], $array[$i++]);
-        $this->assertSame(['object', \RuntimeException::class], $array[$i++]);
+        $this->assertSame(['object', RuntimeException::class], $array[$i++]);
         $this->assertSame(['incomplete-object', 'BogusTestClass'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
         $this->assertSame(['resource', 'stream'], $array[$i++]);
 
         $args = $array[$i++];
         $this->assertSame($args[0], 'object');
-        $this->assertTrue(\Closure::class === $args[1] || is_subclass_of($args[1], '\\' . \Closure::class), 'Expect object class name to be Closure or a subclass of Closure.');
+        $this->assertTrue(Closure::class === $args[1] || is_subclass_of($args[1], '\\' . Closure::class), 'Expect object class name to be Closure or a subclass of Closure.');
 
         $this->assertSame(['array', [['integer', 1], ['integer', 2]]], $array[$i++]);
         $this->assertSame(['array', ['foo' => ['integer', 123]]], $array[$i++]);
@@ -145,7 +148,7 @@ final class FlattenExceptionTest extends TestCase
         $exception = $this->createException(fn () => 1 + 1);
 
         $flattened = new FlattenException($exception);
-        $this->assertStringContainsString(\Closure::class, serialize($flattened));
+        $this->assertStringContainsString(Closure::class, serialize($flattened));
     }
 
     public function testRecursionInArguments(): void
@@ -188,8 +191,8 @@ final class FlattenExceptionTest extends TestCase
         $this->assertStringNotContainsString('*value1*', $serializeTrace);
     }
 
-    private function createException($foo): \Exception
+    private function createException($foo): Exception
     {
-        return new \Exception();
+        return new Exception();
     }
 }

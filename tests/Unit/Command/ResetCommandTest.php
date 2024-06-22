@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class ResetCommandTest extends TestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $idGenerator = new DebuggerIdGenerator();
         $storage = $this->createMock(StorageInterface::class);

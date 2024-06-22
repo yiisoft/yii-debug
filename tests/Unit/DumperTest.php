@@ -11,6 +11,12 @@ use Yiisoft\Yii\Debug as D;
 use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\ThreeProperties;
 
+use function socket_create;
+
+use const AF_INET;
+use const SOCK_STREAM;
+use const SOL_TCP;
+
 final class DumperTest extends TestCase
 {
     /**
@@ -95,9 +101,7 @@ final class DumperTest extends TestCase
     public function testDepthLimitInObjectMap(): void
     {
         $variable = [1, []];
-        $expectedResult = sprintf(
-            '"array (2 items) [...]"',
-        );
+        $expectedResult = '"array (2 items) [...]"';
 
         $dumper = Dumper::create($variable);
         $actualResult = $dumper->asJson(0);
@@ -459,7 +463,7 @@ final class DumperTest extends TestCase
             '"{closed resource}"',
         ];
 
-        $socketResource = \socket_create(\AF_INET, \SOCK_STREAM, \SOL_TCP);
+        $socketResource = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         $socketResourceId = spl_object_id($socketResource);
         yield 'socket resource' => [
             $socketResource,
