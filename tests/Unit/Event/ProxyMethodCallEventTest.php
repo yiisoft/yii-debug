@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Unit\Event;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Yii\Debug\Event\ProxyMethodCallEvent;
 
 class ProxyMethodCallEventTest extends TestCase
@@ -14,7 +15,7 @@ class ProxyMethodCallEventTest extends TestCase
         $time = microtime(true);
         $event = new ProxyMethodCallEvent(
             'test',
-            \stdClass::class,
+            stdClass::class,
             'test',
             [],
             true,
@@ -26,6 +27,6 @@ class ProxyMethodCallEventTest extends TestCase
 
         $this->assertEquals($time, $event->timeStart);
         $this->assertEquals($time + 1, $event->timeEnd);
-        $this->assertEquals(\stdClass::class, $event->class);
+        $this->assertEquals(stdClass::class, $event->class);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Unit\Helper;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use stdClass;
 use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 
@@ -26,7 +27,7 @@ final class BacktraceIgnoreMatcherTest extends TestCase
     public function testFileIgnorance(): void
     {
         $backtrace = debug_backtrace();
-        $reflection = new \ReflectionClass(TestCase::class);
+        $reflection = new ReflectionClass(TestCase::class);
         $file = $reflection->getFileName();
 
         $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote($file)]));

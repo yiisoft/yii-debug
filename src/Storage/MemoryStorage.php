@@ -14,8 +14,9 @@ final class MemoryStorage implements StorageInterface
      */
     private array $collectors = [];
 
-    public function __construct(private DebuggerIdGenerator $idGenerator)
-    {
+    public function __construct(
+        private readonly DebuggerIdGenerator $idGenerator
+    ) {
     }
 
     public function addCollector(CollectorInterface $collector): void
