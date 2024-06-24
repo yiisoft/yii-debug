@@ -23,7 +23,6 @@ final class DebugServiceProvider implements ServiceProviderInterface
 
     public function getExtensions(): array
     {
-        return [
-        ];
+        return [];
     }
 }
