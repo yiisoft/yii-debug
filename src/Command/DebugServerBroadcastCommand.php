@@ -54,7 +54,7 @@ final class DebugServerBroadcastCommand extends Command
 
         $data = $input->getOption('message');
         $socket->broadcast(Connection::MESSAGE_TYPE_LOGGER, $data);
-        $socket->broadcast(Connection::MESSAGE_TYPE_VAR_DUMPER,  VarDumper::create(['$data' => $data])->asJson(false));
+        $socket->broadcast(Connection::MESSAGE_TYPE_VAR_DUMPER, VarDumper::create(['$data' => $data])->asJson(false));
 
         return ExitCode::OK;
     }
