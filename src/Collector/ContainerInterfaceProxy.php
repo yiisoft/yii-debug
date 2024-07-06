@@ -54,13 +54,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
             $this->logProxy(ContainerInterface::class, $this->container, 'get', [$id], $instance, $timeStart);
         }
 
-        if (
-            is_object($instance)
-            && (
-                ($proxy = $this->getServiceProxyCache($id)) ||
-                ($proxy = $this->getServiceProxy($id, $instance))
-            )
-        ) {
+        if (is_object($instance) && ($proxy = $this->getServiceProxy($id, $instance))) {
             $this->setServiceProxyCache($id, $proxy);
             return $proxy;
         }

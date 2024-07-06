@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\DebugServer\Connection;
 
@@ -52,7 +53,8 @@ final class DebugServerBroadcastCommand extends Command
         }
 
         $data = $input->getOption('message');
-        $socket->broadcast($data);
+        $socket->broadcast(Connection::MESSAGE_TYPE_LOGGER, $data);
+        $socket->broadcast(Connection::MESSAGE_TYPE_VAR_DUMPER,  VarDumper::create(['$data' => $data])->asJson(false));
 
         return ExitCode::OK;
     }

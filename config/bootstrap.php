@@ -22,13 +22,15 @@ return [
             return;
         }
 
-        // todo: remove VarDumperHandler if dev-server is not enabled
+        $decorated = VarDumper::getDefaultHandler();
+
+        if ($params['yiisoft/yii-debug']['devServer']['enabled'] ?? false) {
+            $decorated = new CompositeHandler([$decorated, new VarDumperHandler()]);
+        }
+
         VarDumper::setDefaultHandler(
             new VarDumperHandlerInterfaceProxy(
-                new CompositeHandler([
-                    VarDumper::getDefaultHandler(),
-                    new VarDumperHandler(),
-                ]),
+                $decorated,
                 $container->get(VarDumperCollector::class),
             ),
         );

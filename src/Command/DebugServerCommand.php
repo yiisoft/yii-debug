@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpComposerExtensionStubsInspection */
-
 declare(strict_types=1);
 declare(ticks=1);
 
@@ -11,7 +9,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\SignalRegistry\SignalRegistry;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\DebugServer\Connection;
@@ -24,7 +21,6 @@ final class DebugServerCommand extends Command
     protected static $defaultDescription = 'Runs PHP built-in web server';
 
     public function __construct(
-        private SignalRegistry $signalRegistry,
         private string $address = '0.0.0.0',
         private int $port = 8890,
     ) {
@@ -56,45 +52,6 @@ final class DebugServerCommand extends Command
         $socket = Connection::create();
         $socket->bind();
 
-        //if (socket_recvfrom($socket, $buf, 64 * 1024, 0, $source) === false) {
-        //    echo "recv_from failed";
-        //}
-        //var_dump($buf);
-        //
-        //return 0;
-        //if (!@socket_bind($socket, $address, $port)) {
-        //    $io->error(
-        //        sprintf(
-        //            'Address "%s" is already taken by another process.',
-        //            $this->address . ':' . $this->port,
-        //        )
-        //    );
-        //    $io->info(
-        //        sprintf(
-        //            'Would you like to kill the process and rerun?'
-        //        )
-        //    );
-        //    $result = $io->ask('Would you like to kill the process and rerun? (Y/n)');
-        //
-        //    if ($result === 'Y') {
-        //        // todo: change to finding a process by opened port
-        //        $pid = shell_exec(
-        //            sprintf(
-        //                'ps | grep "php ./yii dev"',
-        //            //$this->port,
-        //            )
-        //        );
-        //        $io->info(
-        //            sprintf(
-        //                'Killing the process with ID: "%s".',
-        //                $pid,
-        //            )
-        //        );
-        //        //shell_exec('kill ' . $pid);
-        //    }
-        //    //return ExitCode::IOERR;
-        //}
-
         $io->success(
             sprintf(
                 'Listening on "%s".',
@@ -112,26 +69,21 @@ final class DebugServerCommand extends Command
         }
 
         foreach ($socket->read() as $message) {
-            switch ($message[0]) {
-                case Connection::TYPE_ERROR:
-                    $io->writeln('Connection closed with error: ' . $message[1]);
-                    break 2;
-                default:
-                    $data = \json_decode($message[1], null, 512, JSON_THROW_ON_ERROR);
-                    if ($data[0] === Connection::MESSAGE_TYPE_VAR_DUMPER) {
-                        $io->title('VarDumper');
-                    } elseif ($data[0] === Connection::MESSAGE_TYPE_LOGGER) {
-                        $io->write('Logger');
-                    }
-                    $io->writeln(
-                        sprintf(
-                            "\033[1;37m\033[47m%s\033[0m",
-                            $data[1]
-                        )
-                    );
-                    $io->newLine();
+            if ($message[0] === Connection::TYPE_ERROR) {
+                $io->error('Connection closed with error: ' . $message[1]);
+                break;
             }
+
+            $data = \json_decode($message[1], null, 512, JSON_THROW_ON_ERROR);
+            $type = match ($data[0]) {
+                Connection::MESSAGE_TYPE_VAR_DUMPER => 'VarDumper',
+                Connection::MESSAGE_TYPE_LOGGER => 'Logger',
+                default => 'Plain text',
+            };
+
+            $io->block($data[1], $type);
         }
+
         return ExitCode::OK;
     }
 }
