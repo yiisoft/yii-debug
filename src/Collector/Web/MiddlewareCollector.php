@@ -18,8 +18,9 @@ final class MiddlewareCollector implements SummaryCollectorInterface
     private array $beforeStack = [];
     private array $afterStack = [];
 
-    public function __construct(private TimelineCollector $timelineCollector)
-    {
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    ) {
     }
 
     public function getCollected(): array

@@ -97,9 +97,9 @@ return [
     ],
     'yiisoft/yii-console' => [
         'commands' => [
-            DebugResetCommand::COMMAND_NAME => DebugResetCommand::class,
-            DebugContainerCommand::COMMAND_NAME => DebugContainerCommand::class,
-            DebugEventsCommand::COMMAND_NAME => DebugEventsCommand::class,
+            'debug:reset' => DebugResetCommand::class,
+            'debug:container' => DebugContainerCommand::class,
+            'debug:events' => DebugEventsCommand::class,
             DebugServerCommand::COMMAND_NAME => DebugServerCommand::class,
             DebugServerBroadcastCommand::COMMAND_NAME => DebugServerBroadcastCommand::class,
         ],

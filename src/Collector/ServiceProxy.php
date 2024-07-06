@@ -11,7 +11,7 @@ class ServiceProxy extends ObjectProxy
     use ProxyLogTrait;
 
     public function __construct(
-        private string $service,
+        private readonly string $service,
         object $instance,
         ContainerProxyConfig $config,
     ) {

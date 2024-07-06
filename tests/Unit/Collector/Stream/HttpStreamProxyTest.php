@@ -14,7 +14,7 @@ final class HttpStreamProxyTest extends TestCase
         HttpStreamProxy::unregister();
     }
 
-    public function testRegisteredTwice()
+    public function testRegisteredTwice(): void
     {
         HttpStreamProxy::unregister();
         $this->assertFalse(HttpStreamProxy::$registered);

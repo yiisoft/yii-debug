@@ -11,7 +11,7 @@ class ServiceMethodProxy extends ServiceProxy
     public function __construct(
         string $service,
         object $instance,
-        private array $methods,
+        private readonly array $methods,
         ContainerProxyConfig $config
     ) {
         parent::__construct($service, $instance, $config);

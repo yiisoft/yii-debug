@@ -21,8 +21,9 @@ final class WebAppInfoCollector implements SummaryCollectorInterface
     private float $requestProcessingTimeStarted = 0;
     private float $requestProcessingTimeStopped = 0;
 
-    public function __construct(private TimelineCollector $timelineCollector)
-    {
+    public function __construct(
+        private readonly TimelineCollector $timelineCollector
+    ) {
     }
 
     public function getCollected(): array

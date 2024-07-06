@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Debug\Command;
 
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,14 +20,15 @@ use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Yii\Console\ExitCode;
 use Yiisoft\Yii\Debug\Debugger;
 
+#[AsCommand(
+    name: 'debug:events',
+    description: 'Show information about events and listeners',
+)]
 final class DebugEventsCommand extends Command
 {
-    public const COMMAND_NAME = 'debug:events';
-    protected static $defaultName = self::COMMAND_NAME;
-
     public function __construct(
-        private ContainerInterface $container,
-        private Debugger $debugger,
+        private readonly ContainerInterface $container,
+        private readonly Debugger $debugger,
     ) {
         parent::__construct();
     }
@@ -34,7 +36,6 @@ final class DebugEventsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Show information about events and listeners')
             ->addArgument('id', InputArgument::IS_ARRAY, 'Service ID')
             ->addOption('groups', null, InputOption::VALUE_NONE, 'Show groups')
             ->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'Show group');
@@ -52,7 +53,7 @@ final class DebugEventsCommand extends Command
             $groups = array_keys($build);
             sort($groups);
 
-            $io->table(['Groups'], array_map(fn ($group) => [$group], $groups));
+            $io->table(['Groups'], array_map(static fn ($group) => [$group], $groups));
 
             return ExitCode::OK;
         }

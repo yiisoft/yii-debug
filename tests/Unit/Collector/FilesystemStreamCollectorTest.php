@@ -65,12 +65,12 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 
     public static function dataSkipCollectOnMatchIgnoreReferences(): iterable
     {
-        $mkdirBefore = function (string $path) {
+        $mkdirBefore = static function (string $path) {
             if (is_dir($path)) {
                 @rmdir($path);
             }
         };
-        $mkdirOperation = function (string $path) {
+        $mkdirOperation = static function (string $path) {
             mkdir($path, 0777, true);
         };
         $mkdirAfter = $mkdirBefore;
@@ -84,7 +84,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $mkdirAfter,
             [
                 'mkdir' => [
-                    ['path' => $path, 'args' => ['mode' => 0777, 'options' => 9]], // 9 for some reasons
+                    ['path' => $path, 'args' => ['mode' => 0777, 'options' => 9]], // 9 for some reason
                 ],
             ],
         ];
@@ -107,7 +107,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             [],
         ];
 
-        $renameBefore = function (string $path) {
+        $renameBefore = static function (string $path) {
             if (!is_dir(dirname($path))) {
                 mkdir(dirname($path), 0777, true);
             }
@@ -115,10 +115,10 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
                 touch($path);
             }
         };
-        $renameOperation = function (string $path) {
+        $renameOperation = static function (string $path) {
             rename($path, $path . '.renamed');
         };
-        $renameAfter = function (string $path) {
+        $renameAfter = static function (string $path) {
             FileHelper::removeDirectory(dirname($path));
         };
 
@@ -154,15 +154,15 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             [],
         ];
 
-        $rmdirBefore = function (string $path) {
+        $rmdirBefore = static function (string $path): void {
             if (!is_dir($path)) {
                 mkdir($path, 0777, true);
             }
         };
-        $rmdirOperation = function (string $path) {
+        $rmdirOperation = static function (string $path): void {
             rmdir($path);
         };
-        $rmdirAfter = function (string $path) {
+        $rmdirAfter = static function (string $path): void {
             if (is_dir($path)) {
                 rmdir($path);
             }
@@ -177,7 +177,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $rmdirAfter,
             [
                 'rmdir' => [
-                    ['path' => $path, 'args' => ['options' => 8]], // 8 for some reasons
+                    ['path' => $path, 'args' => ['options' => 8]], // 8 for some reason
                 ],
             ],
         ];
@@ -200,7 +200,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             [],
         ];
 
-        $unlinkBefore = function (string $path) {
+        $unlinkBefore = static function (string $path) {
             if (!is_dir(dirname($path))) {
                 mkdir(dirname($path), 0777, true);
             }
@@ -208,10 +208,10 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
                 touch($path);
             }
         };
-        $unlinkOperation = function (string $path) {
+        $unlinkOperation = static function (string $path) {
             unlink($path);
         };
-        $unlinkAfter = function (string $path) {
+        $unlinkAfter = static function (string $path) {
             FileHelper::removeDirectory(dirname($path));
         };
 
@@ -247,7 +247,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             [],
         ];
 
-        $fileStreamBefore = function (string $path) {
+        $fileStreamBefore = static function (string $path) {
             if (!is_dir(dirname($path))) {
                 mkdir(dirname($path), 0777, true);
             }
@@ -255,7 +255,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
                 touch($path);
             }
         };
-        $fileStreamOperation = function (string $path) {
+        $fileStreamOperation = static function (string $path) {
             $stream = fopen($path, 'a+');
             fwrite($stream, 'test');
             fread($stream, 4);
@@ -267,7 +267,7 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             flock($stream, LOCK_EX);
             fclose($stream);
         };
-        $fileStreamAfter = function (string $path) {
+        $fileStreamAfter = static function (string $path) {
             FileHelper::removeDirectory(dirname($path));
         };
 

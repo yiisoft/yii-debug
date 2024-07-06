@@ -4,7 +4,7 @@ The `debug/container` command displays all registered services and config groups
 
 For example:
 
-```
+```text
 ❯ ./yii debug:container
 +---------------------- params-console -----------------------+
 | Group                        | Services                     |

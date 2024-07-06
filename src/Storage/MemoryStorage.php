@@ -14,8 +14,9 @@ final class MemoryStorage implements StorageInterface
      */
     private array $collectors = [];
 
-    public function __construct(private DebuggerIdGenerator $idGenerator)
-    {
+    public function __construct(
+        private readonly DebuggerIdGenerator $idGenerator
+    ) {
     }
 
     public function addCollector(CollectorInterface $collector): void
@@ -31,6 +32,12 @@ final class MemoryStorage implements StorageInterface
                     'id' => $this->idGenerator->getId(),
                     'collectors' => array_keys($this->collectors),
                 ],
+            ];
+        }
+
+        if ($type === self::TYPE_OBJECTS) {
+            return [
+                $this->idGenerator->getId() => array_merge(...array_values($this->getData())),
             ];
         }
 

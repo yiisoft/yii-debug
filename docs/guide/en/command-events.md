@@ -29,6 +29,7 @@ For example:
 | Yiisoft\Yii\Cycle\Event\AfterMigrate                  | 1     | Yiisoft\Yii\Cycle\Listener\MigrationListener::onAfterMigrate         |
 +-------------------------------------------------------+-------+----------------------------------------------------------------------+
 ```
+
 ### List all groups
 
 You can list all groups by specifying `--groups` option:
