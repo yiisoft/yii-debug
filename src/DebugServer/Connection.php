@@ -21,6 +21,7 @@ final class Connection
 
     public const TYPE_RESULT = 0x001B;
     public const TYPE_ERROR = 0x002B;
+    public const TYPE_RELEASE = 0x003B;
 
     public const MESSAGE_TYPE_VAR_DUMPER = 0x001B;
     public const MESSAGE_TYPE_LOGGER = 0x002B;
@@ -72,13 +73,29 @@ final class Connection
     }
 
     /**
-     * @return Generator<int, array{0: self::TYPE_ERROR|self::TYPE_RESULT, 1: string, 2: int|string, 3?: int}>
+     * @return Generator<int, array{0: self::TYPE_ERROR|self::TYPE_RELEASE|self::TYPE_RESULT, 1: string, 2: int|string, 3?: int}>
      */
     public function read(): Generator
     {
+        $sndbuf = socket_get_option($this->socket,SOL_SOCKET,SO_SNDBUF);
+        $rcvbuf = socket_get_option($this->socket,SOL_SOCKET,SO_RCVBUF);
+
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, ["sec" => 2, "usec" => 0]);
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVBUF, 1024*10);
+        socket_set_option($this->socket, SOL_SOCKET, SO_SNDBUF, 1024*10);
+
+        $newFrameAwaitRepeat = 0;
+        $maxFrameAwaitRepeats = 10;
+        $maxRepeats = 10;
+
         while (true) {
-            if (!socket_recvfrom($this->socket, $header, self::DEFAULT_BUFFER_SIZE, MSG_DONTWAIT, $ip, $port)) {
+            if (!socket_recv($this->socket, $header, 8, MSG_WAITALL)) {
                 $socket_last_error = socket_last_error($this->socket);
+                $newFrameAwaitRepeat++;
+                if ($newFrameAwaitRepeat === $maxFrameAwaitRepeats) {
+                    $newFrameAwaitRepeat = 0;
+                    yield [self::TYPE_RELEASE, $socket_last_error, socket_strerror($socket_last_error)];
+                }
                 if ($socket_last_error === 35) {
                     usleep(self::DEFAULT_TIMEOUT);
                     continue;
@@ -88,15 +105,26 @@ final class Connection
                 continue;
             }
 
-            $length = unpack('N', $header);
+            $length = unpack('P', $header);
             $localBuffer = '';
             $bytesToRead = $length[1];
             $bytesRead = 0;
+            //$value = 2 ** ((int) ($bytesToRead / 2));
+            //socket_set_option($this->socket, SOL_SOCKET, SO_RCVBUF, $value);
+            $repeat = 0;
             while ($bytesRead < $bytesToRead) {
-                if (!$bufferLength = socket_recvfrom($this->socket, $buffer, self::DEFAULT_BUFFER_SIZE, MSG_DONTWAIT, $ip, $port)) {
+                //$buffer = socket_read($this->socket,  $bytesToRead - $bytesRead);
+                //$bufferLength = strlen($buffer);
+                $bufferLength = socket_recv($this->socket, $buffer, min($bytesToRead - $bytesRead, self::DEFAULT_BUFFER_SIZE), MSG_DONTWAIT);
+                if ($bufferLength === false) {
+                    if ($repeat === $maxRepeats) {
+                        break;
+                    }
+                //if ($bufferLength === false) {
                     $socket_last_error = socket_last_error($this->socket);
                     if ($socket_last_error === 35) {
-                        usleep(self::DEFAULT_TIMEOUT);
+                        $repeat++;
+                        usleep(self::DEFAULT_TIMEOUT * 5);
                         continue;
                     }
                     $this->close();
@@ -106,7 +134,7 @@ final class Connection
                 $localBuffer .= $buffer;
                 $bytesRead += $bufferLength;
             }
-            yield [self::TYPE_RESULT, base64_decode($localBuffer), $ip, $port];
+            yield [self::TYPE_RESULT, base64_decode($localBuffer)];
         }
     }
 
@@ -115,8 +143,7 @@ final class Connection
         $files = glob(sys_get_temp_dir() . '/yii-dev-server-*.sock', GLOB_NOSORT);
         //echo 'Files: ' . implode(', ', $files) . "\n";
         $uniqueErrors = [];
-        $payload = base64_encode(json_encode([$type, $data], JSON_THROW_ON_ERROR));
-        $payloadLength = strlen($payload);
+        $payload = (json_encode([$type, $data], JSON_THROW_ON_ERROR));
         foreach ($files as $file) {
             $socket = @fsockopen('udg://' . $file, -1, $errno, $errstr);
             if ($errno === 61) {
@@ -163,12 +190,13 @@ final class Connection
      */
     private function fwriteStream($fp, string $data): int|false
     {
+        $data = base64_encode($data);
         $strlen = strlen($data);
-        fwrite($fp, pack('N', $strlen));
+        fwrite($fp, pack('P', $strlen));
         for ($written = 0; $written < $strlen; $written += $fwrite) {
             $fwrite = fwrite($fp, substr($data, $written), self::DEFAULT_BUFFER_SIZE);
             //\fflush($fp);
-            usleep(self::DEFAULT_TIMEOUT / 2);
+            usleep(self::DEFAULT_TIMEOUT * 5);
             if ($fwrite === false) {
                 return $written;
             }
