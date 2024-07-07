@@ -77,12 +77,12 @@ final class Connection
      */
     public function read(): Generator
     {
-        $sndbuf = socket_get_option($this->socket,SOL_SOCKET,SO_SNDBUF);
-        $rcvbuf = socket_get_option($this->socket,SOL_SOCKET,SO_RCVBUF);
+        $sndbuf = socket_get_option($this->socket, SOL_SOCKET, SO_SNDBUF);
+        $rcvbuf = socket_get_option($this->socket, SOL_SOCKET, SO_RCVBUF);
 
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, ["sec" => 2, "usec" => 0]);
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVBUF, 1024*10);
-        socket_set_option($this->socket, SOL_SOCKET, SO_SNDBUF, 1024*10);
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 2, 'usec' => 0]);
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVBUF, 1024 * 10);
+        socket_set_option($this->socket, SOL_SOCKET, SO_SNDBUF, 1024 * 10);
 
         $newFrameAwaitRepeat = 0;
         $maxFrameAwaitRepeats = 10;
@@ -120,7 +120,7 @@ final class Connection
                     if ($repeat === $maxRepeats) {
                         break;
                     }
-                //if ($bufferLength === false) {
+                    //if ($bufferLength === false) {
                     $socket_last_error = socket_last_error($this->socket);
                     if ($socket_last_error === 35) {
                         $repeat++;
@@ -143,7 +143,7 @@ final class Connection
         $files = glob(sys_get_temp_dir() . '/yii-dev-server-*.sock', GLOB_NOSORT);
         //echo 'Files: ' . implode(', ', $files) . "\n";
         $uniqueErrors = [];
-        $payload = (json_encode([$type, $data], JSON_THROW_ON_ERROR));
+        $payload = json_encode([$type, $data], JSON_THROW_ON_ERROR);
         foreach ($files as $file) {
             $socket = @fsockopen('udg://' . $file, -1, $errno, $errstr);
             if ($errno === 61) {
