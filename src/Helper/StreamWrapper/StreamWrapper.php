@@ -215,6 +215,7 @@ final class StreamWrapper implements StreamWrapperInterface
 
     public function stream_metadata(string $path, int $option, mixed $value): bool
     {
+        /** @psalm-suppress MixedArgument */
         return match ($option) {
             STREAM_META_TOUCH => touch($path, ...$value),
             STREAM_META_OWNER_NAME, STREAM_META_OWNER => chown($path, $value),
