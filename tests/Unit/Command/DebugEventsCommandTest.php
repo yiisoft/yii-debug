@@ -21,7 +21,7 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 final class DebugEventsCommandTest extends TestCase
 {
-    public function testCommand()
+    public function testCommand(): void
     {
         $container = $this->createContainer();
         $idGenerator = new DebuggerIdGenerator();

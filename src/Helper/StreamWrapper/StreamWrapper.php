@@ -105,7 +105,7 @@ final class StreamWrapper implements StreamWrapperInterface
     /**
      * @psalm-suppress InvalidReturnType Unfortunately, I don't know what to return here.
      */
-    public function stream_cast(int $castAs)
+    public function stream_cast(int $castAs): void
     {
         // ???
     }
@@ -211,8 +211,6 @@ final class StreamWrapper implements StreamWrapperInterface
             }
             trigger_error($e->getMessage(), E_USER_ERROR);
         }
-
-        return false;
     }
 
     public function stream_metadata(string $path, int $option, mixed $value): bool

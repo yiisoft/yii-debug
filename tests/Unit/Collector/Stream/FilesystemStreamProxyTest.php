@@ -14,7 +14,7 @@ final class FilesystemStreamProxyTest extends TestCase
         FilesystemStreamProxy::unregister();
     }
 
-    public function testRegisteredTwice()
+    public function testRegisteredTwice(): void
     {
         FilesystemStreamProxy::unregister();
         $this->assertFalse(FilesystemStreamProxy::$registered);
@@ -24,7 +24,7 @@ final class FilesystemStreamProxyTest extends TestCase
         $this->assertTrue(FilesystemStreamProxy::$registered);
     }
 
-    public function testProxyAccess()
+    public function testProxyAccess(): void
     {
         $proxy = new FilesystemStreamProxy();
         FilesystemStreamProxy::register();

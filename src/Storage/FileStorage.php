@@ -11,6 +11,7 @@ use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Dumper;
 
+use function array_merge;
 use function array_slice;
 use function count;
 use function dirname;
@@ -18,6 +19,7 @@ use function filemtime;
 use function glob;
 use function strlen;
 use function substr;
+use function uasort;
 
 final class FileStorage implements StorageInterface
 {
@@ -29,7 +31,7 @@ final class FileStorage implements StorageInterface
     private int $historySize = 50;
 
     public function __construct(
-        private string $path,
+        private readonly string $path,
         private readonly DebuggerIdGenerator $idGenerator,
         private readonly array $excludedClasses = []
     ) {
@@ -89,7 +91,7 @@ final class FileStorage implements StorageInterface
 
     public function getData(): array
     {
-        return array_map(fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
+        return array_map(static fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
     }
 
     public function clear(): void

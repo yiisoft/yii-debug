@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug;
 use __PHP_Incomplete_Class;
 use ArrayObject;
 use Exception;
+use Stringable;
 use Throwable;
 
 /**
@@ -17,7 +18,7 @@ use Throwable;
  *
  * @psalm-import-type BacktraceType from Debugger
  */
-final class FlattenException implements \Stringable
+final class FlattenException implements Stringable
 {
     /**
      * @var string
@@ -26,7 +27,7 @@ final class FlattenException implements \Stringable
     /**
      * @var int|mixed
      */
-    private $code;
+    private mixed $code;
     /**
      * @var string
      */
@@ -103,7 +104,7 @@ final class FlattenException implements \Stringable
      *
      * @return int|mixed the exception code as integer.
      */
-    public function getCode()
+    public function getCode(): mixed
     {
         return $this->code;
     }
@@ -111,7 +112,7 @@ final class FlattenException implements \Stringable
     /**
      * @param int|mixed $code the exception code as integer.
      */
-    private function setCode($code): void
+    private function setCode(mixed $code): void
     {
         $this->code = $code;
     }
@@ -259,7 +260,7 @@ final class FlattenException implements \Stringable
      *
      * @return array arguments tracing.
      */
-    private function flattenArgs(array $args, $level = 0, &$count = 0): array
+    private function flattenArgs(array $args, int $level = 0, int &$count = 0): array
     {
         $result = [];
         foreach ($args as $key => $value) {

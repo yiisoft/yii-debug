@@ -25,9 +25,9 @@ final class Debugger
      * @param string[] $ignoredCommands
      */
     public function __construct(
-        private DebuggerIdGenerator $idGenerator,
-        private StorageInterface $target,
-        private array $collectors,
+        private readonly DebuggerIdGenerator $idGenerator,
+        private readonly StorageInterface $target,
+        private readonly array $collectors,
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
     ) {

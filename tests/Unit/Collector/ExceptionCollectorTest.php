@@ -70,7 +70,7 @@ final class ExceptionCollectorTest extends AbstractCollectorTestCase
         $this->assertEquals(777, $exception['code']);
     }
 
-    public function testNoExceptionCollected()
+    public function testNoExceptionCollected(): void
     {
         $collector = new ExceptionCollector(new TimelineCollector());
 

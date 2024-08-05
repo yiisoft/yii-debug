@@ -13,7 +13,7 @@ use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
 final class EventDispatcherInterfaceProxyTest extends TestCase
 {
-    public function testDispatch()
+    public function testDispatch(): void
     {
         $event = new stdClass();
         $collector = new EventCollector(new TimelineCollector());

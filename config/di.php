@@ -30,6 +30,7 @@ $common = [
         if (isset($params['historySize'])) {
             $fileStorage->setHistorySize((int) $params['historySize']);
         }
+
         return $fileStorage;
     },
 ];
@@ -47,6 +48,7 @@ return array_merge([
         $trackedServices = (array) ($params['trackedServices'] ?? []);
         $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
         $logLevel = $params['logLevel'] ?? ContainerInterfaceProxy::LOG_NOTHING;
+
         return new ContainerProxyConfig(
             $debuggerEnabled,
             $trackedServices,

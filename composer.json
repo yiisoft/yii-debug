@@ -10,14 +10,22 @@
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/yiisoft/yii-debug/issues?state=open",
+        "source": "https://github.com/yiisoft/yii-debug",
         "forum": "https://www.yiiframework.com/forum/",
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "ircs://irc.libera.chat:6697/yii",
-        "chat": "https://t.me/yii3en",
-        "source": "https://github.com/yiisoft/yii-debug"
+        "chat": "https://t.me/yii3en"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "funding": [
+        {
+            "type": "opencollective",
+            "url": "https://opencollective.com/yiisoft"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/yiisoft"
+        }
+    ],
     "require": {
         "php": "^8.1",
         "ext-mbstring": "*",
@@ -27,7 +35,7 @@
         "psr/event-dispatcher": "^1.0",
         "psr/http-client": "^1.0",
         "psr/http-message": "^1.0|^2.0",
-        "psr/log": "^2.0|^3.0",
+        "psr/log": "^1.0|^2.0|^3.0",
         "symfony/console": "^5.4|^6.0",
         "symfony/var-dumper": "^5.4|^6.4",
         "yiisoft/aliases": "^3.0",
@@ -50,11 +58,10 @@
         "rector/rector": "^1.0.0",
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^5.23",
+        "vimeo/psalm": "^5.25",
         "yiisoft/error-handler": "^3.0",
         "yiisoft/event-dispatcher": "^1.0",
         "yiisoft/log": "^2.0",
-        "yiisoft/middleware-dispatcher": "^3.0|^4.0|^5.0",
         "yiisoft/yii-console": "^2.0",
         "yiisoft/yii-http": "^1.0"
     },
@@ -70,9 +77,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
-        },
         "config-plugin-options": {
             "source-directory": "config"
         },

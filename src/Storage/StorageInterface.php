@@ -11,9 +11,20 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
  */
 interface StorageInterface
 {
-    public const TYPE_SUMMARY = 'summary';
-    public const TYPE_DATA = 'data';
-    public const TYPE_OBJECTS = 'objects';
+    /**
+     * @psalm-suppress MissingClassConstType
+     */
+    final public const TYPE_SUMMARY = 'summary';
+
+    /**
+     * @psalm-suppress MissingClassConstType
+     */
+    final public const TYPE_DATA = 'data';
+
+    /**
+     * @psalm-suppress MissingClassConstType
+     */
+    final public const TYPE_OBJECTS = 'objects';
 
     /**
      * Add collector to get debug data from

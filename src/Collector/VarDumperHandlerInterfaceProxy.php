@@ -9,8 +9,8 @@ use Yiisoft\VarDumper\HandlerInterface;
 final class VarDumperHandlerInterfaceProxy implements HandlerInterface
 {
     public function __construct(
-        private HandlerInterface $decorated,
-        private VarDumperCollector $collector,
+        private readonly HandlerInterface $decorated,
+        private readonly VarDumperCollector $collector,
     ) {
     }
 

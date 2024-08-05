@@ -104,7 +104,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
         }
 
         if ($this->config->hasDecoratedServiceCallableConfig($service)) {
-            return $this->getServiceProxyFromCallable($this->config->getDecoratedServiceConfig($service));
+            return $this->getServiceProxyFromCallable($this->config->getDecoratedServiceConfig($service), $instance);
         }
 
         if ($this->config->hasDecoratedServiceArrayConfigWithStringKeys($service)) {
@@ -126,9 +126,9 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return null;
     }
 
-    private function getServiceProxyFromCallable(callable $callback): ?object
+    private function getServiceProxyFromCallable(callable $callback, object $instance): ?object
     {
-        return $callback($this);
+        return $callback($this, $instance);
     }
 
     /**
