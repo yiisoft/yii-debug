@@ -11,7 +11,6 @@ use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Dumper;
 
-use function array_merge;
 use function array_slice;
 use function count;
 use function dirname;
@@ -19,7 +18,6 @@ use function filemtime;
 use function glob;
 use function strlen;
 use function substr;
-use function uasort;
 
 final class FileStorage implements StorageInterface
 {
