@@ -7,9 +7,12 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
 
 final class HttpClientInterfaceProxy implements ClientInterface
 {
+    use ProxyDecoratedCalls;
+
     public function __construct(
         private readonly ClientInterface $decorated,
         private readonly HttpClientCollector $collector
