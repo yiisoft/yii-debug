@@ -35,7 +35,7 @@ final class EventDispatcherInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $dispatcher = new class implements EventDispatcherInterface {
+        $dispatcher = new class () implements EventDispatcherInterface {
             public $var = null;
 
             public function getProxiedCall(): string

@@ -40,7 +40,7 @@ final class HttpClientInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $httpClient = new class implements ClientInterface {
+        $httpClient = new class () implements ClientInterface {
             public $var = null;
 
             public function getProxiedCall(): string

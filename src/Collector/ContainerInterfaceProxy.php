@@ -17,9 +17,9 @@ use function is_string;
 
 final class ContainerInterfaceProxy implements ContainerInterface
 {
+    use ProxyDecoratedCalls;
     use ProxyLogTrait;
     use ProxyTrait;
-    use ProxyDecoratedCalls;
 
     public const LOG_NOTHING = 0;
     public const LOG_ARGUMENTS = 1;

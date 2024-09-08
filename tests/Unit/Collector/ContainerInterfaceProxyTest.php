@@ -351,7 +351,7 @@ final class ContainerInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $container = new class implements ContainerInterface {
+        $container = new class () implements ContainerInterface {
             public $var = null;
 
             public function getProxiedCall(): string

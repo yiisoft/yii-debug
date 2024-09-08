@@ -63,7 +63,7 @@ final class LoggerInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $logger = new class implements LoggerInterface {
+        $logger = new class () implements LoggerInterface {
             use LoggerTrait;
 
             public $var = null;
