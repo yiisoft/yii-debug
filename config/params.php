@@ -22,7 +22,6 @@ use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
 use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
-use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Command\DebugContainerCommand;
@@ -50,7 +49,6 @@ return [
         'collectors.web' => [
             WebAppInfoCollector::class,
             RequestCollector::class,
-            MiddlewareCollector::class,
         ],
         'collectors.console' => [
             ConsoleAppInfoCollector::class,
