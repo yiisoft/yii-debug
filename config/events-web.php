@@ -6,10 +6,10 @@ use Yiisoft\ErrorHandler\Event\ApplicationError;
 use Yiisoft\Middleware\Dispatcher\Event\AfterMiddleware;
 use Yiisoft\Middleware\Dispatcher\Event\BeforeMiddleware;
 use Yiisoft\Profiler\ProfilerInterface;
+use Yiisoft\Yii\Debug\Collector\ExceptionCollector;
 use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
-use Yiisoft\Yii\Debug\Collector\ExceptionCollector;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Http\Event\AfterEmit;
 use Yiisoft\Yii\Http\Event\AfterRequest;
@@ -23,6 +23,7 @@ if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
 
 return [
     ApplicationStartup::class => [
+        [Debugger::class, 'startup'],
         [WebAppInfoCollector::class, 'collect'],
     ],
     ApplicationShutdown::class => [
