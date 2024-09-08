@@ -9,7 +9,7 @@ namespace Yiisoft\Yii\Debug;
  */
 trait ProxyDecoratedCalls
 {
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
         $this->decorated->$name = $value;
     }
