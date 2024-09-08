@@ -7,11 +7,12 @@ namespace Yiisoft\Yii\Debug;
 use __PHP_Incomplete_Class;
 use Closure;
 use ReflectionException;
+use SplObjectStorage;
 use Yiisoft\VarDumper\ClosureExporter;
 
 final class Dumper
 {
-    private array $objects = [];
+    private SplObjectStorage $objects;
 
     private static ?ClosureExporter $closureExporter = null;
     private array $excludedClasses;
@@ -21,6 +22,7 @@ final class Dumper
         array $excludedClasses
     ) {
         $this->excludedClasses = array_flip($excludedClasses);
+        $this->objects = new SplObjectStorage();
     }
 
     /**
@@ -56,7 +58,11 @@ final class Dumper
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
     {
         $this->buildObjectsCache($this->variable, $depth);
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true);
+        $map = [];
+        foreach ($this->objects as $object) {
+            $map[$this->getObjectDescription($object)] = $object;
+        }
+        return $this->asJsonInternal($map, $prettyPrint, $depth, 1, true);
     }
 
     private function buildObjectsCache(mixed $variable, int $depth, int $level = 0): void
@@ -66,11 +72,11 @@ final class Dumper
         }
         if (is_object($variable)) {
             if (array_key_exists($variable::class, $this->excludedClasses) ||
-                array_key_exists($objectDescription = $this->getObjectDescription($variable), $this->objects)
+                $this->objects->contains($variable)
             ) {
                 return;
             }
-            $this->objects[$objectDescription] = $variable;
+            $this->objects->attach($variable);
             if ($depth <= $level + 1) {
                 return;
             }
@@ -159,7 +165,7 @@ final class Dumper
                     break;
                 }
 
-                if ($objectCollapseLevel < $level && array_key_exists($objectDescription, $this->objects)) {
+                if ($objectCollapseLevel < $level && $this->objects->contains($variable)) {
                     $output = 'object@' . $objectDescription;
                     break;
                 }
