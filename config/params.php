@@ -27,6 +27,8 @@ use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Command\DebugContainerCommand;
 use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
+use Yiisoft\Yii\Debug\Command\DebugServerBroadcastCommand;
+use Yiisoft\Yii\Debug\Command\DebugServerCommand;
 
 /**
  * @var $params array
@@ -35,6 +37,9 @@ use Yiisoft\Yii\Debug\Command\DebugResetCommand;
 return [
     'yiisoft/yii-debug' => [
         'enabled' => true,
+        'devServer' => [
+            'enabled' => true,
+        ],
         'collectors' => [
             LogCollector::class,
             EventCollector::class,
@@ -92,6 +97,8 @@ return [
             'debug:reset' => DebugResetCommand::class,
             'debug:container' => DebugContainerCommand::class,
             'debug:events' => DebugEventsCommand::class,
+            DebugServerCommand::COMMAND_NAME => DebugServerCommand::class,
+            DebugServerBroadcastCommand::COMMAND_NAME => DebugServerBroadcastCommand::class,
         ],
     ],
 ];

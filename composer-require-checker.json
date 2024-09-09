@@ -15,6 +15,7 @@
         "Yiisoft\\Cache\\Dependency\\Dependency",
         "Yiisoft\\ErrorHandler\\Event\\ApplicationError",
         "PHPUnit\\Framework\\TestCase",
+        "Yiisoft\\VarDumper\\HandlerInterface",
         "opcache_invalidate"
     ]
 }
