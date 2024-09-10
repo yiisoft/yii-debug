@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
 
 final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 {
+    use ProxyDecoratedCalls;
+
     public function __construct(
-        private readonly EventDispatcherInterface $dispatcher,
+        private readonly EventDispatcherInterface $decorated,
         private readonly EventCollector $collector
     ) {
     }
@@ -21,6 +24,6 @@ final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 
         $this->collector->collect($event, $callStack['file'] . ':' . $callStack['line']);
 
-        return $this->dispatcher->dispatch($event);
+        return $this->decorated->dispatch($event);
     }
 }
