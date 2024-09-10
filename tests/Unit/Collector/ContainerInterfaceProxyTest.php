@@ -349,6 +349,41 @@ final class ContainerInterfaceProxyTest extends TestCase
         $this->assertSame('from tests', $implementation->getName());
     }
 
+    public function testProxyDecoratedCall(): void
+    {
+        $container = new class () implements ContainerInterface {
+            public $var = null;
+
+            public function getProxiedCall(): string
+            {
+                return 'ok';
+            }
+
+            public function setProxiedCall($args): mixed
+            {
+                return $args;
+            }
+
+            public function get($id)
+            {
+                throw new class () extends Exception implements ContainerExceptionInterface {
+                };
+            }
+
+            public function has($id): bool
+            {
+                throw new class () extends Exception implements ContainerExceptionInterface {
+                };
+            }
+        };
+        $proxy = new ContainerInterfaceProxy($container, new ContainerProxyConfig());
+
+        $this->assertEquals('ok', $proxy->getProxiedCall());
+        $this->assertEquals($args = [1, new stdClass(), 'string'], $proxy->setProxiedCall($args));
+        $proxy->var = '123';
+        $this->assertEquals('123', $proxy->var);
+    }
+
     private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig
     {
         return new ContainerProxyConfig(
