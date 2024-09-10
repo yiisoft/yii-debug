@@ -20,6 +20,7 @@ if (!(bool) ($params['yiisoft/yii-debug']['enabled'] ?? false)) {
 
 return [
     ApplicationStartup::class => [
+        [Debugger::class, 'startup'],
         [WebAppInfoCollector::class, 'collect'],
     ],
     ApplicationShutdown::class => [
