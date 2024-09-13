@@ -31,7 +31,7 @@ composer require yiisoft/yii-debug --dev
 ```
 
 > The debug extension also can be installed without the `--dev` flag if you want to collect data in production.
-> Specify needed collectors only to reduce functions overriding and improve performance.
+> Specify the necessary collectors only to reduce functions overriding and improve performance.
 
 ## General usage
 
