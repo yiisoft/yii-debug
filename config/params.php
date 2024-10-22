@@ -24,8 +24,6 @@ use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
-use Yiisoft\Yii\Debug\Command\DebugContainerCommand;
-use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
 
 /**
@@ -90,8 +88,6 @@ return [
     'yiisoft/yii-console' => [
         'commands' => [
             'debug:reset' => DebugResetCommand::class,
-            'debug:container' => DebugContainerCommand::class,
-            'debug:events' => DebugEventsCommand::class,
         ],
     ],
 ];
