@@ -165,7 +165,8 @@ final class Dumper
                     $output = 'object@' . $objectDescription;
                     $this->objects[$objectDescription] = $variable;
                     break;
-                } elseif ($objectCollapseLevel < $level) {
+                }
+                if ($objectCollapseLevel < $level) {
                     $output = 'object@' . $objectDescription;
                     break;
                 }

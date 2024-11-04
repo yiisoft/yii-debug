@@ -105,7 +105,7 @@ final class DumperTest extends TestCase
 
         for ($i = 2; $i <= $depth; $i++) {
             $nested = new stdClass();
-            $nested->id = 'lvl'.$i;
+            $nested->id = 'lvl' . $i;
             $lvl->prop1 = $nested;
             $lvl->prop2 = $nested;
             $lvl = $nested;
