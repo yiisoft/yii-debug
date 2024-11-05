@@ -164,6 +164,11 @@ final class Dumper
                     break;
                 }
 
+                if (!array_key_exists($objectDescription, $this->objects)) {
+                    $output = $objectDescription . ' (...)';
+                    break;
+                }
+
                 $properties = $this->getObjectProperties($variable);
                 if (empty($properties)) {
                     if ($inlineObject) {

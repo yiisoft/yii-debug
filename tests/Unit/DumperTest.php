@@ -20,6 +20,79 @@ use const SOL_TCP;
 final class DumperTest extends TestCase
 {
     /**
+     * @dataProvider loopAsJsonObjectMapDataProvider
+     */
+    public function testLoopAsJsonObjectsMap(mixed $var, int $depth, $expectedResult): void
+    {
+        $exportResult = Dumper::create($var)->asJsonObjectsMap($depth);
+        $this->assertEquals($expectedResult, $exportResult);
+    }
+
+    public static function loopAsJsonObjectMapDataProvider(): iterable
+    {
+        // parent->child->parent structure
+        $o1 = new stdClass();
+        $o1->id = 'o1';
+        $o2 = new stdClass();
+        $o2->id = 'o2';
+        $o2->o1 = $o1;
+        $o1->o2 = $o2;
+
+        // 5 is a min level to reproduce buggy dumping of parent->child->parent structure
+        $head1 = self::getNested(5, $o1);
+        // can't imagine the expected result
+        yield 'nested loop - object' => [
+            $head1,
+            5,
+            <<<S
+            {}
+            S,
+        ];
+
+        // array loop must be 1 level deeper to parse loop objects
+        $head2 = self::getNested(6, [$o1, $o2]);
+        // can't imagine the expected result
+        yield 'nested loop - array' => [
+            $head2,
+            6,
+            <<<S
+            {}
+            S,
+        ];
+
+        $head3 = new stdClass();
+        $head3->id = '1';
+        $head3->lv12 = [
+            'id' => 2,
+            'loop' => $o1,
+        ];
+        // can't imagine the expected result
+        yield 'nested loop to object->array' => [
+            $head3,
+            3,
+            <<<S
+            {}
+            S,
+        ];
+    }
+
+    private static function getNested(int $depth, mixed $data): object
+    {
+        $head = $lvl = new stdClass();
+        $lvl->id = 'lvl1';
+
+        for ($i = 2; $i <= $depth; $i++) {
+            $nested = new stdClass();
+            $nested->id = 'lvl'.$i;
+            $lvl->{'lvl'.$i} = $nested;
+            $lvl = $nested;
+        }
+        $lvl->loop = $data;
+
+        return $head;
+    }
+
+    /**
      * @dataProvider asJsonObjectMapDataProvider
      */
     public function testAsJsonObjectsMap(mixed $var, $expectedResult): void
