@@ -56,7 +56,7 @@ final class Dumper
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
     {
         $this->buildObjectsCache($this->variable, $depth);
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true);
+        return $this->asJsonInternal($this->objects, $prettyPrint, 2, 1, true);
     }
 
     private function buildObjectsCache(mixed $variable, int $depth, int $level = 0): void
