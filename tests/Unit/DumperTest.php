@@ -19,6 +19,166 @@ use const SOL_TCP;
 
 final class DumperTest extends TestCase
 {
+    /**
+     * @dataProvider loopAsJsonObjectMapDataProvider
+     */
+    public function testLoopAsJsonObjectsMap(mixed $var, int $depth, $expectedResult): void
+    {
+        $exportResult = Dumper::create($var)->asJsonObjectsMap($depth, true);
+        $this->assertEquals($expectedResult, $exportResult);
+    }
+
+    public static function loopAsJsonObjectMapDataProvider(): iterable
+    {
+        // parent->child->parent structure
+        $nested1 = new stdClass();
+        $nested1->id = 'nested1';
+        $nested2 = new stdClass();
+        $nested2->id = 'nested2';
+        $nested2->nested1 = $nested1;
+        $nested1->nested2 = $nested2;
+
+        $nested1Id = spl_object_id($nested1);
+        $nested2Id = spl_object_id($nested2);
+
+        // 5 is a min level to reproduce buggy dumping of parent->child->parent structure
+        [$object1, $ids1] = self::getNested(5, $nested1);
+        yield 'nested loop - object' => [
+            $object1,
+            5,
+            <<<S
+            {
+                "stdClass#$ids1[0]": {
+                    "public \$id": "lvl0",
+                    "public \$lvl1": "object@stdClass#$ids1[1]"
+                },
+                "stdClass#$ids1[1]": {
+                    "public \$id": "lvl1",
+                    "public \$lvl2": "object@stdClass#$ids1[2]"
+                },
+                "stdClass#$ids1[2]": {
+                    "public \$id": "lvl2",
+                    "public \$lvl3": "object@stdClass#$ids1[3]"
+                },
+                "stdClass#$ids1[3]": {
+                    "public \$id": "lvl3",
+                    "public \$lvl4": "object@stdClass#$ids1[4]"
+                },
+                "stdClass#$ids1[4]": {
+                    "public \$id": "lvl4",
+                    "public \$lvl5": "object@stdClass#$nested1Id"
+                },
+                "stdClass#$nested1Id": {
+                    "public \$id": "nested1",
+                    "public \$nested2": "object@stdClass#$nested2Id"
+                },
+                "stdClass#$nested2Id": {
+                    "public \$id": "nested2",
+                    "public \$nested1": "object@stdClass#$nested1Id"
+                }
+            }
+            S,
+        ];
+
+        // array loop must be 1 level deeper to parse loop objects
+        [$object2, $ids2] = self::getNested(6, [$nested1, $nested2]);
+        yield 'nested loop - array' => [
+            $object2,
+            6,
+            <<<S
+            {
+                "stdClass#$ids2[0]": {
+                    "public \$id": "lvl0",
+                    "public \$lvl1": "object@stdClass#$ids2[1]"
+                },
+                "stdClass#$ids2[1]": {
+                    "public \$id": "lvl1",
+                    "public \$lvl2": "object@stdClass#$ids2[2]"
+                },
+                "stdClass#$ids2[2]": {
+                    "public \$id": "lvl2",
+                    "public \$lvl3": "object@stdClass#$ids2[3]"
+                },
+                "stdClass#$ids2[3]": {
+                    "public \$id": "lvl3",
+                    "public \$lvl4": "object@stdClass#$ids2[4]"
+                },
+                "stdClass#$ids2[4]": {
+                    "public \$id": "lvl4",
+                    "public \$lvl5": "object@stdClass#$ids2[5]"
+                },
+                "stdClass#$ids2[5]": {
+                    "public \$id": "lvl5",
+                    "public \$lvl6": [
+                        "object@stdClass#$nested1Id",
+                        "object@stdClass#$nested2Id"
+                    ]
+                },
+                "stdClass#$nested1Id": {
+                    "public \$id": "nested1",
+                    "public \$nested2": "object@stdClass#$nested2Id"
+                },
+                "stdClass#$nested2Id": {
+                    "public \$id": "nested2",
+                    "public \$nested1": "object@stdClass#$nested1Id"
+                }
+            }
+            S,
+        ];
+
+        // nested loop to inner array
+        $object3 = new stdClass();
+        $object3->id = 'lvl0';
+        $object3->lv11 = [
+            'id' => 'lvl1',
+            'loop' => $nested1,
+        ];
+        $object3Id = spl_object_id($object3);
+
+        yield 'nested loop to object->array' => [
+            $object3,
+            3,
+            <<<S
+            {
+                "stdClass#$object3Id": {
+                    "public \$id": "lvl0",
+                    "public \$lv11": {
+                        "id": "lvl1",
+                        "loop": "object@stdClass#$nested1Id"
+                    }
+                },
+                "stdClass#$nested1Id": {
+                    "public \$id": "nested1",
+                    "public \$nested2": "object@stdClass#$nested2Id"
+                },
+                "stdClass#$nested2Id": {
+                    "public \$id": "nested2",
+                    "public \$nested1": "object@stdClass#$nested1Id"
+                }
+            }
+            S,
+        ];
+    }
+
+    private static function getNested(int $depth, mixed $data): array
+    {
+        $objectIds = [];
+        $head = $lvl = new stdClass();
+        $objectIds[] = spl_object_id($head);
+        $lvl->id = 'lvl0';
+
+        for ($i = 1; $i < $depth; $i++) {
+            $nested = new stdClass();
+            $nested->id = 'lvl'.$i;
+            $lvl->{'lvl'.$i} = $nested;
+            $lvl = $nested;
+            $objectIds[] = spl_object_id($nested);
+        }
+        $lvl->{'lvl'.$i} = $data;
+
+        return [$head, $objectIds];
+    }
+
     public function testObjectExpanding(): void
     {
         $var = $this->createNested(10, [[[[[[[[['key' => 'end']]]]]]]]]);
