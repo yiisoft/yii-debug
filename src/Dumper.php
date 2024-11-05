@@ -55,15 +55,12 @@ final class Dumper
      */
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
     {
-        $this->buildObjectsCache($this->variable, $depth);
+        $this->buildObjectsCache($this->variable, $depth, false);
         return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true);
     }
 
-    private function buildObjectsCache(mixed $variable, int $depth, int $level = 0): void
+    private function buildObjectsCache(mixed $variable, int $depth, bool $limitDepth = true, int $level = 0): void
     {
-        if ($depth <= $level) {
-            return;
-        }
         if (is_object($variable)) {
             if (array_key_exists($variable::class, $this->excludedClasses) ||
                 array_key_exists($objectDescription = $this->getObjectDescription($variable), $this->objects)
@@ -71,20 +68,26 @@ final class Dumper
                 return;
             }
             $this->objects[$objectDescription] = $variable;
+
+            $nextLevel = $limitDepth ? $level + 1 : 0;
+            if ($depth <= $nextLevel) {
+                return;
+            }
             $variable = $this->getObjectProperties($variable);
 
             foreach ($variable as $value) {
-                $this->buildObjectsCache($value, $depth, 0);
+                $this->buildObjectsCache($value, $depth, $limitDepth, $nextLevel);
             }
             return;
         }
+
         if (is_array($variable)) {
             $nextLevel = $level + 1;
             if ($depth <= $nextLevel) {
                 return;
             }
             foreach ($variable as $value) {
-                $this->buildObjectsCache($value, $depth, $nextLevel);
+                $this->buildObjectsCache($value, $depth, $limitDepth, $nextLevel);
             }
         }
     }
@@ -149,10 +152,6 @@ final class Dumper
                 break;
             case 'object':
                 $objectDescription = $this->getObjectDescription($variable);
-                if ($depth <= $level || array_key_exists($variable::class, $this->excludedClasses)) {
-                    $output = $objectDescription . ' (...)';
-                    break;
-                }
 
                 if ($variable instanceof Closure) {
                     $output = $inlineObject
@@ -161,13 +160,17 @@ final class Dumper
                     break;
                 }
 
-                if (!array_key_exists($objectDescription, $this->objects)) {
+                if ($objectCollapseLevel < $level && array_key_exists($objectDescription, $this->objects)) {
                     $output = 'object@' . $objectDescription;
-                    $this->objects[$objectDescription] = $variable;
                     break;
                 }
-                if ($objectCollapseLevel < $level) {
-                    $output = 'object@' . $objectDescription;
+
+                if (
+                    $depth <= $level
+                    || array_key_exists($variable::class, $this->excludedClasses)
+                    || !array_key_exists($objectDescription, $this->objects)
+                ) {
+                    $output = $objectDescription . ' (...)';
                     break;
                 }
 
