@@ -36,7 +36,7 @@ interface StorageInterface
     /**
      * Returns collected data from collectors added
      *
-     * @return array collected data
+     * @return array[] The collected data
      */
     public function getData(): array;
 
