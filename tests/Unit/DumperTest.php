@@ -19,6 +19,103 @@ use const SOL_TCP;
 
 final class DumperTest extends TestCase
 {
+    public function testObjectExpanding(): void
+    {
+        $var = $this->createNested(10, [[[[[[[[['key' => 'end']]]]]]]]]);
+
+        $lvl1Id = spl_object_id($var);
+        $lvl2Id = spl_object_id($var->prop1);
+        $lvl3Id = spl_object_id($var->prop1->prop1);
+        $lvl4Id = spl_object_id($var->prop1->prop1->prop1);
+        $lvl5Id = spl_object_id($var->prop1->prop1->prop1->prop1);
+        $lvl6Id = spl_object_id($var->prop1->prop2->prop1->prop1->prop1);
+        $lvl7Id = spl_object_id($var->prop1->prop2->prop1->prop1->prop1->prop1);
+        $lvl8Id = spl_object_id($var->prop1->prop2->prop1->prop1->prop1->prop1->prop1);
+        $lvl9Id = spl_object_id($var->prop1->prop2->prop1->prop1->prop1->prop1->prop1->prop1);
+        $lvl10Id = spl_object_id($var->prop1->prop2->prop1->prop1->prop1->prop1->prop1->prop1->prop1);
+
+        $expectedResult = <<<JSON
+        {
+            "stdClass#$lvl1Id": {
+                "public \$id": "lvl1",
+                "public \$prop1": "object@stdClass#$lvl2Id",
+                "public \$prop2": "object@stdClass#$lvl2Id"
+            },
+            "stdClass#$lvl2Id": {
+                "public \$id": "lvl2",
+                "public \$prop1": "object@stdClass#$lvl3Id",
+                "public \$prop2": "object@stdClass#$lvl3Id"
+            },
+            "stdClass#$lvl3Id": {
+                "public \$id": "lvl3",
+                "public \$prop1": "object@stdClass#$lvl4Id",
+                "public \$prop2": "object@stdClass#$lvl4Id"
+            },
+            "stdClass#$lvl4Id": {
+                "public \$id": "lvl4",
+                "public \$prop1": "object@stdClass#$lvl5Id",
+                "public \$prop2": "object@stdClass#$lvl5Id"
+            },
+            "stdClass#$lvl5Id": {
+                "public \$id": "lvl5",
+                "public \$prop1": "object@stdClass#$lvl6Id",
+                "public \$prop2": "object@stdClass#$lvl6Id"
+            },
+            "stdClass#$lvl6Id": {
+                "public \$id": "lvl6",
+                "public \$prop1": "object@stdClass#$lvl7Id",
+                "public \$prop2": "object@stdClass#$lvl7Id"
+            },
+            "stdClass#$lvl7Id": {
+                "public \$id": "lvl7",
+                "public \$prop1": "object@stdClass#$lvl8Id",
+                "public \$prop2": "object@stdClass#$lvl8Id"
+            },
+            "stdClass#$lvl8Id": {
+                "public \$id": "lvl8",
+                "public \$prop1": "object@stdClass#$lvl9Id",
+                "public \$prop2": "object@stdClass#$lvl9Id"
+            },
+            "stdClass#$lvl9Id": {
+                "public \$id": "lvl9",
+                "public \$prop1": "object@stdClass#$lvl10Id",
+                "public \$prop2": "object@stdClass#$lvl10Id"
+            },
+            "stdClass#$lvl10Id": {
+                "public \$id": "lvl10",
+                "public \$loop": [
+                    [
+                        "array (1 item) [...]"
+                    ]
+                ],
+                "public \$head": "object@stdClass#$lvl1Id"
+            }
+        }
+        JSON;
+
+        $actualResult = Dumper::create($var)->asJsonObjectsMap(4, true);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    private function createNested(int $depth, mixed $data): object
+    {
+        $head = $lvl = new stdClass();
+        $lvl->id = 'lvl1';
+
+        for ($i = 2; $i <= $depth; $i++) {
+            $nested = new stdClass();
+            $nested->id = 'lvl' . $i;
+            $lvl->prop1 = $nested;
+            $lvl->prop2 = $nested;
+            $lvl = $nested;
+        }
+        $lvl->loop = $data;
+        $lvl->head = $head;
+
+        return $head;
+    }
+
     /**
      * @dataProvider asJsonObjectMapDataProvider
      */

@@ -158,9 +158,8 @@ final class ContainerInterfaceProxyTest extends TestCase
         $this->expectException(ContainerExceptionInterface::class);
         $this->expectExceptionMessage(
             sprintf(
-                'No definition or class found or resolvable for "%s" while building "%s".',
+                'No definition or class found or resolvable for "%s" while building it.',
                 CollectorInterface::class,
-                CollectorInterface::class
             )
         );
         $containerProxy->get(CollectorInterface::class);

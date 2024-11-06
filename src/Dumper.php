@@ -71,10 +71,12 @@ final class Dumper
                 return;
             }
             $this->objects[$objectDescription] = $variable;
-            if ($depth <= $level + 1) {
-                return;
-            }
             $variable = $this->getObjectProperties($variable);
+
+            foreach ($variable as $value) {
+                $this->buildObjectsCache($value, $depth, 0);
+            }
+            return;
         }
         if (is_array($variable)) {
             $nextLevel = $level + 1;
@@ -159,7 +161,12 @@ final class Dumper
                     break;
                 }
 
-                if ($objectCollapseLevel < $level && array_key_exists($objectDescription, $this->objects)) {
+                if (!array_key_exists($objectDescription, $this->objects)) {
+                    $output = 'object@' . $objectDescription;
+                    $this->objects[$objectDescription] = $variable;
+                    break;
+                }
+                if ($objectCollapseLevel < $level) {
                     $output = 'object@' . $objectDescription;
                     break;
                 }
