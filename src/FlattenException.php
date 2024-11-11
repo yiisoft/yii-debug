@@ -163,6 +163,17 @@ final class FlattenException implements Stringable
 
     /**
      * @param array $trace the Exception stack trace as an array.
+     *
+     * @psalm-param list<
+     *     array{
+     *          args?: array,
+     *          class?: class-string,
+     *          file?: string,
+     *          function?: string,
+     *          line?: int,
+     *          type?: string
+     *     }
+     * > $trace
      */
     private function setTrace(array $trace): void
     {
