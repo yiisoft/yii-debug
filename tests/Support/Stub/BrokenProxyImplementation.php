@@ -8,7 +8,7 @@ use Exception;
 
 class BrokenProxyImplementation implements Interface1
 {
-    public function __construct(private Interface1 $decorated)
+    public function __construct(private readonly Interface1 $decorated)
     {
         throw new Exception('Broken proxy');
     }

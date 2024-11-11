@@ -78,7 +78,7 @@ final class FlattenExceptionTest extends TestCase
         $this->assertEquals('Exception', (new FlattenException(new Exception()))->getClass());
     }
 
-    public function testArguments(): void
+    public function testArguments(): never
     {
         $this->markTestSkipped('Should be fixed');
 
@@ -151,7 +151,7 @@ final class FlattenExceptionTest extends TestCase
         $this->assertStringContainsString(Closure::class, serialize($flattened));
     }
 
-    public function testRecursionInArguments(): void
+    public function testRecursionInArguments(): never
     {
         $this->markTestSkipped('Should be fixed');
 
@@ -164,7 +164,7 @@ final class FlattenExceptionTest extends TestCase
         $this->assertStringContainsString('*DEEP NESTED ARRAY*', serialize($trace));
     }
 
-    public function testTooBigArray(): void
+    public function testTooBigArray(): never
     {
         $this->markTestSkipped('Should be fixed');
 
