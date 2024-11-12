@@ -14,7 +14,7 @@ final class Dumper
     private array $objects = [];
 
     private static ?ClosureExporter $closureExporter = null;
-    private array $excludedClasses;
+    private readonly array $excludedClasses;
 
     private function __construct(
         private readonly mixed $variable,
