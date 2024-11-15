@@ -9,6 +9,10 @@ use Closure;
 use ReflectionException;
 use Yiisoft\VarDumper\ClosureExporter;
 
+use function array_key_exists;
+use function is_array;
+use function is_object;
+
 final class Dumper
 {
     private array $objects = [];
@@ -47,19 +51,20 @@ final class Dumper
 
     /**
      * Export variable as JSON summary of topmost items.
+     * Dumper go into the variable on full depth for search all objects.
      *
-     * @param int $depth Maximum depth that the dumper should go into the variable.
+     * @param int $depth Maximum depth that the dumper should print out.
      * @param bool $prettyPrint Whatever to format exported code.
      *
      * @return string JSON string containing summary.
      */
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
     {
-        $this->buildObjectsCache($this->variable, $depth, false);
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth, 1, true);
+        $this->buildObjectsCache($this->variable);
+        return $this->asJsonInternal($this->objects, $prettyPrint, $depth + 1, 1, true);
     }
 
-    private function buildObjectsCache(mixed $variable, int $depth, bool $limitDepth = true, int $level = 0): void
+    private function buildObjectsCache(mixed $variable, ?int $depth = null, int $level = 0): void
     {
         if (is_object($variable)) {
             if (array_key_exists($variable::class, $this->excludedClasses) ||
@@ -68,26 +73,24 @@ final class Dumper
                 return;
             }
             $this->objects[$objectDescription] = $variable;
+        }
 
-            $nextLevel = $limitDepth ? $level + 1 : 0;
-            if ($depth <= $nextLevel) {
-                return;
-            }
+        $nextLevel = $level + 1;
+        if ($depth !== null && $depth <= $nextLevel) {
+            return;
+        }
+
+        if (is_object($variable)) {
             $variable = $this->getObjectProperties($variable);
-
             foreach ($variable as $value) {
-                $this->buildObjectsCache($value, $depth, $limitDepth, $nextLevel);
+                $this->buildObjectsCache($value, $depth, $nextLevel);
             }
             return;
         }
 
         if (is_array($variable)) {
-            $nextLevel = $level + 1;
-            if ($depth <= $nextLevel) {
-                return;
-            }
             foreach ($variable as $value) {
-                $this->buildObjectsCache($value, $depth, $limitDepth, $nextLevel);
+                $this->buildObjectsCache($value, $depth, $nextLevel);
             }
         }
     }

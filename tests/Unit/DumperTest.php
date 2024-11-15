@@ -19,6 +19,96 @@ use const SOL_TCP;
 
 final class DumperTest extends TestCase
 {
+    public function testAsJsonObjectsMapLevelOne(): void
+    {
+        $object = new stdClass();
+        $object->var = 'test';
+        $objectId = spl_object_id($object);
+
+        $this->assertSame(
+            <<<JSON
+            {
+                "stdClass#$objectId": {
+                    "public \$var": "test"
+                }
+            }
+            JSON,
+            Dumper::create($object)->asJsonObjectsMap(1, true)
+        );
+    }
+
+    public function testAsJsonObjectsMapNestedObject(): void
+    {
+        $nested2 = new stdClass();
+        $nested2->name = 'nested2';
+        $nested2Id = spl_object_id($nested2);
+
+        $nested1 = new stdClass();
+        $nested1->name = 'nested1';
+        $nested1->var = $nested2;
+        $nested1Id = spl_object_id($nested1);
+
+        $object = new stdClass();
+        $object->name = 'root';
+        $object->var = $nested1;
+        $objectId = spl_object_id($object);
+
+        $this->assertSame(
+            <<<JSON
+            {
+                "stdClass#$objectId": {
+                    "public \$name": "root",
+                    "public \$var": "object@stdClass#$nested1Id"
+                },
+                "stdClass#$nested1Id": {
+                    "public \$name": "nested1",
+                    "public \$var": "object@stdClass#$nested2Id"
+                },
+                "stdClass#$nested2Id": {
+                    "public \$name": "nested2"
+                }
+            }
+            JSON,
+            Dumper::create($object)->asJsonObjectsMap(1, true)
+        );
+    }
+
+    public function testAsJsonObjectsMapArrayWithObject(): void
+    {
+        $nested2 = new stdClass();
+        $nested2->name = 'nested2';
+        $nested2Id = spl_object_id($nested2);
+
+        $nested1 = new stdClass();
+        $nested1->name = 'nested1';
+        $nested1->var = [$nested2];
+        $nested1Id = spl_object_id($nested1);
+
+        $object = new stdClass();
+        $object->name = 'root';
+        $object->var = $nested1;
+        $objectId = spl_object_id($object);
+
+        $this->assertSame(
+            <<<JSON
+            {
+                "stdClass#$objectId": {
+                    "public \$name": "root",
+                    "public \$var": "object@stdClass#$nested1Id"
+                },
+                "stdClass#$nested1Id": {
+                    "public \$name": "nested1",
+                    "public \$var": "array (1 item) [...]"
+                },
+                "stdClass#$nested2Id": {
+                    "public \$name": "nested2"
+                }
+            }
+            JSON,
+            Dumper::create($object)->asJsonObjectsMap(1, true)
+        );
+    }
+
     /**
      * @dataProvider loopAsJsonObjectMapDataProvider
      */
@@ -253,7 +343,7 @@ final class DumperTest extends TestCase
         }
         JSON;
 
-        $actualResult = Dumper::create($var)->asJsonObjectsMap(4, true);
+        $actualResult = Dumper::create($var)->asJsonObjectsMap(3, true);
 
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -338,6 +428,7 @@ final class DumperTest extends TestCase
         $object1 = new stdClass();
         $object1Id = spl_object_id($object1);
         $object2 = new stdClass();
+        $object2Id = spl_object_id($object2);
 
         $variable = [$object1, [[$object2]]];
         $expectedResult = sprintf('["object@stdClass#%d",["array (1 item) [...]"]]', $object1Id);
@@ -349,7 +440,7 @@ final class DumperTest extends TestCase
         $map = $dumper->asJsonObjectsMap(2);
         $this->assertEqualsWithoutLE(
             <<<S
-            {"stdClass#{$object1Id}":"{stateless object}"}
+            {"stdClass#$object1Id":"{stateless object}","stdClass#$object2Id":"{stateless object}"}
             S,
             $map,
         );
