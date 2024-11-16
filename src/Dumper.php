@@ -51,7 +51,7 @@ final class Dumper
 
     /**
      * Export variable as JSON summary of topmost items.
-     * Dumper go into the variable on full depth for search all objects.
+     * Dumper goes into the variable full depth to search all objects.
      *
      * @param int $depth Maximum depth that the dumper should print out.
      * @param bool $prettyPrint Whatever to format exported code.
