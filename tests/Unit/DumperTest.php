@@ -39,8 +39,12 @@ final class DumperTest extends TestCase
 
     public function testAsJsonObjectsMapNestedObject(): void
     {
+        $nested3 = new stdClass();
+        $nested3Id = spl_object_id($nested3);
+
         $nested2 = new stdClass();
         $nested2->name = 'nested2';
+        $nested3->var = $nested3;
         $nested2Id = spl_object_id($nested2);
 
         $nested1 = new stdClass();
@@ -69,7 +73,7 @@ final class DumperTest extends TestCase
                 }
             }
             JSON,
-            Dumper::create($object)->asJsonObjectsMap(1, true)
+            Dumper::create($object)->asJsonObjectsMap(300, true)
         );
     }
 
@@ -105,7 +109,7 @@ final class DumperTest extends TestCase
                 }
             }
             JSON,
-            Dumper::create($object)->asJsonObjectsMap(1, true)
+            Dumper::create($object)->asJsonObjectsMap(0, true)
         );
     }
 
@@ -343,7 +347,7 @@ final class DumperTest extends TestCase
         }
         JSON;
 
-        $actualResult = Dumper::create($var)->asJsonObjectsMap(3, true);
+        $actualResult = Dumper::create($var)->asJsonObjectsMap(2, true);
 
         $this->assertEquals($expectedResult, $actualResult);
     }

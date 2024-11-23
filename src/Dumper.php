@@ -53,7 +53,7 @@ final class Dumper
      * Export variable as JSON summary of topmost items.
      * Dumper go into the variable on full depth for search all objects.
      *
-     * @param int $depth Maximum depth that the dumper should print out.
+     * @param int $depth Maximum depth that the dumper should print out arrays.
      * @param bool $prettyPrint Whatever to format exported code.
      *
      * @return string JSON string containing summary.
@@ -61,7 +61,7 @@ final class Dumper
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
     {
         $this->buildObjectsCache($this->variable);
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth + 1, 1, true);
+        return $this->asJsonInternal($this->objects, $prettyPrint, $depth + 2, 1, true);
     }
 
     private function buildObjectsCache(mixed $variable, ?int $depth = null, int $level = 0): void
