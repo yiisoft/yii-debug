@@ -21,8 +21,8 @@ final class DebugServerCommand extends Command
     protected static $defaultDescription = 'Runs PHP built-in web server';
 
     public function __construct(
-        private string $address = '0.0.0.0',
-        private int $port = 8890,
+        private readonly string $address = '0.0.0.0',
+        private readonly int $port = 8890,
     ) {
         parent::__construct();
     }

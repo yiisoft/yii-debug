@@ -29,7 +29,7 @@ final class Connection
     private string $uri;
 
     public function __construct(
-        private Socket $socket,
+        private readonly Socket $socket,
     ) {
     }
 
@@ -105,7 +105,7 @@ final class Connection
                 continue;
             }
 
-            $length = unpack('P', $header);
+            $length = unpack('P', (string) $header);
             $localBuffer = '';
             $bytesToRead = $length[1];
             $bytesRead = 0;
