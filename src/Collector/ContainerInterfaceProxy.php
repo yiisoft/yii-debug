@@ -9,6 +9,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\ProxyTrait;
+use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
 
 use function is_callable;
 use function is_object;
@@ -16,6 +17,7 @@ use function is_string;
 
 final class ContainerInterfaceProxy implements ContainerInterface
 {
+    use ProxyDecoratedCalls;
     use ProxyLogTrait;
     use ProxyTrait;
 
@@ -28,8 +30,10 @@ final class ContainerInterfaceProxy implements ContainerInterface
 
     private array $serviceProxy = [];
 
-    public function __construct(protected ContainerInterface $container, ContainerProxyConfig $config)
-    {
+    public function __construct(
+        protected ContainerInterface $decorated,
+        ContainerProxyConfig $config,
+    ) {
         $this->config = $config;
         $this->proxyManager = new ProxyManager($this->config->getProxyCachePath());
     }
@@ -51,7 +55,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->logProxy(ContainerInterface::class, $this->container, 'get', [$id], $instance, $timeStart);
+            $this->logProxy(ContainerInterface::class, $this->decorated, 'get', [$id], $instance, $timeStart);
         }
 
         if (is_object($instance) && ($proxy = $this->getServiceProxy($id, $instance))) {
@@ -71,7 +75,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
             return $this;
         }
 
-        return $this->container->get($id);
+        return $this->decorated->get($id);
     }
 
     private function isDecorated(string $service): bool
@@ -187,11 +191,11 @@ final class ContainerInterfaceProxy implements ContainerInterface
         $result = null;
 
         try {
-            $result = $this->container->has($id);
+            $result = $this->decorated->has($id);
         } catch (ContainerExceptionInterface $e) {
             $this->repeatError($e);
         } finally {
-            $this->logProxy(ContainerInterface::class, $this->container, 'has', [$id], $result, $timeStart);
+            $this->logProxy(ContainerInterface::class, $this->decorated, 'has', [$id], $result, $timeStart);
         }
 
         return (bool)$result;

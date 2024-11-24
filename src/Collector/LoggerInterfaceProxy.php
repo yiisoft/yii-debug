@@ -7,11 +7,16 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Stringable;
+use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
 
 final class LoggerInterfaceProxy implements LoggerInterface
 {
-    public function __construct(private LoggerInterface $decorated, private LogCollector $collector)
-    {
+    use ProxyDecoratedCalls;
+
+    public function __construct(
+        private readonly LoggerInterface $decorated,
+        private readonly LogCollector $collector
+    ) {
     }
 
     public function emergency(string|Stringable $message, array $context = []): void

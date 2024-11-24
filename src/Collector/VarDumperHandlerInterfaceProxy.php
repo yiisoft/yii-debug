@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector;
 
 use Yiisoft\VarDumper\HandlerInterface;
+use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
 
 final class VarDumperHandlerInterfaceProxy implements HandlerInterface
 {
+    use ProxyDecoratedCalls;
+
     public function __construct(
         private readonly HandlerInterface $decorated,
         private readonly VarDumperCollector $collector,

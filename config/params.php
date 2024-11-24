@@ -22,11 +22,8 @@ use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
 use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
-use Yiisoft\Yii\Debug\Collector\Web\MiddlewareCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
-use Yiisoft\Yii\Debug\Command\DebugContainerCommand;
-use Yiisoft\Yii\Debug\Command\DebugEventsCommand;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
 use Yiisoft\Yii\Debug\Command\DebugServerBroadcastCommand;
 use Yiisoft\Yii\Debug\Command\DebugServerCommand;
@@ -55,7 +52,6 @@ return [
         'collectors.web' => [
             WebAppInfoCollector::class,
             RequestCollector::class,
-            MiddlewareCollector::class,
         ],
         'collectors.console' => [
             ConsoleAppInfoCollector::class,
@@ -97,8 +93,6 @@ return [
     'yiisoft/yii-console' => [
         'commands' => [
             'debug:reset' => DebugResetCommand::class,
-            'debug:container' => DebugContainerCommand::class,
-            'debug:events' => DebugEventsCommand::class,
             DebugServerCommand::COMMAND_NAME => DebugServerCommand::class,
             DebugServerBroadcastCommand::COMMAND_NAME => DebugServerBroadcastCommand::class,
         ],
