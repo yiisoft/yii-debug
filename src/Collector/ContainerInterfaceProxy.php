@@ -28,8 +28,6 @@ final class ContainerInterfaceProxy implements ContainerInterface
 
     private ProxyManager $proxyManager;
 
-    private array $decoratedServices = [];
-
     private array $serviceProxy = [];
 
     public function __construct(
@@ -60,13 +58,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
             $this->logProxy(ContainerInterface::class, $this->decorated, 'get', [$id], $instance, $timeStart);
         }
 
-        if (
-            is_object($instance)
-            && (
-                ($proxy = $this->getServiceProxyCache($id)) ||
-                ($proxy = $this->getServiceProxy($id, $instance))
-            )
-        ) {
+        if (is_object($instance) && ($proxy = $this->getServiceProxy($id, $instance))) {
             $this->setServiceProxyCache($id, $proxy);
             return $proxy;
         }
@@ -96,13 +88,12 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
     }
 
-    private function getServiceProxyCache(string $service): ?object
-    {
-        return $this->serviceProxy[$service] ?? null;
-    }
-
     private function getServiceProxy(string $service, object $instance): ?object
     {
+        if (isset($this->serviceProxy[$service])) {
+            return $this->serviceProxy[$service];
+        }
+
         if (!$this->isDecorated($service)) {
             return null;
         }

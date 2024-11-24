@@ -5,14 +5,18 @@ declare(strict_types=1);
 use Composer\Autoload\ClassLoader;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\VarDumper\ClosureExporter;
 use Yiisoft\VarDumper\UseStatementParser;
 use Yiisoft\Yii\Debug\Collector\ContainerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ContainerProxyConfig;
+use Yiisoft\Yii\Debug\Collector\LogCollector;
+use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
 use Yiisoft\Yii\Debug\Collector\ServiceCollector;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
+use Yiisoft\Yii\Debug\DebugServer\LoggerDecorator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
@@ -44,13 +48,23 @@ return array_merge([
         $params = $params['yiisoft/yii-debug'];
         $collector = $container->get(ServiceCollector::class);
         $dispatcher = $container->get(EventDispatcherInterface::class);
-        $debuggerEnabled = (bool) ($params['enabled'] ?? false);
+        $isDebuggerEnabled = (bool) ($params['enabled'] ?? false);
+        $isDevServerEnabled = (bool) ($params['devServer']['enabled'] ?? false);
+
         $trackedServices = (array) ($params['trackedServices'] ?? []);
+
+        if ($isDevServerEnabled) {
+            $trackedServices[LoggerInterface::class] = static fn (
+                ContainerInterface $container,
+                LoggerInterface $logger,
+            ) => new LoggerInterfaceProxy(new LoggerDecorator($logger), $container->get(LogCollector::class));
+        }
+
         $path = $container->get(Aliases::class)->get('@runtime/cache/container-proxy');
         $logLevel = $params['logLevel'] ?? ContainerInterfaceProxy::LOG_NOTHING;
 
         return new ContainerProxyConfig(
-            $debuggerEnabled,
+            $isDebuggerEnabled,
             $trackedServices,
             $dispatcher,
             $collector,
