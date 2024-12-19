@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug;
 
-/**
- * @property object $decorated
- */
 trait ProxyDecoratedCalls
 {
     public function __set(string $name, mixed $value): void
