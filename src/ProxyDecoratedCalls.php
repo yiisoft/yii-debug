@@ -21,6 +21,9 @@ trait ProxyDecoratedCalls
 
     public function __call(string $name, array $arguments)
     {
+        /**
+         * @psalm-suppress MixedMethodCall
+         */
         return $this->decorated->$name(...$arguments);
     }
 }
