@@ -11,6 +11,9 @@ use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
 use const SEEK_SET;
 
+/**
+ * @psalm-suppress MixedInferredReturnType, MixedReturnStatement
+ */
 final class FilesystemStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
