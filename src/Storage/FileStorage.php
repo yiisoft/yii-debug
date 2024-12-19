@@ -49,7 +49,7 @@ final class FileStorage implements StorageInterface
     {
         clearstatcache();
 
-        $dataFiles = $this->findFilesOrderByModifiedTime(
+        $dataFiles = $this->findFilesOrderedByModifiedTime(
             sprintf(
                 '%s/**/%s/%s.json',
                 $this->path,
@@ -121,7 +121,7 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $summaryFiles = $this->findFilesOrderByModifiedTime($this->path . '/**/**/summary.json');
+        $summaryFiles = $this->findFilesOrderedByModifiedTime($this->path . '/**/**/summary.json');
         if (empty($summaryFiles) || count($summaryFiles) <= $this->historySize) {
             return;
         }
@@ -146,7 +146,7 @@ final class FileStorage implements StorageInterface
     /**
      * @return string[]
      */
-    private function findFilesOrderByModifiedTime(string $pattern): array
+    private function findFilesOrderedByModifiedTime(string $pattern): array
     {
         $files = glob($pattern, GLOB_NOSORT);
         if ($files === false) {
