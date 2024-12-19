@@ -18,7 +18,6 @@ use function filemtime;
 use function glob;
 use function strlen;
 use function substr;
-use function uasort;
 
 final class FileStorage implements StorageInterface
 {
@@ -49,16 +48,17 @@ final class FileStorage implements StorageInterface
     public function read(string $type, ?string $id = null): array
     {
         clearstatcache();
-        $data = [];
-        $pattern = sprintf(
-            '%s/**/%s/%s.json',
-            $this->path,
-            $id ?? '**',
-            $type,
-        );
-        $dataFiles = glob($pattern, GLOB_NOSORT);
-        uasort($dataFiles, static fn ($a, $b) => filemtime($a) <=> filemtime($b));
 
+        $dataFiles = $this->findFilesOrderedByModifiedTime(
+            sprintf(
+                '%s/**/%s/%s.json',
+                $this->path,
+                $id ?? '**',
+                $type,
+            )
+        );
+
+        $data = [];
         foreach ($dataFiles as $file) {
             $dir = dirname($file);
             $id = substr($dir, strlen(dirname($file, 2)) + 1);
@@ -121,12 +121,11 @@ final class FileStorage implements StorageInterface
      */
     private function gc(): void
     {
-        $summaryFiles = glob($this->path . '/**/**/summary.json', GLOB_NOSORT);
+        $summaryFiles = $this->findFilesOrderedByModifiedTime($this->path . '/**/**/summary.json');
         if (empty($summaryFiles) || count($summaryFiles) <= $this->historySize) {
             return;
         }
 
-        uasort($summaryFiles, static fn ($a, $b) => filemtime($b) <=> filemtime($a));
         $excessFiles = array_slice($summaryFiles, $this->historySize);
         foreach ($excessFiles as $file) {
             $path1 = dirname($file);
@@ -142,5 +141,22 @@ final class FileStorage implements StorageInterface
                 FileHelper::removeDirectory($this->path . $group);
             }
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function findFilesOrderedByModifiedTime(string $pattern): array
+    {
+        $files = glob($pattern, GLOB_NOSORT);
+        if ($files === false) {
+            return [];
+        }
+
+        usort(
+            $files,
+            static fn (string $a, string $b) => filemtime($b) <=> filemtime($a)
+        );
+        return $files;
     }
 }

@@ -7,6 +7,8 @@ namespace Yiisoft\Yii\Debug\Collector\Stream;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
+use function count;
+
 final class FilesystemStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
@@ -17,23 +19,25 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
          * Examples:
          * - '/' . preg_quote('yii-debug/src/Dumper', '/') . '/'
          * - '/ClosureExporter/'
+         *
+         * @var string[]
          */
         private readonly array $ignoredPathPatterns = [],
+        /**
+         * @var string[]
+         */
         private readonly array $ignoredClasses = [],
     ) {
     }
 
     /**
-     * @var array[]
+     * @psalm-var array<string, list<array{path: string, args: array}>>
      */
     private array $operations = [];
 
     public function getCollected(): array
     {
-        if (!$this->isActive()) {
-            return [];
-        }
-        return array_map('array_values', $this->operations);
+        return $this->isActive() ? $this->operations : [];
     }
 
     public function startup(): void

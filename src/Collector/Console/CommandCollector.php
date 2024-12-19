@@ -15,6 +15,8 @@ use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
+use function array_key_exists;
+
 final class CommandCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
@@ -23,6 +25,19 @@ final class CommandCollector implements SummaryCollectorInterface
      * Let -1 mean that it was not set during the process.
      */
     private const UNDEFINED_EXIT_CODE = -1;
+
+    /**
+     * @psalm-var array<string, array{
+     *     name: string,
+     *     command: Command|null,
+     *     input: string|null,
+     *     output: string|null,
+     *     error?: string,
+     *     exitCode?: int,
+     *     arguments?: array,
+     *     options?: array,
+     * }>
+     */
     private array $commands = [];
 
     public function __construct(
@@ -127,6 +142,9 @@ final class CommandCollector implements SummaryCollectorInterface
         return method_exists($input, '__toString') ? $input->__toString() : null;
     }
 
+    /**
+     * @return string[]
+     */
     private function getSupportedEvents(): array
     {
         return [

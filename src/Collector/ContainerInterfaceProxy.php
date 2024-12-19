@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Yiisoft\Proxy\ObjectProxy;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\ProxyTrait;
 use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
@@ -30,6 +31,9 @@ final class ContainerInterfaceProxy implements ContainerInterface
 
     private array $decoratedServices = [];
 
+    /**
+     * @psalm-var array<string, object>
+     */
     private array $serviceProxy = [];
 
     public function __construct(
@@ -40,6 +44,9 @@ final class ContainerInterfaceProxy implements ContainerInterface
         $this->proxyManager = new ProxyManager($this->config->getProxyCachePath());
     }
 
+    /**
+     * @psalm-param array<string, mixed> $decoratedServices
+     */
     public function withDecoratedServices(array $decoratedServices): self
     {
         $new = clone $this;
@@ -108,10 +115,12 @@ final class ContainerInterfaceProxy implements ContainerInterface
         }
 
         if ($this->config->hasDecoratedServiceCallableConfig($service)) {
+            /** @psalm-suppress MixedArgument */
             return $this->getServiceProxyFromCallable($this->config->getDecoratedServiceConfig($service), $instance);
         }
 
         if ($this->config->hasDecoratedServiceArrayConfigWithStringKeys($service)) {
+            /** @psalm-suppress MixedArgument */
             return $this->getCommonMethodProxy(
                 interface_exists($service) || class_exists($service) ? $service : $instance::class,
                 $instance,
@@ -120,6 +129,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
         }
 
         if ($this->config->hasDecoratedServiceArrayConfig($service)) {
+            /** @psalm-suppress MixedArgument */
             return $this->getServiceProxyFromArray($instance, $this->config->getDecoratedServiceConfig($service));
         }
 
@@ -130,6 +140,9 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return null;
     }
 
+    /**
+     * @psalm-param callable(ContainerInterface, object):(object|null) $callback
+     */
     private function getServiceProxyFromCallable(callable $callback, object $instance): ?object
     {
         return $callback($this, $instance);
@@ -138,7 +151,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
     /**
      * @psalm-param class-string $service
      */
-    private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ?object
+    private function getCommonMethodProxy(string $service, object $instance, array $callbacks): ObjectProxy
     {
         $methods = [];
         foreach ($callbacks as $method => $callback) {
@@ -163,10 +176,11 @@ final class ContainerInterfaceProxy implements ContainerInterface
                     try {
                         $params[$index] = $this->get($param);
                     } catch (Exception) {
-                        //leave as is
+                        // leave as is
                     }
                 }
             }
+            /** @psalm-suppress MixedMethodCall */
             return new $proxyClass($instance, ...$params);
         } catch (Exception) {
             return null;

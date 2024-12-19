@@ -11,6 +11,9 @@ class ServiceMethodProxy extends ServiceProxy
     public function __construct(
         string $service,
         object $instance,
+        /**
+         * @psalm-var array<string, callable>
+         */
         private readonly array $methods,
         ContainerProxyConfig $config
     ) {

@@ -95,6 +95,7 @@ final class LoggerInterfaceProxy implements LoggerInterface
 
     public function log(mixed $level, string|Stringable $message, array $context = []): void
     {
+        $level = (string) $level;
         $callStack = $this->getCallStack();
 
         $this->collector->collect($level, $message, $context, $callStack['file'] . ':' . $callStack['line']);

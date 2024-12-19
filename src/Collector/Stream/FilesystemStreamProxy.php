@@ -11,6 +11,9 @@ use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
 use const SEEK_SET;
 
+/**
+ * @psalm-suppress MixedInferredReturnType, MixedReturnStatement
+ */
 final class FilesystemStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
@@ -22,8 +25,20 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
     public bool $ignored = false;
 
     public static ?FilesystemStreamCollector $collector = null;
+
+    /**
+     * @var string[]
+     */
     public static array $ignoredPathPatterns = [];
+
+    /**
+     * @var string[]
+     */
     public static array $ignoredClasses = [];
+
+    /**
+     * @psalm-var array<string, array{path: string, args: array}>
+     */
     public array $operations = [];
 
     public function __construct()
@@ -104,7 +119,7 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
     {
         if (!$this->ignored) {
             $this->operations['read'] = [
-                'path' => $this->decorated->filename,
+                'path' => $this->decorated->filename ?? '',
                 'args' => [],
             ];
         }
@@ -155,7 +170,7 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
     {
         if (!$this->ignored) {
             $this->operations['readdir'] = [
-                'path' => $this->decorated->filename,
+                'path' => $this->decorated->filename ?? '',
                 'args' => [],
             ];
         }
@@ -236,7 +251,7 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
     {
         if (!$this->ignored) {
             $this->operations['write'] = [
-                'path' => $this->decorated->filename,
+                'path' => $this->decorated->filename ?? '',
                 'args' => [],
             ];
         }
