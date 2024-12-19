@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 use function in_array;
+use function is_array;
 use function is_callable;
 
 final class ContainerProxyConfig
@@ -64,6 +65,9 @@ final class ContainerProxyConfig
         return $config;
     }
 
+    /**
+     * @psalm-param array<string, mixed> $decoratedServices
+     */
     public function withDecoratedServices(array $decoratedServices): self
     {
         $config = clone $this;
