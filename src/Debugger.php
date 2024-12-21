@@ -11,17 +11,22 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
+/**
+ * @psalm-type BacktraceType = list<array{file?:string,line?:int,function?:string,class?:class-string,object?:object,type?:string,args?:array}>
+ */
 final class Debugger
 {
     private bool $skipCollect = false;
     private bool $active = false;
 
+    /**
+     * @param CollectorInterface[] $collectors
+     * @param string[] $ignoredRequests
+     * @param string[] $ignoredCommands
+     */
     public function __construct(
         private readonly DebuggerIdGenerator $idGenerator,
         private readonly StorageInterface $target,
-        /**
-         * @var CollectorInterface[]
-         */
         private readonly array $collectors,
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
@@ -117,7 +122,7 @@ final class Debugger
     }
 
     /**
-     * @param array $ignoredRequests Patterns for ignored request URLs.
+     * @param string[] $ignoredRequests Patterns for ignored request URLs.
      *
      * @see WildcardPattern
      */
@@ -129,7 +134,7 @@ final class Debugger
     }
 
     /**
-     * @param array $ignoredCommands Patterns for ignored commands names.
+     * @param string[] $ignoredCommands Patterns for ignored commands names.
      *
      * @see WildcardPattern
      */

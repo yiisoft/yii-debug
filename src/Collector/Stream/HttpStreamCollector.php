@@ -7,17 +7,31 @@ namespace Yiisoft\Yii\Debug\Collector\Stream;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
+use function count;
+
 final class HttpStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
     public function __construct(
+        /**
+         * @var string[]
+         */
         private readonly array $ignoredPathPatterns = [],
+        /**
+         * @var string[]
+         */
         private readonly array $ignoredClasses = [],
+        /**
+         * @var string[]
+         */
         private readonly array $ignoredUrls = []
     ) {
     }
 
+    /**
+     * @psalm-var array<string, list<array{uri: string, args: array}>>
+     */
     private array $requests = [];
 
     public function getCollected(): array
@@ -76,9 +90,7 @@ final class HttpStreamCollector implements SummaryCollectorInterface
             'http_stream' => array_merge(
                 ...array_map(
                     fn (string $operation) => [
-                        $operation => is_countable($this->requests[$operation]) ? count(
-                            $this->requests[$operation]
-                        ) : 0,
+                        $operation => count($this->requests[$operation]),
                     ],
                     array_keys($this->requests)
                 )

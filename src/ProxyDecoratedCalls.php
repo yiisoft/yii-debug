@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug;
 
-/**
- * @property object $decorated
- */
 trait ProxyDecoratedCalls
 {
     public function __set(string $name, mixed $value): void
@@ -21,6 +18,9 @@ trait ProxyDecoratedCalls
 
     public function __call(string $name, array $arguments)
     {
+        /**
+         * @psalm-suppress MixedMethodCall
+         */
         return $this->decorated->$name(...$arguments);
     }
 }

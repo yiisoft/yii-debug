@@ -9,15 +9,32 @@ use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
+use function func_get_args;
+use function in_array;
 use function stream_get_wrappers;
 
 use const SEEK_SET;
 
+/**
+ * @psalm-suppress MixedInferredReturnType, MixedReturnStatement
+ */
 final class HttpStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;
+
+    /**
+     * @var string[]
+     */
     public static array $ignoredPathPatterns = [];
+
+    /**
+     * @var string[]
+     */
     public static array $ignoredClasses = [];
+
+    /**
+     * @var string[]
+     */
     public static array $ignoredUrls = [];
     /**
      * @var resource|null
@@ -27,6 +44,10 @@ final class HttpStreamProxy implements StreamWrapperInterface
     public bool $ignored = false;
 
     public static ?HttpStreamCollector $collector = null;
+
+    /**
+     * @psalm-var array<string, array{path: string, args: array}>
+     */
     public array $operations = [];
 
     public function __construct()
@@ -120,7 +141,7 @@ final class HttpStreamProxy implements StreamWrapperInterface
             $headers = (array) ($context['http']['header'] ?? $context['https']['header'] ?? []);
 
             $this->operations['read'] = [
-                'path' => $this->decorated->filename,
+                'path' => $this->decorated->filename ?? '',
                 'args' => [
                     'method' => $method,
                     'response_headers' => $metadata['wrapper_data'],
@@ -175,7 +196,7 @@ final class HttpStreamProxy implements StreamWrapperInterface
     {
         if (!$this->ignored) {
             $this->operations[__FUNCTION__] = [
-                'path' => $this->decorated->filename,
+                'path' => $this->decorated->filename ?? '',
                 'args' => [],
             ];
         }
@@ -256,7 +277,7 @@ final class HttpStreamProxy implements StreamWrapperInterface
     {
         if (!$this->ignored) {
             $this->operations['write'] = [
-                'path' => $this->decorated->filename,
+                'path' => $this->decorated->filename ?? '',
                 'args' => [],
             ];
         }
