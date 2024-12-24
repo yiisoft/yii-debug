@@ -43,7 +43,6 @@
         "yiisoft/config": "^1.3",
         "yiisoft/di": "^1.0",
         "yiisoft/files": "^2.0",
-        "yiisoft/json": "^1.0",
         "yiisoft/profiler": "^3.0",
         "yiisoft/proxy": "^1.0.1",
         "yiisoft/strings": "^2.2",
