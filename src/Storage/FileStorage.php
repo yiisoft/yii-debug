@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Json\Json;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
@@ -16,6 +15,8 @@ use function count;
 use function dirname;
 use function filemtime;
 use function glob;
+use function json_decode;
+use function sprintf;
 use function strlen;
 use function substr;
 
@@ -62,7 +63,8 @@ final class FileStorage implements StorageInterface
         foreach ($dataFiles as $file) {
             $dir = dirname($file);
             $id = substr($dir, strlen(dirname($file, 2)) + 1);
-            $data[$id] = Json::decode(file_get_contents($file));
+            $content = file_get_contents($file);
+            $data[$id] = $content === '' ? '' : json_decode($content, true, flags: JSON_THROW_ON_ERROR);
         }
 
         return $data;
