@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
-use Yiisoft\Aliases\Aliases;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
@@ -79,9 +78,6 @@ final class FileStorageTest extends AbstractStorageTestCase
 
     public function getStorage(DebuggerIdGenerator $idGenerator): FileStorage
     {
-        return new FileStorage(
-            (new Aliases())->get($this->path),
-            $idGenerator,
-        );
+        return new FileStorage($this->path, $idGenerator);
     }
 }
