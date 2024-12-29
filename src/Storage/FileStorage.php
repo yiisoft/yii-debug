@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Dumper;
 
 use function array_slice;
@@ -22,23 +19,12 @@ use function substr;
 
 final class FileStorage implements StorageInterface
 {
-    /**
-     * @var CollectorInterface[]
-     */
-    private array $collectors = [];
-
     private int $historySize = 50;
 
     public function __construct(
         private readonly string $path,
-        private readonly DebuggerIdGenerator $idGenerator,
         private readonly array $excludedClasses = []
     ) {
-    }
-
-    public function addCollector(CollectorInterface $collector): void
-    {
-        $this->collectors[$collector->getName()] = $collector;
     }
 
     public function setHistorySize(int $historySize): void
@@ -70,26 +56,20 @@ final class FileStorage implements StorageInterface
         return $data;
     }
 
-    public function flush(): void
+    public function flush(string $id, array $data, array $summary): void
     {
-        $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
+        $basePath = $this->path . '/' . date('Y-m-d') . '/' . $id . '/';
 
         try {
             FileHelper::ensureDirectory($basePath);
-
-            $data = array_map(
-                static fn (CollectorInterface $collector) => $collector->getCollected(),
-                $this->collectors
-            );
 
             $dumper = Dumper::create($data, $this->excludedClasses);
             file_put_contents($basePath . self::TYPE_DATA . '.json', $dumper->asJson(30));
             file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $dumper->asJsonObjectsMap(30));
 
-            $summaryData = Dumper::create($this->collectSummaryData())->asJson();
+            $summaryData = Dumper::create($summary)->asJson();
             file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $summaryData);
         } finally {
-            $this->collectors = [];
             $this->gc();
         }
     }
@@ -97,25 +77,6 @@ final class FileStorage implements StorageInterface
     public function clear(): void
     {
         FileHelper::removeDirectory($this->path);
-    }
-
-    /**
-     * Collects summary data of current request.
-     */
-    private function collectSummaryData(): array
-    {
-        $summaryData = [
-            'id' => $this->idGenerator->getId(),
-            'collectors' => array_keys($this->collectors),
-        ];
-
-        foreach ($this->collectors as $collector) {
-            if ($collector instanceof SummaryCollectorInterface) {
-                $summaryData = [...$summaryData, ...$collector->getSummary()];
-            }
-        }
-
-        return $summaryData;
     }
 
     /**

@@ -27,13 +27,6 @@ interface StorageInterface
     final public const TYPE_OBJECTS = 'objects';
 
     /**
-     * Add collector to get debug data from
-     *
-     * @param CollectorInterface $collector collector instance
-     */
-    public function addCollector(CollectorInterface $collector): void;
-
-    /**
      * Read all data from storage
      *
      * @param string $type type of data being read. Available types:
@@ -47,8 +40,10 @@ interface StorageInterface
 
     /**
      * Flush data from collectors into storage
+     *
+     * @param array[] $data
      */
-    public function flush(): void;
+    public function flush(string $id, array $data, array $summary): void;
 
     /**
      * Clear storage data

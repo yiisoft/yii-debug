@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Strings\WildcardPattern;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
@@ -20,6 +21,11 @@ final class Debugger
     private bool $active = false;
 
     /**
+     * @psalm-var array<string, CollectorInterface>
+     */
+    private readonly array $collectors;
+
+    /**
      * @param CollectorInterface[] $collectors
      * @param string[] $ignoredRequests
      * @param string[] $ignoredCommands
@@ -27,10 +33,16 @@ final class Debugger
     public function __construct(
         private readonly DebuggerIdGenerator $idGenerator,
         private readonly StorageInterface $target,
-        private readonly array $collectors,
+        array $collectors,
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
     ) {
+        $preparedCollectors = [];
+        foreach ($collectors as $collector) {
+            $preparedCollectors[$collector->getName()] = $collector;
+        }
+        $this->collectors = $preparedCollectors;
+
         register_shutdown_function([$this, 'shutdown']);
     }
 
@@ -56,7 +68,6 @@ final class Debugger
 
         $this->idGenerator->reset();
         foreach ($this->collectors as $collector) {
-            $this->target->addCollector($collector);
             $collector->startup();
         }
     }
@@ -69,7 +80,11 @@ final class Debugger
 
         try {
             if (!$this->skipCollect) {
-                $this->target->flush();
+                $data = array_map(
+                    static fn (CollectorInterface $collector) => $collector->getCollected(),
+                    $this->collectors
+                );
+                $this->target->flush($this->idGenerator->getId(), $data, $this->collectSummaryData());
             }
         } finally {
             foreach ($this->collectors as $collector) {
@@ -143,5 +158,23 @@ final class Debugger
         $new = clone $this;
         $new->ignoredCommands = $ignoredCommands;
         return $new;
+    }
+    /**
+     * Collects summary data of current request.
+     */
+    private function collectSummaryData(): array
+    {
+        $summaryData = [
+            'id' => $this->idGenerator->getId(),
+            'collectors' => array_keys($this->collectors),
+        ];
+
+        foreach ($this->collectors as $collector) {
+            if ($collector instanceof SummaryCollectorInterface) {
+                $summaryData = [...$summaryData, ...$collector->getSummary()];
+            }
+        }
+
+        return $summaryData;
     }
 }

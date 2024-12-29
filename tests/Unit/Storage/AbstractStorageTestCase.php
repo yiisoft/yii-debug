@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
@@ -54,9 +55,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $this->assertEquals([$idGenerator->getId() => $encodedExpectedData], $encodedResult);
     }
 
-    /**
-     * @dataProvider dataProvider()
-     */
+    #[DataProvider('dataProvider')]
     public function testFlush(array $data): void
     {
         $idGenerator = new DebuggerIdGenerator();
