@@ -159,6 +159,7 @@ final class Debugger
         $new->ignoredCommands = $ignoredCommands;
         return $new;
     }
+
     /**
      * Collects summary data of current request.
      */

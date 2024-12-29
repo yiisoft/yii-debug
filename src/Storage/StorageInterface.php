@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Storage;
 
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-
 /**
  * Debug data storage responsibility is to store debug data from collectors added
  */
