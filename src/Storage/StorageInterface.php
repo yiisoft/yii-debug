@@ -34,13 +34,6 @@ interface StorageInterface
     public function addCollector(CollectorInterface $collector): void;
 
     /**
-     * Returns collected data from collectors added
-     *
-     * @return array[] The collected data
-     */
-    public function getData(): array;
-
-    /**
      * Read all data from storage
      *
      * @param string $type type of data being read. Available types:

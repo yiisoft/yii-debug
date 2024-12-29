@@ -35,24 +35,18 @@ final class MemoryStorage implements StorageInterface
             ];
         }
 
+        $data = array_map(
+            static fn (CollectorInterface $collector) => $collector->getCollected(),
+            $this->collectors
+        );
+
         if ($type === self::TYPE_OBJECTS) {
             return [
-                $this->idGenerator->getId() => array_merge(...array_values($this->getData())),
+                $this->idGenerator->getId() => array_merge(...array_values($data)),
             ];
         }
 
-        return [$this->idGenerator->getId() => $this->getData()];
-    }
-
-    public function getData(): array
-    {
-        $data = [];
-
-        foreach ($this->collectors as $name => $collector) {
-            $data[$name] = $collector->getCollected();
-        }
-
-        return $data;
+        return [$this->idGenerator->getId() => $data];
     }
 
     public function flush(): void

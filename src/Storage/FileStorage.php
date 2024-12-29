@@ -77,7 +77,12 @@ final class FileStorage implements StorageInterface
         try {
             FileHelper::ensureDirectory($basePath);
 
-            $dumper = Dumper::create($this->getData(), $this->excludedClasses);
+            $data = array_map(
+                static fn (CollectorInterface $collector) => $collector->getCollected(),
+                $this->collectors
+            );
+
+            $dumper = Dumper::create($data, $this->excludedClasses);
             file_put_contents($basePath . self::TYPE_DATA . '.json', $dumper->asJson(30));
             file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $dumper->asJsonObjectsMap(30));
 
@@ -87,11 +92,6 @@ final class FileStorage implements StorageInterface
             $this->collectors = [];
             $this->gc();
         }
-    }
-
-    public function getData(): array
-    {
-        return array_map(static fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
     }
 
     public function clear(): void
