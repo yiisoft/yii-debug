@@ -21,11 +21,24 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
  */
 
 $common = [
-    StorageInterface::class => static function (ContainerInterface $container, Aliases $aliases) use ($params) {
+    StorageInterface::class => static function (ContainerInterface $container, ?Aliases $aliases = null) use ($params) {
         $params = $params['yiisoft/yii-debug'];
         $debuggerIdGenerator = $container->get(DebuggerIdGenerator::class);
         $excludedClasses = $params['dumper.excludedClasses'];
-        $fileStorage = new FileStorage($aliases->get($params['path']), $debuggerIdGenerator, $excludedClasses);
+
+        $path = $params['path'];
+        if (str_starts_with($path, '@')) {
+            if ($aliases === null) {
+                throw new LogicException(
+                    sprintf(
+                        'yiisoft/aliases dependency is required to resolve path "%s".',
+                        $path
+                    )
+                );
+            }
+            $path = $aliases->get($path);
+        }
+        $fileStorage = new FileStorage($path, $debuggerIdGenerator, $excludedClasses);
 
         if (isset($params['historySize'])) {
             $fileStorage->setHistorySize((int) $params['historySize']);
