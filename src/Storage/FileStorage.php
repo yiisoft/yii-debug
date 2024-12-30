@@ -56,7 +56,7 @@ final class FileStorage implements StorageInterface
         return $data;
     }
 
-    public function flush(string $id, array $data, array $summary): void
+    public function write(string $id, array $data, array $summary): void
     {
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $id . '/';
 

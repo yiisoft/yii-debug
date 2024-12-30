@@ -16,7 +16,7 @@ final class MemoryStorage implements StorageInterface
         return $this->storage[$id][$type] ?? [];
     }
 
-    public function flush(string $id, array $data, array $summary): void
+    public function write(string $id, array $data, array $summary): void
     {
         $this->storage[$id] = [
             'data' => $data,

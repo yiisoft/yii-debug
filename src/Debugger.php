@@ -84,7 +84,7 @@ final class Debugger
                     static fn (CollectorInterface $collector) => $collector->getCollected(),
                     $this->collectors
                 );
-                $this->storage->flush($this->idGenerator->getId(), $data, $this->collectSummaryData());
+                $this->storage->write($this->idGenerator->getId(), $data, $this->collectSummaryData());
             }
         } finally {
             foreach ($this->collectors as $collector) {

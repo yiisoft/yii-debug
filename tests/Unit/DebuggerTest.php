@@ -64,7 +64,7 @@ final class DebuggerTest extends TestCase
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->never())->method('flush');
+        $storage->expects($this->never())->method('write');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector], []);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test', ['X-Debug-Ignore' => 'true'])));
@@ -86,7 +86,7 @@ final class DebuggerTest extends TestCase
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->never())->method('flush');
+        $storage->expects($this->never())->method('write');
 
         putenv('YII_DEBUG_IGNORE=true');
         $debugger = new Debugger($idGenerator, $storage, [$collector], []);
@@ -101,7 +101,7 @@ final class DebuggerTest extends TestCase
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->once())->method('flush');
+        $storage->expects($this->once())->method('write');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector]);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
@@ -116,7 +116,7 @@ final class DebuggerTest extends TestCase
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->never())->method('flush');
+        $storage->expects($this->never())->method('write');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector], ['/test']);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
@@ -134,7 +134,7 @@ final class DebuggerTest extends TestCase
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('addCollector');
-        $storage->expects($this->never())->method('flush');
+        $storage->expects($this->never())->method('write');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector], [], $ignoredCommands);
         $debugger->startup(new ApplicationStartup($ignoredCommand));
@@ -172,7 +172,7 @@ final class DebuggerTest extends TestCase
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->once())->method('addCollector');
-        $storage->expects($this->once())->method('flush');
+        $storage->expects($this->once())->method('write');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector], [], $ignoredCommands);
         $debugger->startup(new ApplicationStartup($ignoredCommand));
@@ -198,7 +198,7 @@ final class DebuggerTest extends TestCase
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('clear');
-        $storage->expects($this->never())->method('flush');
+        $storage->expects($this->never())->method('write');
 
         $debugger = new Debugger($idGenerator, $storage, [$collector]);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));

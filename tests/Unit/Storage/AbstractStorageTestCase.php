@@ -46,7 +46,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $encodedExpectedData = json_decode(Dumper::create($expectedData)->asJson(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!$storage instanceof MemoryStorage) {
-            $storage->flush();
+            $storage->write();
         }
 
         $result = $storage->read(StorageInterface::TYPE_DATA);
@@ -63,7 +63,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $this->assertEquals([], $storage->getData());
     }
 

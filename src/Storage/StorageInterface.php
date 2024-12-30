@@ -41,7 +41,7 @@ interface StorageInterface
      *
      * @param array[] $data
      */
-    public function flush(string $id, array $data, array $summary): void;
+    public function write(string $id, array $data, array $summary): void;
 
     /**
      * Clear storage data
