@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
@@ -45,7 +46,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $encodedExpectedData = json_decode(Dumper::create($expectedData)->asJson(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!$storage instanceof MemoryStorage) {
-            $storage->flush();
+            $storage->write();
         }
 
         $result = $storage->read(StorageInterface::TYPE_DATA);
@@ -54,9 +55,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $this->assertEquals([$idGenerator->getId() => $encodedExpectedData], $encodedResult);
     }
 
-    /**
-     * @dataProvider dataProvider()
-     */
+    #[DataProvider('dataProvider')]
     public function testFlush(array $data): void
     {
         $idGenerator = new DebuggerIdGenerator();
@@ -64,7 +63,7 @@ abstract class AbstractStorageTestCase extends TestCase
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $this->assertEquals([], $storage->getData());
     }
 

@@ -30,7 +30,7 @@ final class FileStorageTest extends AbstractStorageTestCase
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY, null)));
     }
 
@@ -46,15 +46,15 @@ final class FileStorageTest extends AbstractStorageTestCase
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $idGenerator->reset();
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $idGenerator->reset();
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $idGenerator->reset();
 
         $read = $storage->read(StorageInterface::TYPE_SUMMARY, null);
@@ -71,7 +71,7 @@ final class FileStorageTest extends AbstractStorageTestCase
         $collector = $this->createFakeCollector($data);
 
         $storage->addCollector($collector);
-        $storage->flush();
+        $storage->write();
         $storage->clear();
         $this->assertDirectoryDoesNotExist($this->path);
     }
