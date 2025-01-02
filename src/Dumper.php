@@ -13,6 +13,9 @@ use function array_key_exists;
 use function is_array;
 use function is_object;
 
+/**
+ * @internal
+ */
 final class Dumper
 {
     private array $objects = [];
@@ -46,7 +49,11 @@ final class Dumper
     public function asJson(int $depth = 50, bool $format = false): string
     {
         $this->buildObjectsCache($this->variable, $depth);
-        return $this->asJsonInternal($this->variable, $format, $depth, 0, false);
+
+        return $this->asJsonInternal(
+            $this->dumpNestedInternal($this->variable, $depth, 0, false),
+            $format
+        );
     }
 
     /**
@@ -61,7 +68,13 @@ final class Dumper
     public function asJsonObjectsMap(int $depth = 50, bool $prettyPrint = false): string
     {
         $this->buildObjectsCache($this->variable);
-        return $this->asJsonInternal($this->objects, $prettyPrint, $depth + 2, 1, true);
+
+        $variable = [];
+        foreach ($this->objects as $key => $value) {
+            $variable[$key] = $this->dumpNestedInternal($value, $depth + 1, 0, true);
+        }
+
+        return $this->asJsonInternal($variable, $prettyPrint);
     }
 
     private function buildObjectsCache(mixed $variable, ?int $depth = null, int $level = 0): void
@@ -95,23 +108,15 @@ final class Dumper
         }
     }
 
-    private function asJsonInternal(
-        mixed $variable,
-        bool $format,
-        int $depth,
-        int $objectCollapseLevel,
-        bool $inlineObject,
-    ): string {
+    private function asJsonInternal(mixed $variable, bool $format): string
+    {
         $options = JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE;
 
         if ($format) {
             $options |= JSON_PRETTY_PRINT;
         }
 
-        return json_encode(
-            $this->dumpNestedInternal($variable, $depth, 0, $objectCollapseLevel, $inlineObject),
-            $options,
-        );
+        return json_encode($variable, $options);
     }
 
     private function getObjectProperties(object $var): array
@@ -127,7 +132,6 @@ final class Dumper
         mixed $variable,
         int $depth,
         int $level,
-        int $objectCollapseLevel,
         bool $inlineObject
     ): mixed {
         switch (gettype($variable)) {
@@ -147,7 +151,6 @@ final class Dumper
                         $value,
                         $depth,
                         $level + 1,
-                        $objectCollapseLevel,
                         $inlineObject
                     );
                 }
@@ -163,7 +166,7 @@ final class Dumper
                     break;
                 }
 
-                if ($objectCollapseLevel < $level && array_key_exists($objectDescription, $this->objects)) {
+                if ($level > 0 && array_key_exists($objectDescription, $this->objects)) {
                     $output = 'object@' . $objectDescription;
                     break;
                 }
@@ -196,7 +199,6 @@ final class Dumper
                         $value,
                         $depth,
                         $level + 1,
-                        $objectCollapseLevel,
                         $inlineObject,
                     );
                 }
