@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Unit;
 
 use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug as D;
@@ -12,6 +13,8 @@ use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\ThreeProperties;
 
 use function socket_create;
+
+use function sprintf;
 
 use const AF_INET;
 use const SOCK_STREAM;
@@ -33,7 +36,7 @@ final class DumperTest extends TestCase
                 }
             }
             JSON,
-            Dumper::create($object)->asJsonObjectsMap(1, true)
+            Dumper::create([$object])->asJsonObjectsMap(1, true)
         );
     }
 
@@ -69,7 +72,7 @@ final class DumperTest extends TestCase
                 }
             }
             JSON,
-            Dumper::create($object)->asJsonObjectsMap(1, true)
+            Dumper::create([$object])->asJsonObjectsMap(1, true)
         );
     }
 
@@ -105,16 +108,14 @@ final class DumperTest extends TestCase
                 }
             }
             JSON,
-            Dumper::create($object)->asJsonObjectsMap(0, true)
+            Dumper::create([$object])->asJsonObjectsMap(0, true)
         );
     }
 
-    /**
-     * @dataProvider loopAsJsonObjectMapDataProvider
-     */
+    #[DataProvider('loopAsJsonObjectMapDataProvider')]
     public function testLoopAsJsonObjectsMap(mixed $var, int $depth, $expectedResult): void
     {
-        $exportResult = Dumper::create($var)->asJsonObjectsMap($depth, true);
+        $exportResult = Dumper::create([$var])->asJsonObjectsMap($depth, true);
         $this->assertEquals($expectedResult, $exportResult);
     }
 
@@ -343,7 +344,7 @@ final class DumperTest extends TestCase
         }
         JSON;
 
-        $actualResult = Dumper::create($var)->asJsonObjectsMap(2, true);
+        $actualResult = Dumper::create([$var])->asJsonObjectsMap(2, true);
 
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -366,12 +367,10 @@ final class DumperTest extends TestCase
         return $head;
     }
 
-    /**
-     * @dataProvider asJsonObjectMapDataProvider
-     */
+    #[DataProvider('asJsonObjectMapDataProvider')]
     public function testAsJsonObjectsMap(mixed $var, $expectedResult): void
     {
-        $exportResult = Dumper::create($var)->asJsonObjectsMap();
+        $exportResult = Dumper::create([$var])->asJsonObjectsMap();
         $this->assertEquals($expectedResult, $exportResult);
     }
 
@@ -412,15 +411,40 @@ final class DumperTest extends TestCase
             {"stdClass#{$closureInsideObjectId}":{"public \$closure":"fn () => true"},"Closure#{$closureObjectId}":"fn () => true"}
             S,
         ];
+
+        $socketResource = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $socketResourceId = spl_object_id($socketResource);
+        yield 'socket resource' => [
+            $socketResource,
+            <<<S
+            {"Socket#{$socketResourceId}":"{stateless object}"}
+            S,
+        ];
+
+        $curlResource = curl_init('https://example.com');
+        $curlResourceObjectId = spl_object_id($curlResource);
+        yield 'curl resource' => [
+            $curlResource,
+            <<<S
+                {"CurlHandle#{$curlResourceObjectId}":"{stateless object}"}
+                S,
+        ];
+
+        $emptyObject = new stdClass();
+        $emptyObjectId = spl_object_id($emptyObject);
+        yield 'empty object' => [
+            $emptyObject,
+            <<<S
+                {"stdClass#{$emptyObjectId}":"{stateless object}"}
+                S,
+        ];
     }
 
-    /**
-     * @dataProvider jsonDataProvider()
-     */
-    public function testAsJson($variable, string $result): void
+    #[DataProvider('jsonDataProvider')]
+    public function testAsJson(mixed $variable, string $result): void
     {
-        $output = Dumper::create($variable)->asJson();
-        $this->assertEqualsWithoutLE($result, $output);
+        $output = Dumper::create([$variable])->asJson();
+        $this->assertEqualsWithoutLE('[' . $result . ']', $output);
     }
 
     public function testCacheDoesNotCoversObjectOutOfDumpDepth(): void
@@ -467,15 +491,21 @@ final class DumperTest extends TestCase
                 return ['test' => 'ok'];
             }
         };
-        $expectedResult = sprintf(
-            '{"class@anonymous#%d":{"public $test":"ok"}}',
-            spl_object_id($variable),
-        );
+        $objectId = spl_object_id($variable);
 
-        $dumper = Dumper::create($variable);
+        $dumper = Dumper::create([$variable]);
+
+        $expectedResult = sprintf(
+            '["object@class@anonymous#%d"]',
+            $objectId,
+        );
         $actualResult = $dumper->asJson(2);
         $this->assertEqualsWithoutLE($expectedResult, $actualResult);
 
+        $expectedResult = sprintf(
+            '{"class@anonymous#%d":{"public $test":"ok"}}',
+            $objectId,
+        );
         $map = $dumper->asJsonObjectsMap(2);
         $this->assertEqualsWithoutLE($expectedResult, $map);
     }
@@ -550,7 +580,7 @@ final class DumperTest extends TestCase
     {
         $variable = new ThreeProperties();
 
-        $output = Dumper::create($variable)->asJson(2);
+        $output = Dumper::create([$variable])->asJsonObjectsMap();
         $result = sprintf(
             '{"%s#%d":{"public $first":"first","protected $second":"second","private $third":"third"}}',
             str_replace('\\', '\\\\', ThreeProperties::class),
@@ -597,16 +627,6 @@ final class DumperTest extends TestCase
 
     public static function jsonDataProvider(): iterable
     {
-        $emptyObject = new stdClass();
-        $emptyObjectId = spl_object_id($emptyObject);
-
-        yield 'empty object' => [
-            $emptyObject,
-            <<<S
-                {"stdClass#{$emptyObjectId}":"{stateless object}"}
-                S,
-        ];
-
         // @formatter:off
         $shortFunctionObject = fn () => 1;
         // @formatter:on
@@ -772,20 +792,6 @@ final class DumperTest extends TestCase
             '"🤣"',
         ];
 
-
-        $objectWithClosureInProperty = new stdClass();
-        // @formatter:off
-        $objectWithClosureInProperty->a = fn () => 1;
-        // @formatter:on
-        $objectWithClosureInPropertyId = spl_object_id($objectWithClosureInProperty);
-        $objectWithClosureInPropertyClosureId = spl_object_id($objectWithClosureInProperty->a);
-
-        yield 'closure in property supported' => [
-            $objectWithClosureInProperty,
-            <<<S
-                {"stdClass#{$objectWithClosureInPropertyId}":{"public \$a":{"Closure#{$objectWithClosureInPropertyClosureId}":"fn () => 1"}}}
-                S,
-        ];
         yield 'binary string' => [
             pack('H*', md5('binary string')),
             '"ɍ��^��\u00191\u0017�]�-f�"',
@@ -811,15 +817,6 @@ final class DumperTest extends TestCase
             '"{closed resource}"',
         ];
 
-        $socketResource = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        $socketResourceId = spl_object_id($socketResource);
-        yield 'socket resource' => [
-            $socketResource,
-            <<<S
-            {"Socket#{$socketResourceId}":"{stateless object}"}
-            S,
-        ];
-
         $opendirResource = opendir(sys_get_temp_dir());
 
         yield 'opendir resource' => [
@@ -829,15 +826,6 @@ final class DumperTest extends TestCase
                 S,
         ];
 
-        $curlResource = curl_init('https://example.com');
-        $curlResourceObjectId = spl_object_id($curlResource);
-
-        yield 'curl resource' => [
-            $curlResource,
-            <<<S
-                {"CurlHandle#{$curlResourceObjectId}":"{stateless object}"}
-                S,
-        ];
         yield 'stdout' => [
             STDOUT,
             <<<S

@@ -10,8 +10,11 @@ use ReflectionException;
 use Yiisoft\VarDumper\ClosureExporter;
 
 use function array_key_exists;
+use function count;
+use function gettype;
 use function is_array;
 use function is_object;
+use function sprintf;
 
 /**
  * @internal
@@ -24,7 +27,7 @@ final class Dumper
     private readonly array $excludedClasses;
 
     private function __construct(
-        private readonly mixed $variable,
+        private readonly array $variable,
         array $excludedClasses
     ) {
         $this->excludedClasses = array_flip($excludedClasses);
@@ -33,7 +36,7 @@ final class Dumper
     /**
      * @return self An instance containing variable to dump.
      */
-    public static function create(mixed $variable, array $excludedClasses = []): self
+    public static function create(array $variable, array $excludedClasses = []): self
     {
         return new self($variable, $excludedClasses);
     }
