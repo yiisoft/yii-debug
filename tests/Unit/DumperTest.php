@@ -13,7 +13,6 @@ use Yiisoft\Yii\Debug\Dumper;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\ThreeProperties;
 
 use function socket_create;
-
 use function sprintf;
 
 use const AF_INET;
