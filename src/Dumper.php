@@ -162,13 +162,6 @@ final class Dumper
             case 'object':
                 $objectDescription = $this->getObjectDescription($variable);
 
-                if ($variable instanceof Closure) {
-                    $output = $inlineObject
-                        ? $this->exportClosure($variable)
-                        : [$objectDescription => $this->exportClosure($variable)];
-                    break;
-                }
-
                 if ($level > 0 && array_key_exists($objectDescription, $this->objects)) {
                     $output = 'object@' . $objectDescription;
                     break;
@@ -180,6 +173,13 @@ final class Dumper
                     || !array_key_exists($objectDescription, $this->objects)
                 ) {
                     $output = $objectDescription . ' (...)';
+                    break;
+                }
+
+                if ($variable instanceof Closure) {
+                    $output = $inlineObject
+                        ? $this->exportClosure($variable)
+                        : [$objectDescription => $this->exportClosure($variable)];
                     break;
                 }
 
