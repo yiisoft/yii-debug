@@ -23,7 +23,7 @@ use function substr;
 /**
  * @internal
  *
- * Normalize data to array and scalar values only.
+ * Normalize data to array, scalar and null values only.
  */
 final class DataNormalizer
 {
@@ -92,7 +92,6 @@ final class DataNormalizer
      */
     private function normalizeArray(array $array, ?int $depth, array $objectsData, int $level): string|array
     {
-
         if ($depth !== null && $depth <= $level) {
             $valuesCount = count($array);
             if ($valuesCount === 0) {
@@ -186,7 +185,7 @@ final class DataNormalizer
         int $level = 0
     ): void {
         if (is_object($value)) {
-            if (array_key_exists($value::class, $this->excludedClasses)) {
+            if ($value instanceof Closure || array_key_exists($value::class, $this->excludedClasses)) {
                 return;
             }
             $objectId = $this->makeObjectId($value);
