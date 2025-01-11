@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
@@ -19,9 +20,7 @@ final class FileStorageTest extends AbstractStorageTestCase
         FileHelper::removeDirectory($this->path);
     }
 
-    /**
-     * @dataProvider dataProvider()
-     */
+    #[DataProvider('dataProvider')]
     public function testFlushWithGC(array $data): void
     {
         $idGenerator = new DebuggerIdGenerator();
@@ -34,9 +33,7 @@ final class FileStorageTest extends AbstractStorageTestCase
         $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY, null)));
     }
 
-    /**
-     * @dataProvider dataProvider()
-     */
+    #[DataProvider('dataProvider')]
     public function testHistorySize(array $data): void
     {
         $idGenerator = new DebuggerIdGenerator();
@@ -61,9 +58,7 @@ final class FileStorageTest extends AbstractStorageTestCase
         $this->assertCount(2, $read);
     }
 
-    /**
-     * @dataProvider dataProvider()
-     */
+    #[DataProvider('dataProvider')]
     public function testClear(array $data): void
     {
         $idGenerator = new DebuggerIdGenerator();

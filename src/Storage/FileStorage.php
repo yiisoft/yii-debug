@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Yii\Debug\Dumper;
+use Yiisoft\Yii\Debug\DataNormalizer;
 
 use function array_slice;
 use function count;
@@ -13,6 +13,7 @@ use function dirname;
 use function filemtime;
 use function glob;
 use function json_decode;
+use function json_encode;
 use function sprintf;
 use function strlen;
 use function substr;
@@ -21,10 +22,13 @@ final class FileStorage implements StorageInterface
 {
     private int $historySize = 50;
 
+    private readonly DataNormalizer $dataNormalizer;
+
     public function __construct(
         private readonly string $path,
-        private readonly array $excludedClasses = []
+        array $excludedClasses = []
     ) {
+        $this->dataNormalizer = new DataNormalizer($excludedClasses);
     }
 
     public function setHistorySize(int $historySize): void
@@ -63,12 +67,12 @@ final class FileStorage implements StorageInterface
         try {
             FileHelper::ensureDirectory($basePath);
 
-            $dumper = Dumper::create($data, $this->excludedClasses);
-            file_put_contents($basePath . self::TYPE_DATA . '.json', $dumper->asJson(30));
-            file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $dumper->asJsonObjectsMap(30));
+            [$preparedData, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($data, 30);
+            file_put_contents($basePath . self::TYPE_DATA . '.json', $this->encode($preparedData));
+            file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $this->encode($objectsMap));
 
-            $summaryData = Dumper::create($summary)->asJson();
-            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $summaryData);
+            $summaryData = $this->dataNormalizer->prepareData($summary);
+            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $this->encode($summaryData));
         } finally {
             $this->gc();
         }
@@ -121,5 +125,10 @@ final class FileStorage implements StorageInterface
             static fn (string $a, string $b) => filemtime($b) <=> filemtime($a)
         );
         return $files;
+    }
+
+    private function encode(mixed $value): string
+    {
+        return json_encode($value, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
     }
 }
