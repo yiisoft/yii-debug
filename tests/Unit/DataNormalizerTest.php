@@ -635,9 +635,7 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $functionObject = function () {
-            return 1;
-        };
+        $functionObject = fn() => 1;
         // @formatter:on
         yield 'function' => [
             $functionObject,
@@ -649,9 +647,7 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $staticFunctionObject = static function () {
-            return 1;
-        };
+        $staticFunctionObject = static fn() => 1;
         // @formatter:on
         yield 'static function' => [
             $staticFunctionObject,

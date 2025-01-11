@@ -71,19 +71,12 @@ final class DataNormalizer
      */
     private function normalize(mixed $value, ?int $depth, array $objectsData = [], int $level = 0): mixed
     {
-        switch (gettype($value)) {
-            case 'array':
-                return $this->normalizeArray($value, $depth, $objectsData, $level);
-
-            case 'object':
-                return $this->normalizeObject($value, $depth, $objectsData, $level);
-
-            case 'resource':
-            case 'resource (closed)':
-                return $this->normalizeResource($value);
-        }
-
-        return $value;
+        return match (gettype($value)) {
+            'array' => $this->normalizeArray($value, $depth, $objectsData, $level),
+            'object' => $this->normalizeObject($value, $depth, $objectsData, $level),
+            'resource', 'resource (closed)' => $this->normalizeResource($value),
+            default => $value,
+        };
     }
 
     /**
