@@ -33,6 +33,8 @@ interface StorageInterface
      * - {@see TYPE_OBJECTS}
      *
      * @return array data from storage
+     *
+     * @psalm-param self::TYPE_* $type
      */
     public function read(string $type, ?string $id): array;
 
@@ -41,7 +43,7 @@ interface StorageInterface
      *
      * @param array[] $data
      */
-    public function write(string $id, array $data, array $summary): void;
+    public function write(string $id, array $data, array $objectsMap, array $summary): void;
 
     /**
      * Clear storage data

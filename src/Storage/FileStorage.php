@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Yii\Debug\DataNormalizer;
 
 use function array_slice;
 use function count;
@@ -22,14 +21,9 @@ final class FileStorage implements StorageInterface
 {
     private int $historySize = 50;
 
-    private readonly DataNormalizer $dataNormalizer;
-
     public function __construct(
         private readonly string $path,
-        array $excludedClasses = []
-    ) {
-        $this->dataNormalizer = new DataNormalizer($excludedClasses);
-    }
+    ) {}
 
     public function setHistorySize(int $historySize): void
     {
@@ -60,19 +54,15 @@ final class FileStorage implements StorageInterface
         return $data;
     }
 
-    public function write(string $id, array $data, array $summary): void
+    public function write(string $id, array $data, array $objectsMap, array $summary): void
     {
         $basePath = $this->path . '/' . date('Y-m-d') . '/' . $id . '/';
 
         try {
             FileHelper::ensureDirectory($basePath);
-
-            [$preparedData, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($data, 30);
-            file_put_contents($basePath . self::TYPE_DATA . '.json', $this->encode($preparedData));
+            file_put_contents($basePath . self::TYPE_DATA . '.json', $this->encode($data));
             file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $this->encode($objectsMap));
-
-            $summaryData = $this->dataNormalizer->prepareData($summary);
-            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $this->encode($summaryData));
+            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $this->encode($summary));
         } finally {
             $this->gc();
         }

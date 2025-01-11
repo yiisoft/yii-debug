@@ -24,6 +24,7 @@ final class Debugger
      * @psalm-var array<string, CollectorInterface>
      */
     private readonly array $collectors;
+    private readonly DataNormalizer $dataNormalizer;
 
     /**
      * @param CollectorInterface[] $collectors
@@ -36,12 +37,15 @@ final class Debugger
         array $collectors,
         private array $ignoredRequests = [],
         private array $ignoredCommands = [],
+        array $excludedClasses = [],
     ) {
         $preparedCollectors = [];
         foreach ($collectors as $collector) {
             $preparedCollectors[$collector->getName()] = $collector;
         }
         $this->collectors = $preparedCollectors;
+
+        $this->dataNormalizer = new DataNormalizer($excludedClasses);
 
         register_shutdown_function([$this, 'shutdown']);
     }
@@ -80,11 +84,18 @@ final class Debugger
 
         try {
             if (!$this->skipCollect) {
-                $data = array_map(
+                $collectedData = array_map(
                     static fn (CollectorInterface $collector) => $collector->getCollected(),
                     $this->collectors
                 );
-                $this->storage->write($this->idGenerator->getId(), $data, $this->collectSummaryData());
+
+                /** @var array[] $data */
+                [$data, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($collectedData, 30);
+
+                /** @var array $summary */
+                $summary = $this->dataNormalizer->prepareData($this->collectSummaryData(), 30);
+
+                $this->storage->write($this->idGenerator->getId(), $data, $objectsMap, $summary);
             }
         } finally {
             foreach ($this->collectors as $collector) {
