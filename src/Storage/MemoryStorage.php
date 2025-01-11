@@ -15,7 +15,7 @@ final class MemoryStorage implements StorageInterface
     {
         if ($id === null) {
             return array_map(
-                fn (array $item): array => $item[$type] ?? [],
+                static fn (array $item): array => $item[$type] ?? [],
                 $this->storage,
             );
         }
