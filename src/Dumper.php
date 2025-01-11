@@ -84,6 +84,7 @@ final class Dumper
     {
         if (is_object($variable)) {
             if (array_key_exists($variable::class, $this->excludedClasses) ||
+                $variable instanceof Closure ||
                 array_key_exists($objectDescription = $this->getObjectDescription($variable), $this->objects)
             ) {
                 return;
@@ -163,9 +164,7 @@ final class Dumper
                 $objectDescription = $this->getObjectDescription($variable);
 
                 if ($variable instanceof Closure) {
-                    $output = $inlineObject
-                        ? $this->exportClosure($variable)
-                        : [$objectDescription => $this->exportClosure($variable)];
+                    $output = $this->exportClosure($variable);
                     break;
                 }
 

@@ -407,7 +407,7 @@ final class DumperTest extends TestCase
         yield 'closure inside std class' => [
             $closureInsideObject,
             <<<S
-            {"stdClass#{$closureInsideObjectId}":{"public \$closure":"fn () => true"},"Closure#{$closureObjectId}":"fn () => true"}
+            {"stdClass#{$closureInsideObjectId}":{"public \$closure":"fn () => true"}}
             S,
         ];
 
@@ -629,25 +629,18 @@ final class DumperTest extends TestCase
         // @formatter:off
         $shortFunctionObject = fn () => 1;
         // @formatter:on
-        $shortFunctionObjectId = spl_object_id($shortFunctionObject);
-
         yield 'short function' => [
             $shortFunctionObject,
-            <<<S
-                {"Closure#{$shortFunctionObjectId}":"fn () => 1"}
-                S,
+            '"fn () => 1"',
         ];
 
         // @formatter:off
         $staticShortFunctionObject = static fn () => 1;
         // @formatter:on
-        $staticShortFunctionObjectId = spl_object_id($staticShortFunctionObject);
 
         yield 'short static function' => [
             $staticShortFunctionObject,
-            <<<S
-                {"Closure#{$staticShortFunctionObjectId}":"static fn () => 1"}
-                S,
+            '"static fn () => 1"',
         ];
 
         // @formatter:off
@@ -655,13 +648,9 @@ final class DumperTest extends TestCase
             return 1;
         };
         // @formatter:on
-        $functionObjectId = spl_object_id($functionObject);
-
         yield 'function' => [
             $functionObject,
-            <<<S
-                {"Closure#{$functionObjectId}":"function () {\\n    return 1;\\n}"}
-                S,
+            '"function () {\\n    return 1;\\n}"',
         ];
 
         // @formatter:off
@@ -669,13 +658,9 @@ final class DumperTest extends TestCase
             return 1;
         };
         // @formatter:on
-        $staticFunctionObjectId = spl_object_id($staticFunctionObject);
-
         yield 'static function' => [
             $staticFunctionObject,
-            <<<S
-                {"Closure#{$staticFunctionObjectId}":"static function () {\\n    return 1;\\n}"}
-                S,
+            '"static function () {\\n    return 1;\\n}"',
         ];
         yield 'string' => [
             'Hello, Yii!',
@@ -729,61 +714,51 @@ final class DumperTest extends TestCase
         // @formatter:off
         $closureInArrayObject = fn () => new \DateTimeZone('');
         // @formatter:on
-        $closureInArrayObjectId = spl_object_id($closureInArrayObject);
-
         yield 'closure in array' => [
             // @formatter:off
             [$closureInArrayObject],
             // @formatter:on
             <<<S
-                [{"Closure#{$closureInArrayObjectId}":"fn () => new \\\DateTimeZone('')"}]
+                ["fn () => new \\\DateTimeZone('')"]
                 S,
         ];
 
         // @formatter:off
         $closureWithUsualClassNameObject = fn (Dumper $date) => new \DateTimeZone('');
         // @formatter:on
-        $closureWithUsualClassNameObjectId = spl_object_id($closureWithUsualClassNameObject);
-
         yield 'original class name' => [
             $closureWithUsualClassNameObject,
             <<<S
-                {"Closure#{$closureWithUsualClassNameObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
+                "fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"
                 S,
         ];
 
         // @formatter:off
         $closureWithAliasedClassNameObject = fn (Dumper $date) => new \DateTimeZone('');
         // @formatter:on
-        $closureWithAliasedClassNameObjectId = spl_object_id($closureWithAliasedClassNameObject);
-
         yield 'class alias' => [
             $closureWithAliasedClassNameObject,
             <<<S
-                {"Closure#{$closureWithAliasedClassNameObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
+                "fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"
                 S,
         ];
 
         // @formatter:off
         $closureWithAliasedNamespaceObject = fn (D\Dumper $date) => new \DateTimeZone('');
         // @formatter:on
-        $closureWithAliasedNamespaceObjectId = spl_object_id($closureWithAliasedNamespaceObject);
-
         yield 'namespace alias' => [
             $closureWithAliasedNamespaceObject,
             <<<S
-                {"Closure#{$closureWithAliasedNamespaceObjectId}":"fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"}
+                "fn (\\\Yiisoft\\\Yii\\\Debug\\\Dumper \$date) => new \\\DateTimeZone('')"
                 S,
         ];
         // @formatter:off
         $closureWithNullCollisionOperatorObject = fn () => $_ENV['var'] ?? null;
         // @formatter:on
-        $closureWithNullCollisionOperatorObjectId = spl_object_id($closureWithNullCollisionOperatorObject);
-
         yield 'closure with null-collision operator' => [
             $closureWithNullCollisionOperatorObject,
             <<<S
-                {"Closure#{$closureWithNullCollisionOperatorObjectId}":"fn () => \$_ENV['var'] ?? null"}
+                "fn () => \$_ENV['var'] ?? null"
                 S,
         ];
         yield 'utf8 supported' => [
