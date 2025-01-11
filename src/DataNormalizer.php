@@ -30,7 +30,7 @@ final class DataNormalizer
     private readonly array $excludedClasses;
     private static ?ClosureExporter $closureExporter = null;
 
-    public function __construct(array $excludedClasses)
+    public function __construct(array $excludedClasses = [])
     {
         $this->excludedClasses = array_flip($excludedClasses);
     }
