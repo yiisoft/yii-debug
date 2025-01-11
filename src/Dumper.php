@@ -54,7 +54,7 @@ final class Dumper
         $this->buildObjectsCache($this->variable, $depth);
 
         return $this->asJsonInternal(
-            $this->dumpNestedInternal($this->variable, $depth, 0, false),
+            $this->dumpNestedInternal($this->variable, $depth),
             $format
         );
     }
@@ -74,7 +74,7 @@ final class Dumper
 
         $variable = [];
         foreach ($this->objects as $key => $value) {
-            $variable[$key] = $this->dumpNestedInternal($value, $depth + 1, 0, true);
+            $variable[$key] = $this->dumpNestedInternal($value, $depth + 1);
         }
 
         return $this->asJsonInternal($variable, $prettyPrint);
@@ -132,12 +132,7 @@ final class Dumper
         return (array) $var;
     }
 
-    private function dumpNestedInternal(
-        mixed $variable,
-        int $depth,
-        int $level,
-        bool $inlineObject
-    ): mixed {
+    private function dumpNestedInternal(mixed $variable, int $depth, int $level = 0): mixed {
         switch (gettype($variable)) {
             case 'array':
                 if ($depth <= $level) {
@@ -151,12 +146,7 @@ final class Dumper
                 $output = [];
                 foreach ($variable as $key => $value) {
                     $keyDisplay = str_replace("\0", '::', trim((string) $key));
-                    $output[$keyDisplay] = $this->dumpNestedInternal(
-                        $value,
-                        $depth,
-                        $level + 1,
-                        $inlineObject
-                    );
+                    $output[$keyDisplay] = $this->dumpNestedInternal($value, $depth, $level + 1);
                 }
 
                 break;
@@ -184,28 +174,13 @@ final class Dumper
 
                 $properties = $this->getObjectProperties($variable);
                 if (empty($properties)) {
-                    if ($inlineObject) {
-                        $output = '{stateless object}';
-                        break;
-                    }
-                    $output = [$objectDescription => '{stateless object}'];
+                    $output = '{stateless object}';
                     break;
                 }
                 $output = [];
                 foreach ($properties as $key => $value) {
                     $keyDisplay = $this->normalizeProperty((string) $key);
-                    /**
-                     * @psalm-suppress InvalidArrayOffset
-                     */
-                    $output[$objectDescription][$keyDisplay] = $this->dumpNestedInternal(
-                        $value,
-                        $depth,
-                        $level + 1,
-                        $inlineObject,
-                    );
-                }
-                if ($inlineObject) {
-                    $output = $output[$objectDescription];
+                    $output[$keyDisplay] = $this->dumpNestedInternal($value, $depth, $level + 1);
                 }
                 break;
             case 'resource':
