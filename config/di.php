@@ -22,7 +22,6 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 $common = [
     StorageInterface::class => static function (?Aliases $aliases = null) use ($params) {
         $params = $params['yiisoft/yii-debug'];
-        $excludedClasses = $params['dumper.excludedClasses'];
 
         $path = $params['path'];
         if (str_starts_with($path, '@')) {
@@ -36,7 +35,7 @@ $common = [
             }
             $path = $aliases->get($path);
         }
-        $fileStorage = new FileStorage($path, $excludedClasses);
+        $fileStorage = new FileStorage($path);
 
         if (isset($params['historySize'])) {
             $fileStorage->setHistorySize((int) $params['historySize']);

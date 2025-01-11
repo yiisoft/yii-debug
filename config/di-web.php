@@ -19,6 +19,7 @@ return [
                 )
             ),
             'ignoredRequests' => $params['yiisoft/yii-debug']['ignoredRequests'],
+            'excludedClasses' => $params['yiisoft/yii-debug']['excludedClasses'],
         ],
     ],
 ];
