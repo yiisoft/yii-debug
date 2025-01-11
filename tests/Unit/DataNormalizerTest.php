@@ -147,33 +147,33 @@ final class DataNormalizerTest extends TestCase
             5,
             [
                 "stdClass#{$ids1[0]}" => [
-                    "public \$id" => "lvl0",
-                    "public \$lvl1" => "object@stdClass#{$ids1[1]}"
+                    'public $id' => 'lvl0',
+                    'public $lvl1' => "object@stdClass#{$ids1[1]}",
                 ],
                 "stdClass#{$ids1[1]}" => [
-                    "public \$id" => "lvl1",
-                    "public \$lvl2" => "object@stdClass#{$ids1[2]}"
+                    'public $id' => 'lvl1',
+                    'public $lvl2' => "object@stdClass#{$ids1[2]}",
                 ],
                 "stdClass#{$ids1[2]}" => [
-                    "public \$id" => "lvl2",
-                    "public \$lvl3" => "object@stdClass#{$ids1[3]}"
+                    'public $id' => 'lvl2',
+                    'public $lvl3' => "object@stdClass#{$ids1[3]}",
                 ],
                 "stdClass#{$ids1[3]}" => [
-                    "public \$id" => "lvl3",
-                    "public \$lvl4" => "object@stdClass#{$ids1[4]}"
+                    'public $id' => 'lvl3',
+                    'public $lvl4' => "object@stdClass#{$ids1[4]}",
                 ],
                 "stdClass#{$ids1[4]}" => [
-                    "public \$id" => "lvl4",
-                    "public \$lvl5" => "object@stdClass#{$nested1Id}"
+                    'public $id' => 'lvl4',
+                    'public $lvl5' => "object@stdClass#{$nested1Id}",
                 ],
                 "stdClass#{$nested1Id}" => [
-                    "public \$id" => "nested1",
-                    "public \$nested2" => "object@stdClass#{$nested2Id}"
+                    'public $id' => 'nested1',
+                    'public $nested2' => "object@stdClass#{$nested2Id}",
                 ],
                 "stdClass#{$nested2Id}" => [
-                    "public \$id" => "nested2",
-                    "public \$nested1" => "object@stdClass#{$nested1Id}"
-                ]
+                    'public $id' => 'nested2',
+                    'public $nested1' => "object@stdClass#{$nested1Id}",
+                ],
             ],
         ];
 
@@ -184,40 +184,40 @@ final class DataNormalizerTest extends TestCase
             6,
             [
                 "stdClass#$ids2[0]" => [
-                    "public \$id" => "lvl0",
-                    "public \$lvl1" => "object@stdClass#$ids2[1]"
+                    'public $id' => 'lvl0',
+                    'public $lvl1' => "object@stdClass#$ids2[1]",
                 ],
                 "stdClass#$ids2[1]" => [
-                    "public \$id" => "lvl1",
-                    "public \$lvl2" => "object@stdClass#$ids2[2]"
+                    'public $id' => 'lvl1',
+                    'public $lvl2' => "object@stdClass#$ids2[2]",
                 ],
                 "stdClass#$ids2[2]" => [
-                    "public \$id" => "lvl2",
-                    "public \$lvl3" => "object@stdClass#$ids2[3]"
+                    'public $id' => 'lvl2',
+                    'public $lvl3' => "object@stdClass#$ids2[3]",
                 ],
                 "stdClass#$ids2[3]" => [
-                    "public \$id" => "lvl3",
-                    "public \$lvl4" => "object@stdClass#$ids2[4]"
+                    'public $id' => 'lvl3',
+                    'public $lvl4' => "object@stdClass#$ids2[4]",
                 ],
                 "stdClass#$ids2[4]" => [
-                    "public \$id" => "lvl4",
-                    "public \$lvl5" => "object@stdClass#$ids2[5]"
+                    'public $id' => 'lvl4',
+                    'public $lvl5' => "object@stdClass#$ids2[5]",
                 ],
                 "stdClass#$ids2[5]" => [
-                    "public \$id" => "lvl5",
-                    "public \$lvl6" => [
+                    'public $id' => 'lvl5',
+                    'public $lvl6' => [
                         "object@stdClass#$nested1Id",
-                        "object@stdClass#$nested2Id"
-                    ]
+                        "object@stdClass#$nested2Id",
+                    ],
                 ],
                 "stdClass#$nested1Id" => [
-                    "public \$id" => "nested1",
-                    "public \$nested2" => "object@stdClass#$nested2Id"
+                    'public $id' => 'nested1',
+                    'public $nested2' => "object@stdClass#$nested2Id",
                 ],
                 "stdClass#$nested2Id" => [
-                    "public \$id" => "nested2",
-                    "public \$nested1" => "object@stdClass#$nested1Id"
-                ]
+                    'public $id' => 'nested2',
+                    'public $nested1' => "object@stdClass#$nested1Id",
+                ],
             ],
         ];
 
@@ -235,20 +235,20 @@ final class DataNormalizerTest extends TestCase
             3,
             [
                 "stdClass#$object3Id" => [
-                    "public \$id" => "lvl0",
-                    "public \$lv11" => [
-                        "id" => "lvl1",
-                        "loop" => "object@stdClass#$nested1Id"
-                    ]
+                    'public $id' => 'lvl0',
+                    'public $lv11' => [
+                        'id' => 'lvl1',
+                        'loop' => "object@stdClass#$nested1Id",
+                    ],
                 ],
                 "stdClass#$nested1Id" => [
-                    "public \$id" => "nested1",
-                    "public \$nested2" => "object@stdClass#$nested2Id"
+                    'public $id' => 'nested1',
+                    'public $nested2' => "object@stdClass#$nested2Id",
                 ],
                 "stdClass#$nested2Id" => [
-                    "public \$id" => "nested2",
-                    "public \$nested1" => "object@stdClass#$nested1Id"
-                ]
+                    'public $id' => 'nested2',
+                    'public $nested1' => "object@stdClass#$nested1Id",
+                ],
             ],
         ];
     }
@@ -289,58 +289,58 @@ final class DataNormalizerTest extends TestCase
 
         $expectedResult = [
             "stdClass#$lvl1Id" => [
-                "public \$id" => "lvl1",
-                "public \$prop1" => "object@stdClass#$lvl2Id",
-                "public \$prop2" => "object@stdClass#$lvl2Id",
+                'public $id' => 'lvl1',
+                'public $prop1' => "object@stdClass#$lvl2Id",
+                'public $prop2' => "object@stdClass#$lvl2Id",
             ],
             "stdClass#$lvl2Id" => [
-                "public \$id" => "lvl2",
-                "public \$prop1" => "object@stdClass#$lvl3Id",
-                "public \$prop2" => "object@stdClass#$lvl3Id",
+                'public $id' => 'lvl2',
+                'public $prop1' => "object@stdClass#$lvl3Id",
+                'public $prop2' => "object@stdClass#$lvl3Id",
             ],
             "stdClass#$lvl3Id" => [
-                "public \$id" => "lvl3",
-                "public \$prop1" => "object@stdClass#$lvl4Id",
-                "public \$prop2" => "object@stdClass#$lvl4Id",
+                'public $id' => 'lvl3',
+                'public $prop1' => "object@stdClass#$lvl4Id",
+                'public $prop2' => "object@stdClass#$lvl4Id",
             ],
             "stdClass#$lvl4Id" => [
-                "public \$id" => "lvl4",
-                "public \$prop1" => "object@stdClass#$lvl5Id",
-                "public \$prop2" => "object@stdClass#$lvl5Id",
+                'public $id' => 'lvl4',
+                'public $prop1' => "object@stdClass#$lvl5Id",
+                'public $prop2' => "object@stdClass#$lvl5Id",
             ],
             "stdClass#$lvl5Id" => [
-                "public \$id" => "lvl5",
-                "public \$prop1" => "object@stdClass#$lvl6Id",
-                "public \$prop2" => "object@stdClass#$lvl6Id",
+                'public $id' => 'lvl5',
+                'public $prop1' => "object@stdClass#$lvl6Id",
+                'public $prop2' => "object@stdClass#$lvl6Id",
             ],
             "stdClass#$lvl6Id" => [
-                "public \$id" => "lvl6",
-                "public \$prop1" => "object@stdClass#$lvl7Id",
-                "public \$prop2" => "object@stdClass#$lvl7Id",
+                'public $id' => 'lvl6',
+                'public $prop1' => "object@stdClass#$lvl7Id",
+                'public $prop2' => "object@stdClass#$lvl7Id",
             ],
             "stdClass#$lvl7Id" => [
-                "public \$id" => "lvl7",
-                "public \$prop1" => "object@stdClass#$lvl8Id",
-                "public \$prop2" => "object@stdClass#$lvl8Id",
+                'public $id' => 'lvl7',
+                'public $prop1' => "object@stdClass#$lvl8Id",
+                'public $prop2' => "object@stdClass#$lvl8Id",
             ],
             "stdClass#$lvl8Id" => [
-                "public \$id" => "lvl8",
-                "public \$prop1" => "object@stdClass#$lvl9Id",
-                "public \$prop2" => "object@stdClass#$lvl9Id",
+                'public $id' => 'lvl8',
+                'public $prop1' => "object@stdClass#$lvl9Id",
+                'public $prop2' => "object@stdClass#$lvl9Id",
             ],
             "stdClass#$lvl9Id" => [
-                "public \$id" => "lvl9",
-                "public \$prop1" => "object@stdClass#$lvl10Id",
-                "public \$prop2" => "object@stdClass#$lvl10Id",
+                'public $id' => 'lvl9',
+                'public $prop1' => "object@stdClass#$lvl10Id",
+                'public $prop2' => "object@stdClass#$lvl10Id",
             ],
             "stdClass#$lvl10Id" => [
-                "public \$id" => "lvl10",
-                "public \$loop" => [
+                'public $id' => 'lvl10',
+                'public $loop' => [
                     [
-                        "array (1 item) [...]",
+                        'array (1 item) [...]',
+                    ],
                 ],
-                ],
-                "public \$head" => "object@stdClass#$lvl1Id",
+                'public $head' => "object@stdClass#$lvl1Id",
             ],
         ];
 
@@ -384,7 +384,7 @@ final class DataNormalizerTest extends TestCase
             $user,
             [
                 "stdClass#{$objectId}" => [
-                    "public \$id" => 1,
+                    'public $id' => 1,
                 ],
             ],
         ];
@@ -398,12 +398,12 @@ final class DataNormalizerTest extends TestCase
             $decoratedUser,
             [
                 "stdClass#{$decoratedObjectId}" => [
-                    "public \$id" => 1,
-                    "public \$name" => "Name",
-                    "public \$originalUser" => "object@stdClass#{$objectId}",
+                    'public $id' => 1,
+                    'public $name' => 'Name',
+                    'public $originalUser' => "object@stdClass#{$objectId}",
                 ],
                 "stdClass#{$objectId}" => [
-                    "public \$id" => 1,
+                    'public $id' => 1,
                 ],
             ],
         ];
@@ -416,8 +416,8 @@ final class DataNormalizerTest extends TestCase
             $closureInsideObject,
             [
                 "stdClass#{$closureInsideObjectId}" => [
-                    "public \$closure" => "fn () => true"
-                ]
+                    'public $closure' => 'fn () => true',
+                ],
             ],
         ];
 
@@ -425,21 +425,21 @@ final class DataNormalizerTest extends TestCase
         $socketResourceId = spl_object_id($socketResource);
         yield 'socket resource' => [
             $socketResource,
-            ["Socket#{$socketResourceId}" => "{stateless object}"],
+            ["Socket#{$socketResourceId}" => '{stateless object}'],
         ];
 
         $curlResource = curl_init('https://example.com');
         $curlResourceObjectId = spl_object_id($curlResource);
         yield 'curl resource' => [
             $curlResource,
-            ["CurlHandle#{$curlResourceObjectId}" => "{stateless object}"],
+            ["CurlHandle#{$curlResourceObjectId}" => '{stateless object}'],
         ];
 
         $emptyObject = new stdClass();
         $emptyObjectId = spl_object_id($emptyObject);
         yield 'empty object' => [
             $emptyObject,
-            ["stdClass#{$emptyObjectId}" => "{stateless object}"],
+            ["stdClass#{$emptyObjectId}" => '{stateless object}'],
         ];
     }
 
@@ -469,8 +469,8 @@ final class DataNormalizerTest extends TestCase
         );
         $this->assertSame(
             [
-                "stdClass#$object1Id" => "{stateless object}",
-                "stdClass#$object2Id" => "{stateless object}",
+                "stdClass#$object1Id" => '{stateless object}',
+                "stdClass#$object2Id" => '{stateless object}',
             ],
             $objectsMap,
         );
@@ -585,9 +585,9 @@ final class DataNormalizerTest extends TestCase
         $this->assertSame(
             [
                 $key => [
-                    "public \$first" => "first",
-                    "protected \$second" => "second",
-                    "private \$third" => "third"
+                    'public $first' => 'first',
+                    'protected $second' => 'second',
+                    'private $third' => 'third',
                 ],
             ],
             $objectsMap,
@@ -609,7 +609,7 @@ final class DataNormalizerTest extends TestCase
         $this->assertSame(
             [
                 "{$object1Class}#{$object1Id} (...)",
-                "object@{$object2Class}#{$object2Id}"
+                "object@{$object2Class}#{$object2Id}",
             ],
             $data,
         );
@@ -688,15 +688,15 @@ final class DataNormalizerTest extends TestCase
         yield 'fileResource' => [
             fopen('php://input', 'rb'),
             [
-                "timed_out" => false,
-                "blocked" => true,
-                "eof" => false,
-                "wrapper_type" => "PHP",
-                "stream_type" => "Input",
-                "mode" => "rb",
-                "unread_bytes" => 0,
-                "seekable" => true,
-                "uri" => "php://input",
+                'timed_out' => false,
+                'blocked' => true,
+                'eof' => false,
+                'wrapper_type' => 'PHP',
+                'stream_type' => 'Input',
+                'mode' => 'rb',
+                'unread_bytes' => 0,
+                'seekable' => true,
+                'uri' => 'php://input',
             ],
         ];
         yield 'empty array' => [
@@ -784,15 +784,15 @@ final class DataNormalizerTest extends TestCase
         yield 'file resource' => [
             $fileResource,
             [
-                "timed_out" => false,
-                "blocked" => true,
-                "eof" => false,
-                "wrapper_type" => "plainfile",
-                "stream_type" => "STDIO",
-                "mode" => "r+b",
-                "unread_bytes" => 0,
-                "seekable" => true,
-                "uri" => "{$fileResourceUri}",
+                'timed_out' => false,
+                'blocked' => true,
+                'eof' => false,
+                'wrapper_type' => 'plainfile',
+                'stream_type' => 'STDIO',
+                'mode' => 'r+b',
+                'unread_bytes' => 0,
+                'seekable' => true,
+                'uri' => "{$fileResourceUri}",
             ],
         ];
 
@@ -808,57 +808,57 @@ final class DataNormalizerTest extends TestCase
         yield 'opendir resource' => [
             $opendirResource,
             [
-                "timed_out" => false,
-                "blocked" => true,
-                "eof" => false,
-                "wrapper_type" => "plainfile",
-                "stream_type" => "dir",
-                "mode" => "r",
-                "unread_bytes" => 0,
-                "seekable" => true,
+                'timed_out' => false,
+                'blocked' => true,
+                'eof' => false,
+                'wrapper_type' => 'plainfile',
+                'stream_type' => 'dir',
+                'mode' => 'r',
+                'unread_bytes' => 0,
+                'seekable' => true,
             ],
         ];
 
         yield 'stdout' => [
             STDOUT,
             [
-                "timed_out" => false,
-                "blocked" => true,
-                "eof" => false,
-                "wrapper_type" => "PHP",
-                "stream_type" => "STDIO",
-                "mode" => "wb",
-                "unread_bytes" => 0,
-                "seekable" => false,
-                "uri" => "php://stdout",
+                'timed_out' => false,
+                'blocked' => true,
+                'eof' => false,
+                'wrapper_type' => 'PHP',
+                'stream_type' => 'STDIO',
+                'mode' => 'wb',
+                'unread_bytes' => 0,
+                'seekable' => false,
+                'uri' => 'php://stdout',
             ],
         ];
         yield 'stderr' => [
             STDERR,
             [
-                "timed_out" => false,
-                "blocked" => true,
-                "eof" => false,
-                "wrapper_type" => "PHP",
-                "stream_type" => "STDIO",
-                "mode" => "wb",
-                "unread_bytes" => 0,
-                "seekable" => false,
-                "uri" => "php://stderr",
+                'timed_out' => false,
+                'blocked' => true,
+                'eof' => false,
+                'wrapper_type' => 'PHP',
+                'stream_type' => 'STDIO',
+                'mode' => 'wb',
+                'unread_bytes' => 0,
+                'seekable' => false,
+                'uri' => 'php://stderr',
             ],
         ];
         yield 'stdin' => [
             STDIN,
             [
-                "timed_out" => false,
-                "blocked" => true,
-                "eof" => false,
-                "wrapper_type" => "PHP",
-                "stream_type" => "STDIO",
-                "mode" => "rb",
-                "unread_bytes" => 0,
-                "seekable" => false,
-                "uri" => "php://stdin",
+                'timed_out' => false,
+                'blocked' => true,
+                'eof' => false,
+                'wrapper_type' => 'PHP',
+                'stream_type' => 'STDIO',
+                'mode' => 'rb',
+                'unread_bytes' => 0,
+                'seekable' => false,
+                'uri' => 'php://stdin',
             ],
         ];
     }

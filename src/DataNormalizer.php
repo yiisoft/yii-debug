@@ -180,7 +180,8 @@ final class DataNormalizer
     /**
      * @psalm-param array<string, object> $objectsData
      */
-    private function internalMakeObjectsData(mixed $value, array &$objectsData): void {
+    private function internalMakeObjectsData(mixed $value, array &$objectsData): void
+    {
         if (is_object($value)) {
             if ($value instanceof Closure || array_key_exists($value::class, $this->excludedClasses)) {
                 return;

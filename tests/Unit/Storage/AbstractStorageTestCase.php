@@ -14,8 +14,6 @@ use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
-use function json_decode;
-
 abstract class AbstractStorageTestCase extends TestCase
 {
     /**
