@@ -37,14 +37,14 @@ final class DataNormalizer
 
     /**
      * @psalm-param positive-int|null $depth
-     * @psalm-return list{array, array}
+     * @psalm-return list{mixed, array}
      */
     public function prepareDataAndObjectsMap(array $value, ?int $depth = null): array
     {
         $objectsData = $this->makeObjectsData($value);
 
         $objectsMap = array_map(
-            fn (object $object) => $this->normalize(
+            fn (object $object): mixed => $this->normalize(
                 $object,
                 $depth === null ? null : ($depth + 1),
                 $objectsData,
@@ -60,7 +60,7 @@ final class DataNormalizer
     /**
      * @psalm-param positive-int|null $depth
      */
-    public function prepareData(array $value, ?int $depth = null): array
+    public function prepareData(array $value, ?int $depth = null): mixed
     {
         return $this->normalize($value, $depth);
     }
@@ -108,6 +108,10 @@ final class DataNormalizer
         return $result;
     }
 
+    /**
+     * @param positive-int|null $depth
+     * @psalm-param array<string, object> $objectsData
+     */
     private function normalizeObject(object $object, ?int $depth, array $objectsData, int $level): string|array
     {
         if ($object instanceof Closure) {
@@ -164,26 +168,19 @@ final class DataNormalizer
     }
 
     /**
-     * @psalm-param positive-int|null $depth
      * @psalm-return array<string, object>
      */
-    private function makeObjectsData(mixed $value, ?int $depth = null): array
+    private function makeObjectsData(mixed $value): array
     {
         $objectsData = [];
-        $this->internalMakeObjectsData($value, $objectsData, $depth);
+        $this->internalMakeObjectsData($value, $objectsData);
         return $objectsData;
     }
 
     /**
-     * @psalm-param positive-int|null $depth
      * @psalm-param array<string, object> $objectsData
      */
-    private function internalMakeObjectsData(
-        mixed $value,
-        array &$objectsData,
-        ?int $depth = null,
-        int $level = 0
-    ): void {
+    private function internalMakeObjectsData(mixed $value, array &$objectsData): void {
         if (is_object($value)) {
             if ($value instanceof Closure || array_key_exists($value::class, $this->excludedClasses)) {
                 return;
@@ -195,21 +192,16 @@ final class DataNormalizer
             $objectsData[$objectId] = $value;
         }
 
-        $nextLevel = $level + 1;
-        if ($depth !== null && $depth <= $nextLevel) {
-            return;
-        }
-
         if (is_object($value)) {
             foreach ($this->getObjectProperties($value) as $propertyValue) {
-                $this->internalMakeObjectsData($propertyValue, $objectsData, $depth, $nextLevel);
+                $this->internalMakeObjectsData($propertyValue, $objectsData);
             }
             return;
         }
 
         if (is_array($value)) {
             foreach ($value as $arrayItem) {
-                $this->internalMakeObjectsData($arrayItem, $objectsData, $depth, $nextLevel);
+                $this->internalMakeObjectsData($arrayItem, $objectsData);
             }
         }
     }
