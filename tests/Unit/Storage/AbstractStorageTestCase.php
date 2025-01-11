@@ -9,8 +9,6 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
-use Yiisoft\Yii\Debug\DataNormalizer;
-use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 abstract class AbstractStorageTestCase extends TestCase

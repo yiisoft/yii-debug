@@ -23,7 +23,8 @@ final class FileStorage implements StorageInterface
 
     public function __construct(
         private readonly string $path,
-    ) {}
+    ) {
+    }
 
     public function setHistorySize(int $historySize): void
     {

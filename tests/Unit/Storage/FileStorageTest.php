@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
@@ -25,8 +23,8 @@ final class FileStorageTest extends AbstractStorageTestCase
         $storage = $this->getStorage();
         $storage->setHistorySize(5);
 
-        for ($i=1; $i<=10; $i++) {
-            $storage->write('test'.$i, [['data']], [], []);
+        for ($i = 1; $i <= 10; $i++) {
+            $storage->write('test' . $i, [['data']], [], []);
         }
 
         $this->assertCount(5, $storage->read(StorageInterface::TYPE_SUMMARY, null));
