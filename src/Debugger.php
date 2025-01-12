@@ -54,6 +54,11 @@ final class Debugger
         register_shutdown_function([$this, 'shutdown']);
     }
 
+    public function isActive(): bool
+    {
+        return $this->id !== null;
+    }
+
     public function getId(): string
     {
         return $this->id ?? throw new LogicException('Debugger is not started.');
