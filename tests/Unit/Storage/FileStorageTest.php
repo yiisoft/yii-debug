@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Tests\Unit\Storage;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\FileStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
@@ -20,59 +18,41 @@ final class FileStorageTest extends AbstractStorageTestCase
         FileHelper::removeDirectory($this->path);
     }
 
-    #[DataProvider('dataProvider')]
-    public function testFlushWithGC(array $data): void
+    public function testFlushWithGC(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
-        $storage = $this->getStorage($idGenerator);
+        $storage = $this->getStorage();
         $storage->setHistorySize(5);
-        $collector = $this->createFakeCollector($data);
 
-        $storage->addCollector($collector);
-        $storage->flush();
-        $this->assertLessThanOrEqual(5, count($storage->read(StorageInterface::TYPE_SUMMARY, null)));
+        for ($i = 1; $i <= 10; $i++) {
+            $storage->write('test' . $i, [['data']], [], []);
+        }
+
+        $this->assertCount(5, $storage->read(StorageInterface::TYPE_SUMMARY, null));
     }
 
-    #[DataProvider('dataProvider')]
-    public function testHistorySize(array $data): void
+    public function testHistorySize(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
-        $idGenerator->reset();
-        $storage = $this->getStorage($idGenerator);
+        $storage = $this->getStorage();
         $storage->setHistorySize(2);
-        $collector = $this->createFakeCollector($data);
 
-        $storage->addCollector($collector);
-        $storage->flush();
-        $idGenerator->reset();
+        $storage->write('test1', [['data']], [], []);
+        $storage->write('test2', [['data']], [], []);
+        $storage->write('test3', [['data']], [], []);
 
-        $storage->addCollector($collector);
-        $storage->flush();
-        $idGenerator->reset();
-
-        $storage->addCollector($collector);
-        $storage->flush();
-        $idGenerator->reset();
-
-        $read = $storage->read(StorageInterface::TYPE_SUMMARY, null);
-        $this->assertCount(2, $read);
+        $summary = $storage->read(StorageInterface::TYPE_SUMMARY);
+        $this->assertCount(2, $summary);
     }
 
-    #[DataProvider('dataProvider')]
-    public function testClear(array $data): void
+    public function testClear(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
-        $storage = $this->getStorage($idGenerator);
-        $collector = $this->createFakeCollector($data);
-
-        $storage->addCollector($collector);
-        $storage->flush();
+        $storage = $this->getStorage();
+        $storage->write('test1', [['data']], [], []);
         $storage->clear();
         $this->assertDirectoryDoesNotExist($this->path);
     }
 
-    public function getStorage(DebuggerIdGenerator $idGenerator): FileStorage
+    public function getStorage(): FileStorage
     {
-        return new FileStorage($this->path, $idGenerator);
+        return new FileStorage($this->path);
     }
 }

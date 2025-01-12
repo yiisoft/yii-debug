@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Files\FileHelper;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
-use Yiisoft\Yii\Debug\DataNormalizer;
 
 use function array_slice;
 use function count;
@@ -23,26 +19,11 @@ use function substr;
 
 final class FileStorage implements StorageInterface
 {
-    /**
-     * @var CollectorInterface[]
-     */
-    private array $collectors = [];
-
     private int $historySize = 50;
-
-    private readonly DataNormalizer $dataNormalizer;
 
     public function __construct(
         private readonly string $path,
-        private readonly DebuggerIdGenerator $idGenerator,
-        array $excludedClasses = []
     ) {
-        $this->dataNormalizer = new DataNormalizer($excludedClasses);
-    }
-
-    public function addCollector(CollectorInterface $collector): void
-    {
-        $this->collectors[$collector->getName()] = $collector;
     }
 
     public function setHistorySize(int $historySize): void
@@ -74,52 +55,23 @@ final class FileStorage implements StorageInterface
         return $data;
     }
 
-    public function flush(): void
+    public function write(string $id, array $data, array $objectsMap, array $summary): void
     {
-        $basePath = $this->path . '/' . date('Y-m-d') . '/' . $this->idGenerator->getId() . '/';
+        $basePath = $this->path . '/' . date('Y-m-d') . '/' . $id . '/';
 
         try {
             FileHelper::ensureDirectory($basePath);
-
-            [$data, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($this->getData(), 30);
             file_put_contents($basePath . self::TYPE_DATA . '.json', $this->encode($data));
             file_put_contents($basePath . self::TYPE_OBJECTS . '.json', $this->encode($objectsMap));
-
-            $summaryData = $this->dataNormalizer->prepareData($this->collectSummaryData());
-            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $this->encode($summaryData));
+            file_put_contents($basePath . self::TYPE_SUMMARY . '.json', $this->encode($summary));
         } finally {
-            $this->collectors = [];
             $this->gc();
         }
-    }
-
-    public function getData(): array
-    {
-        return array_map(static fn (CollectorInterface $collector) => $collector->getCollected(), $this->collectors);
     }
 
     public function clear(): void
     {
         FileHelper::removeDirectory($this->path);
-    }
-
-    /**
-     * Collects summary data of current request.
-     */
-    private function collectSummaryData(): array
-    {
-        $summaryData = [
-            'id' => $this->idGenerator->getId(),
-            'collectors' => array_keys($this->collectors),
-        ];
-
-        foreach ($this->collectors as $collector) {
-            if ($collector instanceof SummaryCollectorInterface) {
-                $summaryData = [...$summaryData, ...$collector->getSummary()];
-            }
-        }
-
-        return $summaryData;
     }
 
     /**
