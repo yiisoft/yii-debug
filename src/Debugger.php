@@ -115,7 +115,7 @@ final class Debugger
 
     public function stop(): void
     {
-        if ($this->id === null) {
+        if (!$this->isActive()) {
             return;
         }
 
