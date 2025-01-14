@@ -86,7 +86,7 @@ final class Debugger
 
     public function shutdown(): void
     {
-        if ($this->id === null) {
+        if (!$this->isActive()) {
             return;
         }
 
