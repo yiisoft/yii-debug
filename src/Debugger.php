@@ -39,8 +39,8 @@ final class Debugger
     public function __construct(
         private readonly StorageInterface $storage,
         array $collectors,
-        private array $ignoredRequests = [],
-        private array $ignoredCommands = [],
+        private readonly array $ignoredRequests = [],
+        private readonly array $ignoredCommands = [],
         array $excludedClasses = [],
     ) {
         $preparedCollectors = [];
@@ -153,30 +153,6 @@ final class Debugger
             }
         }
         return false;
-    }
-
-    /**
-     * @param string[] $ignoredRequests Patterns for ignored request URLs.
-     *
-     * @see WildcardPattern
-     */
-    public function withIgnoredRequests(array $ignoredRequests): self
-    {
-        $new = clone $this;
-        $new->ignoredRequests = $ignoredRequests;
-        return $new;
-    }
-
-    /**
-     * @param string[] $ignoredCommands Patterns for ignored commands names.
-     *
-     * @see WildcardPattern
-     */
-    public function withIgnoredCommands(array $ignoredCommands): self
-    {
-        $new = clone $this;
-        $new->ignoredCommands = $ignoredCommands;
-        return $new;
     }
 
     /**
