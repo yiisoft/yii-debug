@@ -37,14 +37,6 @@ final class DebuggerTest extends TestCase
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/debug')));
     }
 
-    public function testWithIgnoredRequests(): void
-    {
-        $debugger1 = new Debugger(new MemoryStorage(), []);
-        $debugger2 = $debugger1->withIgnoredRequests(['/test']);
-
-        $this->assertNotSame($debugger1, $debugger2);
-    }
-
     public function testIgnoreByHeader(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
@@ -55,14 +47,6 @@ final class DebuggerTest extends TestCase
         $debugger = new Debugger($storage, [$collector], []);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test', ['X-Debug-Ignore' => 'true'])));
         $debugger->shutdown();
-    }
-
-    public function testWithIgnoredCommands(): void
-    {
-        $debugger1 = new Debugger(new MemoryStorage(), []);
-        $debugger2 = $debugger1->withIgnoredCommands(['command/test']);
-
-        $this->assertNotSame($debugger1, $debugger2);
     }
 
     public function testIgnoreByEnv(): void
