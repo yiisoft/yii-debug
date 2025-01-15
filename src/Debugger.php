@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug;
 
+use LogicException;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\Strings\WildcardPattern;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
@@ -18,7 +19,6 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 final class Debugger
 {
     private bool $skipCollect = false;
-    private bool $active = false;
 
     /**
      * @psalm-var array<string, CollectorInterface>
@@ -27,12 +27,16 @@ final class Debugger
     private readonly DataNormalizer $dataNormalizer;
 
     /**
+     * @var string|null ID of the current request. Null if debugger is not active.
+     */
+    private ?string $id = null;
+
+    /**
      * @param CollectorInterface[] $collectors
      * @param string[] $ignoredRequests
      * @param string[] $ignoredCommands
      */
     public function __construct(
-        private readonly DebuggerIdGenerator $idGenerator,
         private readonly StorageInterface $storage,
         array $collectors,
         private array $ignoredRequests = [],
@@ -50,14 +54,19 @@ final class Debugger
         register_shutdown_function([$this, 'shutdown']);
     }
 
+    public function isActive(): bool
+    {
+        return $this->id !== null;
+    }
+
     public function getId(): string
     {
-        return $this->idGenerator->getId();
+        return $this->id ?? throw new LogicException('Debugger is not started.');
     }
 
     public function startup(object $event): void
     {
-        $this->active = true;
+        $this->id = str_replace('.', '', uniqid('', true));
         $this->skipCollect = false;
 
         if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
@@ -70,7 +79,6 @@ final class Debugger
             return;
         }
 
-        $this->idGenerator->reset();
         foreach ($this->collectors as $collector) {
             $collector->startup();
         }
@@ -78,7 +86,7 @@ final class Debugger
 
     public function shutdown(): void
     {
-        if (!$this->active) {
+        if (!$this->isActive()) {
             return;
         }
 
@@ -95,26 +103,26 @@ final class Debugger
                 /** @var array $summary */
                 $summary = $this->dataNormalizer->prepareData($this->collectSummaryData(), 30);
 
-                $this->storage->write($this->idGenerator->getId(), $data, $objectsMap, $summary);
+                $this->storage->write($this->getId(), $data, $objectsMap, $summary);
             }
         } finally {
             foreach ($this->collectors as $collector) {
                 $collector->shutdown();
             }
-            $this->active = false;
+            $this->id = null;
         }
     }
 
     public function stop(): void
     {
-        if (!$this->active) {
+        if (!$this->isActive()) {
             return;
         }
 
         foreach ($this->collectors as $collector) {
             $collector->shutdown();
         }
-        $this->active = false;
+        $this->id = null;
     }
 
     private function isRequestIgnored(ServerRequestInterface $request): bool
@@ -177,7 +185,7 @@ final class Debugger
     private function collectSummaryData(): array
     {
         $summaryData = [
-            'id' => $this->idGenerator->getId(),
+            'id' => $this->getId(),
             'collectors' => array_keys($this->collectors),
         ];
 

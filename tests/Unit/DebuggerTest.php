@@ -11,7 +11,6 @@ use stdClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Debugger;
-use Yiisoft\Yii\Debug\DebuggerIdGenerator;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
@@ -20,38 +19,27 @@ final class DebuggerTest extends TestCase
 {
     public function testStartup(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('startup');
         $storage = new MemoryStorage();
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector]);
+        $debugger = new Debugger($storage, [$collector]);
         $debugger->startup(new stdClass());
     }
 
     public function testStartupWithSkipCollect(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('startup');
         $storage = new MemoryStorage();
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector], ['/test']);
+        $debugger = new Debugger($storage, [$collector], ['/test']);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/debug')));
-    }
-
-    public function testGetId(): void
-    {
-        $idGenerator = new DebuggerIdGenerator();
-        $debugger = new Debugger($idGenerator, new MemoryStorage($idGenerator), []);
-
-        $this->assertEquals($idGenerator->getId(), $debugger->getId());
     }
 
     public function testWithIgnoredRequests(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
-        $debugger1 = new Debugger($idGenerator, new MemoryStorage($idGenerator), []);
+        $debugger1 = new Debugger(new MemoryStorage(), []);
         $debugger2 = $debugger1->withIgnoredRequests(['/test']);
 
         $this->assertNotSame($debugger1, $debugger2);
@@ -59,21 +47,19 @@ final class DebuggerTest extends TestCase
 
     public function testIgnoreByHeader(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector], []);
+        $debugger = new Debugger($storage, [$collector], []);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test', ['X-Debug-Ignore' => 'true'])));
         $debugger->shutdown();
     }
 
     public function testWithIgnoredCommands(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
-        $debugger1 = new Debugger($idGenerator, new MemoryStorage($idGenerator), []);
+        $debugger1 = new Debugger(new MemoryStorage(), []);
         $debugger2 = $debugger1->withIgnoredCommands(['command/test']);
 
         $this->assertNotSame($debugger1, $debugger2);
@@ -81,14 +67,13 @@ final class DebuggerTest extends TestCase
 
     public function testIgnoreByEnv(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
         putenv('YII_DEBUG_IGNORE=true');
-        $debugger = new Debugger($idGenerator, $storage, [$collector], []);
+        $debugger = new Debugger($storage, [$collector], []);
         $debugger->startup(new ApplicationStartup('command'));
         putenv('YII_DEBUG_IGNORE=false');
         $debugger->shutdown();
@@ -96,13 +81,12 @@ final class DebuggerTest extends TestCase
 
     public function testShutdown(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->once())->method('write');
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector]);
+        $debugger = new Debugger($storage, [$collector]);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
         $debugger->shutdown();
         $debugger->shutdown();
@@ -111,13 +95,12 @@ final class DebuggerTest extends TestCase
 
     public function testShutdownWithSkipRequestCollect(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector], ['/test']);
+        $debugger = new Debugger($storage, [$collector], ['/test']);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
         $debugger->shutdown();
     }
@@ -125,14 +108,13 @@ final class DebuggerTest extends TestCase
     #[DataProvider('dataShutdownWithSkipCommandCollect')]
     public function testShutdownWithSkipCommandCollect(array $ignoredCommands, ?string $ignoredCommand): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->never())->method('startup');
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector], [], $ignoredCommands);
+        $debugger = new Debugger($storage, [$collector], [], $ignoredCommands);
         $debugger->startup(new ApplicationStartup($ignoredCommand));
         $debugger->shutdown();
     }
@@ -160,14 +142,13 @@ final class DebuggerTest extends TestCase
     #[DataProvider('dataShutdownWithoutSkipCommandCollect')]
     public function testShutdownWithoutSkipCommandCollect(array $ignoredCommands, ?string $ignoredCommand): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('startup');
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->once())->method('write');
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector], [], $ignoredCommands);
+        $debugger = new Debugger($storage, [$collector], [], $ignoredCommands);
         $debugger->startup(new ApplicationStartup($ignoredCommand));
         $debugger->shutdown();
     }
@@ -186,14 +167,13 @@ final class DebuggerTest extends TestCase
 
     public function testStopSkipped(): void
     {
-        $idGenerator = new DebuggerIdGenerator();
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('clear');
         $storage->expects($this->never())->method('write');
 
-        $debugger = new Debugger($idGenerator, $storage, [$collector]);
+        $debugger = new Debugger($storage, [$collector]);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
         $debugger->stop();
         $debugger->stop();
