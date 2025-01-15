@@ -40,7 +40,9 @@ final class DebuggerTest extends TestCase
     public function testIgnoreByHeader(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('shutdown');
+        $collector->expects($this->never())->method('startup');
+        $collector->expects($this->never())->method('shutdown');
+
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
@@ -52,7 +54,9 @@ final class DebuggerTest extends TestCase
     public function testIgnoreByEnv(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('shutdown');
+        $collector->expects($this->never())->method('startup');
+        $collector->expects($this->never())->method('shutdown');
+
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
@@ -80,7 +84,9 @@ final class DebuggerTest extends TestCase
     public function testShutdownWithSkipRequestCollect(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('shutdown');
+        $collector->expects($this->never())->method('startup');
+        $collector->expects($this->never())->method('shutdown');
+
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
@@ -94,7 +100,8 @@ final class DebuggerTest extends TestCase
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->never())->method('startup');
-        $collector->expects($this->once())->method('shutdown');
+        $collector->expects($this->never())->method('shutdown');
+
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 

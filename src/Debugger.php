@@ -18,8 +18,6 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
  */
 final class Debugger
 {
-    private bool $skipCollect = false;
-
     /**
      * @psalm-var array<string, CollectorInterface>
      */
@@ -66,18 +64,15 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        $this->id = str_replace('.', '', uniqid('', true));
-        $this->skipCollect = false;
-
         if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
-            $this->skipCollect = true;
             return;
         }
 
         if ($event instanceof ApplicationStartup && $this->isCommandIgnored($event->commandName)) {
-            $this->skipCollect = true;
             return;
         }
+
+        $this->id = str_replace('.', '', uniqid('', true));
 
         foreach ($this->collectors as $collector) {
             $collector->startup();
@@ -91,20 +86,18 @@ final class Debugger
         }
 
         try {
-            if (!$this->skipCollect) {
-                $collectedData = array_map(
-                    static fn (CollectorInterface $collector) => $collector->getCollected(),
-                    $this->collectors
-                );
+            $collectedData = array_map(
+                static fn (CollectorInterface $collector) => $collector->getCollected(),
+                $this->collectors
+            );
 
-                /** @var array[] $data */
-                [$data, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($collectedData, 30);
+            /** @var array[] $data */
+            [$data, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($collectedData, 30);
 
-                /** @var array $summary */
-                $summary = $this->dataNormalizer->prepareData($this->collectSummaryData(), 30);
+            /** @var array $summary */
+            $summary = $this->dataNormalizer->prepareData($this->collectSummaryData(), 30);
 
-                $this->storage->write($this->getId(), $data, $objectsMap, $summary);
-            }
+            $this->storage->write($this->getId(), $data, $objectsMap, $summary);
         } finally {
             foreach ($this->collectors as $collector) {
                 $collector->shutdown();
