@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Tests\Unit;
 
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\PreventionPolicy\PredefinedPolicy;
