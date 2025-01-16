@@ -6,7 +6,7 @@ namespace Yiisoft\Yii\Debug\StartupPolicy;
 
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\ConditionInterface;
 
-final class StartupPreventionPolicy
+final class StartupPolicy
 {
     /**
      * @psalm-var list<ConditionInterface>
