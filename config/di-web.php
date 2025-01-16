@@ -8,7 +8,7 @@ use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\EnvironmentVariableCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\HeaderCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\UriPathsCondition;
-use Yiisoft\Yii\Debug\StartupPolicy\StartupPolicy;
+use Yiisoft\Yii\Debug\StartupPolicy\Debugger\DenyDebuggerPolicy;
 
 if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
@@ -23,8 +23,8 @@ return [
                     $params['yiisoft/yii-debug']['collectors.web'] ?? [],
                 )
             ),
-            'startupPolicy' => DynamicReference::to(
-                static fn () => new StartupPolicy(
+            'debuggerStartupPolicy' => DynamicReference::to(
+                static fn () => new DenyDebuggerPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
                     new HeaderCondition('X-Debug-Ignore'),
                     new UriPathsCondition($params['yiisoft/yii-debug']['ignoredRequests'])
