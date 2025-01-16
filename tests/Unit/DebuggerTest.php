@@ -11,6 +11,7 @@ use stdClass;
 use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Debugger;
+use Yiisoft\Yii\Debug\PreventionPolicy\PredefinedPolicy;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
@@ -27,46 +28,6 @@ final class DebuggerTest extends TestCase
         $debugger->startup(new stdClass());
     }
 
-    public function testStartupWithSkipCollect(): void
-    {
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('startup');
-        $storage = new MemoryStorage();
-
-        $debugger = new Debugger($storage, [$collector], ['/test']);
-        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/debug')));
-    }
-
-    public function testIgnoreByHeader(): void
-    {
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->never())->method('startup');
-        $collector->expects($this->never())->method('shutdown');
-
-        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->never())->method('write');
-
-        $debugger = new Debugger($storage, [$collector], []);
-        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test', ['X-Debug-Ignore' => 'true'])));
-        $debugger->shutdown();
-    }
-
-    public function testIgnoreByEnv(): void
-    {
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->never())->method('startup');
-        $collector->expects($this->never())->method('shutdown');
-
-        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->never())->method('write');
-
-        putenv('YII_DEBUG_IGNORE=true');
-        $debugger = new Debugger($storage, [$collector], []);
-        $debugger->startup(new ApplicationStartup('command'));
-        putenv('YII_DEBUG_IGNORE=false');
-        $debugger->shutdown();
-    }
-
     public function testShutdown(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
@@ -81,7 +42,7 @@ final class DebuggerTest extends TestCase
         $debugger->shutdown();
     }
 
-    public function testShutdownWithSkipRequestCollect(): void
+    public function testShutdownWithStartupPrevention(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->never())->method('startup');
@@ -90,70 +51,9 @@ final class DebuggerTest extends TestCase
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
-        $debugger = new Debugger($storage, [$collector], ['/test']);
+        $debugger = new Debugger($storage, [$collector], new PredefinedPolicy(true));
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
         $debugger->shutdown();
-    }
-
-    #[DataProvider('dataShutdownWithSkipCommandCollect')]
-    public function testShutdownWithSkipCommandCollect(array $ignoredCommands, ?string $ignoredCommand): void
-    {
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->never())->method('startup');
-        $collector->expects($this->never())->method('shutdown');
-
-        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->never())->method('write');
-
-        $debugger = new Debugger($storage, [$collector], [], $ignoredCommands);
-        $debugger->startup(new ApplicationStartup($ignoredCommand));
-        $debugger->shutdown();
-    }
-
-    public static function dataShutdownWithSkipCommandCollect(): iterable
-    {
-        yield [
-            ['app:ignored-command'],
-            'app:ignored-command',
-        ];
-        yield [
-            ['app:ignored-command1', 'app:ignored-command2'],
-            'app:ignored-command2',
-        ];
-        yield [
-            ['app:ignored-command'],
-            null,
-        ];
-        yield [
-            ['app:ignored-command'],
-            '',
-        ];
-    }
-
-    #[DataProvider('dataShutdownWithoutSkipCommandCollect')]
-    public function testShutdownWithoutSkipCommandCollect(array $ignoredCommands, ?string $ignoredCommand): void
-    {
-        $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
-        $collector->expects($this->once())->method('startup');
-        $collector->expects($this->once())->method('shutdown');
-        $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
-        $storage->expects($this->once())->method('write');
-
-        $debugger = new Debugger($storage, [$collector], [], $ignoredCommands);
-        $debugger->startup(new ApplicationStartup($ignoredCommand));
-        $debugger->shutdown();
-    }
-
-    public static function dataShutdownWithoutSkipCommandCollect(): iterable
-    {
-        yield [
-            [],
-            'app:not-ignored-command',
-        ];
-        yield [
-            ['app:ignored-command'],
-            'app:not-ignored-command',
-        ];
     }
 
     public function testStopSkipped(): void

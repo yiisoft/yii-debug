@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug;
 
 use LogicException;
-use Psr\Http\Message\ServerRequestInterface;
-use Yiisoft\Strings\WildcardPattern;
-use Yiisoft\Yii\Console\Event\ApplicationStartup;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\PreventionPolicy\PreventionPolicyInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
-use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 /**
  * @psalm-type BacktraceType = list<array{file?:string,line?:int,function?:string,class?:class-string,object?:object,type?:string,args?:array}>
@@ -31,14 +28,11 @@ final class Debugger
 
     /**
      * @param CollectorInterface[] $collectors
-     * @param string[] $ignoredRequests
-     * @param string[] $ignoredCommands
      */
     public function __construct(
         private readonly StorageInterface $storage,
         array $collectors,
-        private readonly array $ignoredRequests = [],
-        private readonly array $ignoredCommands = [],
+        private readonly ?PreventionPolicyInterface $startupPreventionPolicy = null,
         array $excludedClasses = [],
     ) {
         $preparedCollectors = [];
@@ -64,11 +58,7 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        if ($event instanceof BeforeRequest && $this->isRequestIgnored($event->getRequest())) {
-            return;
-        }
-
-        if ($event instanceof ApplicationStartup && $this->isCommandIgnored($event->commandName)) {
+        if ($this->startupPreventionPolicy?->shouldPrevent($event)) {
             return;
         }
 
@@ -116,36 +106,6 @@ final class Debugger
             $collector->shutdown();
         }
         $this->id = null;
-    }
-
-    private function isRequestIgnored(ServerRequestInterface $request): bool
-    {
-        if ($request->hasHeader('X-Debug-Ignore') && $request->getHeaderLine('X-Debug-Ignore') === 'true') {
-            return true;
-        }
-        $path = $request->getUri()->getPath();
-        foreach ($this->ignoredRequests as $pattern) {
-            if ((new WildcardPattern($pattern))->match($path)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function isCommandIgnored(?string $command): bool
-    {
-        if ($command === null || $command === '') {
-            return true;
-        }
-        if (getenv('YII_DEBUG_IGNORE') === 'true') {
-            return true;
-        }
-        foreach ($this->ignoredCommands as $pattern) {
-            if ((new WildcardPattern($pattern))->match($command)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
