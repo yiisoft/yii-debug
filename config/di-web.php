@@ -5,10 +5,10 @@ declare(strict_types=1);
 use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\Definitions\ReferencesArray;
 use Yiisoft\Yii\Debug\Debugger;
-use Yiisoft\Yii\Debug\PreventionPolicy\CompositePolicy;
-use Yiisoft\Yii\Debug\PreventionPolicy\EnvironmentVariablePolicy;
-use Yiisoft\Yii\Debug\PreventionPolicy\HeaderPolicy;
-use Yiisoft\Yii\Debug\PreventionPolicy\RequestPolicy;
+use Yiisoft\Yii\Debug\StartupPolicy\Condition\OrCondition;
+use Yiisoft\Yii\Debug\StartupPolicy\Condition\EnvironmentVariableCondition;
+use Yiisoft\Yii\Debug\StartupPolicy\Condition\HeaderCondition;
+use Yiisoft\Yii\Debug\StartupPolicy\Condition\RequestCondition;
 
 if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
@@ -23,11 +23,11 @@ return [
                     $params['yiisoft/yii-debug']['collectors.web'] ?? [],
                 )
             ),
-            'startupPreventionPolicy' => DynamicReference::to(
-                static fn () => new CompositePolicy(
-                    new EnvironmentVariablePolicy(),
-                    new HeaderPolicy(),
-                    new RequestPolicy($params['yiisoft/yii-debug']['ignoredRequests'])
+            'startupPreventionCondition' => DynamicReference::to(
+                static fn () => new OrCondition(
+                    new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
+                    new HeaderCondition('X-Debug-Ignore'),
+                    new RequestCondition($params['yiisoft/yii-debug']['ignoredRequests'])
                 ),
             ),
             'excludedClasses' => $params['yiisoft/yii-debug']['excludedClasses'],

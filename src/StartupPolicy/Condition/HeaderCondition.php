@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\PreventionPolicy;
+namespace Yiisoft\Yii\Debug\StartupPolicy\Condition;
 
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-final class HeaderPolicy implements PreventionPolicyInterface
+final class HeaderCondition implements ConditionInterface
 {
     public function __construct(
-        private readonly string $headerName = 'X-Debug-Ignore',
+        private readonly string $headerName,
     ) {
     }
 
-    public function shouldPrevent(object $event): bool
+    public function match(object $event): bool
     {
         if (!$event instanceof BeforeRequest) {
             return false;
