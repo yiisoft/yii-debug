@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Debug\StartupPolicy\Condition;
+namespace Yiisoft\Yii\Debug\StartupPolicy;
 
-final class OrCondition implements ConditionInterface
+use Yiisoft\Yii\Debug\StartupPolicy\Condition\ConditionInterface;
+
+final class DebuggerPolicy
 {
     /**
      * @psalm-var list<ConditionInterface>
@@ -19,7 +21,7 @@ final class OrCondition implements ConditionInterface
         $this->conditions = $policies;
     }
 
-    public function match(object $event): bool
+    public function shouldPrevent(object $event): bool
     {
         foreach ($this->conditions as $policy) {
             if ($policy->match($event)) {

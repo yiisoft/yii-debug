@@ -8,7 +8,7 @@ use LogicException;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\StartupPolicy\Collector\CollectorPolicyInterface;
-use Yiisoft\Yii\Debug\StartupPolicy\Condition\ConditionInterface;
+use Yiisoft\Yii\Debug\StartupPolicy\DebuggerPolicy;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 /**
@@ -33,7 +33,7 @@ final class Debugger
     public function __construct(
         private readonly StorageInterface $storage,
         array $collectors,
-        private readonly ?ConditionInterface $startupPreventionCondition = null,
+        private readonly ?DebuggerPolicy $preventionPolicy = null,
         private readonly ?CollectorPolicyInterface $collectorPolicy = null,
         array $excludedClasses = [],
     ) {
@@ -60,14 +60,14 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        if ($this->startupPreventionCondition?->match($event) === true) {
+        if ($this->preventionPolicy?->shouldPrevent($event) === true) {
             return;
         }
 
         $this->id = str_replace('.', '', uniqid('', true));
 
         foreach ($this->collectors as $collector) {
-            if ($this->collectorPolicy === null || $this->collectorPolicy->shouldStartup($collector, $event)) {
+            if ($this->collectorPolicy?->shouldStartup($collector, $event) !== false) {
                 $collector->startup();
             }
         }

@@ -6,8 +6,8 @@ use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\Definitions\ReferencesArray;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\CommandCondition;
-use Yiisoft\Yii\Debug\StartupPolicy\Condition\OrCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\EnvironmentVariableCondition;
+use Yiisoft\Yii\Debug\StartupPolicy\DebuggerPolicy;
 
 if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
@@ -22,8 +22,8 @@ return [
                     $params['yiisoft/yii-debug']['collectors.console'] ?? []
                 )
             ),
-            'startupPreventionCondition' => DynamicReference::to(
-                static fn () => new OrCondition(
+            'startupPreventionPolicy' => DynamicReference::to(
+                static fn () => new DebuggerPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
                     new CommandCondition($params['yiisoft/yii-debug']['ignoredCommands'])
                 ),
