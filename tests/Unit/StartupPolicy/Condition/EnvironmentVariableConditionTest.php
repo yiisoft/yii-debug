@@ -34,4 +34,12 @@ final class EnvironmentVariableConditionTest extends TestCase
 
         $this->assertSame($expected, $condition->match($event));
     }
+
+    public function testNonExistVariable(): void
+    {
+        $event = new stdClass();
+        $condition = new EnvironmentVariableCondition('YII_NON_EXIST_VARIABLE');
+
+        $this->assertFalse($condition->match($event));
+    }
 }
