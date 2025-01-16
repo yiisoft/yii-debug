@@ -9,7 +9,7 @@ final class CompositePolicy implements PreventionPolicyInterface
     /**
      * @psalm-var list<PreventionPolicyInterface>
      */
-    private array $policies;
+    private readonly array $policies;
 
     /**
      * @no-named-arguments
