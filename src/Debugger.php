@@ -67,7 +67,7 @@ final class Debugger
         $this->id = str_replace('.', '', uniqid('', true));
 
         foreach ($this->collectors as $collector) {
-            if ($this->collectorPolicy?->shouldStartup($collector, $event) === true) {
+            if ($this->collectorPolicy === null || $this->collectorPolicy->shouldStartup($collector, $event)) {
                 $collector->startup();
             }
         }
