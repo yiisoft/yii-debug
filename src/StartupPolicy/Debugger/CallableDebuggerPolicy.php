@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\StartupPolicy\Debugger;
 
-use function call_user_func;
-
 /**
  * @psalm-type TCallable = callable(object): bool
  */
@@ -28,6 +26,6 @@ final class CallableDebuggerPolicy implements DebuggerStartupPolicyInterface
 
     public function satisfies(object $event): bool
     {
-        return call_user_func($this->callable, $event);
+        return ($this->callable)($event);
     }
 }

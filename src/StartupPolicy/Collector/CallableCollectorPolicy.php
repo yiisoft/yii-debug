@@ -6,8 +6,6 @@ namespace Yiisoft\Yii\Debug\StartupPolicy\Collector;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-use function call_user_func;
-
 /**
  * @psalm-type TCallable = callable(CollectorInterface, object): bool
  */
@@ -30,6 +28,6 @@ final class CallableCollectorPolicy implements CollectorStartupPolicyInterface
 
     public function satisfies(CollectorInterface $collector, object $event): bool
     {
-        return call_user_func($this->callable, $collector, $event);
+        return ($this->callable)($collector, $event);
     }
 }
