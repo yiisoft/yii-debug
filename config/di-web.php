@@ -8,7 +8,7 @@ use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\EnvironmentVariableCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\HeaderCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\RequestCondition;
-use Yiisoft\Yii\Debug\StartupPolicy\DebuggerPolicy;
+use Yiisoft\Yii\Debug\StartupPolicy\StartupPreventionPolicy;
 
 if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
@@ -24,7 +24,7 @@ return [
                 )
             ),
             'startupPreventionPolicy' => DynamicReference::to(
-                static fn () => new DebuggerPolicy(
+                static fn () => new StartupPreventionPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
                     new HeaderCondition('X-Debug-Ignore'),
                     new RequestCondition($params['yiisoft/yii-debug']['ignoredRequests'])

@@ -10,7 +10,7 @@ use stdClass;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Debugger;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\PredefinedCondition;
-use Yiisoft\Yii\Debug\StartupPolicy\DebuggerPolicy;
+use Yiisoft\Yii\Debug\StartupPolicy\StartupPreventionPolicy;
 use Yiisoft\Yii\Debug\Storage\MemoryStorage;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
@@ -50,7 +50,7 @@ final class DebuggerTest extends TestCase
         $storage = $this->getMockBuilder(StorageInterface::class)->getMock();
         $storage->expects($this->never())->method('write');
 
-        $debugger = new Debugger($storage, [$collector], new DebuggerPolicy(new PredefinedCondition(true)));
+        $debugger = new Debugger($storage, [$collector], new StartupPreventionPolicy(new PredefinedCondition(true)));
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
         $debugger->shutdown();
     }
