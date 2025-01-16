@@ -6,7 +6,7 @@ namespace Yiisoft\Yii\Debug\StartupPolicy\Collector;
 
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 
-interface CollectorPolicyInterface
+interface CollectorStartupPolicyInterface
 {
-    public function shouldStartup(CollectorInterface $collector, object $event): bool;
+    public function satisfies(CollectorInterface $collector, object $event): bool;
 }

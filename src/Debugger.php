@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Debug;
 use LogicException;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
-use Yiisoft\Yii\Debug\StartupPolicy\Collector\CollectorPolicyInterface;
+use Yiisoft\Yii\Debug\StartupPolicy\Collector\CollectorStartupPolicyInterface;
 use Yiisoft\Yii\Debug\StartupPolicy\Debugger\DebuggerStartupPolicyInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
@@ -34,7 +34,7 @@ final class Debugger
         private readonly StorageInterface $storage,
         array $collectors,
         private readonly ?DebuggerStartupPolicyInterface $debuggerStartupPolicy = null,
-        private readonly ?CollectorPolicyInterface $collectorPolicy = null,
+        private readonly ?CollectorStartupPolicyInterface $collectorStartupPolicy = null,
         array $excludedClasses = [],
     ) {
         $preparedCollectors = [];
@@ -67,7 +67,7 @@ final class Debugger
         $this->id = str_replace('.', '', uniqid('', true));
 
         foreach ($this->collectors as $collector) {
-            if ($this->collectorPolicy?->shouldStartup($collector, $event) === false) {
+            if ($this->collectorStartupPolicy?->satisfies($collector, $event) === false) {
                 continue;
             }
             $collector->startup();
