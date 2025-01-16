@@ -23,7 +23,7 @@ return [
                     $params['yiisoft/yii-debug']['collectors.web'] ?? [],
                 )
             ),
-            'startupPreventionPolicy' => DynamicReference::to(
+            'startupPolicy' => DynamicReference::to(
                 static fn () => new StartupPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
                     new HeaderCondition('X-Debug-Ignore'),
