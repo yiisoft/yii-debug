@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\Definitions\ReferencesArray;
 use Yiisoft\Yii\Debug\Debugger;
-use Yiisoft\Yii\Debug\StartupPolicy\Condition\CommandCondition;
+use Yiisoft\Yii\Debug\StartupPolicy\Condition\CommandNameCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\EnvironmentVariableCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\StartupPolicy;
 
@@ -25,7 +25,7 @@ return [
             'startupPolicy' => DynamicReference::to(
                 static fn () => new StartupPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
-                    new CommandCondition($params['yiisoft/yii-debug']['ignoredCommands'])
+                    new CommandNameCondition($params['yiisoft/yii-debug']['ignoredCommands'])
                 ),
             ),
             'excludedClasses' => $params['yiisoft/yii-debug']['excludedClasses'],
