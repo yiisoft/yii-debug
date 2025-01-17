@@ -7,7 +7,9 @@ namespace Yiisoft\Yii\Debug;
 use LogicException;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
+use Yiisoft\Yii\Debug\StartupPolicy\Collector\AllowAllCollectorPolicy;
 use Yiisoft\Yii\Debug\StartupPolicy\Collector\CollectorStartupPolicyInterface;
+use Yiisoft\Yii\Debug\StartupPolicy\Debugger\AlwaysOnDebuggerPolicy;
 use Yiisoft\Yii\Debug\StartupPolicy\Debugger\DebuggerStartupPolicyInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
@@ -33,8 +35,8 @@ final class Debugger
     public function __construct(
         private readonly StorageInterface $storage,
         array $collectors,
-        private readonly ?DebuggerStartupPolicyInterface $debuggerStartupPolicy = null,
-        private readonly ?CollectorStartupPolicyInterface $collectorStartupPolicy = null,
+        private readonly DebuggerStartupPolicyInterface $debuggerStartupPolicy = new AlwaysOnDebuggerPolicy(),
+        private readonly CollectorStartupPolicyInterface $collectorStartupPolicy = new AllowAllCollectorPolicy(),
         array $excludedClasses = [],
     ) {
         $preparedCollectors = [];
@@ -60,17 +62,16 @@ final class Debugger
 
     public function startup(object $event): void
     {
-        if ($this->debuggerStartupPolicy?->satisfies($event) === false) {
+        if (!$this->debuggerStartupPolicy->satisfies($event)) {
             return;
         }
 
         $this->id = str_replace('.', '', uniqid('', true));
 
         foreach ($this->collectors as $collector) {
-            if ($this->collectorStartupPolicy?->satisfies($collector, $event) === false) {
-                continue;
+            if ($this->collectorStartupPolicy->satisfies($collector, $event)) {
+                $collector->startup();
             }
-            $collector->startup();
         }
     }
 
