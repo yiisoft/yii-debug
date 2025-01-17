@@ -12,7 +12,7 @@ final class CommandNameCondition implements ConditionInterface
     public function __construct(
         /**
          * @var string[]
-         * @psalm-var list<string>
+         * @psalm-var list<non-empty-string>
          */
         private readonly array $names,
     ) {
@@ -27,7 +27,7 @@ final class CommandNameCondition implements ConditionInterface
         $name = (string) $event->commandName;
 
         foreach ($this->names as $pattern) {
-            if ((new WildcardPattern($pattern))->match($name)) {
+            if ((new WildcardPattern($pattern, [':']))->match($name)) {
                 return true;
             }
         }
