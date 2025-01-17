@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 final class StubCollector implements CollectorInterface
 {
     public function __construct(
-        private readonly string $name = __CLASS__,
+        private readonly string $name = self::class,
         private readonly array $collected = [],
     ) {
     }
