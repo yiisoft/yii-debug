@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Unit\StartupPolicy\Condition;
+namespace Yiisoft\Yii\Debug\Tests\Unit\StartupPolicy\Condition;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +17,10 @@ final class EnvironmentVariableConditionTest extends TestCase
         yield 'false' => [false, 'false'];
         yield 'on' => [true, 'on'];
         yield 'off' => [false, 'off'];
+        yield 'TRUE' => [true, 'TRUE'];
+        yield 'FALSE' => [false, 'FALSE'];
+        yield 'ON' => [true, 'ON'];
+        yield 'OFF' => [false, 'OFF'];
         yield 'one' => [true, '1'];
         yield 'zero' => [false, '0'];
         yield 'empty-string' => [false, ''];

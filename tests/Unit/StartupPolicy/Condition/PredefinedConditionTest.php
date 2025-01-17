@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Unit\StartupPolicy\Condition;
+namespace Yiisoft\Yii\Debug\Tests\Unit\StartupPolicy\Condition;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
