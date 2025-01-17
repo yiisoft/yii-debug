@@ -23,7 +23,7 @@ final class AllowDebuggerPolicyTest extends TestCase
                 new PredefinedCondition(false),
                 new PredefinedCondition(false),
                 new PredefinedCondition(true),
-            ]
+            ],
         ];
     }
 
