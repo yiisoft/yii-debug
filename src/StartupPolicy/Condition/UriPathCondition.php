@@ -7,12 +7,12 @@ namespace Yiisoft\Yii\Debug\StartupPolicy\Condition;
 use Yiisoft\Strings\WildcardPattern;
 use Yiisoft\Yii\Http\Event\BeforeRequest;
 
-final class UriPathsCondition implements ConditionInterface
+final class UriPathCondition implements ConditionInterface
 {
     public function __construct(
         /**
          * @var string[]
-         * @psalm-var list<string>
+         * @psalm-var list<non-empty-string>
          */
         private readonly array $paths,
     ) {
@@ -27,7 +27,7 @@ final class UriPathsCondition implements ConditionInterface
         $path = $event->getRequest()->getUri()->getPath();
 
         foreach ($this->paths as $pattern) {
-            if ((new WildcardPattern($pattern))->match($path)) {
+            if ((new WildcardPattern($pattern, ['/']))->match($path)) {
                 return true;
             }
         }

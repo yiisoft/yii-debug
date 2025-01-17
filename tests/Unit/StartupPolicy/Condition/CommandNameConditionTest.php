@@ -17,9 +17,9 @@ final class CommandNameConditionTest extends TestCase
         yield 'with-empty-name' => [false, ['test:run', 'test:stop'], ''];
         yield 'not-match' => [false, ['test:run', 'test:stop'], 'email:send'];
         yield 'match' => [true, ['test:run', 'test:stop'], 'test:stop'];
-        yield 'match-wildcard-1' => [true, ['test:app:*'], 'test:app:stop'];
-        yield 'match-wildcard-2' => [false, ['test:*'], 'test:app:stop'];
-        yield 'match-wildcard-3' => [true, ['test:**'], 'test:app:stop'];
+        yield 'wildcard-1' => [true, ['test:app:*'], 'test:app:stop'];
+        yield 'wildcard-2' => [false, ['test:*'], 'test:app:stop'];
+        yield 'wildcard-3' => [true, ['test:**'], 'test:app:stop'];
     }
 
     #[DataProvider('dataBase')]
