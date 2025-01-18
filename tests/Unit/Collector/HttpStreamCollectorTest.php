@@ -10,6 +10,8 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Stream\HttpStreamCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
+use function is_array;
+
 final class HttpStreamCollectorTest extends AbstractCollectorTestCase
 {
     /**
