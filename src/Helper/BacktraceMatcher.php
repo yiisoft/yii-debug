@@ -23,7 +23,7 @@ use function in_array;
  *     args?:array,
  * }
  */
-final class BacktraceIgnoreMatcher
+final class BacktraceMatcher
 {
     /**
      * @param string[] $patterns

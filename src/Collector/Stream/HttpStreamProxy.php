@@ -6,7 +6,7 @@ namespace Yiisoft\Yii\Debug\Collector\Stream;
 
 use Yiisoft\Strings\CombinedRegexp;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
+use Yiisoft\Yii\Debug\Helper\BacktraceMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
@@ -95,7 +95,7 @@ final class HttpStreamProxy implements StreamWrapperInterface
         /**
          * It's important to trigger autoloader before unregistering the file stream handler
          */
-        class_exists(BacktraceIgnoreMatcher::class);
+        class_exists(BacktraceMatcher::class);
         class_exists(StreamWrapper::class);
         class_exists(CombinedRegexp::class);
         stream_wrapper_unregister('http');
@@ -309,7 +309,7 @@ final class HttpStreamProxy implements StreamWrapperInterface
         }
 
         $backtrace = debug_backtrace();
-        return BacktraceIgnoreMatcher::matchesClass($backtrace[3], self::$ignoredClasses)
-            || BacktraceIgnoreMatcher::matchesFile($backtrace[3], self::$ignoredPathPatterns);
+        return BacktraceMatcher::matchesClass($backtrace[3], self::$ignoredClasses)
+            || BacktraceMatcher::matchesFile($backtrace[3], self::$ignoredPathPatterns);
     }
 }
