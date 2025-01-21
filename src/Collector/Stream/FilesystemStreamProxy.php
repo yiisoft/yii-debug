@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
 use Yiisoft\Strings\CombinedRegexp;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Yii\Debug\Helper\BacktraceMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
@@ -88,6 +89,7 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
         class_exists(BacktraceMatcher::class);
         class_exists(StreamWrapper::class);
         class_exists(CombinedRegexp::class);
+        class_exists(StringHelper::class);
         stream_wrapper_unregister('file');
         stream_wrapper_register('file', self::class, STREAM_IS_URL);
         self::$registered = true;

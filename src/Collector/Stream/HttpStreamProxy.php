@@ -98,6 +98,7 @@ final class HttpStreamProxy implements StreamWrapperInterface
         class_exists(BacktraceMatcher::class);
         class_exists(StreamWrapper::class);
         class_exists(CombinedRegexp::class);
+        class_exists(StringHelper::class);
         stream_wrapper_unregister('http');
         stream_wrapper_register('http', self::class, STREAM_IS_URL);
 
