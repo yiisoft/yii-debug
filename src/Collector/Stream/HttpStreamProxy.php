@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Debug\Collector\Stream;
 
 use Yiisoft\Strings\CombinedRegexp;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Yii\Debug\Helper\BacktraceIgnoreMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
@@ -303,12 +304,12 @@ final class HttpStreamProxy implements StreamWrapperInterface
 
     private function isIgnored(string $url): bool
     {
-        if (BacktraceIgnoreMatcher::doesStringMatchPattern($url, self::$ignoredUrls)) {
+        if (StringHelper::matchAnyRegex($url, self::$ignoredUrls)) {
             return true;
         }
 
         $backtrace = debug_backtrace();
-        return BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, self::$ignoredClasses)
-            || BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, self::$ignoredPathPatterns);
+        return BacktraceIgnoreMatcher::matchesClass($backtrace[3], self::$ignoredClasses)
+            || BacktraceIgnoreMatcher::matchesFile($backtrace[3], self::$ignoredPathPatterns);
     }
 }

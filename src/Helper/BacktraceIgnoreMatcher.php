@@ -4,50 +4,44 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Debug\Helper;
 
-use Yiisoft\Strings\CombinedRegexp;
-use Yiisoft\Yii\Debug\Debugger;
+use Yiisoft\Strings\StringHelper;
+
+use function in_array;
 
 /**
- * All backtrace parameters should contain at least 4 elements in the following order:
- * 0 – Called method
- * 1 – Proxy
- * 2 – Real using place / Composer\ClassLoader include function
- * 3 – Whatever / Composer\ClassLoader
+ * `BacktraceMatcher` provides methods to match backtrace items returned by the PHP function `debug_backtrace()`.
  *
- * @psalm-import-type BacktraceType from Debugger
+ * @see https://www.php.net/manual/function.debug-backtrace.php
+ *
+ * @psalm-type TBacktraceItem = array{
+ *     file?: string,
+ *     line?: int,
+ *     function?: string,
+ *     class?: class-string,
+ *     object?: object,
+ *     type?: string,
+ *     args?:array,
+ * }
  */
 final class BacktraceIgnoreMatcher
 {
     /**
      * @param string[] $patterns
-     * @psalm-param BacktraceType $backtrace
+     * @psalm-param TBacktraceItem $backtraceItem
      */
-    public static function isIgnoredByFile(array $backtrace, array $patterns): bool
+    public static function matchesFile(array $backtraceItem, array $patterns): bool
     {
-        if (!isset($backtrace[2]['file'])) {
-            return false;
-        }
-        $path = $backtrace[2]['file'];
-
-        return self::doesStringMatchPattern($path, $patterns);
+        $path = $backtraceItem['file'] ?? null;
+        return $path !== null && StringHelper::matchAnyRegex($path, $patterns);
     }
 
     /**
-     * @psalm-param BacktraceType $backtrace
+     * @param string[] $classes
+     * @psalm-param TBacktraceItem $backtraceItem
      */
-    public static function isIgnoredByClass(array $backtrace, array $classes): bool
+    public static function matchesClass(array $backtraceItem, array $classes): bool
     {
-        return isset($backtrace[3]['class']) && in_array($backtrace[3]['class'], $classes, true);
-    }
-
-    /**
-     * @param string[] $patterns
-     */
-    public static function doesStringMatchPattern(string $string, array $patterns): bool
-    {
-        if (empty($patterns)) {
-            return false;
-        }
-        return (new CombinedRegexp($patterns))->matches($string);
+        $class = $backtraceItem['class'] ?? null;
+        return $class !== null && in_array($class, $classes, true);
     }
 }

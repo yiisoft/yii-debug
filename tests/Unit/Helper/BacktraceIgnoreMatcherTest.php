@@ -15,13 +15,11 @@ final class BacktraceIgnoreMatcherTest extends TestCase
     {
         $backtrace = debug_backtrace();
 
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, [self::class]));
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, [stdClass::class]));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesClass($backtrace[3], [self::class]));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesClass($backtrace[3], [stdClass::class]));
 
-        $backtrace[3] = $backtrace[0];
-
-        $this->assertTrue(BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, [self::class]));
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, [stdClass::class]));
+        $this->assertTrue(BacktraceIgnoreMatcher::matchesClass($backtrace[0], [self::class]));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesClass($backtrace[0], [stdClass::class]));
     }
 
     public function testFileIgnorance(): void
@@ -30,53 +28,22 @@ final class BacktraceIgnoreMatcherTest extends TestCase
         $reflection = new ReflectionClass(TestCase::class);
         $file = $reflection->getFileName();
 
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote($file)]));
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote(__FILE__)]));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesFile($backtrace[2], [preg_quote($file)]));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesFile($backtrace[2], [preg_quote(__FILE__)]));
 
-        $backtrace[2] = $backtrace[0];
-
-        $this->assertTrue(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote($file)]));
+        $this->assertTrue(BacktraceIgnoreMatcher::matchesFile($backtrace[0], [preg_quote($file)]));
         $this->assertTrue(
-            BacktraceIgnoreMatcher::isIgnoredByFile(
-                $backtrace,
+            BacktraceIgnoreMatcher::matchesFile(
+                $backtrace[0],
                 [preg_quote(dirname($file) . DIRECTORY_SEPARATOR) . '*']
             )
         );
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, [preg_quote(__FILE__)]));
-    }
-
-    public function testStringMatches(): void
-    {
-        $this->assertTrue(
-            BacktraceIgnoreMatcher::doesStringMatchPattern(
-                'dev/123/456',
-                ['dev/123/456']
-            )
-        );
-        $this->assertTrue(
-            BacktraceIgnoreMatcher::doesStringMatchPattern(
-                'dev/123/456',
-                ['456']
-            )
-        );
-        $this->assertTrue(
-            BacktraceIgnoreMatcher::doesStringMatchPattern(
-                'dev/123/456',
-                ['dev/.*/456']
-            )
-        );
-        $this->assertTrue(
-            BacktraceIgnoreMatcher::doesStringMatchPattern(
-                'dev/123/456',
-                ['dev*/456', 'dev/123/*']
-            )
-        );
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesFile($backtrace[0], [preg_quote(__FILE__)]));
     }
 
     public function testEmptyBacktrace(): void
     {
-        $this->assertFalse(BacktraceIgnoreMatcher::doesStringMatchPattern('dev/123/456', []));
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByFile([], ['dev/123/456']));
-        $this->assertFalse(BacktraceIgnoreMatcher::isIgnoredByClass([], ['dev/123/456']));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesFile([], ['dev/123/456']));
+        $this->assertFalse(BacktraceIgnoreMatcher::matchesClass([], ['dev/123/456']));
     }
 }

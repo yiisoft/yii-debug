@@ -105,8 +105,8 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
     private function isIgnored(): bool
     {
         $backtrace = debug_backtrace();
-        return BacktraceIgnoreMatcher::isIgnoredByClass($backtrace, self::$ignoredClasses)
-            || BacktraceIgnoreMatcher::isIgnoredByFile($backtrace, self::$ignoredPathPatterns);
+        return BacktraceIgnoreMatcher::matchesClass($backtrace[3], self::$ignoredClasses)
+            || BacktraceIgnoreMatcher::matchesFile($backtrace[3], self::$ignoredPathPatterns);
     }
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
