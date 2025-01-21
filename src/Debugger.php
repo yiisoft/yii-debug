@@ -13,21 +13,31 @@ use Yiisoft\Yii\Debug\StartupPolicy\Debugger\AlwaysOnDebuggerPolicy;
 use Yiisoft\Yii\Debug\StartupPolicy\Debugger\DebuggerStartupPolicyInterface;
 use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
+/**
+ * Debugger collects data from collectors and stores it in a storage.
+ */
 final class Debugger
 {
     /**
+     * @var CollectorInterface[] Collectors, indexed by their names.
+     *
      * @psalm-var array<string, CollectorInterface>
      */
     private readonly array $collectors;
+
+    /**
+     * @var DataNormalizer Data normalizer that prepares data for storage.
+     */
     private readonly DataNormalizer $dataNormalizer;
 
     /**
-     * @var string|null ID of the current request. Null if debugger is not active.
-     */
-    private ?string $id = null;
-
-    /**
-     * @param CollectorInterface[] $collectors
+     * @param StorageInterface $storage The storage to store collected data.
+     * @param CollectorInterface[] $collectors Collectors to be used.
+     * @param DebuggerStartupPolicyInterface $debuggerStartupPolicy Policy to decide whether debugger should be started.
+     * Default {@see AlwaysOnDebuggerPolicy} that always allows to startup debugger.
+     * @param CollectorStartupPolicyInterface $collectorStartupPolicy Policy to decide whether collector should be
+     * started. Default {@see AllowAllCollectorPolicy} that always allows to use all collectors.
+     * @param array $excludedClasses List of classes to be excluded from collected data before storing.
      */
     public function __construct(
         private readonly StorageInterface $storage,
@@ -47,16 +57,38 @@ final class Debugger
         register_shutdown_function([$this, 'shutdown']);
     }
 
+    /**
+     * @var string|null ID of the current request. `null` if debugger is not active.
+     */
+    private ?string $id = null;
+
+    /**
+     * Returns whether debugger is active.
+     *
+     * @return bool Whether debugger is active.
+     */
     public function isActive(): bool
     {
         return $this->id !== null;
     }
 
+    /**
+     * Returns ID of the current request.
+     *
+     * Throws `LogicException` if debugger is not started. Use {@see isActive()} to check if debugger is active.
+     *
+     * @return string ID of the current request.
+     */
     public function getId(): string
     {
         return $this->id ?? throw new LogicException('Debugger is not started.');
     }
 
+    /**
+     * Starts debugger and collectors.
+     *
+     * @param object $event Event that triggered debugger startup.
+     */
     public function startup(object $event): void
     {
         if (!$this->debuggerStartupPolicy->satisfies($event)) {
@@ -72,6 +104,9 @@ final class Debugger
         }
     }
 
+    /**
+     * Shuts down debugger and collectors. Collected data is flushed to storage.
+     */
     public function shutdown(): void
     {
         if (!$this->isActive()) {
@@ -79,32 +114,48 @@ final class Debugger
         }
 
         try {
-            $collectedData = array_map(
-                static fn (CollectorInterface $collector) => $collector->getCollected(),
-                $this->collectors
-            );
-
-            /** @var array[] $data */
-            [$data, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($collectedData, 30);
-
-            /** @var array $summary */
-            $summary = $this->dataNormalizer->prepareData($this->collectSummaryData(), 30);
-
-            $this->storage->write($this->getId(), $data, $objectsMap, $summary);
+            $this->flush();
         } finally {
-            foreach ($this->collectors as $collector) {
-                $collector->shutdown();
-            }
-            $this->id = null;
+            $this->stop();
         }
     }
 
-    public function stop(): void
+    /**
+     * Stop debugger and collectors. Collected data isn't flushed to storage.
+     */
+    public function terminate(): void
     {
         if (!$this->isActive()) {
             return;
         }
 
+        $this->stop();
+    }
+
+    /**
+     * Collects data from collectors and stores it in a storage.
+     */
+    private function flush(): void
+    {
+        $collectedData = array_map(
+            static fn (CollectorInterface $collector) => $collector->getCollected(),
+            $this->collectors
+        );
+
+        /** @var array[] $data */
+        [$data, $objectsMap] = $this->dataNormalizer->prepareDataAndObjectsMap($collectedData, 30);
+
+        /** @var array $summary */
+        $summary = $this->dataNormalizer->prepareData($this->collectSummaryData(), 30);
+
+        $this->storage->write($this->getId(), $data, $objectsMap, $summary);
+    }
+
+    /**
+     * Stops debugger and collectors.
+     */
+    private function stop(): void
+    {
         foreach ($this->collectors as $collector) {
             $collector->shutdown();
         }

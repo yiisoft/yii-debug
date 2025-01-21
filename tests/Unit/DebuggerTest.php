@@ -64,7 +64,7 @@ final class DebuggerTest extends TestCase
 
         $debugger = new Debugger($storage, [$collector]);
         $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
-        $debugger->stop();
-        $debugger->stop();
+        $debugger->terminate();
+        $debugger->terminate();
     }
 }
