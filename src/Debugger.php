@@ -105,7 +105,7 @@ final class Debugger
     }
 
     /**
-     * Shuts down debugger and collectors. Collected data is flushed to storage.
+     * Stops the debugger for listening. Collected data will be flushed to storage.
      */
     public function shutdown(): void
     {
