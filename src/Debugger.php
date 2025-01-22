@@ -121,7 +121,7 @@ final class Debugger
     }
 
     /**
-     * Stop debugger and collectors. Collected data isn't flushed to storage.
+     * Stops the debugger from listening. Collected data will not be flushed to storage.
      */
     public function terminate(): void
     {
