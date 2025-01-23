@@ -16,17 +16,17 @@ use Yiisoft\Yii\Http\Event\BeforeRequest;
 
 final class DebuggerTest extends TestCase
 {
-    public function testStartup(): void
+    public function testStart(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('startup');
         $storage = new MemoryStorage();
 
         $debugger = new Debugger($storage, [$collector]);
-        $debugger->startup(new stdClass());
+        $debugger->start(new stdClass());
     }
 
-    public function testShutdown(): void
+    public function testStop(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->once())->method('shutdown');
@@ -34,13 +34,13 @@ final class DebuggerTest extends TestCase
         $storage->expects($this->once())->method('write');
 
         $debugger = new Debugger($storage, [$collector]);
-        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
-        $debugger->shutdown();
-        $debugger->shutdown();
-        $debugger->shutdown();
+        $debugger->start(new BeforeRequest(new ServerRequest('GET', '/test')));
+        $debugger->stop();
+        $debugger->stop();
+        $debugger->stop();
     }
 
-    public function testShutdownWithStartupPrevention(): void
+    public function testStopWithStartupPrevention(): void
     {
         $collector = $this->getMockBuilder(CollectorInterface::class)->getMock();
         $collector->expects($this->never())->method('startup');
@@ -50,8 +50,8 @@ final class DebuggerTest extends TestCase
         $storage->expects($this->never())->method('write');
 
         $debugger = new Debugger($storage, [$collector], new AllowDebuggerPolicy());
-        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
-        $debugger->shutdown();
+        $debugger->start(new BeforeRequest(new ServerRequest('GET', '/test')));
+        $debugger->stop();
     }
 
     public function testStopSkipped(): void
@@ -63,8 +63,8 @@ final class DebuggerTest extends TestCase
         $storage->expects($this->never())->method('write');
 
         $debugger = new Debugger($storage, [$collector]);
-        $debugger->startup(new BeforeRequest(new ServerRequest('GET', '/test')));
-        $debugger->terminate();
-        $debugger->terminate();
+        $debugger->start(new BeforeRequest(new ServerRequest('GET', '/test')));
+        $debugger->kill();
+        $debugger->kill();
     }
 }

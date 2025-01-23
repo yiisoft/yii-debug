@@ -54,7 +54,7 @@ final class Debugger
 
         $this->dataNormalizer = new DataNormalizer($excludedClasses);
 
-        register_shutdown_function([$this, 'shutdown']);
+        register_shutdown_function([$this, 'stop']);
     }
 
     /**
@@ -89,7 +89,7 @@ final class Debugger
      *
      * @param object $event Event that triggered debugger startup.
      */
-    public function startup(object $event): void
+    public function start(object $event): void
     {
         if (!$this->debuggerStartupPolicy->satisfies($event)) {
             return;
@@ -107,7 +107,7 @@ final class Debugger
     /**
      * Stops the debugger for listening. Collected data will be flushed to storage.
      */
-    public function shutdown(): void
+    public function stop(): void
     {
         if (!$this->isActive()) {
             return;
@@ -116,20 +116,20 @@ final class Debugger
         try {
             $this->flush();
         } finally {
-            $this->stop();
+            $this->deactivate();
         }
     }
 
     /**
      * Stops the debugger from listening. Collected data will not be flushed to storage.
      */
-    public function terminate(): void
+    public function kill(): void
     {
         if (!$this->isActive()) {
             return;
         }
 
-        $this->stop();
+        $this->deactivate();
     }
 
     /**
@@ -154,7 +154,7 @@ final class Debugger
     /**
      * Stops debugger and collectors.
      */
-    private function stop(): void
+    private function deactivate(): void
     {
         foreach ($this->collectors as $collector) {
             $collector->shutdown();
