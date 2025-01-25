@@ -34,9 +34,7 @@ final class VarDumperHandlerInterfaceProxyTest extends TestCase
             ],
         ], $collector->getCollected());
         $this->assertEquals([
-            'var-dumper' => [
-                'total' => 1,
-            ],
+            'total' => 1,
         ], $collector->getSummary());
 
         $this->assertCount(1, $timeline->getCollected());
