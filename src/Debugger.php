@@ -85,13 +85,28 @@ final class Debugger
     }
 
     /**
+     * @var bool Whether debugger startup is denied.
+     */
+    private bool $denyStart = false;
+
+    /**
      * Starts debugger and collectors.
      *
      * @param object $event Event that triggered debugger startup.
      */
     public function start(object $event): void
     {
+        if ($this->denyStart) {
+            return;
+        }
+
         if (!$this->debuggerStartupPolicy->satisfies($event)) {
+            $this->denyStart = true;
+            $this->kill();
+            return;
+        }
+
+        if ($this->isActive()) {
             return;
         }
 
@@ -160,6 +175,7 @@ final class Debugger
             $collector->shutdown();
         }
         $this->id = null;
+        $this->denyStart = false;
     }
 
     /**
