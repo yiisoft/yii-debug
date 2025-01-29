@@ -55,19 +55,16 @@ final class ExceptionCollectorTest extends AbstractCollectorTestCase
     protected function checkSummaryData(array $data): void
     {
         parent::checkSummaryData($data);
-        $this->assertCount(1, $data);
-        $this->assertArrayHasKey('exception', $data);
 
-        $exception = $data['exception'];
-        $this->assertArrayHasKey('class', $exception);
-        $this->assertArrayHasKey('message', $exception);
-        $this->assertArrayHasKey('file', $exception);
-        $this->assertArrayHasKey('line', $exception);
-        $this->assertArrayHasKey('code', $exception);
+        $this->assertArrayHasKey('class', $data);
+        $this->assertArrayHasKey('message', $data);
+        $this->assertArrayHasKey('file', $data);
+        $this->assertArrayHasKey('line', $data);
+        $this->assertArrayHasKey('code', $data);
 
-        $this->assertEquals(Exception::class, $exception['class']);
-        $this->assertEquals('test', $exception['message']);
-        $this->assertEquals(777, $exception['code']);
+        $this->assertEquals(Exception::class, $data['class']);
+        $this->assertEquals('test', $data['message']);
+        $this->assertEquals(777, $data['code']);
     }
 
     public function testNoExceptionCollected(): void

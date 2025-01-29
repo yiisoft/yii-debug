@@ -96,13 +96,11 @@ final class HttpClientCollectorTest extends AbstractCollectorTestCase
     protected function checkSummaryData(array $data): void
     {
         parent::checkSummaryData($data);
-        $this->assertCount(1, $data);
-        $this->assertArrayHasKey('http', $data);
-        $this->assertCount(2, $data['http']);
-        $this->assertArrayHasKey('count', $data['http']);
-        $this->assertArrayHasKey('totalTime', $data['http']);
+        $this->assertCount(2, $data);
+        $this->assertArrayHasKey('count', $data);
+        $this->assertArrayHasKey('totalTime', $data);
 
-        $this->assertEquals(3, $data['http']['count']);
-        $this->assertEquals(3.1, round($data['http']['totalTime'], 1));
+        $this->assertEquals(3, $data['count']);
+        $this->assertEquals(3.1, round($data['totalTime'], 1));
     }
 }

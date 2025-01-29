@@ -58,15 +58,14 @@ final class ConsoleAppInfoCollectorTest extends AbstractCollectorTestCase
     {
         parent::checkSummaryData($data);
 
-        $this->assertArrayHasKey('console', $data);
-        $this->assertArrayHasKey('php', $data['console']);
-        $this->assertArrayHasKey('version', $data['console']['php']);
-        $this->assertArrayHasKey('request', $data['console']);
-        $this->assertArrayHasKey('startTime', $data['console']['request']);
-        $this->assertArrayHasKey('processingTime', $data['console']['request']);
-        $this->assertArrayHasKey('memory', $data['console']);
-        $this->assertArrayHasKey('peakUsage', $data['console']['memory']);
+        $this->assertArrayHasKey('php', $data);
+        $this->assertArrayHasKey('version', $data['php']);
+        $this->assertArrayHasKey('request', $data);
+        $this->assertArrayHasKey('startTime', $data['request']);
+        $this->assertArrayHasKey('processingTime', $data['request']);
+        $this->assertArrayHasKey('memory', $data);
+        $this->assertArrayHasKey('peakUsage', $data['memory']);
 
-        $this->assertEquals(PHP_VERSION, $data['console']['php']['version']);
+        $this->assertEquals(PHP_VERSION, $data['php']['version']);
     }
 }

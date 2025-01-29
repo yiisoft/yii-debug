@@ -333,10 +333,10 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
     protected function checkSummaryData(array $data): void
     {
         parent::checkSummaryData($data);
-        $this->assertArrayHasKey('fs_stream', $data);
+        $this->assertArrayHasKey('streams', $data);
         $this->assertEquals(
             ['read' => 2, 'mkdir' => 1],
-            $data['fs_stream'],
+            $data['streams'],
             print_r($data, true),
         );
     }

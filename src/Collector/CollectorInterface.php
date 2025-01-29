@@ -11,6 +11,7 @@ interface CollectorInterface
 {
     /**
      * @return string Collector's name.
+     * @psalm-return non-empty-string
      */
     public function getName(): string;
 
