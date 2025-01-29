@@ -31,6 +31,16 @@ final class Debugger
     private readonly DataNormalizer $dataNormalizer;
 
     /**
+     * @var string|null ID of the current request. `null` if debugger is not active.
+     */
+    private ?string $id = null;
+
+    /**
+     * @var bool Whether debugger startup is denied.
+     */
+    private bool $denyStart = false;
+
+    /**
      * @param StorageInterface $storage The storage to store collected data.
      * @param CollectorInterface[] $collectors Collectors to be used.
      * @param DebuggerStartupPolicyInterface $debuggerStartupPolicy Policy to decide whether debugger should be started.
@@ -58,11 +68,6 @@ final class Debugger
     }
 
     /**
-     * @var string|null ID of the current request. `null` if debugger is not active.
-     */
-    private ?string $id = null;
-
-    /**
      * Returns whether debugger is active.
      *
      * @return bool Whether debugger is active.
@@ -83,11 +88,6 @@ final class Debugger
     {
         return $this->id ?? throw new LogicException('Debugger is not started.');
     }
-
-    /**
-     * @var bool Whether debugger startup is denied.
-     */
-    private bool $denyStart = false;
 
     /**
      * Starts debugger and collectors.
@@ -175,7 +175,6 @@ final class Debugger
             $collector->shutdown();
         }
         $this->id = null;
-        $this->denyStart = false;
     }
 
     /**

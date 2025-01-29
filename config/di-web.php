@@ -32,5 +32,9 @@ return [
             ),
             'excludedClasses' => $params['yiisoft/yii-debug']['excludedClasses'],
         ],
+        'reset' => function () {
+            /** @var Debugger $this */
+            $this->denyStart = false;
+        },
     ],
 ];
