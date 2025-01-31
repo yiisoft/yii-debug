@@ -34,7 +34,7 @@ return [
         ],
         'reset' => function () {
             /** @var Debugger $this */
-            $this->denyStart = false;
+            $this->allowStart = true;
         },
     ],
 ];
