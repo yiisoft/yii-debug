@@ -36,9 +36,9 @@ final class Debugger
     private ?string $id = null;
 
     /**
-     * @var bool Whether debugger startup is denied.
+     * @var bool Whether debugger startup is allowed.
      */
-    private bool $denyStart = false;
+    private bool $allowStart = true;
 
     /**
      * @param StorageInterface $storage The storage to store collected data.
@@ -96,12 +96,12 @@ final class Debugger
      */
     public function start(object $event): void
     {
-        if ($this->denyStart) {
+        if (!$this->allowStart) {
             return;
         }
 
         if (!$this->debuggerStartupPolicy->satisfies($event)) {
-            $this->denyStart = true;
+            $this->allowStart = false;
             $this->kill();
             return;
         }
