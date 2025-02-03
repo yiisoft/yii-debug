@@ -37,10 +37,14 @@ final class Debugger
     private readonly DataNormalizer $dataNormalizer;
 
     /**
-     * @var string|null ID of the current request. `null` if debugger is not active.
-     * @psalm-var non-empty-string|null
+     * @var non-empty-string|null ID of the current request. `null` if debugger is not active.
      */
     private ?string $id = null;
+
+    /**
+     * @var bool Whether debugger startup is allowed.
+     */
+    private bool $allowStart = true;
 
     /**
      * @param StorageInterface $storage The storage to store collected data.
@@ -100,7 +104,17 @@ final class Debugger
      */
     public function start(object $event): void
     {
+        if (!$this->allowStart) {
+            return;
+        }
+
         if (!$this->debuggerStartupPolicy->satisfies($event)) {
+            $this->allowStart = false;
+            $this->kill();
+            return;
+        }
+
+        if ($this->isActive()) {
             return;
         }
 
