@@ -37,8 +37,7 @@ final class VarDumperCollectorTest extends AbstractCollectorTestCase
     {
         parent::checkSummaryData($data);
         $this->assertCount(1, $data);
-        $this->assertArrayHasKey('var-dumper', $data);
-        $this->assertArrayHasKey('total', $data['var-dumper']);
-        $this->assertEquals(1, $data['var-dumper']['total']);
+        $this->assertArrayHasKey('total', $data);
+        $this->assertEquals(1, $data['total']);
     }
 }

@@ -71,10 +71,9 @@ final class CommandCollectorTest extends AbstractCollectorTestCase
 
     protected function checkSummaryData(array $data): void
     {
-        $this->assertArrayHasKey('command', $data);
-        $this->assertArrayHasKey('input', $data['command']);
-        $this->assertArrayHasKey('class', $data['command']);
-        $this->assertEquals('test1', $data['command']['input']);
-        $this->assertEquals(null, $data['command']['class']);
+        $this->assertArrayHasKey('input', $data);
+        $this->assertArrayHasKey('class', $data);
+        $this->assertEquals('test1', $data['input']);
+        $this->assertEquals(null, $data['class']);
     }
 }

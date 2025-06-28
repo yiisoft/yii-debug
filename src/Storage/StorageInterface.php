@@ -27,12 +27,12 @@ interface StorageInterface
     /**
      * Read all data from storage
      *
-     * @param string $type type of data being read. Available types:
+     * @param string $type Type of data being read. Available types:
      * - {@see TYPE_SUMMARY}
      * - {@see TYPE_DATA}
      * - {@see TYPE_OBJECTS}
      *
-     * @return array data from storage
+     * @return array Data from storage
      *
      * @psalm-param self::TYPE_* $type
      */

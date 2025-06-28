@@ -15,13 +15,19 @@ use Yiisoft\Yii\Debug\Storage\StorageInterface;
 
 /**
  * Debugger collects data from collectors and stores it in a storage.
+ *
+ * @psalm-type TSummary = array{
+ *     id: non-empty-string,
+ *     collectors: list<non-empty-string>,
+ *     summary: array<non-empty-string, array>,
+ * }
  */
 final class Debugger
 {
     /**
      * @var CollectorInterface[] Collectors, indexed by their names.
      *
-     * @psalm-var array<string, CollectorInterface>
+     * @psalm-var array<non-empty-string, CollectorInterface>
      */
     private readonly array $collectors;
 
@@ -31,7 +37,7 @@ final class Debugger
     private readonly DataNormalizer $dataNormalizer;
 
     /**
-     * @var string|null ID of the current request. `null` if debugger is not active.
+     * @var non-empty-string|null ID of the current request. `null` if debugger is not active.
      */
     private ?string $id = null;
 
@@ -83,6 +89,8 @@ final class Debugger
      * Throws `LogicException` if debugger is not started. Use {@see isActive()} to check if debugger is active.
      *
      * @return string ID of the current request.
+     *
+     * @psalm-return non-empty-string
      */
     public function getId(): string
     {
@@ -110,6 +118,7 @@ final class Debugger
             return;
         }
 
+        /** @var non-empty-string */
         $this->id = str_replace('.', '', uniqid('', true));
 
         foreach ($this->collectors as $collector) {
@@ -178,18 +187,25 @@ final class Debugger
     }
 
     /**
-     * Collects summary data of current request.
+     * Collects summary data of current request. Structure of the summary data is:
+     *
+     * - `id` - ID of the current request,
+     * - `collectors` - list of collector names used in the current request,
+     * - `summary` - summary data collected by collectors indexed by collector names.
+     *
+     * @psalm-return TSummary
      */
     private function collectSummaryData(): array
     {
         $summaryData = [
             'id' => $this->getId(),
             'collectors' => array_keys($this->collectors),
+            'summary' => [],
         ];
 
         foreach ($this->collectors as $collector) {
             if ($collector instanceof SummaryCollectorInterface) {
-                $summaryData = [...$summaryData, ...$collector->getSummary()];
+                $summaryData['summary'][$collector->getName()] = $collector->getSummary();
             }
         }
 
