@@ -8,7 +8,6 @@ use DateTimeZone;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Yii\Debug as D;
 use Yiisoft\Yii\Debug\DataNormalizer;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\ThreeProperties;
 
@@ -729,7 +728,7 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $closureInArrayObject = fn () => new \DateTimeZone('');
+        $closureInArrayObject = fn () => new DateTimeZone('');
         // @formatter:on
         yield 'closure in array' => [
             // @formatter:off
@@ -739,7 +738,7 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $closureWithUsualClassNameObject = fn (DataNormalizer $date) => new \DateTimeZone('');
+        $closureWithUsualClassNameObject = fn (DataNormalizer $date) => new DateTimeZone('');
         // @formatter:on
         yield 'original class name' => [
             $closureWithUsualClassNameObject,
@@ -747,7 +746,7 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $closureWithAliasedClassNameObject = fn (DataNormalizer $date) => new \DateTimeZone('');
+        $closureWithAliasedClassNameObject = fn (DataNormalizer $date) => new DateTimeZone('');
         // @formatter:on
         yield 'class alias' => [
             $closureWithAliasedClassNameObject,
@@ -755,7 +754,7 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $closureWithAliasedNamespaceObject = fn (D\DataNormalizer $date) => new \DateTimeZone('');
+        $closureWithAliasedNamespaceObject = fn (DataNormalizer $date) => new DateTimeZone('');
         // @formatter:on
         yield 'namespace alias' => [
             $closureWithAliasedNamespaceObject,
