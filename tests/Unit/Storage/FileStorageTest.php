@@ -74,7 +74,7 @@ final class FileStorageTest extends AbstractStorageTestCase
 
         // This should not produce any warnings even though a file was deleted
         $summary = $storage->read(StorageInterface::TYPE_SUMMARY);
-        
+
         // We should get 4 results (5 written - 1 deleted)
         $this->assertCount(4, $summary);
     }
