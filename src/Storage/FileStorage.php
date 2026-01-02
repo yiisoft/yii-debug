@@ -8,7 +8,6 @@ use Yiisoft\Files\FileHelper;
 
 use function array_filter;
 use function array_slice;
-use function array_values;
 use function count;
 use function dirname;
 use function file_exists;
@@ -124,7 +123,7 @@ final class FileStorage implements StorageInterface
         );
 
         // Filter out files that no longer exist (due to concurrent deletion)
-        return array_values(array_filter($files, static fn(string $file): bool => file_exists($file)));
+        return array_filter($files, static fn(string $file): bool => file_exists($file));
     }
 
     private function encode(mixed $value): string

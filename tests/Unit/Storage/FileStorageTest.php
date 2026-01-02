@@ -59,7 +59,7 @@ final class FileStorageTest extends AbstractStorageTestCase
         // Write some data
         for ($i = 1; $i <= 5; $i++) {
             $storage->write('test' . $i, [['data' . $i]], [], ['id' => 'test' . $i]);
-            usleep(100000); // 100ms delay to ensure different modification times
+            usleep(1000); // 1ms delay to ensure different modification times
         }
 
         // Find all summary files
