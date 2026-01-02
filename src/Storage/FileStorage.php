@@ -122,7 +122,7 @@ final class FileStorage implements StorageInterface
                 return $mtimeB <=> $mtimeA;
             }
         );
-        
+
         // Filter out files that no longer exist (due to concurrent deletion)
         return array_values(array_filter($files, static fn(string $file): bool => file_exists($file)));
     }
