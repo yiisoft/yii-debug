@@ -116,14 +116,16 @@ final class FileStorage implements StorageInterface
         usort(
             $files,
             static function (string $a, string $b): int {
-                $mtimeA = file_exists($a) ? filemtime($a) : 0;
-                $mtimeB = file_exists($b) ? filemtime($b) : 0;
-                return $mtimeB <=> $mtimeA;
+                // Use @ to suppress warnings when files are deleted concurrently by another process
+                $mtimeA = @filemtime($a);
+                $mtimeB = @filemtime($b);
+                // filemtime() returns false if file doesn't exist, treat as 0 for sorting
+                return ($mtimeB ?: 0) <=> ($mtimeA ?: 0);
             }
         );
 
         // Filter out files that no longer exist (due to concurrent deletion)
-        return array_filter($files, static fn(string $file): bool => file_exists($file));
+        return array_filter($files, static fn(string $file): bool => @file_exists($file));
     }
 
     private function encode(mixed $value): string
