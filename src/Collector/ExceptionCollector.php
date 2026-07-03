@@ -34,7 +34,7 @@ final class ExceptionCollector implements SummaryCollectorInterface
             $exceptions[] = $throwable;
         }
 
-        return array_map([$this, 'serializeException'], $exceptions);
+        return array_map($this->serializeException(...), $exceptions);
     }
 
     public function collect(ApplicationError $error): void
