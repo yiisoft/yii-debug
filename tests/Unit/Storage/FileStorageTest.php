@@ -51,6 +51,34 @@ final class FileStorageTest extends AbstractStorageTestCase
         $this->assertDirectoryDoesNotExist($this->path);
     }
 
+    public function testConcurrentDeletion(): void
+    {
+        $storage = $this->getStorage();
+        $storage->setHistorySize(10);
+
+        // Write some data
+        for ($i = 1; $i <= 5; $i++) {
+            $storage->write('test' . $i, [['data' . $i]], [], ['id' => 'test' . $i]);
+            usleep(1000); // 1ms delay to ensure different modification times
+        }
+
+        // Find all summary files
+        $pattern = $this->path . '/**/**/summary.json';
+        $summaryFiles = glob($pattern, GLOB_NOSORT);
+        $this->assertNotEmpty($summaryFiles, 'Should have summary files');
+
+        // Delete one summary file to simulate concurrent deletion during gc
+        if (!empty($summaryFiles)) {
+            unlink($summaryFiles[0]);
+        }
+
+        // This should not produce any warnings even though a file was deleted
+        $summary = $storage->read(StorageInterface::TYPE_SUMMARY);
+
+        // We should get 4 results (5 written - 1 deleted)
+        $this->assertCount(4, $summary);
+    }
+
     public function getStorage(): FileStorage
     {
         return new FileStorage($this->path);

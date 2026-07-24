@@ -6,9 +6,11 @@ namespace Yiisoft\Yii\Debug\Storage;
 
 use Yiisoft\Files\FileHelper;
 
+use function array_filter;
 use function array_slice;
 use function count;
 use function dirname;
+use function file_exists;
 use function filemtime;
 use function glob;
 use function json_decode;
@@ -113,9 +115,17 @@ final class FileStorage implements StorageInterface
 
         usort(
             $files,
-            static fn (string $a, string $b) => filemtime($b) <=> filemtime($a)
+            static function (string $a, string $b): int {
+                // Use @ to suppress warnings when files are deleted concurrently by another process
+                $mtimeA = @filemtime($a);
+                $mtimeB = @filemtime($b);
+                // filemtime() returns false if file doesn't exist, treat as 0 for sorting
+                return ($mtimeB ?: 0) <=> ($mtimeA ?: 0);
+            }
         );
-        return $files;
+
+        // Filter out files that no longer exist (due to concurrent deletion)
+        return array_filter($files, static fn(string $file): bool => @file_exists($file));
     }
 
     private function encode(mixed $value): string
