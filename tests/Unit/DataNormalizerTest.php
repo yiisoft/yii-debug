@@ -381,7 +381,7 @@ final class DataNormalizerTest extends TestCase
             $closureInsideObject,
             [
                 "stdClass#{$closureInsideObjectId}" => [
-                    'public $closure' => 'fn () => true',
+                    'public $closure' => 'fn() => true',
                 ],
             ],
         ];
@@ -587,7 +587,7 @@ final class DataNormalizerTest extends TestCase
         // @formatter:on
         yield 'short function' => [
             $shortFunctionObject,
-            'fn () => 1',
+            'fn() => 1',
         ];
 
         // @formatter:off
@@ -596,7 +596,7 @@ final class DataNormalizerTest extends TestCase
 
         yield 'short static function' => [
             $staticShortFunctionObject,
-            'static fn () => 1',
+            'static fn() => 1',
         ];
 
         // @formatter:off
@@ -700,7 +700,7 @@ final class DataNormalizerTest extends TestCase
             // @formatter:off
             [$closureInArrayObject],
             // @formatter:on
-            ["fn () => new \\DateTimeZone('')"],
+            ["fn() => new \\DateTimeZone('')"],
         ];
 
         // @formatter:off
@@ -708,7 +708,7 @@ final class DataNormalizerTest extends TestCase
         // @formatter:on
         yield 'original class name' => [
             $closureWithUsualClassNameObject,
-            "fn (\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
+            "fn(\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
         ];
 
         // @formatter:off
@@ -716,7 +716,7 @@ final class DataNormalizerTest extends TestCase
         // @formatter:on
         yield 'class alias' => [
             $closureWithAliasedClassNameObject,
-            "fn (\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
+            "fn(\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
         ];
 
         // @formatter:off
@@ -724,14 +724,14 @@ final class DataNormalizerTest extends TestCase
         // @formatter:on
         yield 'namespace alias' => [
             $closureWithAliasedNamespaceObject,
-            "fn (\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
+            "fn(\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
         ];
         // @formatter:off
         $closureWithNullCollisionOperatorObject = fn() => $_ENV['var'] ?? null;
         // @formatter:on
         yield 'closure with null-collision operator' => [
             $closureWithNullCollisionOperatorObject,
-            "fn () => \$_ENV['var'] ?? null",
+            "fn() => \$_ENV['var'] ?? null",
         ];
         yield 'utf8 supported' => [
             '🤣',
