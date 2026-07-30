@@ -41,9 +41,8 @@ final class CommandCollector implements SummaryCollectorInterface
     private array $commands = [];
 
     public function __construct(
-        private readonly TimelineCollector $timelineCollector
-    ) {
-    }
+        private readonly TimelineCollector $timelineCollector,
+    ) {}
 
     public function getCollected(): array
     {

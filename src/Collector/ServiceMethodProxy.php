@@ -15,7 +15,7 @@ class ServiceMethodProxy extends ServiceProxy
          * @psalm-var array<string, callable>
          */
         private readonly array $methods,
-        ContainerProxyConfig $config
+        ContainerProxyConfig $config,
     ) {
         parent::__construct($service, $instance, $config);
     }

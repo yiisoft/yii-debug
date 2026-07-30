@@ -11,21 +11,16 @@ final class StubCollector implements CollectorInterface
     public function __construct(
         private readonly string $name = self::class,
         private readonly array $collected = [],
-    ) {
-    }
+    ) {}
 
     public function getName(): string
     {
         return $this->name;
     }
 
-    public function startup(): void
-    {
-    }
+    public function startup(): void {}
 
-    public function shutdown(): void
-    {
-    }
+    public function shutdown(): void {}
 
     public function getCollected(): array
     {

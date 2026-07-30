@@ -8,8 +8,7 @@ final class PredefinedCondition implements ConditionInterface
 {
     public function __construct(
         private readonly bool $match,
-    ) {
-    }
+    ) {}
 
     public function match(object $event): bool
     {

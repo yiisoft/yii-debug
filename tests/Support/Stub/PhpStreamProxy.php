@@ -7,6 +7,11 @@ namespace Yiisoft\Yii\Debug\Tests\Support\Stub;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
+use function func_get_args;
+
+use const SEEK_SET;
+use const STREAM_IS_URL;
+
 final class PhpStreamProxy implements StreamWrapperInterface
 {
     public static bool $registered = false;

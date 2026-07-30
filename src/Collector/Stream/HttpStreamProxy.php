@@ -15,6 +15,7 @@ use function in_array;
 use function stream_get_wrappers;
 
 use const SEEK_SET;
+use const STREAM_IS_URL;
 
 /**
  * @psalm-suppress MixedInferredReturnType, MixedReturnStatement
@@ -57,16 +58,6 @@ final class HttpStreamProxy implements StreamWrapperInterface
         $this->decorated->context = $this->context;
     }
 
-    public function __call(string $name, array $arguments)
-    {
-        try {
-            self::unregister();
-            return $this->decorated->{$name}(...$arguments);
-        } finally {
-            self::register();
-        }
-    }
-
     public function __destruct()
     {
         if (self::$collector === null) {
@@ -80,6 +71,16 @@ final class HttpStreamProxy implements StreamWrapperInterface
             );
         }
         self::unregister();
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        try {
+            self::unregister();
+            return $this->decorated->{$name}(...$arguments);
+        } finally {
+            self::register();
+        }
     }
 
     public function __get(string $name)

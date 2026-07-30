@@ -28,29 +28,29 @@ final class HttpClientCollectorTest extends AbstractCollectorTestCase
             new Request('POST', 'http://yiiframework.com'),
             startTime: 12.10,
             line: 'file2:555',
-            uniqueId: 'test2'
+            uniqueId: 'test2',
         );
         $collector->collect(
             new Request('GET', 'http://yiiframework.com'),
             startTime: 15.00,
             line: 'file2:666',
-            uniqueId: 'test3'
+            uniqueId: 'test3',
         );
 
         $collector->collectTotalTime(
             new Response(200, [], 'test'),
             endTime: 13.10,
-            uniqueId: 'test1'
+            uniqueId: 'test1',
         );
         $collector->collectTotalTime(
             new Response(200, [], 'test'),
             endTime: 12.20,
-            uniqueId: 'test2'
+            uniqueId: 'test2',
         );
         $collector->collectTotalTime(
             new Response(200, [], 'test'),
             endTime: 20.00,
-            uniqueId: 'test4'
+            uniqueId: 'test4',
         );
     }
 

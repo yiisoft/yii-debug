@@ -22,8 +22,7 @@ final class ContainerProxyConfig
         private ?ServiceCollector $collector = null,
         private ?string $proxyCachePath = null,
         private int $logLevel = ContainerInterfaceProxy::LOG_NOTHING,
-    ) {
-    }
+    ) {}
 
     public function activate(): self
     {

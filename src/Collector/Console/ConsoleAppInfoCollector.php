@@ -13,6 +13,8 @@ use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 use Yiisoft\Yii\Debug\Collector\TimelineCollector;
 
+use const PHP_VERSION;
+
 final class ConsoleAppInfoCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
@@ -23,9 +25,8 @@ final class ConsoleAppInfoCollector implements SummaryCollectorInterface
     private float $requestProcessingTimeStopped = 0;
 
     public function __construct(
-        private readonly TimelineCollector $timelineCollector
-    ) {
-    }
+        private readonly TimelineCollector $timelineCollector,
+    ) {}
 
     public function getCollected(): array
     {

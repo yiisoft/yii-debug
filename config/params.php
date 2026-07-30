@@ -25,6 +25,12 @@ use Yiisoft\Yii\Debug\Collector\VarDumperCollector;
 use Yiisoft\Yii\Debug\Collector\Web\RequestCollector;
 use Yiisoft\Yii\Debug\Collector\Web\WebAppInfoCollector;
 use Yiisoft\Yii\Debug\Command\DebugResetCommand;
+use PhpParser\ErrorHandler\Throwing;
+use PhpParser\NameContext;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\Node\Name;
+use PhpParser\Parser\Php7;
 
 /**
  * @var $params array
@@ -53,18 +59,18 @@ return [
             CommandCollector::class,
         ],
         'trackedServices' => [
-            Injector::class => fn (ContainerInterface $container) => new Injector($container),
+            Injector::class => fn(ContainerInterface $container) => new Injector($container),
             LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             EventDispatcherInterface::class => [EventDispatcherInterfaceProxy::class, EventCollector::class],
             ClientInterface::class => [HttpClientInterfaceProxy::class, HttpClientCollector::class],
         ],
         'excludedClasses' => [
-            'PhpParser\\Parser\\Php7',
-            'PhpParser\\NodeTraverser',
-            'PhpParser\\NodeVisitor\\NameResolver',
-            'PhpParser\\NameContext',
-            'PhpParser\\Node\\Name',
-            'PhpParser\\ErrorHandler\\Throwing',
+            Php7::class,
+            NodeTraverser::class,
+            NameResolver::class,
+            NameContext::class,
+            Name::class,
+            Throwing::class,
             'Spiral\\Attributes\\Internal\\AttributeParser',
             'Doctrine\\Inflector\\Rules\\Pattern',
             'Doctrine\\Inflector\\Rules\\Word',

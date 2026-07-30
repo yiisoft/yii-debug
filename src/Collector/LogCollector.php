@@ -13,9 +13,8 @@ class LogCollector implements SummaryCollectorInterface
     private array $messages = [];
 
     public function __construct(
-        private readonly TimelineCollector $timelineCollector
-    ) {
-    }
+        private readonly TimelineCollector $timelineCollector,
+    ) {}
 
     public function getCollected(): array
     {
@@ -41,11 +40,6 @@ class LogCollector implements SummaryCollectorInterface
         $this->timelineCollector->collect($this, count($this->messages));
     }
 
-    private function reset(): void
-    {
-        $this->messages = [];
-    }
-
     public function getSummary(): array
     {
         if (!$this->isActive()) {
@@ -54,5 +48,10 @@ class LogCollector implements SummaryCollectorInterface
         return [
             'total' => count($this->messages),
         ];
+    }
+
+    private function reset(): void
+    {
+        $this->messages = [];
     }
 }

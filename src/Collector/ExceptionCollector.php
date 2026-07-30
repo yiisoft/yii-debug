@@ -14,9 +14,8 @@ final class ExceptionCollector implements SummaryCollectorInterface
     private ?Throwable $exception = null;
 
     public function __construct(
-        private readonly TimelineCollector $timelineCollector
-    ) {
-    }
+        private readonly TimelineCollector $timelineCollector,
+    ) {}
 
     public function getCollected(): array
     {
@@ -34,7 +33,7 @@ final class ExceptionCollector implements SummaryCollectorInterface
             $exceptions[] = $throwable;
         }
 
-        return array_map([$this, 'serializeException'], $exceptions);
+        return array_map($this->serializeException(...), $exceptions);
     }
 
     public function collect(ApplicationError $error): void

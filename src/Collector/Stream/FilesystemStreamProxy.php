@@ -10,7 +10,10 @@ use Yiisoft\Yii\Debug\Helper\BacktraceMatcher;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapper;
 use Yiisoft\Yii\Debug\Helper\StreamWrapper\StreamWrapperInterface;
 
+use function func_get_args;
+
 use const SEEK_SET;
+use const STREAM_IS_URL;
 
 /**
  * @psalm-suppress MixedInferredReturnType, MixedReturnStatement
@@ -48,16 +51,6 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
         $this->decorated->context = $this->context;
     }
 
-    public function __call(string $name, array $arguments)
-    {
-        try {
-            self::unregister();
-            return $this->decorated->{$name}(...$arguments);
-        } finally {
-            self::register();
-        }
-    }
-
     public function __destruct()
     {
         if (self::$collector === null) {
@@ -71,6 +64,16 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
             );
         }
         self::unregister();
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        try {
+            self::unregister();
+            return $this->decorated->{$name}(...$arguments);
+        } finally {
+            self::register();
+        }
     }
 
     public function __get(string $name)
@@ -102,13 +105,6 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
         }
         @stream_wrapper_restore('file');
         self::$registered = false;
-    }
-
-    private function isIgnored(): bool
-    {
-        $backtrace = debug_backtrace();
-        return BacktraceMatcher::matchesClass($backtrace[3], self::$ignoredClasses)
-            || BacktraceMatcher::matchesFile($backtrace[3], self::$ignoredPathPatterns);
     }
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
@@ -275,5 +271,12 @@ final class FilesystemStreamProxy implements StreamWrapperInterface
     public function url_stat(string $path, int $flags): array|false
     {
         return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    private function isIgnored(): bool
+    {
+        $backtrace = debug_backtrace();
+        return BacktraceMatcher::matchesClass($backtrace[3], self::$ignoredClasses)
+            || BacktraceMatcher::matchesFile($backtrace[3], self::$ignoredPathPatterns);
     }
 }

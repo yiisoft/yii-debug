@@ -15,8 +15,7 @@ final class BlackListCollectorPolicy implements CollectorStartupPolicyInterface
          * @psalm-var array<string, ConditionInterface>
          */
         private readonly array $conditions,
-    ) {
-    }
+    ) {}
 
     public function satisfies(CollectorInterface $collector, object $event): bool
     {

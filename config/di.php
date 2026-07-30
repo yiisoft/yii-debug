@@ -27,10 +27,10 @@ $common = [
         if (str_starts_with($path, '@')) {
             if ($aliases === null) {
                 throw new LogicException(
-                    sprintf(
+                    \sprintf(
                         'yiisoft/aliases dependency is required to resolve path "%s".',
-                        $path
-                    )
+                        $path,
+                    ),
                 );
             }
             $path = $aliases->get($path);
@@ -65,7 +65,7 @@ return array_merge([
             $dispatcher,
             $collector,
             $path,
-            $logLevel
+            $logLevel,
         );
     },
     FilesystemStreamCollector::class => [

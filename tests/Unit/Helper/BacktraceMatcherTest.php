@@ -9,6 +9,10 @@ use ReflectionClass;
 use stdClass;
 use Yiisoft\Yii\Debug\Helper\BacktraceMatcher;
 
+use function dirname;
+
+use const DIRECTORY_SEPARATOR;
+
 final class BacktraceMatcherTest extends TestCase
 {
     public function testClassIgnorance(): void
@@ -35,8 +39,8 @@ final class BacktraceMatcherTest extends TestCase
         $this->assertTrue(
             BacktraceMatcher::matchesFile(
                 $backtrace[0],
-                [preg_quote(dirname($file) . DIRECTORY_SEPARATOR) . '*']
-            )
+                [preg_quote(dirname($file) . DIRECTORY_SEPARATOR) . '*'],
+            ),
         );
         $this->assertFalse(BacktraceMatcher::matchesFile($backtrace[0], [preg_quote(__FILE__)]));
     }

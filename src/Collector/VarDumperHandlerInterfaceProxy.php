@@ -7,6 +7,8 @@ namespace Yiisoft\Yii\Debug\Collector;
 use Yiisoft\VarDumper\HandlerInterface;
 use Yiisoft\Yii\Debug\ProxyDecoratedCalls;
 
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+
 final class VarDumperHandlerInterfaceProxy implements HandlerInterface
 {
     use ProxyDecoratedCalls;
@@ -14,8 +16,7 @@ final class VarDumperHandlerInterfaceProxy implements HandlerInterface
     public function __construct(
         private readonly HandlerInterface $decorated,
         private readonly VarDumperCollector $collector,
-    ) {
-    }
+    ) {}
 
     public function handle(mixed $variable, int $depth, bool $highlight = false): void
     {
@@ -39,7 +40,7 @@ final class VarDumperHandlerInterfaceProxy implements HandlerInterface
 
         $this->collector->collect(
             $variable,
-            $callStack === null ? '' : $callStack['file'] . ':' . $callStack['line']
+            $callStack === null ? '' : $callStack['file'] . ':' . $callStack['line'],
         );
         $this->decorated->handle($variable, $depth, $highlight);
     }

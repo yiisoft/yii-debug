@@ -13,6 +13,11 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
+    /**
+     * @psalm-var array<string, list<array{path: string, args: array}>>
+     */
+    private array $operations = [];
+
     public function __construct(
         /**
          * Collection of regexps to ignore files sources to sniff.
@@ -27,13 +32,7 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
          * @var string[]
          */
         private readonly array $ignoredClasses = [],
-    ) {
-    }
-
-    /**
-     * @psalm-var array<string, list<array{path: string, args: array}>>
-     */
-    private array $operations = [];
+    ) {}
 
     public function getCollected(): array
     {
@@ -80,9 +79,9 @@ final class FilesystemStreamCollector implements SummaryCollectorInterface
         return [
             'streams' => array_merge(
                 ...array_map(
-                    fn (string $operation) => [$operation => count($this->operations[$operation])],
-                    array_keys($this->operations)
-                )
+                    fn(string $operation) => [$operation => count($this->operations[$operation])],
+                    array_keys($this->operations),
+                ),
             ),
         ];
     }

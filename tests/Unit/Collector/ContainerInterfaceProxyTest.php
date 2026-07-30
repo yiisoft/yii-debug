@@ -35,6 +35,8 @@ use Yiisoft\Yii\Debug\Tests\Support\Stub\Implementation2;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface1;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\Interface2;
 
+use function sprintf;
+
 final class ContainerInterfaceProxyTest extends TestCase
 {
     private string $path = 'tests/container-proxy';
@@ -54,8 +56,8 @@ final class ContainerInterfaceProxyTest extends TestCase
             $containerProxy->withDecoratedServices(
                 [
                     LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
-                ]
-            )
+                ],
+            ),
         );
     }
 
@@ -74,7 +76,7 @@ final class ContainerInterfaceProxyTest extends TestCase
         $config = new ContainerProxyConfig(
             true,
             [
-                LoggerInterface::class => fn (ContainerInterface $container) => $container->get(LoggerInterfaceProxy::class),
+                LoggerInterface::class => fn(ContainerInterface $container) => $container->get(LoggerInterfaceProxy::class),
                 EventDispatcherInterface::class => [
                     EventDispatcherInterfaceProxy::class,
                     EventCollector::class,
@@ -83,7 +85,7 @@ final class ContainerInterfaceProxyTest extends TestCase
             $dispatcherMock,
             $this->createServiceCollector(),
             $this->path,
-            ContainerInterfaceProxy::LOG_ARGUMENTS
+            ContainerInterfaceProxy::LOG_ARGUMENTS,
         );
         $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $config);
 
@@ -113,7 +115,7 @@ final class ContainerInterfaceProxyTest extends TestCase
             $dispatcherMock,
             $serviceCollector,
             $this->path,
-            ContainerInterfaceProxy::LOG_ARGUMENTS
+            ContainerInterfaceProxy::LOG_ARGUMENTS,
         );
         $container = $this->createContainer();
         $containerProxy = new ContainerInterfaceProxy($container, $config);
@@ -138,14 +140,14 @@ final class ContainerInterfaceProxyTest extends TestCase
             $dispatcherMock,
             $this->createServiceCollector(),
             $this->path,
-            ContainerInterfaceProxy::LOG_ARGUMENTS
+            ContainerInterfaceProxy::LOG_ARGUMENTS,
         );
         $containerProxy = new ContainerInterfaceProxy($this->createContainer(), $config);
 
         $this->assertInstanceOf(EventDispatcherInterface::class, $containerProxy->get(EventDispatcherInterface::class));
         $this->assertInstanceOf(
             stdClass::class,
-            $containerProxy->get(EventDispatcherInterface::class)->dispatch(new stdClass())
+            $containerProxy->get(EventDispatcherInterface::class)->dispatch(new stdClass()),
         );
     }
 
@@ -160,7 +162,7 @@ final class ContainerInterfaceProxyTest extends TestCase
             sprintf(
                 'No definition or class found or resolvable for "%s" while building it.',
                 CollectorInterface::class,
-            )
+            ),
         );
         $containerProxy->get(CollectorInterface::class);
     }
@@ -184,7 +186,7 @@ final class ContainerInterfaceProxyTest extends TestCase
         $this->assertNotNull($containerProxy->get(ListenerProviderInterface::class));
         $this->assertInstanceOf(
             ListenerProviderInterface::class,
-            $containerProxy->get(ListenerProviderInterface::class)
+            $containerProxy->get(ListenerProviderInterface::class),
         );
     }
 
@@ -192,19 +194,17 @@ final class ContainerInterfaceProxyTest extends TestCase
     {
         $container = new CompositeContainer();
         $container->attach(
-            container: new class () implements ContainerInterface {
+            container: new class implements ContainerInterface {
                 public function get($id)
                 {
-                    throw new class () extends Exception implements ContainerExceptionInterface {
-                    };
+                    throw new class extends Exception implements ContainerExceptionInterface {};
                 }
 
                 public function has($id): bool
                 {
-                    throw new class () extends Exception implements ContainerExceptionInterface {
-                    };
+                    throw new class extends Exception implements ContainerExceptionInterface {};
                 }
-            }
+            },
         );
         $container->attach($container);
 
@@ -235,17 +235,15 @@ final class ContainerInterfaceProxyTest extends TestCase
     public function testHasThrowsExceptionAndErrorInCollectorIsNotEmpty(): void
     {
         $container = new CompositeContainer();
-        $container->attach(new class () implements ContainerInterface {
+        $container->attach(new class implements ContainerInterface {
             public function get($id)
             {
-                throw new class () extends Exception implements ContainerExceptionInterface {
-                };
+                throw new class extends Exception implements ContainerExceptionInterface {};
             }
 
             public function has($id): bool
             {
-                throw new class () extends Exception implements ContainerExceptionInterface {
-                };
+                throw new class extends Exception implements ContainerExceptionInterface {};
             }
         });
         $container->attach($container);
@@ -350,7 +348,7 @@ final class ContainerInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $container = new class () implements ContainerInterface {
+        $container = new class implements ContainerInterface {
             public $var = null;
 
             public function getProxiedCall(): string
@@ -365,14 +363,12 @@ final class ContainerInterfaceProxyTest extends TestCase
 
             public function get($id)
             {
-                throw new class () extends Exception implements ContainerExceptionInterface {
-                };
+                throw new class extends Exception implements ContainerExceptionInterface {};
             }
 
             public function has($id): bool
             {
-                throw new class () extends Exception implements ContainerExceptionInterface {
-                };
+                throw new class extends Exception implements ContainerExceptionInterface {};
             }
         };
         $proxy = new ContainerInterfaceProxy($container, new ContainerProxyConfig());
@@ -381,6 +377,11 @@ final class ContainerInterfaceProxyTest extends TestCase
         $this->assertEquals($args = [1, new stdClass(), 'string'], $proxy->setProxiedCall($args));
         $proxy->var = '123';
         $this->assertEquals('123', $proxy->var);
+    }
+
+    protected function createServiceCollector(): ServiceCollector
+    {
+        return new ServiceCollector(new TimelineCollector());
     }
 
     private function createConfig(int $logLevel = ContainerInterfaceProxy::LOG_ARGUMENTS): ContainerProxyConfig
@@ -397,7 +398,7 @@ final class ContainerInterfaceProxyTest extends TestCase
             $this->createMock(EventDispatcherInterface::class),
             $this->createServiceCollector(),
             $this->path,
-            $logLevel
+            $logLevel,
         );
     }
 
@@ -413,10 +414,5 @@ final class ContainerInterfaceProxyTest extends TestCase
                 ...$definitions,
             ]);
         return new Container($config);
-    }
-
-    protected function createServiceCollector(): ServiceCollector
-    {
-        return new ServiceCollector(new TimelineCollector());
     }
 }

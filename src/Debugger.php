@@ -162,8 +162,8 @@ final class Debugger
     private function flush(): void
     {
         $collectedData = array_map(
-            static fn (CollectorInterface $collector) => $collector->getCollected(),
-            $this->collectors
+            static fn(CollectorInterface $collector) => $collector->getCollected(),
+            $this->collectors,
         );
 
         /** @var array[] $data */

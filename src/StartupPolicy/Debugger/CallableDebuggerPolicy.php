@@ -19,7 +19,7 @@ final class CallableDebuggerPolicy implements DebuggerStartupPolicyInterface
      * @psalm-param TCallable $callable
      */
     public function __construct(
-        callable $callable
+        callable $callable,
     ) {
         $this->callable = $callable;
     }

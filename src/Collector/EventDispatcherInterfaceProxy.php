@@ -13,9 +13,8 @@ final class EventDispatcherInterfaceProxy implements EventDispatcherInterface
 
     public function __construct(
         private readonly EventDispatcherInterface $decorated,
-        private readonly EventCollector $collector
-    ) {
-    }
+        private readonly EventCollector $collector,
+    ) {}
 
     public function dispatch(object $event): object
     {

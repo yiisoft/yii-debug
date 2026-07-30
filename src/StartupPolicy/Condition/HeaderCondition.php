@@ -18,8 +18,7 @@ final class HeaderCondition implements ConditionInterface
          * @psalm-var non-empty-string
          */
         private readonly string $headerName,
-    ) {
-    }
+    ) {}
 
     public function match(object $event): bool
     {

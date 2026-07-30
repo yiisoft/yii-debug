@@ -14,23 +14,6 @@ use function is_array;
 
 final class HttpStreamCollectorTest extends AbstractCollectorTestCase
 {
-    /**
-     * @param HttpStreamCollector $collector
-     */
-    protected function collectTestData(CollectorInterface $collector): void
-    {
-        $collector->collect(
-            operation: 'read',
-            path: __FILE__,
-            args: ['arg1' => 'v1', 'arg2' => 'v2'],
-        );
-        $collector->collect(
-            operation: 'read',
-            path: __FILE__,
-            args: ['arg3' => 'v3', 'arg4' => 'v4'],
-        );
-    }
-
     #[DataProvider('dataSkipCollectOnMatchIgnoreReferences')]
     public function testSkipCollectOnMatchIgnoreReferences(
         string $url,
@@ -68,8 +51,7 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
 
     public static function dataSkipCollectOnMatchIgnoreReferences(): iterable
     {
-        $httpStreamBefore = function (string $url) {
-        };
+        $httpStreamBefore = function (string $url) {};
         $httpStreamOperation = static function (string $url) {
             $stream = fopen($url, 'r');
             fread($stream, 4);
@@ -137,6 +119,23 @@ final class HttpStreamCollectorTest extends AbstractCollectorTestCase
             $httpStreamAfter,
             [],
         ];
+    }
+
+    /**
+     * @param HttpStreamCollector $collector
+     */
+    protected function collectTestData(CollectorInterface $collector): void
+    {
+        $collector->collect(
+            operation: 'read',
+            path: __FILE__,
+            args: ['arg1' => 'v1', 'arg2' => 'v2'],
+        );
+        $collector->collect(
+            operation: 'read',
+            path: __FILE__,
+            args: ['arg3' => 'v3', 'arg4' => 'v4'],
+        );
     }
 
     protected function getCollector(): CollectorInterface

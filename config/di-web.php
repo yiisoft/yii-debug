@@ -10,7 +10,7 @@ use Yiisoft\Yii\Debug\StartupPolicy\Condition\HeaderCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\UriPathCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Debugger\DenyDebuggerPolicy;
 
-if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
+if (!(bool) ($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
 }
 
@@ -21,13 +21,13 @@ return [
                 array_merge(
                     $params['yiisoft/yii-debug']['collectors'],
                     $params['yiisoft/yii-debug']['collectors.web'] ?? [],
-                )
+                ),
             ),
             'debuggerStartupPolicy' => DynamicReference::to(
-                static fn () => new DenyDebuggerPolicy(
+                static fn() => new DenyDebuggerPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
                     new HeaderCondition('X-Debug-Ignore'),
-                    new UriPathCondition($params['yiisoft/yii-debug']['ignoredRequests'])
+                    new UriPathCondition($params['yiisoft/yii-debug']['ignoredRequests']),
                 ),
             ),
             'excludedClasses' => $params['yiisoft/yii-debug']['excludedClasses'],

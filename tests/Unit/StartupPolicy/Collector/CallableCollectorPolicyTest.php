@@ -14,9 +14,9 @@ final class CallableCollectorPolicyTest extends TestCase
 {
     public static function dataBase(): iterable
     {
-        yield 'true' => [true, static fn ($collector, $event) => true];
-        yield 'false' => [false, static fn ($collector, $event) => false];
-        yield 'check-arguments' => [true, static fn (StubCollector $collector, stdClass $event) => true];
+        yield 'true' => [true, static fn($collector, $event) => true];
+        yield 'false' => [false, static fn($collector, $event) => false];
+        yield 'check-arguments' => [true, static fn(StubCollector $collector, stdClass $event) => true];
     }
 
     #[DataProvider('dataBase')]

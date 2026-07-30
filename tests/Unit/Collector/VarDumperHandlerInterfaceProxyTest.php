@@ -47,7 +47,7 @@ final class VarDumperHandlerInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $handler = new class () implements HandlerInterface {
+        $handler = new class implements HandlerInterface {
             public $var = null;
 
             public function getProxiedCall(): string
@@ -60,9 +60,7 @@ final class VarDumperHandlerInterfaceProxyTest extends TestCase
                 return $args;
             }
 
-            public function handle(mixed $variable, int $depth, bool $highlight = false): void
-            {
-            }
+            public function handle(mixed $variable, int $depth, bool $highlight = false): void {}
         };
         $collector = new VarDumperCollector(new TimelineCollector());
         $proxy = new VarDumperHandlerInterfaceProxy($handler, $collector);

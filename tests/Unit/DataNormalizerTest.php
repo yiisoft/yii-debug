@@ -17,6 +17,9 @@ use function sprintf;
 use const AF_INET;
 use const SOCK_STREAM;
 use const SOL_TCP;
+use const STDERR;
+use const STDIN;
+use const STDOUT;
 
 final class DataNormalizerTest extends TestCase
 {
@@ -252,25 +255,6 @@ final class DataNormalizerTest extends TestCase
         ];
     }
 
-    private static function getNested(int $depth, mixed $data): array
-    {
-        $objectIds = [];
-        $head = $lvl = new stdClass();
-        $objectIds[] = spl_object_id($head);
-        $lvl->id = 'lvl0';
-
-        for ($i = 1; $i < $depth; $i++) {
-            $nested = new stdClass();
-            $nested->id = 'lvl' . $i;
-            $lvl->{'lvl' . $i} = $nested;
-            $lvl = $nested;
-            $objectIds[] = spl_object_id($nested);
-        }
-        $lvl->{'lvl' . $i} = $data;
-
-        return [$head, $objectIds];
-    }
-
     public function testObjectExpanding(): void
     {
         $var = $this->createNested(10, [[[[[[[[['key' => 'end']]]]]]]]]);
@@ -348,24 +332,6 @@ final class DataNormalizerTest extends TestCase
         $this->assertEquals($expectedResult, $objectsMap);
     }
 
-    private function createNested(int $depth, mixed $data): object
-    {
-        $head = $lvl = new stdClass();
-        $lvl->id = 'lvl1';
-
-        for ($i = 2; $i <= $depth; $i++) {
-            $nested = new stdClass();
-            $nested->id = 'lvl' . $i;
-            $lvl->prop1 = $nested;
-            $lvl->prop2 = $nested;
-            $lvl = $nested;
-        }
-        $lvl->loop = $data;
-        $lvl->head = $head;
-
-        return $head;
-    }
-
     #[DataProvider('objectsMapDataProvider')]
     public function testObjectsMap(mixed $var, $expectedResult): void
     {
@@ -408,14 +374,14 @@ final class DataNormalizerTest extends TestCase
         ];
 
         $closureInsideObject = new stdClass();
-        $closureObject = fn () => true;
+        $closureObject = fn() => true;
         $closureInsideObject->closure = $closureObject;
         $closureInsideObjectId = spl_object_id($closureInsideObject);
         yield 'closure inside std class' => [
             $closureInsideObject,
             [
                 "stdClass#{$closureInsideObjectId}" => [
-                    'public $closure' => 'fn () => true',
+                    'public $closure' => 'fn() => true',
                 ],
             ],
         ];
@@ -487,7 +453,7 @@ final class DataNormalizerTest extends TestCase
 
     public function testObjectProvidesDebugInfoMethod(): void
     {
-        $variable = new class () {
+        $variable = new class {
             public function __debugInfo(): array
             {
                 return ['test' => 'ok'];
@@ -617,20 +583,20 @@ final class DataNormalizerTest extends TestCase
     public static function prepareDataDataProvider(): iterable
     {
         // @formatter:off
-        $shortFunctionObject = fn () => 1;
+        $shortFunctionObject = fn() => 1;
         // @formatter:on
         yield 'short function' => [
             $shortFunctionObject,
-            'fn () => 1',
+            'fn() => 1',
         ];
 
         // @formatter:off
-        $staticShortFunctionObject = static fn () => 1;
+        $staticShortFunctionObject = static fn() => 1;
         // @formatter:on
 
         yield 'short static function' => [
             $staticShortFunctionObject,
-            'static fn () => 1',
+            'static fn() => 1',
         ];
 
         // @formatter:off
@@ -728,44 +694,44 @@ final class DataNormalizerTest extends TestCase
         ];
 
         // @formatter:off
-        $closureInArrayObject = fn () => new DateTimeZone('');
+        $closureInArrayObject = fn() => new DateTimeZone('');
         // @formatter:on
         yield 'closure in array' => [
             // @formatter:off
             [$closureInArrayObject],
             // @formatter:on
-            ["fn () => new \\DateTimeZone('')"],
+            ["fn() => new \\DateTimeZone('')"],
         ];
 
         // @formatter:off
-        $closureWithUsualClassNameObject = fn (DataNormalizer $date) => new DateTimeZone('');
+        $closureWithUsualClassNameObject = fn(DataNormalizer $date) => new DateTimeZone('');
         // @formatter:on
         yield 'original class name' => [
             $closureWithUsualClassNameObject,
-            "fn (\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
+            "fn(\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
         ];
 
         // @formatter:off
-        $closureWithAliasedClassNameObject = fn (DataNormalizer $date) => new DateTimeZone('');
+        $closureWithAliasedClassNameObject = fn(DataNormalizer $date) => new DateTimeZone('');
         // @formatter:on
         yield 'class alias' => [
             $closureWithAliasedClassNameObject,
-            "fn (\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
+            "fn(\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
         ];
 
         // @formatter:off
-        $closureWithAliasedNamespaceObject = fn (DataNormalizer $date) => new DateTimeZone('');
+        $closureWithAliasedNamespaceObject = fn(DataNormalizer $date) => new DateTimeZone('');
         // @formatter:on
         yield 'namespace alias' => [
             $closureWithAliasedNamespaceObject,
-            "fn (\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
+            "fn(\\Yiisoft\\Yii\\Debug\\DataNormalizer \$date) => new \\DateTimeZone('')",
         ];
         // @formatter:off
-        $closureWithNullCollisionOperatorObject = fn () => $_ENV['var'] ?? null;
+        $closureWithNullCollisionOperatorObject = fn() => $_ENV['var'] ?? null;
         // @formatter:on
         yield 'closure with null-collision operator' => [
             $closureWithNullCollisionOperatorObject,
-            "fn () => \$_ENV['var'] ?? null",
+            "fn() => \$_ENV['var'] ?? null",
         ];
         yield 'utf8 supported' => [
             '🤣',
@@ -860,5 +826,42 @@ final class DataNormalizerTest extends TestCase
                 'uri' => 'php://stdin',
             ],
         ];
+    }
+
+    private static function getNested(int $depth, mixed $data): array
+    {
+        $objectIds = [];
+        $head = $lvl = new stdClass();
+        $objectIds[] = spl_object_id($head);
+        $lvl->id = 'lvl0';
+
+        for ($i = 1; $i < $depth; $i++) {
+            $nested = new stdClass();
+            $nested->id = 'lvl' . $i;
+            $lvl->{'lvl' . $i} = $nested;
+            $lvl = $nested;
+            $objectIds[] = spl_object_id($nested);
+        }
+        $lvl->{'lvl' . $i} = $data;
+
+        return [$head, $objectIds];
+    }
+
+    private function createNested(int $depth, mixed $data): object
+    {
+        $head = $lvl = new stdClass();
+        $lvl->id = 'lvl1';
+
+        for ($i = 2; $i <= $depth; $i++) {
+            $nested = new stdClass();
+            $nested->id = 'lvl' . $i;
+            $lvl->prop1 = $nested;
+            $lvl->prop2 = $nested;
+            $lvl = $nested;
+        }
+        $lvl->loop = $data;
+        $lvl->head = $head;
+
+        return $head;
     }
 }

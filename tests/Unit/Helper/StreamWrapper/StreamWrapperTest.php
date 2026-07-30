@@ -7,6 +7,8 @@ namespace Yiisoft\Yii\Debug\Tests\Unit\Helper\StreamWrapper;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Debug\Tests\Support\Stub\PhpStreamProxy;
 
+use const LOCK_EX;
+
 final class StreamWrapperTest extends TestCase
 {
     protected function tearDown(): void

@@ -70,8 +70,8 @@ final class ContainerInterfaceProxy implements ContainerInterface
         if (
             is_object($instance)
             && (
-                ($proxy = $this->getServiceProxyCache($id)) ||
-                ($proxy = $this->getServiceProxy($id, $instance))
+                ($proxy = $this->getServiceProxyCache($id))
+                || ($proxy = $this->getServiceProxy($id, $instance))
             )
         ) {
             $this->setServiceProxyCache($id, $proxy);
@@ -79,6 +79,31 @@ final class ContainerInterfaceProxy implements ContainerInterface
         }
 
         return $instance;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
+    }
+
+    /**
+     * @psalm-suppress InvalidCatch
+     */
+    public function has($id): bool
+    {
+        $this->resetCurrentError();
+        $timeStart = microtime(true);
+        $result = null;
+
+        try {
+            $result = $this->decorated->has($id);
+        } catch (ContainerExceptionInterface $e) {
+            $this->repeatError($e);
+        } finally {
+            $this->logProxy(ContainerInterface::class, $this->decorated, 'has', [$id], $result, $timeStart);
+        }
+
+        return (bool) $result;
     }
 
     /**
@@ -96,11 +121,6 @@ final class ContainerInterfaceProxy implements ContainerInterface
     private function isDecorated(string $service): bool
     {
         return $this->isActive() && $this->config->hasDecoratedService($service);
-    }
-
-    public function isActive(): bool
-    {
-        return $this->config->getIsActive() && $this->config->getDecoratedServices() !== [];
     }
 
     private function getServiceProxyCache(string $service): ?object
@@ -124,7 +144,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
             return $this->getCommonMethodProxy(
                 interface_exists($service) || class_exists($service) ? $service : $instance::class,
                 $instance,
-                $this->config->getDecoratedServiceConfig($service)
+                $this->config->getDecoratedServiceConfig($service),
             );
         }
 
@@ -163,7 +183,7 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $this->proxyManager->createObjectProxy(
             $service,
             ServiceMethodProxy::class,
-            [$service, $instance, $methods, $this->config]
+            [$service, $instance, $methods, $this->config],
         );
     }
 
@@ -195,32 +215,12 @@ final class ContainerInterfaceProxy implements ContainerInterface
         return $this->proxyManager->createObjectProxy(
             $service,
             ServiceProxy::class,
-            [$service, $instance, $this->config]
+            [$service, $instance, $this->config],
         );
     }
 
     private function setServiceProxyCache(string $service, object $instance): void
     {
         $this->serviceProxy[$service] = $instance;
-    }
-
-    /**
-     * @psalm-suppress InvalidCatch
-     */
-    public function has($id): bool
-    {
-        $this->resetCurrentError();
-        $timeStart = microtime(true);
-        $result = null;
-
-        try {
-            $result = $this->decorated->has($id);
-        } catch (ContainerExceptionInterface $e) {
-            $this->repeatError($e);
-        } finally {
-            $this->logProxy(ContainerInterface::class, $this->decorated, 'has', [$id], $result, $timeStart);
-        }
-
-        return (bool)$result;
     }
 }

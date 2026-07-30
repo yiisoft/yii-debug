@@ -15,8 +15,7 @@ final class CommandNameCondition implements ConditionInterface
          * @psalm-var list<non-empty-string>
          */
         private readonly array $names,
-    ) {
-    }
+    ) {}
 
     public function match(object $event): bool
     {

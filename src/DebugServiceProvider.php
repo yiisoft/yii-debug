@@ -14,8 +14,8 @@ final class DebugServiceProvider implements ServiceProviderInterface
     public function getDefinitions(): array
     {
         return [
-            ContainerInterface::class =>
-                static fn (ContainerInterface $container, ContainerProxyConfig $config) => new ContainerInterfaceProxy(
+            ContainerInterface::class
+                => static fn(ContainerInterface $container, ContainerProxyConfig $config) => new ContainerInterfaceProxy(
                     $container,
                     $config,
                 ),
