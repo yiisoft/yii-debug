@@ -28,9 +28,8 @@ final class RequestCollector implements SummaryCollectorInterface
     private ?ResponseInterface $response = null;
 
     public function __construct(
-        private readonly TimelineCollector $timelineCollector
-    ) {
-    }
+        private readonly TimelineCollector $timelineCollector,
+    ) {}
 
     public function getCollected(): array
     {

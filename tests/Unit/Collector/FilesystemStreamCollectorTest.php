@@ -10,30 +10,13 @@ use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\Stream\FilesystemStreamCollector;
 use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
+use function dirname;
+
+use const DIRECTORY_SEPARATOR;
+use const LOCK_EX;
+
 final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
 {
-    /**
-     * @param FilesystemStreamCollector $collector
-     */
-    protected function collectTestData(CollectorInterface $collector): void
-    {
-        $collector->collect(
-            operation: 'read',
-            path: __FILE__,
-            args: ['arg1' => 'v1', 'arg2' => 'v2'],
-        );
-        $collector->collect(
-            operation: 'read',
-            path: __FILE__,
-            args: ['arg3' => 'v3', 'arg4' => 'v4'],
-        );
-        $collector->collect(
-            operation: 'mkdir',
-            path: __DIR__,
-            args: ['recursive'],
-        );
-    }
-
     #[DataProvider('dataSkipCollectOnMatchIgnoreReferences')]
     public function testSkipCollectOnMatchIgnoreReferences(
         string $path,
@@ -305,6 +288,28 @@ final class FilesystemStreamCollectorTest extends AbstractCollectorTestCase
             $fileStreamAfter,
             [],
         ];
+    }
+
+    /**
+     * @param FilesystemStreamCollector $collector
+     */
+    protected function collectTestData(CollectorInterface $collector): void
+    {
+        $collector->collect(
+            operation: 'read',
+            path: __FILE__,
+            args: ['arg1' => 'v1', 'arg2' => 'v2'],
+        );
+        $collector->collect(
+            operation: 'read',
+            path: __FILE__,
+            args: ['arg3' => 'v3', 'arg4' => 'v4'],
+        );
+        $collector->collect(
+            operation: 'mkdir',
+            path: __DIR__,
+            args: ['recursive'],
+        );
     }
 
     protected function getCollector(): CollectorInterface

@@ -17,14 +17,18 @@ use function sprintf;
 use function strlen;
 use function substr;
 
+use const GLOB_NOSORT;
+use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_UNICODE;
+
 final class FileStorage implements StorageInterface
 {
     private int $historySize = 50;
 
     public function __construct(
         private readonly string $path,
-    ) {
-    }
+    ) {}
 
     public function setHistorySize(int $historySize): void
     {
@@ -41,7 +45,7 @@ final class FileStorage implements StorageInterface
                 $this->path,
                 $id ?? '**',
                 $type,
-            )
+            ),
         );
 
         $data = [];
@@ -113,7 +117,7 @@ final class FileStorage implements StorageInterface
 
         usort(
             $files,
-            static fn (string $a, string $b) => filemtime($b) <=> filemtime($a)
+            static fn(string $a, string $b) => filemtime($b) <=> filemtime($a),
         );
         return $files;
     }

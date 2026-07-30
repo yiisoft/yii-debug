@@ -16,7 +16,7 @@ trait ProxyLogTrait
         string $method,
         array $arguments,
         mixed $result,
-        float $timeStart
+        float $timeStart,
     ): void {
         $error = $this->getCurrentError();
         $this->processLogData($arguments, $result, $error);
@@ -55,7 +55,7 @@ trait ProxyLogTrait
         ?array $arguments,
         mixed $result,
         ?object $error,
-        float $timeStart
+        float $timeStart,
     ): void {
         $this->config->getCollector()?->collect(
             $service,
@@ -77,7 +77,7 @@ trait ProxyLogTrait
         ?array $arguments,
         mixed $result,
         ?object $error,
-        float $timeStart
+        float $timeStart,
     ): void {
         $this->config->getDispatcher()?->dispatch(
             new ProxyMethodCallEvent(
@@ -90,7 +90,7 @@ trait ProxyLogTrait
                 $error,
                 $timeStart,
                 microtime(true),
-            )
+            ),
         );
     }
 

@@ -21,6 +21,9 @@ use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 use function sleep;
 use function usleep;
 
+use const DIRECTORY_SEPARATOR;
+use const PHP_VERSION;
+
 final class ConsoleAppInfoCollectorTest extends AbstractCollectorTestCase
 {
     /**

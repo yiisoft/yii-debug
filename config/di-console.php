@@ -9,7 +9,7 @@ use Yiisoft\Yii\Debug\StartupPolicy\Condition\CommandNameCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Condition\EnvironmentVariableCondition;
 use Yiisoft\Yii\Debug\StartupPolicy\Debugger\DenyDebuggerPolicy;
 
-if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
+if (!(bool) ($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
 }
 
@@ -19,13 +19,13 @@ return [
             'collectors' => ReferencesArray::from(
                 array_merge(
                     $params['yiisoft/yii-debug']['collectors'],
-                    $params['yiisoft/yii-debug']['collectors.console'] ?? []
-                )
+                    $params['yiisoft/yii-debug']['collectors.console'] ?? [],
+                ),
             ),
             'debuggerStartupPolicy' => DynamicReference::to(
-                static fn () => new DenyDebuggerPolicy(
+                static fn() => new DenyDebuggerPolicy(
                     new EnvironmentVariableCondition('YII_DEBUG_IGNORE'),
-                    new CommandNameCondition($params['yiisoft/yii-debug']['ignoredCommands'])
+                    new CommandNameCondition($params['yiisoft/yii-debug']['ignoredCommands']),
                 ),
             ),
             'excludedClasses' => $params['yiisoft/yii-debug']['excludedClasses'],

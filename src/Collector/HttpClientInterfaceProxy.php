@@ -15,9 +15,8 @@ final class HttpClientInterfaceProxy implements ClientInterface
 
     public function __construct(
         private readonly ClientInterface $decorated,
-        private readonly HttpClientCollector $collector
-    ) {
-    }
+        private readonly HttpClientCollector $collector,
+    ) {}
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {

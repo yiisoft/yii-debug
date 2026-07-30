@@ -30,9 +30,7 @@ trait CollectorTrait
         return self::class;
     }
 
-    private function reset(): void
-    {
-    }
+    private function reset(): void {}
 
     private function isActive(): bool
     {

@@ -13,6 +13,11 @@ final class HttpStreamCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
+    /**
+     * @psalm-var array<string, list<array{uri: string, args: array}>>
+     */
+    private array $requests = [];
+
     public function __construct(
         /**
          * @var string[]
@@ -25,14 +30,8 @@ final class HttpStreamCollector implements SummaryCollectorInterface
         /**
          * @var string[]
          */
-        private readonly array $ignoredUrls = []
-    ) {
-    }
-
-    /**
-     * @psalm-var array<string, list<array{uri: string, args: array}>>
-     */
-    private array $requests = [];
+        private readonly array $ignoredUrls = [],
+    ) {}
 
     public function getCollected(): array
     {
@@ -89,11 +88,11 @@ final class HttpStreamCollector implements SummaryCollectorInterface
         return [
             'streams' => array_merge(
                 ...array_map(
-                    fn (string $operation) => [
+                    fn(string $operation) => [
                         $operation => count($this->requests[$operation]),
                     ],
-                    array_keys($this->requests)
-                )
+                    array_keys($this->requests),
+                ),
             ),
         ];
     }

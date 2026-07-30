@@ -15,8 +15,7 @@ final class UriPathCondition implements ConditionInterface
          * @psalm-var list<non-empty-string>
          */
         private readonly array $paths,
-    ) {
-    }
+    ) {}
 
     public function match(object $event): bool
     {

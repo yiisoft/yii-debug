@@ -30,16 +30,16 @@ final class ContainerProxyConfigTest extends TestCase
         $this->assertNotSame(
             $config,
             $config->withDispatcher(
-                new EventDispatcherInterfaceProxy($dispatcherMock, new EventCollector(new TimelineCollector()))
-            )
+                new EventDispatcherInterfaceProxy($dispatcherMock, new EventCollector(new TimelineCollector())),
+            ),
         );
         $this->assertNotSame(
             $config,
             $config->withDecoratedServices(
                 [
                     LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
-                ]
-            )
+                ],
+            ),
         );
     }
 
@@ -54,7 +54,7 @@ final class ContainerProxyConfigTest extends TestCase
             $dispatcherMock,
             $this->createServiceCollector(),
             '@tests/runtime',
-            1
+            1,
         );
 
         $this->assertTrue($config->getIsActive());
@@ -66,11 +66,11 @@ final class ContainerProxyConfigTest extends TestCase
             [
                 LoggerInterface::class => [LoggerInterfaceProxy::class, LogCollector::class],
             ],
-            $config->getDecoratedServices()
+            $config->getDecoratedServices(),
         );
         $this->assertEquals(
             [LoggerInterfaceProxy::class, LogCollector::class],
-            $config->getDecoratedServiceConfig(LoggerInterface::class)
+            $config->getDecoratedServiceConfig(LoggerInterface::class),
         );
 
         $this->assertTrue($config->hasCollector());

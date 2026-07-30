@@ -21,7 +21,7 @@ final class CallableCollectorPolicy implements CollectorStartupPolicyInterface
      * @psalm-param TCallable $callable
      */
     public function __construct(
-        callable $callable
+        callable $callable,
     ) {
         $this->callable = $callable;
     }

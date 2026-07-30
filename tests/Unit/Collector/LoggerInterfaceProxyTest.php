@@ -12,6 +12,7 @@ use Psr\Log\LogLevel;
 use stdClass;
 use Yiisoft\Yii\Debug\Collector\LogCollector;
 use Yiisoft\Yii\Debug\Collector\LoggerInterfaceProxy;
+use Stringable;
 
 final class LoggerInterfaceProxyTest extends TestCase
 {
@@ -63,7 +64,7 @@ final class LoggerInterfaceProxyTest extends TestCase
 
     public function testProxyDecoratedCall(): void
     {
-        $logger = new class () implements LoggerInterface {
+        $logger = new class implements LoggerInterface {
             use LoggerTrait;
 
             public $var = null;
@@ -78,9 +79,7 @@ final class LoggerInterfaceProxyTest extends TestCase
                 return $args;
             }
 
-            public function log($level, \Stringable|string $message, array $context = []): void
-            {
-            }
+            public function log($level, Stringable|string $message, array $context = []): void {}
         };
         $collector = $this->createMock(LogCollector::class);
         $proxy = new LoggerInterfaceProxy($logger, $collector);

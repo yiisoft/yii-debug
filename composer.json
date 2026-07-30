@@ -46,14 +46,16 @@
     "require-dev": {
         "ext-curl": "*",
         "ext-sockets": "*",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "jetbrains/phpstorm-attributes": "^1.2",
         "maglnet/composer-require-checker": "^4.2",
         "nyholm/psr7": "^1.3",
         "phpunit/phpunit": "^10.5",
-        "rector/rector": "^1.2",
+        "rector/rector": "^2.0",
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^5.26",
+        "yiisoft/code-style": "^1.1",
         "yiisoft/error-handler": "^3.0",
         "yiisoft/event-dispatcher": "^1.0",
         "yiisoft/log": "^2.0",
@@ -95,6 +97,8 @@
     },
     "scripts": {
         "test": "phpunit --testdox --no-interaction",
-        "test-watch": "phpunit-watcher watch"
+        "test-watch": "phpunit-watcher watch",
+        "rector": "rector",
+        "cs-fix": "php-cs-fixer fix"
     }
 }

@@ -8,10 +8,24 @@ use Throwable;
 
 use function trigger_error;
 
+use function function_exists;
+use function is_resource;
+
 use const E_USER_ERROR;
 use const STREAM_MKDIR_RECURSIVE;
 use const STREAM_URL_STAT_QUIET;
 use const STREAM_USE_PATH;
+use const LOCK_EX;
+use const SEEK_SET;
+use const STREAM_META_ACCESS;
+use const STREAM_META_GROUP;
+use const STREAM_META_GROUP_NAME;
+use const STREAM_META_OWNER;
+use const STREAM_META_OWNER_NAME;
+use const STREAM_META_TOUCH;
+use const STREAM_OPTION_BLOCKING;
+use const STREAM_OPTION_READ_TIMEOUT;
+use const STREAM_OPTION_WRITE_BUFFER;
 
 final class StreamWrapper implements StreamWrapperInterface
 {
@@ -123,7 +137,7 @@ final class StreamWrapper implements StreamWrapperInterface
         $this->filename = realpath($path) ?: $path;
 
         if ((self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE && function_exists(
-            'opcache_invalidate'
+            'opcache_invalidate',
         )) {
             opcache_invalidate($path, false);
         }
@@ -131,7 +145,7 @@ final class StreamWrapper implements StreamWrapperInterface
             $path,
             $mode,
             ($options & STREAM_USE_PATH) === STREAM_USE_PATH,
-            (self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE ? null : $this->context
+            (self::STREAM_OPEN_FOR_INCLUDE & $options) === self::STREAM_OPEN_FOR_INCLUDE ? null : $this->context,
         );
 
         if (!is_resource($this->stream)) {
@@ -221,7 +235,7 @@ final class StreamWrapper implements StreamWrapperInterface
             STREAM_META_OWNER_NAME, STREAM_META_OWNER => chown($path, $value),
             STREAM_META_GROUP_NAME, STREAM_META_GROUP => chgrp($path, $value),
             STREAM_META_ACCESS => chmod($path, $value),
-            default => false
+            default => false,
         };
     }
 

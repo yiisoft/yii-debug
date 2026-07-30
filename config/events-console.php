@@ -11,7 +11,7 @@ use Yiisoft\Yii\Debug\Collector\Console\CommandCollector;
 use Yiisoft\Yii\Debug\Collector\Console\ConsoleAppInfoCollector;
 use Yiisoft\Yii\Debug\Debugger;
 
-if (!(bool)($params['yiisoft/yii-debug']['enabled'] ?? false)) {
+if (!(bool) ($params['yiisoft/yii-debug']['enabled'] ?? false)) {
     return [];
 }
 

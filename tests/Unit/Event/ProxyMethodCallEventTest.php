@@ -22,7 +22,7 @@ class ProxyMethodCallEventTest extends TestCase
             'success',
             null,
             $time,
-            $time + 1
+            $time + 1,
         );
 
         $this->assertEquals($time, $event->timeStart);

@@ -13,9 +13,9 @@ final class CallableDebuggerPolicyTest extends TestCase
 {
     public static function dataBase(): iterable
     {
-        yield 'true' => [true, static fn ($event) => true];
-        yield 'false' => [false, static fn ($event) => false];
-        yield 'check-arguments' => [true, static fn (stdClass $event) => true];
+        yield 'true' => [true, static fn($event) => true];
+        yield 'false' => [false, static fn($event) => false];
+        yield 'check-arguments' => [true, static fn(stdClass $event) => true];
     }
 
     #[DataProvider('dataBase')]

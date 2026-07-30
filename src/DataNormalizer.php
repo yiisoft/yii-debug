@@ -44,7 +44,7 @@ final class DataNormalizer
         $objectsData = $this->makeObjectsData($value);
 
         $objectsMap = array_map(
-            fn (object $object): mixed => $this->normalize(
+            fn(object $object): mixed => $this->normalize(
                 $object,
                 $depth === null ? null : ($depth + 1),
                 $objectsData,

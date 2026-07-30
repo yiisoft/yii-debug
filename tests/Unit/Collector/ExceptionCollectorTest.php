@@ -13,6 +13,15 @@ use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class ExceptionCollectorTest extends AbstractCollectorTestCase
 {
+    public function testNoExceptionCollected(): void
+    {
+        $collector = new ExceptionCollector(new TimelineCollector());
+
+        $collector->startup();
+
+        $this->assertEquals([], $collector->getCollected());
+    }
+
     /**
      * @param CollectorInterface|ExceptionCollector $collector
      */
@@ -65,14 +74,5 @@ final class ExceptionCollectorTest extends AbstractCollectorTestCase
         $this->assertEquals(Exception::class, $data['class']);
         $this->assertEquals('test', $data['message']);
         $this->assertEquals(777, $data['code']);
-    }
-
-    public function testNoExceptionCollected(): void
-    {
-        $collector = new ExceptionCollector(new TimelineCollector());
-
-        $collector->startup();
-
-        $this->assertEquals([], $collector->getCollected());
     }
 }

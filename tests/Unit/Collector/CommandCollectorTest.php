@@ -18,6 +18,15 @@ use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class CommandCollectorTest extends AbstractCollectorTestCase
 {
+    public function testCollectWithInactiveCollector(): void
+    {
+        $collector = $this->getCollector();
+        $this->collectTestData($collector);
+
+        $collected = $collector->getCollected();
+        $this->assertEmpty($collected);
+    }
+
     /**
      * @param CollectorInterface|CommandCollector $collector
      */
@@ -27,33 +36,24 @@ final class CommandCollectorTest extends AbstractCollectorTestCase
             new ConsoleCommandEvent(
                 new Command('test'),
                 new StringInput('test'),
-                new ConsoleBufferedOutput()
-            )
+                new ConsoleBufferedOutput(),
+            ),
         );
         $collector->collect(
             new ConsoleErrorEvent(
                 new StringInput('test1'),
                 new ConsoleBufferedOutput(),
-                new Exception()
-            )
+                new Exception(),
+            ),
         );
         $collector->collect(
             new ConsoleTerminateEvent(
                 new Command('test1'),
                 new StringInput('test1'),
                 new ConsoleBufferedOutput(),
-                0
-            )
+                0,
+            ),
         );
-    }
-
-    public function testCollectWithInactiveCollector(): void
-    {
-        $collector = $this->getCollector();
-        $this->collectTestData($collector);
-
-        $collected = $collector->getCollected();
-        $this->assertEmpty($collected);
     }
 
     protected function getCollector(): CollectorInterface
