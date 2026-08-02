@@ -56,7 +56,7 @@
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^5.26",
         "yiisoft/code-style": "^1.1",
-        "yiisoft/error-handler": "^3.0",
+        "yiisoft/error-handler": "^3.0 || ^4.0",
         "yiisoft/event-dispatcher": "^1.0",
         "yiisoft/log": "^2.0",
         "yiisoft/yii-console": "^2.0",
