@@ -24,4 +24,7 @@ return (new Configuration())
     ->ignoreErrorsOnPackages(
         ['yiisoft/error-handler', 'yiisoft/injector', 'yiisoft/yii-console', 'yiisoft/yii-http'],
         [ErrorType::DEV_DEPENDENCY_IN_PROD],
-    );
+    )
+    // `yiisoft/definitions` is used only in `config/di-web.php` and `config/di-console.php`, which are loaded
+    // by consumers using `yiisoft/di`, that already requires `yiisoft/definitions` itself.
+    ->ignoreErrorsOnPackages(['yiisoft/definitions'], [ErrorType::SHADOW_DEPENDENCY]);
